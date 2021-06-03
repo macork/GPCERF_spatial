@@ -91,7 +91,8 @@ calc.ac = function(w, X, weights){
   c(w.trans%*%diag(weights)%*%X.trans)
 }
 
-nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt, file.out, n.cpu = 20){
+nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt, n.cpu = 20,
+                      n.neighbour = 50, expand = 2, block.size = 2e3){
   require(snowfall)
   coord.obs = cbind(w.obs, train.GPS.ret$GPS)
   #get rid of unobserved stratified mortality rate
@@ -103,12 +104,7 @@ nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt, file.out, n
   y.use.ord = y.use[order(coord.obs[,1])]
   design.use.ord = design.use[order(coord.obs[,1]),]
   
-  # w.obs = cbind(test2$ozone, test2$GPS.ozone)
-  # w.obs.ozone.ord = w.obs.ozone[order(w.obs.ozone[,1]),]
-  # y.obs.ozone.ord = test2$mortality_trans[order(w.obs.ozone[,1])]
-  # y.un.obs.ozone.ord = test2$mortality[order(w.obs.ozone[,1])]
-  
-  all.params = expand.grid(seq(0.2,0.6,0.2), seq(0.2,0.6,0.2), c(0.5, 1, 1.5))
+  all.params = expand.grid(seq(0.5,4.5,1), seq(0.5,4.5,1), seq(0.5,4.5,1))
   sfInit(parallel = T, cpus = n.cpu)
   sfExport("get.nn.fast", "train.GPS.ret", "coord.obs.ord", "y.use.ord", "calc.ac")
   all.cb = apply(all.params, 1, function(params){
@@ -128,10 +124,11 @@ nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt, file.out, n
     rowMeans(all.res)
   })
   sfStop()
-  saveRDS(all.cb, file.out)
+  all.cb
 }
 
-nn.estimate = function(params, w.obs, w.est, y.obs, train.GPS.ret, file.out, n.cpu = 20){
+nn.estimate = function(params, w.obs, w.est, y.obs, train.GPS.ret, n.cpu = 20,
+                       n.neighbour = 50, expand = 2, block.size = 2e3){
   require(snowfall)
   coord.obs = cbind(w.obs, train.GPS.ret$GPS)
   #get rid of unobserved stratified mortality rate
@@ -155,7 +152,7 @@ nn.estimate = function(params, w.obs, w.est, y.obs, train.GPS.ret, file.out, n.c
                 y.obs.ord = y.use.ord, n.neighbour = 50, expand = 2, block.size = 2e3)
   })
   sfStop()
-  saveRDS(all.res, file.out)
+  all.res
 }
 
 nn.sigma.est = function(params, w.obs, GPS.obs, y.obs, n.neighbour, n.core = 20){

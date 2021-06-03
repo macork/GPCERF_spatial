@@ -1,32 +1,25 @@
 library(spatstat)
 
-GP.weights.calc = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, e_gps_std_pred, w_resid, 
+GP.weights.calc = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, e_gps_std,
                            kernel.fn = function(x) exp(-x^2)){
   # param[1]: alpha, param[2]: beta, param[3]: gamma
   # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  w_resid.new = (w-e_gps_pred)/e_gps_std_pred
-  GPS.new = approx(density(w_resid,na.rm = TRUE)$x,
-                   density(w_resid,na.rm = TRUE)$y,
-                   xout=w_resid.new,rule=2)$y
+  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std)
   
   obs.new = cbind( w*sqrt(param[1]), GPS.new*sqrt(param[2]) )
   Sigma.cross = param[3]*kernel.fn(spatstat.geom::crossdist(obs.new[,1], obs.new[,2],
                                                             obs.use[,1], obs.use[,2]))
   # each row is the weights for all subject for estimate of Y_i(w)
   # each column is the weight of an observed sample (w_i, c_i)
-  # system.time(eigenMapMatMult(Sigma.cross, inv.Sigma.obs))
   weights.all = Sigma.cross%*%inv.Sigma.obs
   weights.all
 }
 
-GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, e_gps_std_pred, w_resid, 
+GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, e_gps_std, 
                            kernel.fn = function(x) exp(-x^2)){
   # param[1]: alpha, param[2]: beta, param[3]: gamma
   # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  w_resid.new = (w-e_gps_pred)/e_gps_std_pred
-  GPS.new = approx(density(w_resid,na.rm = TRUE)$x,
-                   density(w_resid,na.rm = TRUE)$y,
-                   xout=w_resid.new,rule=2)$y
+  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std)
   
   obs.new = cbind( w*sqrt(param[1]), GPS.new*sqrt(param[2]) )
   Sigma.cross = param[3]*kernel.fn(spatstat.geom::crossdist(obs.new[,1], obs.new[,2],
@@ -38,7 +31,7 @@ GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, 
 }
 
 # tune alpha, beta and gamma in the GP model
-tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std_pred, w_resid, 
+tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std, 
                      kernel.fn = function(x) exp(-x^2)){
   param = unlist(param)
   x.design = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
@@ -51,10 +44,11 @@ tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std_pred, w_
     
     weights.final = GP.weights.test(w = w, w.obs = sim.data$treat, obs.use = obs.use, param = param,
                     inv.Sigma.obs = inv.Sigma.obs,
-                    e_gps_pred = e_gps_pred, e_gps_std_pred = e_gps_std_pred,
-                    w_resid = w_resid)
+                    e_gps_pred = e_gps_pred, e_gps_std= e_gps_std)
     weights.final[weights.final<0] = 0
     weights.final = weights.final/sum(weights.final)
+    
+    est = sim.data$Y%*%weights.final
     
     # weighted correlation
     # this computes rho_r(w) for each covariate r
@@ -65,10 +59,10 @@ tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std_pred, w_
     x.mean = colMeans(x.design*weights.final)
     x.cov = (t(x.design) - x.mean)%*%diag(weights.final)%*%t(t(x.design) - x.mean)
     x.stan = t(t(solve(chol(x.cov)))%*%(t(x.design) - x.mean))
-    abs(c(t(x.stan)%*%diag(weights.final)%*%w.stan))
+    c( abs(c(t(x.stan)%*%diag(weights.final)%*%w.stan)), est )
   })
   # this is vector of average rho_r(w) over the range of w for every r
-  rowMeans(col.all)
+  list(cb = rowMeans(col.all[1:6,]), est = col.all[7,])
 }
 
 # estimate sigma
