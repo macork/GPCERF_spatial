@@ -14,12 +14,15 @@ tru.curve = sapply(seq(0,20,0.1), function(w){
 e_gps <- xgboost(label=sim.data$treat, data=as.matrix(sim.data[,-(1:2)]), nrounds = 50)
 e_gps_pred <- predict(e_gps,as.matrix(sim.data[,-(1:2)]))
 e_gps_std <- sd(sim.data$treat-e_gps_pred)
-GPS = dnorm(sim.data$treat, mean = e_gps_pred, sd = e_gps_std)
+GPS = dnorm(sim.data$treat, mean = e_gps_pred, sd = e_gps_std, log = T)
+
+# e_gps_pred = (design.mt%*%beta.tru - 0.8)*9+17
+# e_gps_std = 5
 
 w.all = seq(0,20,0.1)
 # tuning + estimating parameters for the GP model
-all.params = expand.grid(seq(0.5,4.5,1), seq(0.5,4.5,1), seq(0.5,4.5,1))
-tune.res <- apply(all.params[1:2,], 1, function(x){
+all.params = expand.grid(seq(0.01,0.09,0.02), seq(0.01,0.09,0.02), c(1,5,10))
+tune.res <- apply(all.params, 1, function(x){
   print(x)
   tuning.fn(param = x, sim.data = sim.data, w.all = w.all, GPS = GPS, e_gps_pred = e_gps_pred,
             e_gps_std = e_gps_std)
@@ -47,7 +50,7 @@ matched_set = create_matching(sim.data$Y,
                               sl.lib = c("SL.xgboost","SL.earth","SL.gam","SL.ranger"),
                               scale = 0.5,
                               delta_n=1)
-matching.erf = matching_smooth(matched_Y = matched_set$Y,
+matching.cerf = matching_smooth(matched_Y = matched_set$Y,
                       matched_w = matched_set$w,
                       bw.seq = seq(0.2,2,0.2),
                       w.vals = w.all)

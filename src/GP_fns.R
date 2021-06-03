@@ -18,8 +18,7 @@ GP.weights.calc = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, 
 GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, e_gps_std, 
                            kernel.fn = function(x) exp(-x^2)){
   # param[1]: alpha, param[2]: beta, param[3]: gamma
-  # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std)
+  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
   
   obs.new = cbind( w*sqrt(param[1]), GPS.new*sqrt(param[2]) )
   Sigma.cross = param[3]*kernel.fn(spatstat.geom::crossdist(obs.new[,1], obs.new[,2],
@@ -33,13 +32,14 @@ GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, 
 # tune alpha, beta and gamma in the GP model
 tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std, 
                      kernel.fn = function(x) exp(-x^2)){
+  # browser()
   param = unlist(param)
   x.design = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
   
   obs.use = cbind( sim.data$treat*sqrt(param[1]), GPS*sqrt(param[2]) )
   Sigma.obs = param[3]*kernel.fn(as.matrix(dist(obs.use))) + diag(nrow(obs.use))
   inv.Sigma.obs = chol2inv(chol(Sigma.obs))
-  
+  # browser()
   col.all = sapply(w.all, function(w){
     
     weights.final = GP.weights.test(w = w, w.obs = sim.data$treat, obs.use = obs.use, param = param,
@@ -47,7 +47,6 @@ tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std,
                     e_gps_pred = e_gps_pred, e_gps_std= e_gps_std)
     weights.final[weights.final<0] = 0
     weights.final = weights.final/sum(weights.final)
-    
     est = sim.data$Y%*%weights.final
     
     # weighted correlation
