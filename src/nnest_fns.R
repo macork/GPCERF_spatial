@@ -33,16 +33,20 @@ get.nn.fast = function(params, w.new, GPS.new, obs.ord, y.obs.ord,
   
   obs.new = t(t(cbind(w.new, GPS.new))*sqrt(params[1:2]))
   id.all = split(1:n, ceiling(seq_along(1:n)/n.block))
-  all.res = sapply(id.all, function(id.ind){
+  all.weights = sapply(id.all, function(id.ind){
     cov.cross = params[3]*exp(-spatstat.geom::crossdist(obs.new[id.ind,1], obs.new[id.ind,2],
                                                         obs.use[,1], obs.use[,2]))
     #mean
     w = cov.cross%*%cov.use.inv
-    y.sum = sum(w%*%y.use)
     w[w<0] = 0
-    c(colSums(w), y.sum)
+    colSums(w)
   })
-  cbind(c(idx.all,NA), rowSums(all.res)/n)
+  weights = rowSums(all.weights)/n
+  weights = weights/sum(weights)
+  
+  est = c(y.use%*%weights)
+  
+  cbind(c(idx.all,NA), c(weights, est))
 }
 
 get.nn.sd = function(params, w.new, GPS.new, obs.ord, n.neighbour = 10, expand = 1){
@@ -91,8 +95,9 @@ calc.ac = function(w, X, weights){
   c(w.trans%*%diag(weights)%*%X.trans)
 }
 
-nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt, n.cpu = 20,
-                      n.neighbour = 50, expand = 2, block.size = 2e3){
+nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt, 
+                      all.params = expand.grid(seq(0.5,4.5,1), seq(0.5,4.5,1), seq(0.5,4.5,1)),
+                      n.cpu = 20,  n.neighbour = 50, expand = 2, block.size = 2e3){
   require(snowfall)
   coord.obs = cbind(w.obs, train.GPS.ret$GPS)
   #get rid of unobserved stratified mortality rate
@@ -103,8 +108,7 @@ nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt, n.cpu = 20,
   coord.obs.ord = coord.obs[order(coord.obs[,1]),]
   y.use.ord = y.use[order(coord.obs[,1])]
   design.use.ord = design.use[order(coord.obs[,1]),]
-  
-  all.params = expand.grid(seq(0.5,4.5,1), seq(0.5,4.5,1), seq(0.5,4.5,1))
+
   sfInit(parallel = T, cpus = n.cpu)
   sfExport("get.nn.fast", "train.GPS.ret", "coord.obs.ord", "y.use.ord", "calc.ac")
   all.cb = apply(all.params, 1, function(params){
@@ -112,9 +116,9 @@ nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt, n.cpu = 20,
     sfExport("params")
     all.res = sfSapply(w.est, function(w){
       print(w)
-      GPS.new = dnorm(w, mean = train.GPS.ret$e_gps_pred, sd = train.GPS.ret$e_gps_std_pred)
+      GPS.new = dnorm(w, mean = train.GPS.ret$e_gps_pred, sd = train.GPS.ret$e_gps_std_pred, log = T)
       res = get.nn.fast(params = params, w.new = w, GPS.new = GPS.new, obs.ord = coord.obs.ord, 
-                  y.obs.ord = y.use.ord, n.neighbour = 50, expand = 2, block.size = 2e3)
+                  y.obs.ord = y.use.ord, n.neighbour = n.neighbour, expand = expand, block.size = block.size)
       idx = res[-nrow(res),1]
       weights = res[-nrow(res),2]
       weights = weights/sum(weights)
@@ -147,9 +151,9 @@ nn.estimate = function(params, w.obs, w.est, y.obs, train.GPS.ret, n.cpu = 20,
   sfExport("get.nn.fast", "train.GPS.ret", "coord.obs.ord", "y.use.ord", "params")
   all.res = sfLapply(w.est, function(w){
     print(w)
-    GPS.new = dnorm(w, mean = train.GPS.ret$e_gps_pred, sd = train.GPS.ret$e_gps_std_pred)
+    GPS.new = dnorm(w, mean = train.GPS.ret$e_gps_pred, sd = train.GPS.ret$e_gps_std_pred, log = T)
     get.nn.fast(params = params, w.new = w, GPS.new = GPS.new, obs.ord = coord.obs.ord, 
-                y.obs.ord = y.use.ord, n.neighbour = 50, expand = 2, block.size = 2e3)
+                y.obs.ord = y.use.ord, n.neighbour = n.neighbour, expand = expand, block.size = block.size)
   })
   sfStop()
   all.res

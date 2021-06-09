@@ -33,12 +33,13 @@ gp.cerf = tune.res[[opt.idx]]$est
 ## nngp tune+estmate
 nn.bc = nn.balance(sim.data$treat, w.all, sim.data$Y, 
            train.GPS.ret = list(GPS = GPS, e_gps_pred = e_gps_pred,e_gps_std_pred = e_gps_std), 
-           design.mt = design.mt, n.cpu = 1, n.neighbour = 5, expand = 1, block.size = 1)
-opt.idx.nn = order(colMeans(nn.bc))[1]
+           design.mt = design.mt, all.params = all.params, n.cpu = 1, n.neighbour = 20, expand = 1, block.size = 1)
+opt.idx.nn = order(colMeans(abs(nn.bc)))[1]
 nn.opt.param = unlist(all.params[opt.idx.nn,])
-nn.cerf = nn.estimate(nn.opt.param, sim.data$treat, w.all, sim.data$Y, 
+nn.res = nn.estimate(nn.opt.param, sim.data$treat, w.all, sim.data$Y, 
                       train.GPS.ret = list(GPS = GPS, e_gps_pred = e_gps_pred,e_gps_std_pred = e_gps_std), 
-                      n.cpu = 1, n.neighbour = 5, expand = 1)
+                      n.cpu = 1, n.neighbour = 10, expand = 1)
+nn.cerf = sapply(nn.res, function(x) x[nrow(x),2])
 
 # GPS matching
 library("GPSmatching")
