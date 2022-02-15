@@ -1,15 +1,22 @@
 Package: GPCERF
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+Authors@R: c(
+    person("Naeem", "Khoshnevis", email = "nkhoshnevis@g.harvard.edu",
+           role=c("aut","cre"), 
+           comment = c(ORCID = "0000-0003-4315-1426", AFFILIATION="FASRC")),
+    person("Boyu", "Ren", email = "email?",
+           role= c("aut"),            
+           comment = c(ORCID = "?", AFFILIATION="?")),
+    person("Tanujt", "Dey", email = "email?",
+           role= c("aut"),            
+           comment = c(ORCID = "?", AFFILIATION="?")),
+    person("Danielle","Braun", email = "dbraun@hsph.harvard.edu",
+           role=c("aut"),     
+           comment = c(ORCID = "0000-0002-5177-8598", AFFILIATION="HSPH")))
+Maintainer: Naeem Khoshnevis <nkhoshnevis@g.harvard.edu>
 Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
