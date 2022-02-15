@@ -1,3 +1,21 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param w
+#' @param w.obs
+#' @param obs.use
+#' @param param
+#' @param inv.Sigma.obs
+#' @param e_gps_pred
+#' @param e_gps_std
+#' @param kernel.fn
+#'
+#' @return
+#' @export
+#'
+#' @examples
 GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, e_gps_std,
                            kernel.fn = function(x) exp(-x^2)){
   # param[1]: alpha, param[2]: beta, param[3]: gamma

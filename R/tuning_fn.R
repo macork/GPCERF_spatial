@@ -1,4 +1,21 @@
 # tune alpha, beta and gamma in the GP model
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param param
+#' @param sim.data
+#' @param w.all
+#' @param GPS
+#' @param e_gps_pred
+#' @param e_gps_std
+#' @param kernel.fn
+#'
+#' @return
+#' @export
+#'
+#' @examples
 tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std,
                      kernel.fn = function(x) exp(-x^2)){
   # browser()

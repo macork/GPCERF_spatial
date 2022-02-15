@@ -1,3 +1,17 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param sample_size
+#' @param outcome_sd
+#' @param gps_spec
+#' @param cova_spec
+#'
+#' @return
+#' @export
+#'
+#' @examples
 data_generate<-function(sample_size=1000,outcome_sd = 10,gps_spec= 1, cova_spec=1){
   # browser()
   size<-sample_size

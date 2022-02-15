@@ -1,4 +1,16 @@
-# estimate sigma
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param param
+#' @param sim.data
+#' @param GPS
+#'
+#' @return
+#' @export
+#'
+#' @examples
 noise.est = function(param, sim.data, GPS){
   # browser()
   n.sample = nrow(sim.data)

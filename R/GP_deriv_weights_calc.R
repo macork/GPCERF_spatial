@@ -1,5 +1,23 @@
 # weights for derivatives
 # we switch back to dnorm to calc GPS
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param w
+#' @param w.obs
+#' @param GPS.obs
+#' @param param
+#' @param e_gps_pred
+#' @param e_gps_std
+#' @param kernel.fn
+#' @param kernel.deriv.fn
+#'
+#' @return
+#' @export
+#'
+#' @examples
 GP.deriv.weights.calc = function(w, w.obs, GPS.obs, param, e_gps_pred, e_gps_std,
                                  kernel.fn = function(x) exp(-x^2),
                                  kernel.deriv.fn = function(x, mu, sigma) (x-mu)/sigma^2){

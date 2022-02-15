@@ -1,3 +1,19 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param params
+#' @param w.new
+#' @param GPS.new
+#' @param obs.ord
+#' @param n.neighbour
+#' @param expand
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get.nn.sd = function(params, w.new, GPS.new, obs.ord, n.neighbour = 10, expand = 1){
   #params[4] should be sigma^2
   n = length(GPS.new)

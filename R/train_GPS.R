@@ -1,3 +1,15 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param cov.mt
+#' @param w.all
+#'
+#' @return
+#' @export
+#'
+#' @examples
 train.GPS = function(cov.mt, w.all){
   require(xgboost)
   GPS_mod <-xgboost(data = cov.mt, label = w.all, nrounds=50)

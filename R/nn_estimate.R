@@ -1,3 +1,22 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param params
+#' @param w.obs
+#' @param w.est
+#' @param y.obs
+#' @param train.GPS.ret
+#' @param n.cpu
+#' @param n.neighbour
+#' @param expand
+#' @param block.size
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nn.estimate = function(params, w.obs, w.est, y.obs, train.GPS.ret, n.cpu = 20,
                        n.neighbour = 50, expand = 2, block.size = 2e3){
   require(snowfall)

@@ -1,3 +1,19 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param params
+#' @param w.obs
+#' @param GPS.obs
+#' @param y.obs
+#' @param n.neighbour
+#' @param n.core
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nn.sigma.est = function(params, w.obs, GPS.obs, y.obs, n.neighbour, n.core = 20){
   require(snowfall)
   #params: length 3, first scale for w, second scale for GPS, third scale for exp fn

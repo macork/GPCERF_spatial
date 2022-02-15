@@ -1,3 +1,21 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param params
+#' @param w.new
+#' @param GPS.new
+#' @param obs.ord
+#' @param y.obs.ord
+#' @param n.neighbour
+#' @param expand
+#' @param block.size
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get.nn.fast = function(params, w.new, GPS.new, obs.ord, y.obs.ord,
                        n.neighbour = 10, expand = 5, block.size = 1e4){
   # browser()

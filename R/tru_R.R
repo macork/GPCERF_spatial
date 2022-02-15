@@ -1,3 +1,15 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param w
+#' @param sim.data
+#'
+#' @return
+#' @export
+#'
+#' @examples
 tru_R<-function(w, sim.data){
   design.mt = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
   mean(apply(design.mt, 1, function(x){

@@ -1,3 +1,16 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param w
+#' @param X
+#' @param weights
+#'
+#' @return
+#' @export
+#'
+#' @examples
 calc.ac = function(w, X, weights){
   w.mean = sum(w*weights)
   w.sd = sqrt(sum((w-w.mean)^2*weights))

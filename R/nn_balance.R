@@ -1,3 +1,23 @@
+#' @title
+#' Title
+#'
+#' @description
+#'
+#' @param w.obs
+#' @param w.est
+#' @param y.obs
+#' @param train.GPS.ret
+#' @param design.mt
+#' @param all.params
+#' @param n.cpu
+#' @param n.neighbour
+#' @param expand
+#' @param block.size
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nn.balance = function(w.obs, w.est, y.obs, train.GPS.ret, design.mt,
                       all.params = expand.grid(seq(0.5,4.5,1), seq(0.5,4.5,1), seq(0.5,4.5,1)),
                       n.cpu = 20,  n.neighbour = 50, expand = 2, block.size = 2e3){
