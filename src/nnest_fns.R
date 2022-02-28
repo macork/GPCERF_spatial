@@ -49,6 +49,52 @@ get.nn.fast = function(params, w.new, GPS.new, obs.ord, y.obs.ord,
   cbind(c(idx.all,NA), c(weights, est))
 }
 
+deriv.nn.fast = function(params, w.new, GPS.new, obs.ord, y.obs.ord, 
+                       n.neighbour = 10, expand = 5, block.size = 1e4,
+                       kernel.fn = function(x) exp(-x^2),
+                       kernel.deriv.fn = function(x, mu, sigma) (x-mu)/sigma^2){
+  # browser()
+  n = length(GPS.new)
+  n.block = ceiling(n/block.size)
+  #params: length 3, first scale for w, second scale for GPS, 
+  #third scale for exp fn
+  if(w.new >= obs.ord[nrow(obs.ord),1]){
+    idx.all = seq( nrow(obs.ord) - expand*n.neighbour + 1, nrow(obs.ord), 1)
+  }else{
+    idx.anchor = which.max(obs.ord[,1]>=w.new)
+    idx.start = max(1, idx.anchor - n.neighbour*expand)
+    idx.end = min(nrow(obs.ord), idx.anchor + n.neighbour*expand)
+    if(idx.end == nrow(obs.ord)){
+      idx.all = seq(idx.end - n.neighbour*2*expand + 1, idx.end, 1)
+    }else{
+      idx.all = seq(idx.start, idx.start+n.neighbour*2*expand-1, 1)
+    }
+  }
+  
+  obs.use = t(t(obs.ord[idx.all,])*sqrt(params[1:2]))
+  cov.use.inv = chol2inv(chol(params[3]*exp(-as.matrix(dist(obs.use))^2) + diag(nrow(obs.use))))
+  y.use = y.obs.ord[idx.all]
+  
+  obs.new = t(t(cbind(w.new, GPS.new))*sqrt(params[1:2]))
+  id.all = split(1:n, ceiling(seq_along(1:n)/n.block))
+  all.weights = sapply(id.all, function(id.ind){
+    cov.cross = param[3]*kernel.fn(spatstat.geom::crossdist(obs.new[,1], obs.new[,2],
+                                                            obs.use[,1], obs.use[,2]))*
+      param[1]*outer(w, w.obs, "-") - param[2]*outer(GPS.new, GPS.obs, "-")*
+      GPS.new*kernel.deriv.fn(w, e_gps_pred, e_gps_std)
+    #mean
+    w = cov.cross%*%cov.use.inv
+    w[w<0] = 0
+    colSums(w)
+  })
+  weights = rowSums(all.weights)/n
+  weights = weights/sum(weights)
+  
+  est = c(y.use%*%weights)
+  
+  cbind(c(idx.all,NA), c(weights, est))
+}
+
 get.nn.sd = function(params, w.new, GPS.new, obs.ord, n.neighbour = 10, expand = 1){
   #params[4] should be sigma^2
   n = length(GPS.new)
@@ -183,4 +229,14 @@ nn.sigma.est = function(params, w.obs, GPS.obs, y.obs, n.neighbour, n.core = 20)
   sfStop()
   sigma2 = var(all.residuals)
   return(sigma2)
+}
+
+nn.cp.calc = function(w, GPS.new, y.obs, w.obs, GPS.obs, param, e_gps_pred, e_gps_std, 
+                                 kernel.fn = function(x) exp(-x^2),
+                                 kernel.deriv.fn = function(x, mu, sigma) (x-mu)/sigma^2){
+  # param[1]: alpha, param[2]: beta, param[3]: gamma
+  # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
+  left.deriv = deriv.nn.fast(params, w, GPS.new, cbind(w.obs,GPS.obs)[w.obs<w,], y.obs, n.neighbour = 200)
+  right.deriv = deriv.nn.fast(params, w, GPS.new, cbind(w.obs,GPS.obs)[w.obs>=w,], y.obs, n.neighbour = 200)
+  right.deriv - left.deriv
 }
