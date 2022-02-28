@@ -12,13 +12,13 @@ GP.weights.calc = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, 
   # each row is the weights for all subject for estimate of Y_i(w)
   # each column is the weight of an observed sample (w_i, c_i)
   weights.all = Sigma.cross%*%inv.Sigma.obs
-  weights.all
+  weights.all + (1-sum(weights.all))*1/length(w.obs)
 }
 
 GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, e_gps_std, 
                            kernel.fn = function(x) exp(-x^2)){
   # param[1]: alpha, param[2]: beta, param[3]: gamma
-  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
+  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std, T)
   
   obs.new = cbind( w*sqrt(param[1]), GPS.new*sqrt(param[2]) )
   Sigma.cross = param[3]*kernel.fn(spatstat.geom::crossdist(obs.new[,1], obs.new[,2],
@@ -26,7 +26,8 @@ GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, 
   # each row is the weights for all subject for estimate of Y_i(w)
   # each column is the weight of an observed sample (w_i, c_i)
   # system.time(eigenMapMatMult(Sigma.cross, inv.Sigma.obs))
-  c((rep(1/length(w.obs),length(w.obs))%*%Sigma.cross)%*%inv.Sigma.obs)
+  w.mean = 1 - rowSums(Sigma.cross%*%inv.Sigma.obs)
+  c((rep(1/length(w.obs),length(w.obs))%*%Sigma.cross)%*%inv.Sigma.obs) + sum(w.mean)/length(w.obs)^2
 }
 
 # tune alpha, beta and gamma in the GP model
@@ -94,4 +95,13 @@ GP.deriv.weights.calc = function(w, w.obs, GPS.obs, param, e_gps_pred, e_gps_std
     GPS.new*kernel.deriv.fn(w, e_gps_pred, e_gps_std)
   weights.all = Sigma.cross%*%chol2inv(chol(Sigma.obs))
   weights.all
+}
+
+GP.cp.diff = function(w, y.obs, w.obs, GPS.obs, param, e_gps_pred, e_gps_std, noise_est){
+  # left derivatives
+  left.weights = GP.deriv.weights.calc(w, w.obs[w.obs<w], GPS.obs[w.obs<w], 
+                                       param, e_gps_pred, e_gps_std)
+  right.weights = GP.deriv.weights.calc(w, w.obs[w.obs>=w], GPS.obs[w.obs>=w], 
+                                        param, e_gps_pred, e_gps_std)
+  right.weights%*%y.obs[w.obs>=w] - left.weights%*%y.obs[w.obs>=w]
 }
