@@ -7,11 +7,18 @@
 calc.ac(w, X, weights)
 }
 \arguments{
-\item{weights}{}
+\item{w}{param description}
+
+\item{X}{param description}
+
+\item{weights}{param description}
 }
 \value{
-
+Return val
 }
 \description{
+Description
+}
+\examples{
 
 }

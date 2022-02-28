@@ -7,11 +7,13 @@
 tru_R(w, sim.data)
 }
 \arguments{
-\item{sim.data}{}
+\item{w}{param's description}
+
+\item{sim.data}{param's description}
 }
 \value{
 
 }
 \description{
-
+Description
 }

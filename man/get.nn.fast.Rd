@@ -16,11 +16,25 @@ get.nn.fast(
 )
 }
 \arguments{
-\item{block.size}{}
+\item{params}{param's description}
+
+\item{w.new}{param's description}
+
+\item{GPS.new}{param's description}
+
+\item{obs.ord}{param's description}
+
+\item{y.obs.ord}{param's description}
+
+\item{n.neighbour}{param's description}
+
+\item{expand}{param's description}
+
+\item{block.size}{param's description}
 }
 \value{
 
 }
 \description{
-
+Description
 }

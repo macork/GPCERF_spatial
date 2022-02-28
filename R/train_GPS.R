@@ -2,9 +2,10 @@
 #' Title
 #'
 #' @description
+#' Description
 #'
-#' @param cov.mt
-#' @param w.all
+#' @param cov.mt param's description
+#' @param w.all param's description
 #'
 #' @return
 #' @export

@@ -2,13 +2,14 @@
 #' Title
 #'
 #' @description
+#' Description
 #'
-#' @param params
-#' @param w.new
-#' @param GPS.new
-#' @param obs.ord
-#' @param n.neighbour
-#' @param expand
+#' @param params param's description
+#' @param w.new param's description
+#' @param GPS.new param's description
+#' @param obs.ord param's description
+#' @param n.neighbour param's description
+#' @param expand param's description
 #'
 #' @return
 #' @export

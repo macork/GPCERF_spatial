@@ -2,13 +2,14 @@
 #' Title
 #'
 #' @description
+#' Description
 #'
-#' @param params
-#' @param w.obs
-#' @param GPS.obs
-#' @param y.obs
-#' @param n.neighbour
-#' @param n.core
+#' @param params param's description
+#' @param w.obs param's description
+#' @param GPS.obs param's description
+#' @param y.obs param's description
+#' @param n.neighbour param's description
+#' @param n.core param's description
 #'
 #' @return
 #' @export

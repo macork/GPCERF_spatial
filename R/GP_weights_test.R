@@ -2,16 +2,18 @@
 #' Title
 #'
 #' @description
+#' Description
 #'
-#' @param w
-#' @param w.obs
-#' @param obs.use
-#' @param param
-#' @param inv.Sigma.obs
-#' @param e_gps_pred
-#' @param e_gps_std
-#' @param kernel.fn
+#' @param w param's description
+#' @param w.obs param's description
+#' @param obs.use param's description
+#' @param param param's description
+#' @param inv.Sigma.obs param's description
+#' @param e_gps_pred param's description
+#' @param e_gps_std param's description
+#' @param kernel.fn param's description
 #'
+#' @import stats
 #' @return
 #' @export
 #'
@@ -19,7 +21,7 @@
 GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs, e_gps_pred, e_gps_std,
                            kernel.fn = function(x) exp(-x^2)){
   # param[1]: alpha, param[2]: beta, param[3]: gamma
-  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
+  GPS.new = stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
 
   obs.new = cbind( w*sqrt(param[1]), GPS.new*sqrt(param[2]) )
   Sigma.cross = param[3]*kernel.fn(spatstat.geom::crossdist(obs.new[,1], obs.new[,2],

@@ -7,11 +7,13 @@
 train.GPS(cov.mt, w.all)
 }
 \arguments{
-\item{w.all}{}
+\item{cov.mt}{param's description}
+
+\item{w.all}{param's description}
 }
 \value{
 
 }
 \description{
-
+Description
 }

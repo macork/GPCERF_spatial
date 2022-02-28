@@ -7,11 +7,21 @@
 nn.sigma.est(params, w.obs, GPS.obs, y.obs, n.neighbour, n.core = 20)
 }
 \arguments{
-\item{n.core}{}
+\item{params}{param's description}
+
+\item{w.obs}{param's description}
+
+\item{GPS.obs}{param's description}
+
+\item{y.obs}{param's description}
+
+\item{n.neighbour}{param's description}
+
+\item{n.core}{param's description}
 }
 \value{
 
 }
 \description{
-
+Description
 }

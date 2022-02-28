@@ -16,11 +16,25 @@ GP.weights.calc(
 )
 }
 \arguments{
-\item{kernel.fn}{}
+\item{w}{param's description}
+
+\item{w.obs}{param's description}
+
+\item{obs.use}{param's description}
+
+\item{param}{param's description}
+
+\item{inv.Sigma.obs}{param's description}
+
+\item{e_gps_pred}{param's description}
+
+\item{e_gps_std}{param's description}
+
+\item{kernel.fn}{param's description}
 }
 \value{
 
 }
 \description{
-Title
+Description
 }

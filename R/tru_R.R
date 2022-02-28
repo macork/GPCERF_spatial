@@ -2,9 +2,10 @@
 #' Title
 #'
 #' @description
+#' Description
 #'
-#' @param w
-#' @param sim.data
+#' @param w param's description
+#' @param sim.data param's description
 #'
 #' @return
 #' @export

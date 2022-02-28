@@ -2,10 +2,11 @@
 #' Title
 #'
 #' @description
+#' Description
 #'
-#' @param param
-#' @param sim.data
-#' @param GPS
+#' @param param param's description
+#' @param sim.data param's description
+#' @param GPS param's description
 #'
 #' @return
 #' @export

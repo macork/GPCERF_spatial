@@ -18,11 +18,29 @@ nn.balance(
 )
 }
 \arguments{
-\item{block.size}{}
+\item{w.obs}{param's description}
+
+\item{w.est}{param's description}
+
+\item{y.obs}{param's description}
+
+\item{train.GPS.ret}{param's description}
+
+\item{design.mt}{param's description}
+
+\item{all.params}{param's description}
+
+\item{n.cpu}{param's description}
+
+\item{n.neighbour}{param's description}
+
+\item{expand}{param's description}
+
+\item{block.size}{param's description}
 }
 \value{
 
 }
 \description{
-
+Description
 }

@@ -1,14 +1,17 @@
 #' @title
 #' Title
 #'
-#' @param w
-#' @param w.obs
-#' @param obs.use
-#' @param param
-#' @param inv.Sigma.obs
-#' @param e_gps_pred
-#' @param e_gps_std
-#' @param kernel.fn
+#' @description
+#' Description
+#'
+#' @param w param's description
+#' @param w.obs param's description
+#' @param obs.use param's description
+#' @param param param's description
+#' @param inv.Sigma.obs param's description
+#' @param e_gps_pred param's description
+#' @param e_gps_std param's description
+#' @param kernel.fn param's description
 #'
 #' @return
 #' @export

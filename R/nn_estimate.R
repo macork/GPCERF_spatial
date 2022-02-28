@@ -2,16 +2,17 @@
 #' Title
 #'
 #' @description
+#' Description
 #'
-#' @param params
-#' @param w.obs
-#' @param w.est
-#' @param y.obs
-#' @param train.GPS.ret
-#' @param n.cpu
-#' @param n.neighbour
-#' @param expand
-#' @param block.size
+#' @param params param's description
+#' @param w.obs param's description
+#' @param w.est param's description
+#' @param y.obs param's description
+#' @param train.GPS.ret param's description
+#' @param n.cpu param's description
+#' @param n.neighbour param's description
+#' @param expand param's description
+#' @param block.size param's description
 #'
 #' @return
 #' @export

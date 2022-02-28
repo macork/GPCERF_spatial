@@ -7,11 +7,15 @@
 noise.est(param, sim.data, GPS)
 }
 \arguments{
-\item{GPS}{}
+\item{param}{param's description}
+
+\item{sim.data}{param's description}
+
+\item{GPS}{param's description}
 }
 \value{
 
 }
 \description{
-
+Description
 }

@@ -3,14 +3,15 @@
 #' Title
 #'
 #' @description
+#' Description
 #'
-#' @param param
-#' @param sim.data
-#' @param w.all
-#' @param GPS
-#' @param e_gps_pred
-#' @param e_gps_std
-#' @param kernel.fn
+#' @param param param's description
+#' @param sim.data param's description
+#' @param w.all param's description
+#' @param GPS param's description
+#' @param e_gps_pred param's description
+#' @param e_gps_std param's description
+#' @param kernel.fn param's description
 #'
 #' @return
 #' @export

@@ -7,11 +7,21 @@
 get.nn.sd(params, w.new, GPS.new, obs.ord, n.neighbour = 10, expand = 1)
 }
 \arguments{
-\item{expand}{}
+\item{params}{param's description}
+
+\item{w.new}{param's description}
+
+\item{GPS.new}{param's description}
+
+\item{obs.ord}{param's description}
+
+\item{n.neighbour}{param's description}
+
+\item{expand}{param's description}
 }
 \value{
 
 }
 \description{
-
+Description
 }

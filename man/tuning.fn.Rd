@@ -15,11 +15,23 @@ tuning.fn(
 )
 }
 \arguments{
-\item{kernel.fn}{}
+\item{param}{param's description}
+
+\item{sim.data}{param's description}
+
+\item{w.all}{param's description}
+
+\item{GPS}{param's description}
+
+\item{e_gps_pred}{param's description}
+
+\item{e_gps_std}{param's description}
+
+\item{kernel.fn}{param's description}
 }
 \value{
 
 }
 \description{
-
+Description
 }
