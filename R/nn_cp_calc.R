@@ -1,3 +1,24 @@
+#' @title
+#' Title
+#'
+#' @description
+#' Description
+#'
+#' @param w
+#' @param GPS.new
+#' @param y.obs
+#' @param w.obs
+#' @param GPS.obs
+#' @param param
+#' @param e_gps_pred
+#' @param e_gps_std
+#' @param kernel.fn
+#' @param kernel.deriv.fn
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nn.cp.calc = function(w, GPS.new, y.obs, w.obs, GPS.obs, param, e_gps_pred, e_gps_std,
                       kernel.fn = function(x) exp(-x^2),
                       kernel.deriv.fn = function(x, mu, sigma) (x-mu)/sigma^2){
