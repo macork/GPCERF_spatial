@@ -1,15 +1,17 @@
 #' @title
-#' Title
+#' Calculate Posterior Variances for nnGP Model
 #'
 #' @description
-#' Description
+#' Calculate the posterior variance of a point on the CERF based on the nnGP model.
 #'
-#' @param params param's description
-#' @param w.new param's description
-#' @param GPS.new param's description
-#' @param obs.ord param's description
-#' @param n.neighbour param's description
-#' @param expand param's description
+#' @param params Values of hyperparameters in the GP model.
+#' @param w.new  The exposure level for the point of interest on the CERF.
+#' @param GPS.new The GPS for all samples when their exposure levels are set at \code{w.new}.
+#' @param obs.ord A matrix of two columns. First column is the observed exposure levels of all
+#' samples; second is the GPS at the observed exposure levels. The rows are in ascending order
+#' for the first column.
+#' @param n.neighbour Number of nearest neighbours on one side (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.
 #'
 #' @return
 #' @export
