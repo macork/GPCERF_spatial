@@ -1,8 +1,8 @@
 #' @title
-#' Calculate Posterior Variances for nnGP Model
+#' Calculate Posterior Standard Deviations for nnGP Model
 #'
 #' @description
-#' Calculate the posterior variance of a point on the CERF based on the nnGP model.
+#' Calculate the posterior standard deviation of a point on the CERF based on the nnGP model.
 #'
 #' @param params Values of hyperparameters in the GP model.
 #' @param w.new  The exposure level for the point of interest on the CERF.
@@ -14,6 +14,7 @@
 #' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.
 #'
 #' @return
+#' The posterior standard deviation of the estimated CERF at \code{w.new}.
 #' @export
 #'
 #' @examples

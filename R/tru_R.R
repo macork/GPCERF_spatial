@@ -1,13 +1,15 @@
 #' @title
-#' Title
+#' Calculate True CERF
 #'
 #' @description
-#' Description
+#' Derive the true CERF at exposure levels of interest when the data
+#' is distributed as described in the simulation study.
 #'
-#' @param w param's description
-#' @param sim.data param's description
+#' @param w A vector of exposure levels at which the CERF is derived.
+#' @param sim.data A data frame from one simulation run.
 #'
 #' @return
+#' A vector of CERF values evaluated at \code{w}.
 #' @export
 #'
 #' @examples

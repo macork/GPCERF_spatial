@@ -15,6 +15,9 @@
 #' @author Tanujit Dey
 #' @author Danielle Braun
 #' @import stats
+#' @import spatstat
+#' @import snowfall
+#' @import MASS
 #'
 #' @references
 #'

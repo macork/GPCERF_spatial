@@ -1,5 +1,3 @@
-# weights for derivatives
-# we switch back to dnorm to calc GPS
 #' @title
 #' Calculate Derivatives of CERF
 #'

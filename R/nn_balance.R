@@ -1,21 +1,28 @@
 #' @title
-#' Title
+#' Hyper-parameter Tuning of nnGP
 #'
 #' @description
-#' Description
+#' Select the optimal hyper-parameter values on a pre-defined grid by minimizing the covariate
+#' balance of the nnGP.
 #'
-#' @param w.obs param's description
-#' @param w.est param's description
-#' @param y.obs param's description
-#' @param train.GPS.ret param's description
-#' @param design.mt param's description
-#' @param all.params param's description
-#' @param n.cpu param's description
-#' @param n.neighbour param's description
-#' @param expand param's description
-#' @param block.size param's description
+#' @param w.obs A vector of the observed exposure levels.
+#' @param w.est A vector of exposure levels at which CERF will be estimated.
+#' @param y.obs A vector of observed outcomes
+#' @param train.GPS.ret A list containing three items, 1) estimated GPS at observed exposure
+#' levels; 2) estimated conditional means of the exposure level at the observed covariate
+#' values for all samples; 3) estimated conditional standard deviation of the exposure level
+#' given all covariates.
+#' @param design.mt The covariate matrix of all samples (intercept excluded).
+#' @param all.params A matrix of candidate values of the hyper-parameters, each row contains a
+#' set of values of all hyper-parameters.
+#' @param n.cpu Number of cores to use in the tuning process.
+#' @param n.neighbour Number of nearest neighbours on one side (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.
+#' @param block.size Number of samples included in a computation block. Mainly used to
+#' balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.
 #'
 #' @return
+#' Estimated covariate balance scores for the grid of hyper-parameter values considered in \code{all.params}.
 #' @export
 #'
 #' @examples
