@@ -1,19 +1,24 @@
-# tune alpha, beta and gamma in the GP model
 #' @title
-#' Title
+#' Hyperparameter Tuning in Full GP
 #'
 #' @description
-#' Description
+#' Calculate the induced covariate balance associated with one hyperparameter
+#' configuration in full GP.
 #'
-#' @param param param's description
-#' @param sim.data param's description
-#' @param w.all param's description
-#' @param GPS param's description
-#' @param e_gps_pred param's description
-#' @param e_gps_std param's description
-#' @param kernel.fn param's description
+#' @param param A vector of values of hyperparameters.
+#' @param sim.data A data frame containing all data including outcome, exposure
+#' and covariates.
+#' @param w.all A vector of exposure levels at which the CERF is estimated.
+#' @param GPS A vector of estimated GPS evaluated at the observed exposure levels.
+#' @param e_gps_pred A vector of estimated conditional means of the exposure given covariates
+#' for all samples.
+#' @param e_gps_std A scalar of estimated conditional standard deviations of the exposure given covariates.
+#' @param kernel.fn The covariance function of GP.
 #'
 #' @return
+#' A list containing two elements: 1) a vector of absolute weighted correlation of each
+#' covariate to the exposure, which is the metric for covariate balance and 2) the estimated
+#' CERF at \code{w.all} based on the hyper-parameter values in \code{param}.
 #' @export
 #'
 #' @examples

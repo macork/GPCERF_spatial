@@ -1,21 +1,23 @@
-# weights for derivatives
-# we switch back to dnorm to calc GPS
 #' @title
-#' Title
+#' Calculate Derivatives of CERF
 #'
 #' @description
-#' Description
+#' Calculate the weights assigned to each observed outcome when deriving the
+#' posterior mean of the first derivative of CERF at a given exposure level.
 #'
-#' @param w param's description
-#' @param w.obs param's description
-#' @param GPS.obs param's description
-#' @param param param's description
-#' @param e_gps_pred param's description
-#' @param e_gps_std param's description
-#' @param kernel.fn param's description
-#' @param kernel.deriv.fn param's description
+#' @param w A scalar of exposure level of interest.
+#' @param w.obs A vector of observed exposure levels of all samples.
+#' @param GPS.obs A vector of GPS for all samples at the observed levels of exposure.
+#' @param param A vector of hyper-parameters in the GP model.
+#' @param e_gps_pred A vecotor of estimated conditional means of the exposure given covariates
+#' for all samples.
+#' @param e_gps_std A scalar of estimated conditional standard deviations of the exposure given covariates.
+#' @param kernel.fn The covariance function.
+#' @param kernel.deriv.fn The partial derivative of the covariance function.
 #'
 #' @return
+#' A vector of weights for all samples, based on which the posterior mean of the derivative of CERF at the
+#' exposure level of interest is calculated.
 #' @export
 #'
 #' @examples

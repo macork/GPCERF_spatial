@@ -1,26 +1,30 @@
 #' @title
-#' Title
+#' Estimation of CERF with nnGP
 #'
 #' @description
-#' Description
+#' Estimate the posterior mean of the CERF at specified exposure levels with nnGP.
 #'
-#' @param params param's description
-#' @param w.obs param's description
-#' @param w.est param's description
-#' @param y.obs param's description
-#' @param train.GPS.ret param's description
-#' @param n.cpu param's description
-#' @param n.neighbour param's description
-#' @param expand param's description
-#' @param block.size param's description
+#' @param params A vector of hyperparameters for the nnGP.
+#' @param w.obs A vector of observed exposure levels.
+#' @param w.est A vector of exposure levels at which the CERF is estimated.
+#' @param y.obs A vector of observed outcome values.
+#' @param train.GPS.ret A list containing three items, 1) estimated GPS at observed exposure
+#' levels; 2) estimated conditional means of the exposure level at the observed covariate
+#' values for all samples; 3) estimated conditional standard deviation of the exposure level
+#' given all covariates.
+#' @param n.cpu Number of cores to use in the tuning process.
+#' @param n.neighbour Number of nearest neighbours on one side (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.
+#' @param block.size Number of samples included in a computation block. Mainly used to
+#' balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.
 #'
 #' @return
+#' A list of matrices, where each matrix is the returned value from \code{get.nn.fast}.
 #' @export
 #'
 #' @examples
 nn.estimate = function(params, w.obs, w.est, y.obs, train.GPS.ret, n.cpu = 20,
                        n.neighbour = 50, expand = 2, block.size = 2e3){
-  require(snowfall)
   coord.obs = cbind(w.obs, train.GPS.ret$GPS)
   #get rid of unobserved stratified mortality rate
   coord.obs = coord.obs[!is.na(y.obs),]
@@ -34,14 +38,14 @@ nn.estimate = function(params, w.obs, w.est, y.obs, train.GPS.ret, n.cpu = 20,
   # y.obs.ozone.ord = test2$mortality_trans[order(w.obs.ozone[,1])]
   # y.un.obs.ozone.ord = test2$mortality[order(w.obs.ozone[,1])]
 
-  sfInit(parallel = T, cpus = n.cpu)
-  sfExport("get.nn.fast", "train.GPS.ret", "coord.obs.ord", "y.use.ord", "params")
-  all.res = sfLapply(w.est, function(w){
+  snowfall::sfInit(parallel = T, cpus = n.cpu)
+  snowfall::sfExport("get.nn.fast", "train.GPS.ret", "coord.obs.ord", "y.use.ord", "params")
+  all.res = snowfall::sfLapply(w.est, function(w){
     print(w)
     GPS.new = dnorm(w, mean = train.GPS.ret$e_gps_pred, sd = train.GPS.ret$e_gps_std_pred, log = T)
     get.nn.fast(params = params, w.new = w, GPS.new = GPS.new, obs.ord = coord.obs.ord,
                 y.obs.ord = y.use.ord, n.neighbour = n.neighbour, expand = expand, block.size = block.size)
   })
-  sfStop()
+  snowfall::sfStop()
   all.res
 }

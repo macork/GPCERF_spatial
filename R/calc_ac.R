@@ -1,15 +1,16 @@
 #' @title
-#' Title
+#' Calculate Covariate Balance
 #'
 #' @description
-#' Description
+#' Calculate weighted correlation between a list of covariates and an exposure.
+#' Weights are defined by the covariance function of the GP.
 #'
-#' @param w param description
-#' @param X param description
-#' @param weights param description
+#' @param w A vector exposure values across all subjects.
+#' @param X A matrix of covariate values. Subjects in rows and covariates in columns.
+#' @param weights A vector of weights assigned to all subjects based on the trained GP.
 #'
 #' @return
-#' Return val
+#' A vector of correlations between w and each column of X.
 #' @export
 #'
 #' @examples

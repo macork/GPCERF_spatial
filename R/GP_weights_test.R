@@ -1,20 +1,24 @@
 #' @title
-#' Title
+#' Calculate Weights for Estimation of a Point on CERF
 #'
 #' @description
-#' Description
+#' Calculate the weights of observed outcomes which is then used to estimate
+#' the posterior mean of CERF at a given exposure level.
 #'
-#' @param w param's description
-#' @param w.obs param's description
-#' @param obs.use param's description
-#' @param param param's description
-#' @param inv.Sigma.obs param's description
-#' @param e_gps_pred param's description
-#' @param e_gps_std param's description
-#' @param kernel.fn param's description
+#' @param w param's A scalar of exposure level of interest.
+#' @param w.obs A vector of observed exposure levels of all samples.
+#' @param obs.use A matrix of two columns. First column is the observed exposure levels of all
+#' samples; second is the GPS at the observed exposure levels.
+#' @param param A vector of hyperparameters for the GP.
+#' @param inv.Sigma.obs Inverse of the covariance matrix between observed samples.
+#' @param e_gps_pred A vector of estimated conditional means of the exposure given covariates
+#' for all samples.
+#' @param e_gps_std A scalar of estimated conditional standard deviations of the exposure given covariates.
+#' @param kernel.fn The covariance function of GP.
 #'
-#' @import stats
 #' @return
+#' A vector of the weights assigned to each sample for the calculate of posterior mean
+#' of CERF at \code{w}.
 #' @export
 #'
 #' @examples

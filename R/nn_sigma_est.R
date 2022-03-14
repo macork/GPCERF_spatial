@@ -1,17 +1,19 @@
 #' @title
-#' Title
+#' Estimate the Standard Deviation of the Nugget Term in nnGP
 #'
 #' @description
-#' Description
+#' Estimate the starndard deviations of the nugget term in nnGP by calculating
+#' the standard deviations of the residuals.
 #'
-#' @param params param's description
-#' @param w.obs param's description
-#' @param GPS.obs param's description
-#' @param y.obs param's description
-#' @param n.neighbour param's description
-#' @param n.core param's description
+#' @param params A vector of hyper-parameter values.
+#' @param w.obs A vector of observed exposure levels.
+#' @param GPS.obs A vector of estimated GPS evaluated at the observed exposure levels.
+#' @param y.obs A vector of observed outcomes.
+#' @param n.neighbour Number of nearest neighbours on one side.
+#' @param n.core Number of cores to use in the tuning process.
 #'
 #' @return
+#' A scalar of estimated standard deviation of the nugget term in nnGP.
 #' @export
 #'
 #' @examples
@@ -37,6 +39,5 @@ nn.sigma.est = function(params, w.obs, GPS.obs, y.obs, n.neighbour, n.core = 20)
     c(w%*%y.ord[idx.use]) - y.ord[i]
   })
   sfStop()
-  sigma2 = var(all.residuals)
-  return(sigma2)
+  return( sd(all.residuals) )
 }
