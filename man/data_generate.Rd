@@ -2,16 +2,25 @@
 % Please edit documentation in R/data_generate.R
 \name{data_generate}
 \alias{data_generate}
-\title{Title}
+\title{Generate Synthetic Data for GPCERF Package}
 \usage{
 data_generate(sample_size = 1000, outcome_sd = 10, gps_spec = 1, cova_spec = 1)
 }
 \arguments{
-\item{cova_spec}{}
+\item{sample_size}{Number of data samples.}
+
+\item{outcome_sd}{Standard deviation used to generate the outcome in the
+sythetic dataset.}
+
+\item{gps_spec}{A numeric value (1-6) that indicates the GPS model used to
+generate the continuous exposure.}
+
+\item{cova_spec}{A numeric value (1-2) to modify the covariates.}
 }
 \value{
-
+A data frame of the synthetic data. Outcome is labelled as Y, exposure as w, and
+covariates cf1-6.
 }
 \description{
-
+Generates synthetic data set based on different GPS models and covariates.
 }

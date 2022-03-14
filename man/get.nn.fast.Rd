@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nn_fast.R
 \name{get.nn.fast}
 \alias{get.nn.fast}
-\title{Title}
+\title{Calculate Posterior Means for nnGP Model}
 \usage{
 get.nn.fast(
   params,
@@ -16,25 +16,33 @@ get.nn.fast(
 )
 }
 \arguments{
-\item{params}{param's description}
+\item{params}{Values of hyperparameters in the GP model.}
 
-\item{w.new}{param's description}
+\item{w.new}{The exposure level for the point of interest on the CERF.}
 
-\item{GPS.new}{param's description}
+\item{GPS.new}{The GPS for all samples when their exposure levels are set at \code{w.new}.}
 
-\item{obs.ord}{param's description}
+\item{obs.ord}{A matrix of two columns. First column is the observed exposure levels of all
+samples; second is the GPS at the observed exposure levels. The rows are in ascending order
+for the first column.}
 
-\item{y.obs.ord}{param's description}
+\item{y.obs.ord}{A vector of observed outcome values. The vector is ordered as \code{obs.ord}.}
 
-\item{n.neighbour}{param's description}
+\item{n.neighbour}{Number of nearest neighbours on one side (see also \code{expand}).}
 
-\item{expand}{param's description}
+\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.}
 
-\item{block.size}{param's description}
+\item{block.size}{Number of samples included in a computation block. Mainly used to
+balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.}
 }
 \value{
-
+A two column matrix. The first column is the weights assigned to each nearest neighbour.
+The second column is the corresponding observed outcome value. The weight in the last row of
+this matrix is NA and the observed outcome value is the estimated posterior mean of the CERF
+at point \code{w.new}, which is the weighted sum of all observed outcome values of the neighbours.
 }
 \description{
-Description
+Calculate the posterior mean of a point on the CERF based on the nnGP model.
+This function also returns the weights assigned to all nearest neighbours when
+calculating the posterior mean.
 }

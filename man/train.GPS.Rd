@@ -2,18 +2,22 @@
 % Please edit documentation in R/train_GPS.R
 \name{train.GPS}
 \alias{train.GPS}
-\title{Title}
+\title{Train Model for GPS}
 \usage{
 train.GPS(cov.mt, w.all)
 }
 \arguments{
-\item{cov.mt}{param's description}
+\item{cov.mt}{Covariate matrix containing all covariates. Each row is a sample and each
+column is a covariate.}
 
-\item{w.all}{param's description}
+\item{w.all}{A vector of observed exposure levels.}
 }
 \value{
-
+A list of three elements: 1) a vector of estimated GPS at the observed exposure levels; 2)
+a vector of estimated conditional means of exposure levels when the covariates are fixed
+at the observed values; 3) estimated standard deviation of exposure levels
 }
 \description{
-Description
+Estimate the conditional mean and sd of exposure level as a function of covariates with
+xgboost algorithm.
 }

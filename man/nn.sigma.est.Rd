@@ -2,26 +2,27 @@
 % Please edit documentation in R/nn_sigma_est.R
 \name{nn.sigma.est}
 \alias{nn.sigma.est}
-\title{Title}
+\title{Estimate the Standard Deviation of the Nugget Term in nnGP}
 \usage{
 nn.sigma.est(params, w.obs, GPS.obs, y.obs, n.neighbour, n.core = 20)
 }
 \arguments{
-\item{params}{param's description}
+\item{params}{A vector of hyper-parameter values.}
 
-\item{w.obs}{param's description}
+\item{w.obs}{A vector of observed exposure levels.}
 
-\item{GPS.obs}{param's description}
+\item{GPS.obs}{A vector of estimated GPS evaluated at the observed exposure levels.}
 
-\item{y.obs}{param's description}
+\item{y.obs}{A vector of observed outcomes.}
 
-\item{n.neighbour}{param's description}
+\item{n.neighbour}{Number of nearest neighbours on one side.}
 
-\item{n.core}{param's description}
+\item{n.core}{Number of cores to use in the tuning process.}
 }
 \value{
-
+A scalar of estimated standard deviation of the nugget term in nnGP.
 }
 \description{
-Description
+Estimate the starndard deviations of the nugget term in nnGP by calculating
+the standard deviations of the residuals.
 }

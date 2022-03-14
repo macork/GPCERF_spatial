@@ -2,7 +2,7 @@
 % Please edit documentation in R/tuning_fn.R
 \name{tuning.fn}
 \alias{tuning.fn}
-\title{Title}
+\title{Hyperparameter Tuning in Full GP}
 \usage{
 tuning.fn(
   param,
@@ -15,23 +15,28 @@ tuning.fn(
 )
 }
 \arguments{
-\item{param}{param's description}
+\item{param}{A vector of values of hyperparameters.}
 
-\item{sim.data}{param's description}
+\item{sim.data}{A data frame containing all data including outcome, exposure
+and covariates.}
 
-\item{w.all}{param's description}
+\item{w.all}{A vector of exposure levels at which the CERF is estimated.}
 
-\item{GPS}{param's description}
+\item{GPS}{A vector of estimated GPS evaluated at the observed exposure levels.}
 
-\item{e_gps_pred}{param's description}
+\item{e_gps_pred}{A vector of estimated conditional means of the exposure given covariates
+for all samples.}
 
-\item{e_gps_std}{param's description}
+\item{e_gps_std}{A scalar of estimated conditional standard deviations of the exposure given covariates.}
 
-\item{kernel.fn}{param's description}
+\item{kernel.fn}{The covariance function of GP.}
 }
 \value{
-
+A list containing two elements: 1) a vector of absolute weighted correlation of each
+covariate to the exposure, which is the metric for covariate balance and 2) the estimated
+CERF at \code{w.all} based on the hyper-parameter values in \code{param}.
 }
 \description{
-Description
+Calculate the induced covariate balance associated with one hyperparameter
+configuration in full GP.
 }

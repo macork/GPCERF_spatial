@@ -2,7 +2,7 @@
 % Please edit documentation in R/nn_estimate.R
 \name{nn.estimate}
 \alias{nn.estimate}
-\title{Title}
+\title{Estimation of CERF with nnGP}
 \usage{
 nn.estimate(
   params,
@@ -17,27 +17,31 @@ nn.estimate(
 )
 }
 \arguments{
-\item{params}{param's description}
+\item{params}{A vector of hyperparameters for the nnGP.}
 
-\item{w.obs}{param's description}
+\item{w.obs}{A vector of observed exposure levels.}
 
-\item{w.est}{param's description}
+\item{w.est}{A vector of exposure levels at which the CERF is estimated.}
 
-\item{y.obs}{param's description}
+\item{y.obs}{A vector of observed outcome values.}
 
-\item{train.GPS.ret}{param's description}
+\item{train.GPS.ret}{A list containing three items, 1) estimated GPS at observed exposure
+levels; 2) estimated conditional means of the exposure level at the observed covariate
+values for all samples; 3) estimated conditional standard deviation of the exposure level
+given all covariates.}
 
-\item{n.cpu}{param's description}
+\item{n.cpu}{Number of cores to use in the tuning process.}
 
-\item{n.neighbour}{param's description}
+\item{n.neighbour}{Number of nearest neighbours on one side (see also \code{expand}).}
 
-\item{expand}{param's description}
+\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.}
 
-\item{block.size}{param's description}
+\item{block.size}{Number of samples included in a computation block. Mainly used to
+balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.}
 }
 \value{
-
+A list of matrices, where each matrix is the returned value from \code{get.nn.fast}.
 }
 \description{
-Description
+Estimate the posterior mean of the CERF at specified exposure levels with nnGP.
 }

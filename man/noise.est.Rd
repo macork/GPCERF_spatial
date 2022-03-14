@@ -2,20 +2,21 @@
 % Please edit documentation in R/noise_est.R
 \name{noise.est}
 \alias{noise.est}
-\title{Title}
+\title{Estimate the Standard Deviation of the Nugget Term in Full GP}
 \usage{
-noise.est(param, sim.data, GPS)
+noise.est(param, data, GPS)
 }
 \arguments{
-\item{param}{param's description}
+\item{param}{A vector of hyper-parameter values for the full GP.}
 
-\item{sim.data}{param's description}
+\item{data}{A data frame containing outcome, exposure and all covariates.}
 
-\item{GPS}{param's description}
+\item{GPS}{A vector of estimated GPS at the observed exposure levels.}
 }
 \value{
-
+A scalar of estimated standard deviation of the nugget term in full GP.
 }
 \description{
-Description
+Estimate the starndard deviations of the nugget term in full GP by calculating
+the standard deviations of the residuals.
 }

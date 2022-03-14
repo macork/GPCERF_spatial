@@ -2,7 +2,7 @@
 % Please edit documentation in R/nn_balance.R
 \name{nn.balance}
 \alias{nn.balance}
-\title{Title}
+\title{Hyper-parameter Tuning of nnGP}
 \usage{
 nn.balance(
   w.obs,
@@ -18,29 +18,35 @@ nn.balance(
 )
 }
 \arguments{
-\item{w.obs}{param's description}
+\item{w.obs}{A vector of the observed exposure levels.}
 
-\item{w.est}{param's description}
+\item{w.est}{A vector of exposure levels at which CERF will be estimated.}
 
-\item{y.obs}{param's description}
+\item{y.obs}{A vector of observed outcomes}
 
-\item{train.GPS.ret}{param's description}
+\item{train.GPS.ret}{A list containing three items, 1) estimated GPS at observed exposure
+levels; 2) estimated conditional means of the exposure level at the observed covariate
+values for all samples; 3) estimated conditional standard deviation of the exposure level
+given all covariates.}
 
-\item{design.mt}{param's description}
+\item{design.mt}{The covariate matrix of all samples (intercept excluded).}
 
-\item{all.params}{param's description}
+\item{all.params}{A matrix of candidate values of the hyper-parameters, each row contains a
+set of values of all hyper-parameters.}
 
-\item{n.cpu}{param's description}
+\item{n.cpu}{Number of cores to use in the tuning process.}
 
-\item{n.neighbour}{param's description}
+\item{n.neighbour}{Number of nearest neighbours on one side (see also \code{expand}).}
 
-\item{expand}{param's description}
+\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.}
 
-\item{block.size}{param's description}
+\item{block.size}{Number of samples included in a computation block. Mainly used to
+balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.}
 }
 \value{
-
+Estimated covariate balance scores for the grid of hyper-parameter values considered in \code{all.params}.
 }
 \description{
-Description
+Select the optimal hyper-parameter values on a pre-defined grid by minimizing the covariate
+balance of the nnGP.
 }

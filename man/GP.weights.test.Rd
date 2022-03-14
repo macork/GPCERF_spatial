@@ -2,7 +2,7 @@
 % Please edit documentation in R/GP_weights_test.R
 \name{GP.weights.test}
 \alias{GP.weights.test}
-\title{Title}
+\title{Calculate Weights for Estimation of a Point on CERF}
 \usage{
 GP.weights.test(
   w,
@@ -16,25 +16,29 @@ GP.weights.test(
 )
 }
 \arguments{
-\item{w}{param's description}
+\item{w}{param's A scalar of exposure level of interest.}
 
-\item{w.obs}{param's description}
+\item{w.obs}{A vector of observed exposure levels of all samples.}
 
-\item{obs.use}{param's description}
+\item{obs.use}{A matrix of two columns. First column is the observed exposure levels of all
+samples; second is the GPS at the observed exposure levels.}
 
-\item{param}{param's description}
+\item{param}{A vector of hyperparameters for the GP.}
 
-\item{inv.Sigma.obs}{param's description}
+\item{inv.Sigma.obs}{Inverse of the covariance matrix between observed samples.}
 
-\item{e_gps_pred}{param's description}
+\item{e_gps_pred}{A vector of estimated conditional means of the exposure given covariates
+for all samples.}
 
-\item{e_gps_std}{param's description}
+\item{e_gps_std}{A scalar of estimated conditional standard deviations of the exposure given covariates.}
 
-\item{kernel.fn}{param's description}
+\item{kernel.fn}{The covariance function of GP.}
 }
 \value{
-
+A vector of the weights assigned to each sample for the calculate of posterior mean
+of CERF at \code{w}.
 }
 \description{
-Description
+Calculate the weights of observed outcomes which is then used to estimate
+the posterior mean of CERF at a given exposure level.
 }

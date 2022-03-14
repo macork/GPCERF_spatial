@@ -2,18 +2,19 @@
 % Please edit documentation in R/tru_R.R
 \name{tru_R}
 \alias{tru_R}
-\title{Title}
+\title{Calculate True CERF}
 \usage{
 tru_R(w, sim.data)
 }
 \arguments{
-\item{w}{param's description}
+\item{w}{A vector of exposure levels at which the CERF is derived.}
 
-\item{sim.data}{param's description}
+\item{sim.data}{A data frame from one simulation run.}
 }
 \value{
-
+A vector of CERF values evaluated at \code{w}.
 }
 \description{
-Description
+Derive the true CERF at exposure levels of interest when the data
+is distributed as described in the simulation study.
 }

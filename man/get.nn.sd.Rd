@@ -2,26 +2,28 @@
 % Please edit documentation in R/get_nn_sd.R
 \name{get.nn.sd}
 \alias{get.nn.sd}
-\title{Title}
+\title{Calculate Posterior Standard Deviations for nnGP Model}
 \usage{
 get.nn.sd(params, w.new, GPS.new, obs.ord, n.neighbour = 10, expand = 1)
 }
 \arguments{
-\item{params}{param's description}
+\item{params}{Values of hyperparameters in the GP model.}
 
-\item{w.new}{param's description}
+\item{w.new}{The exposure level for the point of interest on the CERF.}
 
-\item{GPS.new}{param's description}
+\item{GPS.new}{The GPS for all samples when their exposure levels are set at \code{w.new}.}
 
-\item{obs.ord}{param's description}
+\item{obs.ord}{A matrix of two columns. First column is the observed exposure levels of all
+samples; second is the GPS at the observed exposure levels. The rows are in ascending order
+for the first column.}
 
-\item{n.neighbour}{param's description}
+\item{n.neighbour}{Number of nearest neighbours on one side (see also \code{expand}).}
 
-\item{expand}{param's description}
+\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.}
 }
 \value{
-
+The posterior standard deviation of the estimated CERF at \code{w.new}.
 }
 \description{
-Description
+Calculate the posterior standard deviation of a point on the CERF based on the nnGP model.
 }
