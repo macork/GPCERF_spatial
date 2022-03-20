@@ -2,7 +2,7 @@
 % Please edit documentation in R/tuning_fn.R
 \name{tuning.fn}
 \alias{tuning.fn}
-\title{Hyperparameter Tuning in Full GP}
+\title{Hyperparameter Tuning in Full Guassian Process (GP)}
 \usage{
 tuning.fn(
   param,
@@ -37,6 +37,25 @@ covariate to the exposure, which is the metric for covariate balance and 2) the 
 CERF at \code{w.all} based on the hyper-parameter values in \code{param}.
 }
 \description{
-Calculate the induced covariate balance associated with one hyperparameter
+Calculates the induced covariate balance associated with one hyperparameter
 configuration in full GP.
+}
+\examples{
+
+sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
+
+w.all = seq(0,20,0.1)
+
+e_gps <- xgboost(label=sim.data$treat, data=as.matrix(sim.data[,-(1:2)]),
+ nrounds = 50)
+e_gps_pred <- predict(e_gps,as.matrix(sim.data[,-(1:2)]))
+e_gps_std <- sd(sim.data$treat-e_gps_pred)
+GPS <- dnorm(sim.data$treat, mean = e_gps_pred, sd = e_gps_std, log = T)
+
+tune.res <- tuning.fn(param = c(0.09, 0.09, 10), sim.data = sim.data,
+w.all = w.all, GPS = GPS, e_gps_pred = e_gps_pred,
+e_gps_std = e_gps_std)
+
+gp.cerf <- tune.res$est
+
 }

@@ -2,7 +2,7 @@
 #' Hyperparameter Tuning in Full Guassian Process (GP)
 #'
 #' @description
-#' Calculate the induced covariate balance associated with one hyperparameter
+#' Calculates the induced covariate balance associated with one hyperparameter
 #' configuration in full GP.
 #'
 #' @param param A vector of values of hyperparameters.
@@ -22,6 +22,23 @@
 #' @export
 #'
 #' @examples
+#'
+#' sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
+#'
+#' w.all = seq(0,20,0.1)
+#'
+#' e_gps <- xgboost(label=sim.data$treat, data=as.matrix(sim.data[,-(1:2)]),
+#'  nrounds = 50)
+#' e_gps_pred <- predict(e_gps,as.matrix(sim.data[,-(1:2)]))
+#' e_gps_std <- sd(sim.data$treat-e_gps_pred)
+#' GPS <- dnorm(sim.data$treat, mean = e_gps_pred, sd = e_gps_std, log = T)
+#'
+#' tune.res <- tuning.fn(param = c(0.09, 0.09, 10), sim.data = sim.data,
+#' w.all = w.all, GPS = GPS, e_gps_pred = e_gps_pred,
+#' e_gps_std = e_gps_std)
+#'
+#' gp.cerf <- tune.res$est
+#'
 tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std,
                      kernel.fn = function(x) exp(-x^2)){
   # browser()
@@ -34,9 +51,11 @@ tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std,
   # browser()
   col.all = sapply(w.all, function(w){
 
-    weights.final = GP.weights.test(w = w, w.obs = sim.data$treat, obs.use = obs.use, param = param,
+    weights.final = GP.weights.test(w = w, w.obs = sim.data$treat,
+                                    obs.use = obs.use, param = param,
                                     inv.Sigma.obs = inv.Sigma.obs,
-                                    e_gps_pred = e_gps_pred, e_gps_std= e_gps_std)
+                                    e_gps_pred = e_gps_pred,
+                                    e_gps_std= e_gps_std)
     weights.final[weights.final<0] = 0
     weights.final = weights.final/sum(weights.final)
     est = sim.data$Y%*%weights.final
