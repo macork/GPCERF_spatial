@@ -41,14 +41,15 @@
 #'
 tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std,
                      kernel.fn = function(x) exp(-x^2)){
-  # browser()
+
   param = unlist(param)
   x.design = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
 
   obs.use = cbind( sim.data$treat*sqrt(param[1]), GPS*sqrt(param[2]) )
   Sigma.obs = param[3]*kernel.fn(as.matrix(dist(obs.use))) + diag(nrow(obs.use))
   inv.Sigma.obs = chol2inv(chol(Sigma.obs))
-  # browser()
+
+
   col.all = sapply(w.all, function(w){
 
     weights.final = GP.weights.test(w = w, w.obs = sim.data$treat,

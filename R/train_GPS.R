@@ -16,6 +16,13 @@
 #' @export
 #'
 #' @examples
+#'
+#' mydata <- generate_synthetic_data()
+#' gps_list <- train.GPS(as.matrix(mydata[,c("cf1", "cf2", "cf3", "cf4",
+#'                                           "cf5", "cf6")]),
+#'                       as.matrix(mydata$treat))
+#'
+#'
 train.GPS = function(cov.mt, w.all){
   GPS_mod <- xgboost::xgboost(data = cov.mt, label = w.all, nrounds=50)
   e_gps_pred <- predict(GPS_mod,cov.mt)

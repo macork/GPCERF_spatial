@@ -1,5 +1,5 @@
 
-librar(xgboost)
+library(xgboost)
 # Generate synthetic data
 sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
 

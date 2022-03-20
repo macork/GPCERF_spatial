@@ -23,7 +23,7 @@ GP.weights.test(
 \item{obs.use}{A matrix of two columns. First column is the observed exposure levels of all
 samples; second is the GPS at the observed exposure levels.}
 
-\item{param}{A vector of hyperparameters for the GP.}
+\item{param}{A vector of hyperparameters for the GP. (alpha, beta, gamma)}
 
 \item{inv.Sigma.obs}{Inverse of the covariance matrix between observed samples.}
 
@@ -39,6 +39,6 @@ A vector of the weights assigned to each sample for the calculate of posterior m
 of CERF at \code{w}.
 }
 \description{
-Calculate the weights of observed outcomes which is then used to estimate
+Calculates the weights of observed outcomes which is then used to estimate
 the posterior mean of CERF at a given exposure level.
 }

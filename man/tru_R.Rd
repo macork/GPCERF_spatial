@@ -12,9 +12,16 @@ tru_R(w, sim.data)
 \item{sim.data}{A data frame from one simulation run.}
 }
 \value{
-A vector of CERF values evaluated at \code{w}.
+The CERF value evaluated at \code{w}.
 }
 \description{
-Derive the true CERF at exposure levels of interest when the data
+Derives the true CERF at exposure levels of interest when the data
 is distributed as described in the simulation study.
+}
+\examples{
+
+sim.data <- generate_synthetic_data()
+w <- 0.2
+tr <- tru_R(w, sim.data)
+
 }

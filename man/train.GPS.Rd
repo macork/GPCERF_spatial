@@ -21,3 +21,12 @@ at the observed values; 3) estimated standard deviation of exposure levels
 Estimate the conditional mean and sd of exposure level as a function of covariates with
 xgboost algorithm.
 }
+\examples{
+
+mydata <- generate_synthetic_data()
+gps_list <- train.GPS(as.matrix(mydata[,c("cf1", "cf2", "cf3", "cf4",
+                                          "cf5", "cf6")]),
+                      as.matrix(mydata$treat))
+
+
+}
