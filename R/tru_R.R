@@ -2,17 +2,22 @@
 #' Calculate True CERF
 #'
 #' @description
-#' Derive the true CERF at exposure levels of interest when the data
+#' Derives the true CERF at exposure levels of interest when the data
 #' is distributed as described in the simulation study.
 #'
 #' @param w A vector of exposure levels at which the CERF is derived.
 #' @param sim.data A data frame from one simulation run.
 #'
 #' @return
-#' A vector of CERF values evaluated at \code{w}.
+#' The CERF value evaluated at \code{w}.
 #' @export
 #'
 #' @examples
+#'
+#' sim.data <- generate_synthetic_data()
+#' w <- 0.2
+#' tr <- tru_R(w, sim.data)
+#'
 tru_R<-function(w, sim.data){
   design.mt = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
   mean(apply(design.mt, 1, function(x){
