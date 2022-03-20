@@ -1,5 +1,5 @@
 #' @title
-#' Hyperparameter Tuning in Full GP
+#' Hyperparameter Tuning in Full Guassian Process (GP)
 #'
 #' @description
 #' Calculate the induced covariate balance associated with one hyperparameter

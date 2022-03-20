@@ -4,7 +4,8 @@
 * 
 
 ### Changed
-* 
+
+* data.generate -> generate_synthetic_data 
 
 ### Added
 * 

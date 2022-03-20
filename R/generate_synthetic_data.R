@@ -18,6 +18,9 @@
 #' @export
 #'
 #' @examples
+#'
+#' mydata <- generate_synthetic_data(sample_size = 200)
+#'
 generate_synthetic_data <-function(sample_size=1000, outcome_sd = 10,
                                    gps_spec= 1, cova_spec=1){
 
