@@ -4,7 +4,7 @@ test_that("Weighted correlation works as expected.", {
   data1 <- generate_synthetic_data(sample_size = 100)
   setDT(data1)
   weights1 <- runif(nrow(data1))
-  val1 <- compute_w_corr(data = data, weights = weights1)
+  val1 <- compute_w_corr(data = data1, weights = weights1)
 
   expect_vector(val1)
   expect_equal(length(val1), 6L)
