@@ -17,4 +17,10 @@ w.all = seq(0,20,0.1)
 
 setDT(sim.data)
 
-a <- estimate_cerf_gp(sim.data, w.all, GPS_m, params = list(alpha = c(0.1,0.2,0.4), beta=0.2, g_sigma = 1, tune_app = "all"))
+a <- estimate_cerf_gp(sim.data,
+                      w.all,
+                      GPS_m,
+                      params = list(alpha = c(0.1,0.2,0.4),
+                                    beta=0.2,
+                                    g_sigma = 1,
+                                    tune_app = "all"))
