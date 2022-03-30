@@ -39,7 +39,7 @@
 #'w = 1.8
 #'
 #'# Define kernel function
-#'kernel_fn = function(x) exp(-x^2)
+#'kernel_fn <- function(x) exp(-x^2)
 #'
 #'# compute GPS, e_gps_pred, and e_gps_std
 #'e_gps <- xgboost(label=data$treat, data=as.matrix(data[,-(1:2)]),
@@ -56,8 +56,8 @@
 #'g_sigma <- hyperparam[3]
 #'
 #'# Compute scaled observation data and inverse of covariate matrix.
-#'scaled_obs = cbind(obs_exposure*sqrt(1/alpha), GPS*sqrt(1/beta))
-#'sigma_obs = g_sigma*kernel_fn(as.matrix(dist(scaled_obs))) + diag(nrow(scaled_obs))
+#'scaled_obs <- cbind(obs_exposure*sqrt(1/alpha), GPS*sqrt(1/beta))
+#'sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(scaled_obs))) + diag(nrow(scaled_obs))
 #'inv_sigma_obs <- compute_inverse(sigma_obs)
 #'
 #'
@@ -81,8 +81,8 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   # Compute GPS for requested w
   e_gps_pred <- GPS_m$e_gps_pred
   e_gps_std <- GPS_m$e_gps_std
-  GPS_w = stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
-  scaled_w = cbind( w*sqrt(1/alpha), GPS_w*sqrt(1/beta) )
+  GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
+  scaled_w <- cbind( w*sqrt(1/alpha), GPS_w*sqrt(1/beta) )
 
   # kappa
   # sigma_cross = kappa/sigma^2 : Is always n*n matrix.

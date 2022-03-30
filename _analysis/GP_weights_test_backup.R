@@ -26,10 +26,14 @@ GP.weights.test = function(w, w.obs, obs.use, param, inv.Sigma.obs,
                            e_gps_pred, e_gps_std,
                            kernel.fn = function(x) exp(-x^2)){
 
-  # param[1]: alpha, param[2]: beta, param[3]: gamma
+  # param[1]: alpha, param[2]: beta, param[3]: gamma/sgima
   GPS.new = stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
 
   obs.new = cbind( w*sqrt(param[1]), GPS.new*sqrt(param[2]) )
+
+  # kappa
+  # Sigma.cross = kappa/sigma^2 : Is always n^2 matrix.
+  # each column of Sigma.cross is ki.
   Sigma.cross = param[3]*kernel.fn(spatstat.geom::crossdist(obs.new[,1],
                                                             obs.new[,2],
                                                             obs.use[,1],

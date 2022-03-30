@@ -5,7 +5,7 @@
 #' Derives the true CERF at exposure levels of interest when the data
 #' is distributed as described in the simulation study.
 #'
-#' @param w A vector of exposure levels at which the CERF is derived.
+#' @param w A exposure level at which the CERF is derived.
 #' @param sim.data A data frame from one simulation run.
 #'
 #' @return

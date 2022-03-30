@@ -7,7 +7,7 @@
 tru_R(w, sim.data)
 }
 \arguments{
-\item{w}{A vector of exposure levels at which the CERF is derived.}
+\item{w}{A exposure level at which the CERF is derived.}
 
 \item{sim.data}{A data frame from one simulation run.}
 }

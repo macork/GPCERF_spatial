@@ -45,7 +45,21 @@ tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std,
   param = unlist(param)
   x.design = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
 
-  obs.use = cbind( sim.data$treat*sqrt(param[1]), GPS*sqrt(param[2]) )
+  # mi(w)
+  # param 1: alpha
+  # param 2: beta
+  # param 3: ratio gamma/sigma
+  # Sigma.obs
+  # obs: Observation data
+  # GP itself is a Bayesian model.
+
+  alpha <- param[1]
+  beta  <- param[2]
+  gamma <- param[3] # or maybe the ratio of gamma/sigma
+
+  #obs.use = cbind( sim.data$treat*sqrt(param[1]), GPS*sqrt(param[2]))
+  # use: scaled version of w and gps that is used directly in dist function.
+  obs.use = cbind(sim.data$treat*sqrt(alpha), GPS*sqrt(beta))
   Sigma.obs = param[3]*kernel.fn(as.matrix(dist(obs.use))) + diag(nrow(obs.use))
   inv.Sigma.obs = chol2inv(chol(Sigma.obs))
 
@@ -59,6 +73,8 @@ tuning.fn = function(param, sim.data, w.all, GPS, e_gps_pred, e_gps_std,
                                     e_gps_std= e_gps_std)
     weights.final[weights.final<0] = 0
     weights.final = weights.final/sum(weights.final)
+    # weigts.final = invers of paranthesis * kappa
+    # est is the same as m in the paper.
     est = sim.data$Y%*%weights.final
 
     # weighted correlation

@@ -1,3 +1,0 @@
-- tuning_fn function is hardcoded for synthetic data. 
-- tru_R function is hardcoded for synthetic data. 
-- noise.est is not used in the package. 

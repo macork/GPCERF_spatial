@@ -16,7 +16,8 @@
 #' @author Danielle Braun
 #' @import stats
 #' @import spatstat
-#' @import snowfall
+#' @import xgboost
+#' @import data.table
 #' @import MASS
 #'
 #' @references
