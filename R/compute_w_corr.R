@@ -12,6 +12,8 @@
 #' @param weights A vector of weights for each observation data.
 #'
 #' @return
+#' A vector of covariate balance
+#'
 #' @export
 #'
 #' @examples
@@ -26,7 +28,7 @@ compute_w_corr <- function(data, weights){
 
   if (!is.data.table(data)){
     stop(paste0("The data should be a data.table. ",
-                "Current format: ", class(obs_data)[1]))
+                "Current format: ", class(data)[1]))
   }
 
   if (nrow(data) != length(weights)){
@@ -41,14 +43,14 @@ compute_w_corr <- function(data, weights){
 
   exposure_data <- data[,2]
 
-  x_design = model.matrix(as.formula(frml), data = data)
-  w_mean = sum(exposure_data*weights)
-  w_sd = sqrt(sum((exposure_data - w_mean)^2*weights))
-  w_stan = (exposure_data - w_mean)/w_sd
+  x_design <- model.matrix(as.formula(frml), data = data)
+  w_mean <- sum(exposure_data*weights)
+  w_sd <- sqrt(sum((exposure_data - w_mean)^2*weights))
+  w_stan <- (exposure_data - w_mean)/w_sd
 
-  x_mean = colMeans(x_design*weights)
-  x_cov = (t(x_design) - x_mean)%*%diag(weights)%*%t(t(x_design) - x_mean)
-  x_stan = t(t(solve(chol(x_cov)))%*%(t(x_design) - x_mean))
+  x_mean <- colMeans(x_design*weights)
+  x_cov <- (t(x_design) - x_mean)%*%diag(weights)%*%t(t(x_design) - x_mean)
+  x_stan <- t(t(solve(chol(x_cov)))%*%(t(x_design) - x_mean))
   covariate_balance <- abs(c(t(x_stan)%*%diag(weights)%*%w_stan))
 
   return(covariate_balance)
