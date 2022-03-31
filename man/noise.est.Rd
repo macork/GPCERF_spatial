@@ -2,7 +2,7 @@
 % Please edit documentation in R/noise_est.R
 \name{noise.est}
 \alias{noise.est}
-\title{Estimate the Standard Deviation of the Nugget Term in Full GP}
+\title{Estimate the Standard Deviation of the Nugget Term in Full Gaussian Process}
 \usage{
 noise.est(param, data, GPS)
 }
@@ -17,6 +17,9 @@ noise.est(param, data, GPS)
 A scalar of estimated standard deviation of the nugget term in full GP.
 }
 \description{
-Estimate the starndard deviations of the nugget term in full GP by calculating
+Estimates the standard deviations of the nugget term in full GP by calculating
 the standard deviations of the residuals.
+}
+\examples{
+
 }

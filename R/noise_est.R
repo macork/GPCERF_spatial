@@ -1,8 +1,8 @@
 #' @title
-#' Estimate the Standard Deviation of the Nugget Term in Full GP
+#' Estimate the Standard Deviation of the Nugget Term in Full Gaussian Process
 #'
 #' @description
-#' Estimate the starndard deviations of the nugget term in full GP by calculating
+#' Estimates the standard deviations of the nugget term in full GP by calculating
 #' the standard deviations of the residuals.
 #'
 #' @param param A vector of hyper-parameter values for the full GP.
@@ -14,13 +14,18 @@
 #' @export
 #'
 #' @examples
+#'
 noise.est = function(param, data, GPS){
-  # browser()
+
   n.sample = nrow(sim.data)
   w.all = rep(data$treat, 2)
   GPS.all = rep(GPS, 2)
-  Sigma.all = param[3]*exp(-as.matrix(dist(cbind(w.all*sqrt(param[1]), GPS.all*sqrt(param[2]))))) +
+  Sigma.all = param[3]*exp(-as.matrix(dist(cbind(w.all*sqrt(param[1]),
+                                                 GPS.all*sqrt(param[2]))))) +
     diag(2*n.sample)
 
-  sd(data$Y - Sigma.all[1:n.sample,-(1:n.sample)]%*%chol2inv(chol(Sigma.all[-(1:n.sample),-(1:n.sample)]))%*%sim.data$Y)
+  sd(data$Y - Sigma.all[1:n.sample,
+                        -(1:n.sample)]%*%chol2inv(
+                          chol(Sigma.all[-(1:n.sample),
+                                         -(1:n.sample)]))%*%sim.data$Y)
 }
