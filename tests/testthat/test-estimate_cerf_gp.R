@@ -1,5 +1,6 @@
 test_that("estimate_cerf_gp works as expected!", {
 
+  set.seed(129)
   sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
 
   # Compute true curve
@@ -26,7 +27,13 @@ test_that("estimate_cerf_gp works as expected!", {
                                                 tune_app = "all"))
 
 
-  # estimate_cerf_gp returns S3 class
-  expect_s3_class(cerf_gp_obj)
+  # estimate_cerf_gp returns S3 class cerf_gp
+  expect_s3_class(cerf_gp_obj, "cerf_gp")
+
+  expect_equal(length(cerf_gp_obj$pst_mean), 201L)
+  expect_equal(length(cerf_gp_obj$w), 201L)
+  expect_equal(cerf_gp_obj$pst_mean[1], -17.11463154, tolerance = 0.00001)
+  expect_equal(cerf_gp_obj$pst_mean[10], -15.27494662, tolerance = 0.00001)
+  expect_equal(cerf_gp_obj$w[70], w.all[70], tolerance = 0.00001)
 
 })
