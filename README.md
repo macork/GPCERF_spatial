@@ -1,6 +1,6 @@
-| Resource    |  Github Actions      | 
-| ----------  | -------------------- |
-| Platforms   | Windows, macOS, Linux| 
+| Resource    |  Github Actions      |  Code Coverage  |
+| ----------  | -------------------- | --------------- |
+| Platforms   | Windows, macOS, Linux|                 |
 | R CMD check | [![R build status](https://github.com/FASRC/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/fasrc/GPCERF/actions) | 
 
 
