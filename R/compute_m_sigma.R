@@ -73,7 +73,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
   g_sigma <- param[3]
 
 
-  obs_exposure <- data[,2]
+  obs_exposure <- data[[2]]
 
   scaled_obs = cbind(obs_exposure*sqrt(1/alpha), GPS*sqrt(1/beta))
   sigma_obs = g_sigma*kernel_fn(as.matrix(dist(scaled_obs))) + diag(nrow(scaled_obs))

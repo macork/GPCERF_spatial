@@ -41,7 +41,7 @@ compute_w_corr <- function(data, weights){
   conf_names <- colnames(data[,3:ncol(data)])
   frml <- paste("~",paste(conf_names, collapse = "+"), "-1", sep = "")
 
-  exposure_data <- data[,2]
+  exposure_data <- data[[2]]
 
   x_design <- model.matrix(as.formula(frml), data = data)
   w_mean <- sum(exposure_data*weights)
