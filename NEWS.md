@@ -4,6 +4,20 @@
 * 
 
 ### Changed
+* 
+
+### Added
+* 
+
+### Removed
+* 
+
+## GPCERF 0.0.1 (2022-03-31)
+
+### Fixed
+* 
+
+### Changed
 
 * w.obs -> w_obs
 * inv.Sigma.obs -> inv_sigma_obs
