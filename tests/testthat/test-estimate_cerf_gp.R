@@ -1,21 +1,12 @@
-# Gaussian processes for the estimation of causal exposure-response curves (GP-CERF)
+test_that("estimate_cerf_gp works as expected!", {
 
-## Summary
-Gaussian Process (GP) approach for nonparametric modeling. 
-
-## Installation
-
-```r
-library("devtools")
-install_github("fasrc/GPCERF", ref="develop")
-library("GPCERF")
-```
-
-## Usage
-
-
-```r
+  set.seed(129)
   sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
+
+  # Compute true curve
+  tru.curve <- sapply(seq(0,20,0.1), function(w){
+    tru_R(w, sim.data)
+  })
 
   # Estimate GPS function
   # In the future, CausalGPS gps estimation will be used.
@@ -35,8 +26,14 @@ library("GPCERF")
                                                 g_sigma = 1,
                                                 tune_app = "all"))
 
-```
 
-## References
+  # estimate_cerf_gp returns S3 class cerf_gp
+  expect_s3_class(cerf_gp_obj, "cerf_gp")
 
-Ren, B., Wu, X., Braun, D., Pillai, N. and Dominici, F., 2021. Bayesian modeling for exposure response curve via gaussian processes: Causal effects of exposure to air pollution on health outcomes. arXiv preprint arXiv:2105.03454.
+  expect_equal(length(cerf_gp_obj$pst_mean), 201L)
+  expect_equal(length(cerf_gp_obj$w), 201L)
+  expect_equal(cerf_gp_obj$pst_mean[1], -17.11463154, tolerance = 0.00001)
+  expect_equal(cerf_gp_obj$pst_mean[10], -15.27494662, tolerance = 0.00001)
+  expect_equal(cerf_gp_obj$w[70], w.all[70], tolerance = 0.00001)
+
+})
