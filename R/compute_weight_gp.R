@@ -85,10 +85,11 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   # kappa
   # sigma_cross = kappa/sigma^2 : Is always n*n matrix.
   # each column of sigma_cross is ki.
-  sigma_cross <- g_sigma*kernel_fn(spatstat.geom::crossdist(scaled_w[,1],
-                                                            scaled_w[,2],
-                                                            scaled_obs[,1],
-                                                            scaled_obs[,2]))
+  # statspat.geom::crossdist
+  sigma_cross <- g_sigma*kernel_fn(crossdist(scaled_w[,1],
+                                             scaled_w[,2],
+                                             scaled_obs[,1],
+                                             scaled_obs[,2]))
 
   # each row is the weights for all subject for estimate of Y_i(w)
   # each column is the weight of an observed sample (w_i, c_i)
