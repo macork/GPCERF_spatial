@@ -55,7 +55,7 @@ set.seed(129)
 sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
 
 
-Estimate GPS function
+# Estimate GPS function
 GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
                    w.all = as.matrix(sim.data$treat))
 

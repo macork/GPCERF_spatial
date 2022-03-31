@@ -19,8 +19,8 @@
 #' @examples
 #'
 #' mydata <- generate_synthetic_data(sample_size = 200)
-#' setDT(mydata)
-#' weights <- runif(nrow(mydata)
+#' data.table::setDT(mydata)
+#' weights <- runif(nrow(mydata))
 #' compute_w_corr(mydata, weights)
 #'
 compute_w_corr <- function(data, weights){
