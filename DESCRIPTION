@@ -24,7 +24,9 @@ Copyright: Harvard University
 Imports:
     data.table,
     xgboost,
-    stats
+    stats,
+    MASS,
+    spatstat.geom
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

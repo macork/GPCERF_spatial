@@ -36,19 +36,14 @@
 #'
 #' w.all = seq(0,20,0.1)
 #'
-#' e_gps <- xgboost(label=data$treat,
-#'                  data=as.matrix(data[,-(1:2)]),
-#'                  nrounds = 50)
-#' e_gps_pred <- predict(e_gps,as.matrix(data[,-(1:2)]))
-#' e_gps_std <- sd(data$treat-e_gps_pred)
-#' GPS <- dnorm(data$treat,
-#'              mean = e_gps_pred,
-#'              sd = e_gps_std, log = T)
+#' data.table::setDT(data)
 #'
-#' GPS_m <- data.table(GPS, e_gps_pred, e_gps_std)
+#' #Estimate GPS function
+#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
+#'                    w.all = as.matrix(data$treat))
 #'
 #' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
-#'                             data = sim.data,
+#'                             data = data,
 #'                             w = w.all,
 #'                             GPS_m = GPS_m)
 #'
@@ -81,10 +76,10 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
 
-  col.all = sapply(w.all, function(w){
+  col.all = sapply(w, function(w_instance){
 
     # compute weights
-    weights.final = compute_weight_gp(w = w,
+    weights.final = compute_weight_gp(w = w_instance,
                                       w_obs = w_obs,
                                       scaled_obs = scaled_obs,
                                       hyperparam = hyperparam,
@@ -95,7 +90,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
     weights.final = weights.final/sum(weights.final)
     # weigts.final = invers of paranthesis * kappa
     # est is the same as m in the paper.
-    est = sim.data$Y%*%weights.final
+    est = data$Y%*%weights.final
 
     # weighted correlation
     # this computes rho_r(w) for each covariate r

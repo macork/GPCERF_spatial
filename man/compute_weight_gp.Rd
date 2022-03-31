@@ -56,7 +56,7 @@ the posterior mean of CERF at a given exposure level.
 \examples{
 
 set.seed(814)
-Generate synthetic data
+#Generate synthetic data
 data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 w_obs <- obs_exposure <- data$treat
 
@@ -66,13 +66,11 @@ w = 1.8
 # Define kernel function
 kernel_fn <- function(x) exp(-x^2)
 
-# compute GPS, e_gps_pred, and e_gps_std
-e_gps <- xgboost(label=data$treat, data=as.matrix(data[,-(1:2)]),
-                nrounds = 50)
-e_gps_pred <- predict(e_gps,as.matrix(data[,-(1:2)]))
-e_gps_std <- sd(data$treat-e_gps_pred)
-GPS <- dnorm(data$treat, mean = e_gps_pred, sd = e_gps_std, log = T)
-GPS_m <- data.table(GPS, e_gps_pred, e_gps_std)
+# Estimate GPS function
+GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
+                   w.all = as.matrix(data$treat))
+
+GPS <- GPS_m$GPS
 
 # set hyperparameters
 hyperparam <- c(0.1, 0.4, 1)
@@ -87,12 +85,12 @@ inv_sigma_obs <- compute_inverse(sigma_obs)
 
 
 weight <- compute_weight_gp(w = w,
-                           w_obs = w_obs,
-                           scaled_obs = scaled_obs,
-                           hyperparam = hyperparam,
-                           inv_sigma_obs = inv_sigma_obs,
-                           GPS_m = GPS_m,
-                           kernel_fn = kernel_fn)
+                            w_obs = w_obs,
+                            scaled_obs = scaled_obs,
+                            hyperparam = hyperparam,
+                            inv_sigma_obs = inv_sigma_obs,
+                            GPS_m = GPS_m,
+                            kernel_fn = kernel_fn)
 
 
 }
