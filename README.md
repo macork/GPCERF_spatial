@@ -1,7 +1,7 @@
 | Resource    |  Github Actions      |  Code Coverage  |
 | ----------  | -------------------- | --------------- |
 | Platforms   | Windows, macOS, Linux|                 |
-| R CMD check | [![R build status](https://github.com/FASRC/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/fasrc/GPCERF/actions) | 
+| R CMD check | [![R build status](https://github.com/FASRC/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/fasrc/GPCERF/actions) | [![codecov](https://codecov.io/gh/fasrc/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://codecov.io/gh/fasrc/GPCERF) |
 
 
 # Gaussian processes for the estimation of causal exposure-response curves (GP-CERF)
