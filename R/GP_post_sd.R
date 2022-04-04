@@ -10,6 +10,6 @@ GP_post_sd = function(w, obs.use, param, sigma, e_gps_pred, e_gps_std,
   Sigma.within.w = Sigma.all[1:n, 1:n]
   Sigma.cross = Sigma.all[1:n, -(1:n)]
   Sigma.within.obs = Sigma.all[-(1:n), -(1:n)]
-  Sigma.cond = Sigma.within.w - Sigma.cross%*%chol2inv(Sigma.within.obs)%*%t(Sigma.cross)
+  Sigma.cond = Sigma.within.w - Sigma.cross%*%chol2inv(chol(Sigma.within.obs))%*%t(Sigma.cross)
   sqrt(rep(1/n,n)%*%Sigma.cond%*%rep(1/n,n) + sigma^2)
 }
