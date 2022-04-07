@@ -79,6 +79,9 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   # Compute GPS for requested w
   e_gps_pred <- GPS_m$e_gps_pred
   e_gps_std <- GPS_m$e_gps_std
+
+  # TODO: The following section is repeated between this function
+  # and compute_sd_gp function.
   GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
   scaled_w <- cbind( w*sqrt(1/alpha), GPS_w*sqrt(1/beta) )
 
