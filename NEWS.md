@@ -29,6 +29,8 @@
 
 ### Added
 
+* compute_sd_gp function
+* estimate_noise function
 * estimate_cerf_gp function
 * compute_inverse function
 * compute_w_corr function

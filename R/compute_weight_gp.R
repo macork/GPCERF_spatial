@@ -72,9 +72,9 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
                               inv_sigma_obs, GPS_m,
                               kernel_fn = function(x) exp(-x^2)){
 
-  alpha <- hyperparam[1]
-  beta <- hyperparam[2]
-  g_sigma <- hyperparam[3]
+  alpha <- hyperparam[[1]]
+  beta <- hyperparam[[2]]
+  g_sigma <- hyperparam[[3]]
 
   # Compute GPS for requested w
   e_gps_pred <- GPS_m$e_gps_pred

@@ -115,6 +115,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   # covariate balance ----------------------------------------------------------
   opt_idx <- order(sapply(tune_res, function(x){ mean(x$cb) }))[1]
   gp_cerf <- tune_res[[opt_idx]]$est
+  gp_post_sd <- tune_res[[opt_idx]]$pst
 
   # Build gp_cerf S3 object
 
@@ -122,6 +123,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   class(result) <- "cerf_gp"
 
   result$pst_mean <- gp_cerf
+  result$pst_sd <- gp_post_sd
   result$w <- w
 
   # Add best match to the gp_cerf object

@@ -2,7 +2,7 @@ test_that("Weighted correlation works as expected.", {
 
   set.seed(239)
   data1 <- generate_synthetic_data(sample_size = 100)
-  setDT(data1)
+  data.table::setDT(data1)
   weights1 <- runif(nrow(data1))
   val1 <- compute_w_corr(data = data1, weights = weights1)
 

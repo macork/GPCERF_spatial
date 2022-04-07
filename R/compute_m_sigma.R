@@ -75,6 +75,11 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
 
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
+  # Estimate noise
+  noise_est <- estimate_noise(hyperparam = hyperparam,
+                                           data = data,
+                                           GPS = GPS)
+
 
   col.all = sapply(w, function(w_instance){
 
@@ -92,6 +97,18 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
     # est is the same as m in the paper.
     est = data$Y%*%weights.final
 
+
+    # Compute credible interval
+    #t1 <- proc.time()
+    pst_sd <- compute_sd_gp(w = w_instance,
+                            scaled_obs = scaled_obs,
+                            hyperparam = hyperparam,
+                            sigma = noise_est,
+                            GPS_m = GPS_m)
+    #t2 <- proc.time()
+
+    #print(paste("Time taken to estimate posterior sd: ", t2[[3]] - t1[[3]], " s."))
+
     # weighted correlation
     # this computes rho_r(w) for each covariate r
 
@@ -107,12 +124,15 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
     # covariate_balance <- abs(c(t(x.stan)%*%diag(weights.final)%*%w.stan))
 
 
-    c(covariate_balance, est)
+    c(covariate_balance, est, pst_sd)
   })
   # this is vector of average rho_r(w) over the range of w for every r
 
-  n_confounders <- nrow(col.all) - 1
-  est_index <- nrow(col.all)
+  n_confounders <- nrow(col.all) - 2 # est, pst_sd
+  est_index <- nrow(col.all) - 1
+  pst_sd <- nrow(col.all)
 
-  list(cb = rowMeans(col.all[1:n_confounders,]), est = col.all[est_index,])
+  list(cb = rowMeans(col.all[1:n_confounders,]),
+       est = col.all[est_index,],
+       pst = col.all[pst_sd, ])
 }
