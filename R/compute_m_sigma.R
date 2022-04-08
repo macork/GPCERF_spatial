@@ -32,7 +32,8 @@
 #'
 #' @examples
 #'
-#' data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
+#' set.seed(912)
+#' data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
 #'
 #' w.all = seq(0,20,0.1)
 #'

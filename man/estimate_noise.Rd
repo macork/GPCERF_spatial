@@ -29,7 +29,7 @@ the standard deviations of the residuals.
 
 set.seed(109)
 data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
-setDT(data)
+data.table::setDT(data)
 
 # Estimate GPS function
 GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),

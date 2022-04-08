@@ -2,7 +2,7 @@ test_that("multiplication works", {
 
   set.seed(917)
   # Generate synthetic data
-  data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
+  data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
   w_obs <- obs_exposure <- data$treat
 
   # Choose an exposure level to compute CERF
@@ -39,7 +39,6 @@ test_that("multiplication works", {
                               GPS_m = GPS_m,
                               kernel_fn = kernel_fn)
 
-  expect_equal(length(weight), 500L)
-  expect_equal(weight[10], 6.197482e-05, tolerance = 10e-5)
-
+  expect_equal(length(weight), 200L)
+  expect_equal(weight[28], 1.588098e-03, tolerance = 10e-5)
 })

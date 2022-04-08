@@ -52,7 +52,7 @@ for the provided set of hyperparameters.
 \examples{
 
 set.seed(129)
-sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
+sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
 
 # Estimate GPS function
