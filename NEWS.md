@@ -8,6 +8,7 @@
 
 ### Added
 
+* Package website using pkgdown
 * Logger functions
 * compute_sd_gp function
 
