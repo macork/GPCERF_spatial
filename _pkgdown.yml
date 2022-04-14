@@ -1,0 +1,25 @@
+url: https://fasrc.github.io/GPCERF/
+
+home:
+  title: Gaussian Process (GP) approach for nonparametric modeling.
+
+template:
+  bootstrap: 5
+
+reference:
+  - title: Estimate CERF with Gaussain Process
+    contents:
+    - estimate_cerf_gp
+  - title: Utilities
+    contents:
+    - set_logger
+    - get_logger
+
+articles:
+  - title: Introduction
+    navbar: Introduction
+    contents: [Estimate-CERF-GP]
+
+  - title: Collabration
+    navbar: Collabration
+    contents: [Developers-Guide]
