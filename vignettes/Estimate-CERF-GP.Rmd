@@ -1,0 +1,21 @@
+---
+title: "Estimate-CERF-GP"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Estimate-CERF-GP}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(GPCERF)
+```
+
+Estimating CERF using GP approach will be here ...

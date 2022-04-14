@@ -31,6 +31,7 @@ Generates synthetic data set based on different GPS models and covariates.
 }
 \examples{
 
+set.seed(351)
 mydata <- generate_synthetic_data(sample_size = 200)
 
 }
