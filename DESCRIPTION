@@ -26,7 +26,8 @@ Imports:
     xgboost,
     stats,
     MASS,
-    spatstat.geom
+    spatstat.geom,
+    logger
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

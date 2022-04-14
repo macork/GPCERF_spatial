@@ -59,6 +59,10 @@
 estimate_cerf_gp <- function(data, w, GPS_m, params,
                              kernel_fn = function(x) exp(-x^2)){
 
+
+  # Log system info
+  log_system_info()
+
   # Double-check input parameters ----------------------------------------------
   if (!is.data.table(data)){
     stop(paste0("Data should be a data.table. ",
