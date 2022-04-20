@@ -10,7 +10,7 @@
 #' @param GPS.obs A vector of GPS for all samples at the observed levels of exposure.
 #' @param y.obs A vector of observed outcome values.
 #' @param param A vector of hyper-parameters in the GP model.
-#' @param e_gps_pred A vecotor of estimated conditional means of the exposure given covariates
+#' @param e_gps_pred A vector of estimated conditional means of the exposure given covariates
 #' for all samples.
 #' @param e_gps_std A scalar of estimated conditional standard deviations of the exposure given covariates.
 #' @param n.neighbour Number of nearest neighbours on one side (see also \code{expand}).
