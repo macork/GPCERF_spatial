@@ -1,10 +1,10 @@
-# GPCERF <a href="https://fasrc.github.io/GPCERF"><img src="man/figures/png/logo_place_holder.png" align="right" width="120" /></a>
+# GPCERF <a href="https://NSAPH-Software.github.io/GPCERF"><img src="man/figures/png/logo_place_holder.png" align="right" width="120" /></a>
 
 <!-- badges: start -->
-[![R build status](https://github.com/FASRC/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/fasrc/GPCERF/actions)
-[![codecov](https://codecov.io/gh/fasrc/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://codecov.io/gh/fasrc/GPCERF)
+[![R build status](https://github.com/NSAPH-Software/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/NSAPH-Software/GPCERF/actions)
+[![codecov](https://codecov.io/gh/NSAPH-Software/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://codecov.io/gh/NSAPH-Software/GPCERF)
 <!-- badges: end -->
-
+ 
 
 
 # Gaussian processes for the estimation of causal exposure-response curves (GP-CERF)
@@ -16,7 +16,7 @@ Gaussian Process (GP) approach for nonparametric modeling.
 
 ```r
 library("devtools")
-install_github("fasrc/GPCERF", ref="develop")
+install_github("NSAPH-Software/GPCERF", ref="develop")
 library("GPCERF")
 ```
 

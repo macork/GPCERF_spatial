@@ -18,8 +18,8 @@ Maintainer: Naeem Khoshnevis <nkhoshnevis@g.harvard.edu>
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
 Language: en-US
-URL: https://github.com/fasrc/GPCERF
-BugReports: https://github.com/fasrc/GPCERF/issues
+URL: https://github.com/NSAPH-Software/GPCERF
+BugReports: https://github.com/NSAPH-Software/GPCERF/issues
 Copyright: Harvard University
 Imports:
     data.table,
