@@ -15,11 +15,17 @@
 #' @author Tanujit Dey
 #' @author Danielle Braun
 #' @import stats
-#' @import spatstat
-#' @import snowfall
+#' @import xgboost
+#' @import data.table
 #' @import MASS
+#' @import Rcpp
+#' @import RcppArmadillo
+#' @importFrom spatstat.geom crossdist
+#' @useDynLib GPCERF, .registration = TRUE
 #'
 #' @references
-#'
+#' Ren, B., Wu, X., Braun, D., Pillai, N. and Dominici, F., 2021. Bayesian
+#' modeling for exposure response curve via gaussian processes: Causal effects
+#' of exposure to air pollution on health outcomes. arXiv preprint arXiv:2105.03454.
 #'
 NULL
