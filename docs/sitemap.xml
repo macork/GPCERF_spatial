@@ -31,10 +31,19 @@
     <loc>https://fasrc.github.io/GPCERF/reference/GPCERF-package.html</loc>
   </url>
   <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/calc_ac.html</loc>
+  </url>
+  <url>
     <loc>https://fasrc.github.io/GPCERF/reference/compute_inverse.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/compute_m_sigma.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/compute_posterior_m_nn.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/compute_posterior_sd_nn.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/compute_sd_gp.html</loc>
@@ -49,7 +58,19 @@
     <loc>https://fasrc.github.io/GPCERF/reference/estimate_cerf_gp.html</loc>
   </url>
   <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/estimate_cerf_nngp.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/estimate_mean_sd_nn.html</loc>
+  </url>
+  <url>
     <loc>https://fasrc.github.io/GPCERF/reference/estimate_noise.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/estimate_noise_nn.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/find_optimal_nn.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/generate_synthetic_data.html</loc>
