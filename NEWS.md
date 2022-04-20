@@ -5,6 +5,7 @@
 
 ### Changed
 
+* nn_cp_calc -> compute_rl_deriv_nn
 * deriv_nn_fast -> compute_deriv_nn
 * get_nn_sd -> compute_posterior_sd_nn
 * nn_sigma_est -> estimate_noise_nn
