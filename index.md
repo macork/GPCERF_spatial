@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R build status](https://github.com/NSAPH-Software/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/NSAPH-Software/GPCERF/actions)
-[![codecov](https://codecov.io/gh/fasrc/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://codecov.io/gh/fasrc/GPCERF)
+[![codecov](https://codecov.io/gh/NSAPH-Software/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://codecov.io/gh/NSAPH-Software/GPCERF)
 <!-- badges: end -->
  
 
