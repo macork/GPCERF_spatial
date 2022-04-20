@@ -4,7 +4,15 @@
 * 
 
 ### Changed
-* 
+
+* get_nn_sd -> compute_posterior_sd_nn
+* nn_sigma_est -> estimate_noise_nn
+* idx.all -> idx_select
+* GPS.new -> GPS_w
+* w.new -> w
+* get.nn.fast -> compute_posterior_m_nn
+* w.est -> w 
+* nn_balance -> best_nn_cb
 
 ### Added
 
