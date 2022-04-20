@@ -27,7 +27,9 @@ Imports:
     stats,
     MASS,
     spatstat.geom,
-    logger
+    logger,
+    Rcpp,
+    RcppArmadillo
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -40,3 +42,6 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+LinkingTo: 
+    RcppArmadillo,
+    Rcpp

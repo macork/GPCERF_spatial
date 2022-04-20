@@ -4,3 +4,6 @@
 ^\.github$
 ^\_analysis
 ^\_src
+^_pkgdown\.yml$
+^docs$
+index.md
