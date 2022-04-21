@@ -18,6 +18,7 @@
 #'
 #' @examples
 #'
+#' set.seed(124)
 #' mydata <- generate_synthetic_data(sample_size = 200)
 #' data.table::setDT(mydata)
 #' weights <- runif(nrow(mydata))

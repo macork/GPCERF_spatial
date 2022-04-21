@@ -4,10 +4,23 @@
 * 
 
 ### Changed
-* 
+
+* nn_cp_calc -> compute_rl_deriv_nn
+* deriv_nn_fast -> compute_deriv_nn
+* get_nn_sd -> compute_posterior_sd_nn
+* nn_sigma_est -> estimate_noise_nn
+* idx.all -> idx_select
+* GPS.new -> GPS_w
+* w.new -> w
+* get.nn.fast -> compute_posterior_m_nn
+* w.est -> w 
+* nn_balance -> best_nn_cb
 
 ### Added
-* 
+
+* Package website using pkgdown
+* Logger functions
+* compute_sd_gp function
 
 ### Removed
 * 
@@ -29,6 +42,7 @@
 
 ### Added
 
+* estimate_noise function
 * estimate_cerf_gp function
 * compute_inverse function
 * compute_w_corr function

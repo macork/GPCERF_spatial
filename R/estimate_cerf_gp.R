@@ -35,7 +35,7 @@
 #' @examples
 #'
 #' set.seed(129)
-#' sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
+#' sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 #'
 #'
 #' # Estimate GPS function
@@ -58,6 +58,10 @@
 #'
 estimate_cerf_gp <- function(data, w, GPS_m, params,
                              kernel_fn = function(x) exp(-x^2)){
+
+
+  # Log system info
+  log_system_info()
 
   # Double-check input parameters ----------------------------------------------
   if (!is.data.table(data)){
@@ -115,6 +119,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   # covariate balance ----------------------------------------------------------
   opt_idx <- order(sapply(tune_res, function(x){ mean(x$cb) }))[1]
   gp_cerf <- tune_res[[opt_idx]]$est
+  gp_post_sd <- tune_res[[opt_idx]]$pst
 
   # Build gp_cerf S3 object
 
@@ -122,6 +127,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   class(result) <- "cerf_gp"
 
   result$pst_mean <- gp_cerf
+  result$pst_sd <- gp_post_sd
   result$w <- w
 
   # Add best match to the gp_cerf object

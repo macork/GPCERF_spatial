@@ -1,6 +1,6 @@
 Package: GPCERF
 Title: What the Package Does (One Line, Title Case)
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person("Naeem", "Khoshnevis", email = "nkhoshnevis@g.harvard.edu",
            role=c("aut","cre"), 
@@ -18,15 +18,18 @@ Maintainer: Naeem Khoshnevis <nkhoshnevis@g.harvard.edu>
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
 Language: en-US
-URL: https://github.com/fasrc/GPCERF
-BugReports: https://github.com/fasrc/GPCERF/issues
+URL: https://github.com/NSAPH-Software/GPCERF
+BugReports: https://github.com/NSAPH-Software/GPCERF/issues
 Copyright: Harvard University
 Imports:
     data.table,
     xgboost,
     stats,
     MASS,
-    spatstat.geom
+    spatstat.geom,
+    logger,
+    Rcpp,
+    RcppArmadillo
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -34,5 +37,11 @@ RoxygenNote: 7.1.2
 Depends: 
     R (>= 3.5.0)
 Suggests: 
+    rmarkdown,
+    knitr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr
+LinkingTo: 
+    RcppArmadillo,
+    Rcpp

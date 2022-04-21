@@ -18,7 +18,10 @@
 #' @import xgboost
 #' @import data.table
 #' @import MASS
+#' @import Rcpp
+#' @import RcppArmadillo
 #' @importFrom spatstat.geom crossdist
+#' @useDynLib GPCERF, .registration = TRUE
 #'
 #' @references
 #' Ren, B., Wu, X., Braun, D., Pillai, N. and Dominici, F., 2021. Bayesian
