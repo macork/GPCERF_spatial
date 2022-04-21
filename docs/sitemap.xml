@@ -34,6 +34,12 @@
     <loc>https://fasrc.github.io/GPCERF/reference/calc_ac.html</loc>
   </url>
   <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/compute_deriv_nn.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/compute_deriv_weights_gp.html</loc>
+  </url>
+  <url>
     <loc>https://fasrc.github.io/GPCERF/reference/compute_inverse.html</loc>
   </url>
   <url>
@@ -44,6 +50,12 @@
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/compute_posterior_sd_nn.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/compute_rl_deriv_gp.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/compute_rl_deriv_nn.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/compute_sd_gp.html</loc>
