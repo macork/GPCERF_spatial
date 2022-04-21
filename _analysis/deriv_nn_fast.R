@@ -31,7 +31,7 @@ deriv.nn.fast = function(w, w.obs, GPS.obs, y.obs, params, e_gps_pred, e_gps_std
                                  kernel.deriv.fn = function(x) -exp(-x)){
   # params[1]: alpha, params[2]: beta, params[3]: gamma
   # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std)
+  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
 
   n = length(GPS.new)
   n.block = ceiling(n/block.size)
@@ -64,14 +64,12 @@ deriv.nn.fast = function(w, w.obs, GPS.obs, y.obs, params, e_gps_pred, e_gps_std
   all.weights = sapply(id.all, function(id.ind){
     cross.dist = spatstat.geom::crossdist(obs.new[id.ind,1], obs.new[id.ind,2],
                                           obs.use[,1], obs.use[,2])
-    Sigma.cross = params[3]*params[1]*(-2*outer(rep(w,length(id.ind))*params[1], obs.use[,1], "-"))*
+    Sigma.cross = params[3]*sqrt(params[1])*(2*outer(rep(w,length(id.ind))*params[1], obs.use[,1], "-"))*
       kernel.deriv.fn(cross.dist^2)
     #mean
     w = Sigma.cross%*%Sigma.obs.inv
-    w[w<0] = 0
     colSums(w)
   })
   weights = rowSums(all.weights)/n
-  weights = weights/sum(weights)
   weights%*%y.use
 }
