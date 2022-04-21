@@ -2,10 +2,12 @@
 
 export(calc_ac)
 export(compute_deriv_nn)
+export(compute_deriv_weights_gp)
 export(compute_inverse)
 export(compute_m_sigma)
 export(compute_posterior_m_nn)
 export(compute_posterior_sd_nn)
+export(compute_rl_deriv_gp)
 export(compute_rl_deriv_nn)
 export(compute_w_corr)
 export(compute_weight_gp)

@@ -17,7 +17,7 @@ test_that("compute_deriv_nn works as expected!", {
                                 block_size = 1000)
 
   expect_equal(length(deriv_val), 1L)
-  expect_equal(deriv_val[1,1], -11.51633, tolerance = 0.00001)
+  expect_equal(deriv_val[1,1], 13.56024, tolerance = 0.00001)
   expect_true(is.matrix(deriv_val))
 
 })
