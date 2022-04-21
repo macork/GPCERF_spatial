@@ -22,19 +22,23 @@
 #'
 #' @examples
 GP.deriv.weights.calc = function(w, w.obs, GPS.obs, param, e_gps_pred, e_gps_std,
-                                 kernel.fn = function(x) exp(-x^2),
-                                 kernel.deriv.fn = function(x, mu, sigma) (x-mu)/sigma^2){
+                                 kernel.fn = function(x) exp(-x),
+                                 kernel.deriv.fn = function(x) -exp(-x)){
   # param[1]: alpha, param[2]: beta, param[3]: gamma
   # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std)
+  GPS.new = dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
+  n = length(GPS.new)
 
   obs.use = cbind( w.obs*sqrt(param[1]), GPS.obs*sqrt(param[2]) )
   obs.new = cbind( w*sqrt(param[1]), GPS.new*sqrt(param[2]) )
-  Sigma.obs = param[3]*kernel.fn(as.matrix(dist(obs.use))) + diag(nrow(obs.use))
-  Sigma.cross = param[3]*kernel.fn(spatstat.geom::crossdist(obs.new[,1], obs.new[,2],
-                                                            obs.use[,1], obs.use[,2]))*
-    param[1]*outer(w, w.obs, "-") - param[2]*outer(GPS.new, GPS.obs, "-")*
-    GPS.new*kernel.deriv.fn(w, e_gps_pred, e_gps_std)
+  Sigma.obs = param[3]*kernel.fn(as.matrix(dist(obs.use))^2) + diag(nrow(obs.use))
+  cross.dist = spatstat.geom::crossdist(obs.new[,1], obs.new[,2],
+                                        obs.use[,1], obs.use[,2])
+  Sigma.cross = param[3]*sqrt(param[1])*kernel.deriv.fn(cross.dist^2)*
+    (2*outer(rep(w,n), w.obs, "-"))
   weights.all = Sigma.cross%*%chol2inv(chol(Sigma.obs))
-  weights.all
+  # weights.all[weights.all<0] = 0
+  # weights = colMeans(weights.all)
+  # weights/sum(weights)
+  colMeans(weights.all)
 }

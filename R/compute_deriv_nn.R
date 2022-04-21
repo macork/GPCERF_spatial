@@ -66,7 +66,7 @@ compute_deriv_nn <- function(w,
 
   # params[1]: alpha, params[2]: beta, params[3]: gamma
   # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  GPS_w = dnorm(w, mean = e_gps_pred, sd = e_gps_std)
+  GPS_w = dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
 
   n = length(GPS_w)
   n.block = ceiling(n/block_size)
@@ -99,14 +99,12 @@ compute_deriv_nn <- function(w,
   all.weights = sapply(id.all, function(id.ind){
     cross.dist = spatstat.geom::crossdist(obs.new[id.ind,1], obs.new[id.ind,2],
                                           obs.use[,1], obs.use[,2])
-    Sigma.cross = g_sigma*(1/alpha)*(-2*outer(rep(w,length(id.ind))*(1/alpha), obs.use[,1], "-"))*
+    Sigma.cross = g_sigma*(1/alpha)*(2*outer(rep(w,length(id.ind))*(1/alpha), obs.use[,1], "-"))*
       kernel_deriv_fn(cross.dist^2)
     #mean
     wght = Sigma.cross%*%Sigma.obs.inv
-    wght[wght<0] = 0
     colSums(wght)
   })
   weights = rowSums(all.weights)/n
-  weights = weights/sum(weights)
   weights%*%y.use
 }
