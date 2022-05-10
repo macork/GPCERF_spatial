@@ -1,6 +1,7 @@
 # GPCERF <a href="https://NSAPH-Software.github.io/GPCERF"><img src="man/figures/png/logo_place_holder.png" align="right" width="120" /></a>
 
 <!-- badges: start -->
+[![](http://www.r-pkg.org/badges/version-last-release/GPCERF)](http://www.r-pkg.org/pkg/gpcerf)
 [![R build status](https://github.com/NSAPH-Software/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/NSAPH-Software/GPCERF/actions)
 [![codecov](https://codecov.io/gh/NSAPH-Software/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://codecov.io/gh/NSAPH-Software/GPCERF)
 <!-- badges: end -->
