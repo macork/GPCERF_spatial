@@ -30,13 +30,13 @@
 #' cb <- calc_ac(w = data$treat, X = design_mt, weights=weights)
 #'
 calc_ac <- function(w, X, weights){
-  w.mean = sum(w*weights)
-  w.sd = sqrt(sum((w-w.mean)^2*weights))
-  w.trans = (w-w.mean)/w.sd
+  w_mean = sum(w*weights)
+  w_sd = sqrt(sum((w-w_mean)^2*weights))
+  w_trans = (w-w_mean)/w_sd
 
-  X.mean = colSums(X*weights)
-  X.cov = (t(X) - X.mean)%*%diag(weights)%*%t(t(X)-X.mean)
-  X.trans = t(t(solve(chol(X.cov)))%*%(t(X)-X.mean))
+  X_mean = colSums(X*weights)
+  X_cov = (t(X) - X_mean)%*%diag(weights)%*%t(t(X)-X_mean)
+  X_trans = t(t(solve(chol(X_cov)))%*%(t(X)-X_mean))
 
-  c(w.trans%*%diag(weights)%*%X.trans)
+  c(w_trans%*%diag(weights)%*%X_trans)
 }
