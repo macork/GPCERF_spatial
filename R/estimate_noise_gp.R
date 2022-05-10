@@ -28,10 +28,10 @@
 #'
 #' hyperparam <- c(0.1, 0.2, 1)
 #'
-#' noise_est <- estimate_noise(hyperparam, data, GPS_m$GPS)
+#' noise_est <- estimate_noise_gp(hyperparam, data, GPS_m$GPS)
 #'
 #'
-estimate_noise <- function(hyperparam, data, GPS){
+estimate_noise_gp <- function(hyperparam, data, GPS){
 
 
   # Double-check input parameters ----------------------------------------------

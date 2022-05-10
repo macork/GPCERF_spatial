@@ -110,7 +110,6 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   # hyperparameters. -----------------------------------------------------------
 
   tune_res <- apply(tune_params_subset, 1, function(x){
-    print(x)
     compute_m_sigma(hyperparam = x, data = data,
                     w = w, GPS_m = GPS_m)
   })

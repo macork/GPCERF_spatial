@@ -71,32 +71,32 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
 
   w_obs <- data[[2]]
 
-  scaled_obs = cbind(w_obs*sqrt(1/alpha), GPS*sqrt(1/beta))
-  sigma_obs = g_sigma*kernel_fn(as.matrix(dist(scaled_obs))) + diag(nrow(scaled_obs))
+  scaled_obs <- cbind(w_obs*sqrt(1/alpha), GPS*sqrt(1/beta))
+  sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(scaled_obs))) + diag(nrow(scaled_obs))
 
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
   # Estimate noise
-  noise_est <- estimate_noise(hyperparam = hyperparam,
-                                           data = data,
-                                           GPS = GPS)
+  noise_est <- estimate_noise_gp(hyperparam = hyperparam,
+                                 data = data,
+                                 GPS = GPS)
 
 
-  col.all = sapply(w, function(w_instance){
+  col_all <- sapply(w, function(w_instance){
 
     # compute weights
-    weights.final = compute_weight_gp(w = w_instance,
+    weights_final <- compute_weight_gp(w = w_instance,
                                       w_obs = w_obs,
                                       scaled_obs = scaled_obs,
                                       hyperparam = hyperparam,
                                       inv_sigma_obs = inv_sigma_obs,
                                       GPS_m = GPS_m)
 
-    weights.final[weights.final<0] = 0
-    weights.final = weights.final/sum(weights.final)
+    weights_final[weights_final<0] <- 0
+    weights_final <- weights_final/sum(weights_final)
     # weigts.final = invers of paranthesis * kappa
     # est is the same as m in the paper.
-    est = data$Y%*%weights.final
+    est <- data$Y%*%weights_final
 
 
     # Compute credible interval
@@ -113,27 +113,27 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
     # weighted correlation
     # this computes rho_r(w) for each covariate r
 
-    covariate_balance <- compute_w_corr(data, weights.final)
+    covariate_balance <- compute_w_corr(data, weights_final)
     # x.design = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
-    # w.mean = sum(sim.data$treat*weights.final)
-    # w.sd = sqrt(sum((sim.data$treat - w.mean)^2*weights.final))
+    # w.mean = sum(sim.data$treat*weights_final)
+    # w.sd = sqrt(sum((sim.data$treat - w.mean)^2*weights_final))
     # w.stan = (sim.data$treat - w.mean)/w.sd
     #
-    # x.mean = colMeans(x.design*weights.final)
-    # x.cov = (t(x.design) - x.mean)%*%diag(weights.final)%*%t(t(x.design) - x.mean)
+    # x.mean = colMeans(x.design*weights_final)
+    # x.cov = (t(x.design) - x.mean)%*%diag(weights_final)%*%t(t(x.design) - x.mean)
     # x.stan = t(t(solve(chol(x.cov)))%*%(t(x.design) - x.mean))
-    # covariate_balance <- abs(c(t(x.stan)%*%diag(weights.final)%*%w.stan))
+    # covariate_balance <- abs(c(t(x.stan)%*%diag(weights_final)%*%w.stan))
 
 
     c(covariate_balance, est, pst_sd)
   })
   # this is vector of average rho_r(w) over the range of w for every r
 
-  n_confounders <- nrow(col.all) - 2 # est, pst_sd
-  est_index <- nrow(col.all) - 1
-  pst_sd <- nrow(col.all)
+  n_confounders <- nrow(col_all) - 2 # est, pst_sd
+  est_index <- nrow(col_all) - 1
+  pst_sd <- nrow(col_all)
 
-  list(cb = rowMeans(col.all[1:n_confounders,]),
-       est = col.all[est_index,],
-       pst = col.all[pst_sd, ])
+  list(cb = rowMeans(col_all[1:n_confounders,]),
+       est = col_all[est_index,],
+       pst = col_all[pst_sd, ])
 }

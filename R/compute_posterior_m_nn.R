@@ -80,45 +80,45 @@ compute_posterior_m_nn <- function(hyperparam,
   g_sigma <- hyperparam[[3]]
 
 
-  n = base::length(GPS_w)
+  n <- base::length(GPS_w)
 
   # Compute number of blocks
-  n_block = base::ceiling(n/block_size)
+  n_block <- base::ceiling(n/block_size)
 
 
   if(w >= obs_ord[nrow(obs_ord),1]){
-    idx_select = seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
+    idx_select <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
   }else{
-    idx.anchor = which.max(obs_ord[,1]>=w)
-    idx.start = max(1, idx.anchor - n_neighbor*expand)
-    idx.end = min(nrow(obs_ord), idx.anchor + n_neighbor*expand)
-    if(idx.end == nrow(obs_ord)){
-      idx_select = seq(idx.end - n_neighbor*2*expand + 1, idx.end, 1)
+    idx_anchor <- which.max(obs_ord[,1]>=w)
+    idx_start <- max(1, idx_anchor - n_neighbor*expand)
+    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor*expand)
+    if(idx_end == nrow(obs_ord)){
+      idx_select <- seq(idx_end - n_neighbor*2*expand + 1, idx_end, 1)
     }else{
-      idx_select = seq(idx.start, idx.start+n_neighbor*2*expand-1, 1)
+      idx_select <- seq(idx_start, idx_start+n_neighbor*2*expand-1, 1)
     }
   }
 
-  used_obs = t(t(obs_ord[idx_select,])*(1/sqrt(c(alpha, beta))))
+  used_obs <- t(t(obs_ord[idx_select,])*(1/sqrt(c(alpha, beta))))
   cov_used_inv <- compute_inverse(g_sigma*exp(-as.matrix(dist(used_obs))^2) + diag(nrow(used_obs)))
-  used_y = y_obs_ord[idx_select]
+  used_y <- y_obs_ord[idx_select]
 
-  w_obs = t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
-  id_all = split(1:n, ceiling(seq_along(1:n)/n_block))
-  all_weights = sapply(id_all, function(id_ind){
-    cov_cross = g_sigma*exp(-spatstat.geom::crossdist(w_obs[id_ind,1],
-                                                      w_obs[id_ind,2],
-                                                      used_obs[,1],
-                                                      used_obs[,2]))
+  w_obs <- t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
+  id_all <- split(1:n, ceiling(seq_along(1:n)/n_block))
+  all_weights <- sapply(id_all, function(id_ind){
+    cov_cross <- g_sigma*exp(-spatstat.geom::crossdist(w_obs[id_ind,1],
+                                                       w_obs[id_ind,2],
+                                                       used_obs[,1],
+                                                       used_obs[,2]))
     #mean
-    w = cov_cross%*%cov_used_inv
-    w[w<0] = 0
+    w <- cov_cross%*%cov_used_inv
+    w[w<0] <- 0
     colSums(w)
   })
-  weights = rowSums(all_weights)/n
-  weights = weights/sum(weights)
+  weights <- rowSums(all_weights)/n
+  weights <- weights/sum(weights)
 
-  est = c(used_y%*%weights)
+  est <- c(used_y%*%weights)
 
-  cbind(c(idx_select,NA), c(weights, est))
+  return(cbind(c(idx_select,NA), c(weights, est)))
 }

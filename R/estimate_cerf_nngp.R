@@ -164,7 +164,5 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn){
   result$pst_mean <- posterior_mean
   result$pst_sd <- posterior_sd
 
-  #
-
   invisible(result)
 }
