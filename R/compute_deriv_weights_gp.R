@@ -53,19 +53,19 @@ compute_deriv_weights_gp <- function(w,
 
   # param[1]: alpha, param[2]: beta, param[3]: gamma
   # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  GPS_w = dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
-  n = length(GPS_w)
+  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
+  n <- length(GPS_w)
 
-  obs.use = cbind( w_obs*sqrt(1/alpha), GPS*sqrt(1/beta) )
-  obs.new = cbind( w*sqrt(1/alpha), GPS_w*sqrt(1/beta) )
-  Sigma.obs = g_sigma*kernel_fn(as.matrix(dist(obs.use))^2) + diag(nrow(obs.use))
-  cross.dist = spatstat.geom::crossdist(obs.new[,1], obs.new[,2],
-                                        obs.use[,1], obs.use[,2])
-  Sigma.cross = g_sigma*sqrt(1/alpha)*kernel_deriv_fn(cross.dist^2)*
+  obs_use <- cbind( w_obs*sqrt(1/alpha), GPS*sqrt(1/beta) )
+  obs_new <- cbind( w*sqrt(1/alpha), GPS_w*sqrt(1/beta) )
+  Sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(obs_use))^2) + diag(nrow(obs_use))
+  cross_dist <- spatstat.geom::crossdist(obs_new[,1], obs_new[,2],
+                                        obs_use[,1], obs_use[,2])
+  Sigma_cross <- g_sigma*sqrt(1/alpha)*kernel_deriv_fn(cross_dist^2)*
     (2*outer(rep(w,n), w_obs, "-"))
-  weights.all = Sigma.cross%*%chol2inv(chol(Sigma.obs))
-  # weights.all[weights.all<0] = 0
-  # weights = colMeans(weights.all)
+  weights_all <- Sigma_cross%*%chol2inv(chol(Sigma_obs))
+  # weights_all[weights_all<0] = 0
+  # weights = colMeans(weights_all)
   # weights/sum(weights)
-  colMeans(weights.all)
+  return(colMeans(weights_all))
 }

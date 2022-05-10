@@ -66,45 +66,46 @@ compute_deriv_nn <- function(w,
 
   # params[1]: alpha, params[2]: beta, params[3]: gamma
   # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  GPS_w = dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
+  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
 
-  n = length(GPS_w)
-  n.block = ceiling(n/block_size)
-  obs.raw = cbind(w_obs, GPS)
-  obs.ord = obs.raw[order(obs.raw[,1]),]
-  y_obs.ord = y_obs[order(obs.raw[,1])]
+  n <- length(GPS_w)
+  n_block <- ceiling(n/block_size)
+  obs_raw <- cbind(w_obs, GPS)
+  obs_ord <- obs_raw[order(obs_raw[,1]),]
+  y_obs_ord <- y_obs[order(obs_raw[,1])]
   #params: length 3, first scale for w, second scale for GPS,
   #third scale for exp fn
-  if(w >= obs.ord[nrow(obs.ord),1]){
-    idx.all = seq( nrow(obs.ord) - expand*n_neighbor + 1, nrow(obs.ord), 1)
+  if(w >= obs_ord[nrow(obs_ord),1]){
+    idx_all <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
   }else{
-    idx.anchor = which.max(obs.ord[,1]>=w)
-    idx.start = max(1, idx.anchor - n_neighbor*expand)
-    idx.end = min(nrow(obs.ord), idx.anchor + n_neighbor*expand)
-    if(idx.end == nrow(obs.ord)){
-      idx.all = seq(idx.end - n_neighbor*2*expand + 1, idx.end, 1)
+    idx_anchor <- which.max(obs_ord[,1]>=w)
+    idx_start <- max(1, idx_anchor - n_neighbor*expand)
+    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor*expand)
+    if(idx_end == nrow(obs_ord)){
+      idx_all <- seq(idx_end - n_neighbor*2*expand + 1, idx_end, 1)
     }else{
-      idx.all = seq(idx.start, idx.start+n_neighbor*2*expand-1, 1)
+      idx_all <- seq(idx_start, idx_start+n_neighbor*2*expand-1, 1)
     }
   }
 
-  obs.use = t(t(obs.ord[idx.all,])*(1/sqrt(c(alpha, beta))))
-  y.use = y_obs.ord[idx.all]
+  obs_use <- t(t(obs_ord[idx_all,])*(1/sqrt(c(alpha, beta))))
+  y_use <- y_obs_ord[idx_all]
 
-  obs.new = t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
-  id.all = split(1:n, ceiling(seq_along(1:n)/n.block))
-  Sigma.obs = g_sigma*kernel_fn(as.matrix(dist(obs.use))^2) + diag(nrow(obs.use))
-  Sigma.obs.inv = chol2inv(chol(Sigma.obs))
+  obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
+  id_all <- split(1:n, ceiling(seq_along(1:n)/n_block))
+  Sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(obs_use))^2) + diag(nrow(obs_use))
+  Sigma_obs_inv <- chol2inv(chol(Sigma_obs))
 
-  all.weights = sapply(id.all, function(id.ind){
-    cross.dist = spatstat.geom::crossdist(obs.new[id.ind,1], obs.new[id.ind,2],
-                                          obs.use[,1], obs.use[,2])
-    Sigma.cross = g_sigma*(1/alpha)*(2*outer(rep(w,length(id.ind))*(1/alpha), obs.use[,1], "-"))*
-      kernel_deriv_fn(cross.dist^2)
+  all_weights <- sapply(id_all, function(id.ind){
+    cross_dist <- spatstat.geom::crossdist(obs_new[id.ind,1], obs_new[id.ind,2],
+                                          obs_use[,1], obs_use[,2])
+    Sigma_cross <- g_sigma*(1/alpha)*(2*outer(rep(w,length(id.ind))*(1/alpha), obs_use[,1], "-"))*
+      kernel_deriv_fn(cross_dist^2)
     #mean
-    wght = Sigma.cross%*%Sigma.obs.inv
+    wght <- Sigma_cross%*%Sigma_obs_inv
     colSums(wght)
   })
-  weights = rowSums(all.weights)/n
-  weights%*%y.use
+  weights <- rowSums(all_weights)/n
+
+  return(weights%*%y_use)
 }
