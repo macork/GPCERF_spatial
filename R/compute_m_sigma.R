@@ -77,9 +77,9 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
   # Estimate noise
-  noise_est <- estimate_noise(hyperparam = hyperparam,
-                                           data = data,
-                                           GPS = GPS)
+  noise_est <- estimate_noise_gp(hyperparam = hyperparam,
+                                 data = data,
+                                 GPS = GPS)
 
 
   col_all <- sapply(w, function(w_instance){

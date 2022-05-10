@@ -62,45 +62,42 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                       n_neighbor = 50, expand = 2, block_size = 2e3){
 
 
-  coord.obs = cbind(w_obs, GPS_m$GPS)
+  coord_obs <- cbind(w_obs, GPS_m$GPS)
 
   #Remove unobserved outputs
-  coord.obs = coord.obs[!is.na(y_obs),]
-  y.use = y_obs[!is.na(y_obs)]
-  design.use = design_mt[!is.na(y_obs),]
+  coord_obs <- coord_obs[!is.na(y_obs),]
+  y_use <- y_obs[!is.na(y_obs)]
+  design_use <- design_mt[!is.na(y_obs),]
 
-  coord.obs.ord = coord.obs[order(coord.obs[,1]),]
-  y.use.ord = y.use[order(coord.obs[,1])]
-  design.use.ord = design.use[order(coord.obs[,1]),]
+  coord_obs_ord <- coord_obs[order(coord_obs[,1]),]
+  y_use_ord <- y_use[order(coord_obs[,1])]
+  design_use_ord <- design_use[order(coord_obs[,1]),]
 
 
-  all.cb = apply(hyperparams, 1, function(hyperparam){
-    print(hyperparam)
-    all.res = sapply(w, function(wi){
-      print(wi)
+  all_cb <- apply(hyperparams, 1, function(hyperparam){
+    all_res <- sapply(w, function(wi){
       # Estimate GPS for requested w.
-      GPS_w = dnorm(wi,
+      GPS_w <- dnorm(wi,
                     mean = GPS_m$e_gps_pred,
                     sd = GPS_m$e_gps_std, log = TRUE)
 
       # Compute posterior mean
-      res = compute_posterior_m_nn(hyperparam = hyperparam,
-                                   w = wi,
-                                   GPS_w = GPS_w,
-                                   obs_ord = coord.obs.ord,
-                                   y_obs_ord = y.use.ord,
-                                   n_neighbor = n_neighbor,
-                                   expand = expand,
-                                   block_size = block_size)
-      idx = res[-nrow(res),1]
-      weights = res[-nrow(res),2]
-      weights = weights/sum(weights)
-      calc_ac( coord.obs[idx,1], design.use.ord[idx,], weights = weights)
+      res <- compute_posterior_m_nn(hyperparam = hyperparam,
+                                    w = wi,
+                                    GPS_w = GPS_w,
+                                    obs_ord = coord_obs_ord,
+                                    y_obs_ord = y_use_ord,
+                                    n_neighbor = n_neighbor,
+                                    expand = expand,
+                                    block_size = block_size)
+      idx <- res[-nrow(res),1]
+      weights <- res[-nrow(res),2]
+      weights <- weights/sum(weights)
+      calc_ac( coord_obs[idx,1], design_use_ord[idx,], weights = weights)
     })
     #covariate specific balance, averaged over w
-    rowMeans(all.res)
+    rowMeans(all_res)
   })
 
-  return(all.cb)
-
+  return(all_cb)
 }

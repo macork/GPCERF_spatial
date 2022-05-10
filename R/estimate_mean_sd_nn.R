@@ -71,27 +71,26 @@ estimate_mean_sd_nn <- function(hyperparam,
 
 
 
-  coord.obs = cbind(w_obs, GPS_m$GPS)
+  coord_obs <- cbind(w_obs, GPS_m$GPS)
 
   #Remove missing outputs
-  coord.obs = coord.obs[!is.na(y_obs),]
-  y.use = y_obs[!is.na(y_obs)]
+  coord_obs <- coord_obs[!is.na(y_obs),]
+  y_use <- y_obs[!is.na(y_obs)]
 
-  coord.obs.ord = coord.obs[order(coord.obs[,1]),]
-  y.use.ord = y.use[order(coord.obs[,1])]
+  coord_obs_ord <- coord_obs[order(coord_obs[,1]),]
+  y_use_ord <- y_use[order(coord_obs[,1])]
 
 
   all_res_mean <- lapply(w, function(wi){
-    print(wi)
-    GPS_w = dnorm(wi,
+    GPS_w <- dnorm(wi,
                   mean = GPS_m$e_gps_pred,
                   sd = GPS_m$e_gps_std, log = TRUE)
 
     compute_posterior_m_nn(hyperparam = hyperparam,
                            w = wi,
                            GPS_w = GPS_w,
-                           obs_ord = coord.obs.ord,
-                           y_obs_ord = y.use.ord,
+                           obs_ord = coord_obs_ord,
+                           y_obs_ord = y_use_ord,
                            n_neighbor = n_neighbor,
                            expand = expand,
                            block_size = block_size)
@@ -100,23 +99,19 @@ estimate_mean_sd_nn <- function(hyperparam,
 
   # TODO: repeating GPS_w, merge them together.
   all_res_sd <- lapply(w, function(wi){
-    print(wi)
-    GPS_w = dnorm(wi,
-                  mean = GPS_m$e_gps_pred,
-                  sd = GPS_m$e_gps_std, log = T)
+    GPS_w <- dnorm(wi,
+                   mean = GPS_m$e_gps_pred,
+                   sd = GPS_m$e_gps_std, log = T)
 
     val <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                    w = wi,
                                    GPS_w = GPS_w,
-                                   obs_ord = coord.obs.ord,
+                                   obs_ord = coord_obs_ord,
                                    sigma2 = sigma2,
                                    n_neighbor = n_neighbor,
                                    expand = expand)
 
-    print(val)
-
     return(val)
-
   })
 
   return(list(all_res_mean, unlist(all_res_sd)))

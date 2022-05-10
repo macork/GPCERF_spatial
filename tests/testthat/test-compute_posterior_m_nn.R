@@ -22,7 +22,7 @@ test_that("compute_posterior_m_nn works as expected.", {
                  sd = GPS_m$e_gps_std, log = TRUE)
 
   # Order data for easy selection
-  coord_obs = cbind(data$treat, GPS_m$GPS)
+  coord_obs <- cbind(data$treat, GPS_m$GPS)
   y_use <- data$Y
 
   obs_ord <- coord_obs[order(coord_obs[,1]),]
