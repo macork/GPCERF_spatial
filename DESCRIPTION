@@ -1,5 +1,5 @@
 Package: GPCERF
-Title: Gaussian processes for Estimating Causal Exposure Response Curves
+Title: Gaussian Processes for Estimating Causal Exposure Response Curves
 Version: 0.0.2.9000
 Authors@R: c(
     person("Naeem", "Khoshnevis", email = "nkhoshnevis@g.harvard.edu",
