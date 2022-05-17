@@ -30,7 +30,7 @@
 #' # covariate matrix
 #' design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
 #'
-#' cb <- calc_ac(w = data$treat, X = design_mt, weights=weights)
+#' cb <- GPCERF:::calc_ac(w = data$treat, X = design_mt, weights=weights)
 #'
 calc_ac <- function(w, X, weights){
 

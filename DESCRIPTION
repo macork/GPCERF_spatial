@@ -30,7 +30,9 @@ Imports:
     spatstat.geom,
     logger,
     Rcpp,
-    RcppArmadillo
+    RcppArmadillo,
+    ggplot2,
+    rlang
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

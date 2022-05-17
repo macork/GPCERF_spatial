@@ -18,8 +18,6 @@
 #'
 autoplot.cerf_gp <- function(object, ...){
 
-  gg_labs <- NULL
-  gg_title <- "Exposure Rate Function"
 
   ## collect additional arguments
   dot_args <- list(...)
@@ -35,12 +33,13 @@ autoplot.cerf_gp <- function(object, ...){
                          sd_vals = object$pst_sd)
 
   g <- ggplot2::ggplot(tmp_data) +
-       ggplot2::geom_ribbon(ggplot2::aes(w_vals,
-                                y = mean_vals,
-                                ymin = mean_vals - 1.96*sd_vals,
-                                ymax = mean_vals + 1.96*sd_vals),
+       ggplot2::geom_ribbon(ggplot2::aes(.data$w_vals,
+                                y = .data$mean_vals,
+                                ymin = .data$mean_vals - 1.96*.data$sd_vals,
+                                ymax = .data$mean_vals + 1.96*.data$sd_vals),
                                 fill = "blue", alpha = 0.25) +
-        ggplot2::geom_line(ggplot2::aes(w_vals,mean_vals), color="blue", size = 1) +
+        ggplot2::geom_line(ggplot2::aes(.data$w_vals,.data$mean_vals),
+                           color="blue", size = 1) +
         ggplot2::theme_bw() +
         ggplot2::ggtitle("Estimated CERF (gp) with credible band (1.96sd)") +
         ggplot2::xlab("Exposure level") +
@@ -107,12 +106,13 @@ autoplot.cerf_nngp <- function(object, ...){
                          sd_vals = object$pst_sd)
 
   g <- ggplot2::ggplot(tmp_data) +
-       ggplot2::geom_ribbon(ggplot2::aes(w_vals,
-                                y = mean_vals,
-                                ymin = mean_vals - 1.96*sd_vals,
-                                ymax = mean_vals + 1.96*sd_vals),
+       ggplot2::geom_ribbon(ggplot2::aes(.data$w_vals,
+                                y = .data$mean_vals,
+                                ymin = .data$mean_vals - 1.96*.data$sd_vals,
+                                ymax = .data$mean_vals + 1.96*.data$sd_vals),
                             fill = "#FC4E07", alpha = 0.25) +
-    ggplot2::geom_line(ggplot2::aes(w_vals,mean_vals), color="#FC4E07", size = 1) +
+    ggplot2::geom_line(ggplot2::aes(.data$w_vals,.data$mean_vals),
+                       color="#FC4E07", size = 1) +
     ggplot2::theme_bw() +
     ggplot2::ggtitle("Estimated CERF (nngp) with credible band (1.96sd)") +
     ggplot2::xlab("Exposure level") +
