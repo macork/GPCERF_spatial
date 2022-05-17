@@ -55,7 +55,8 @@
 #'                                 params = list(alpha = c(0.1,0.2,0.4),
 #'                                               beta=0.2,
 #'                                               g_sigma = 1,
-#'                                               tune_app = "all"))
+#'                                               tune_app = "all"),
+#'                                 nthread = 1)
 #'
 #'
 estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
@@ -112,7 +113,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
   tune_res <- apply(tune_params_subset, 1, function(x){
     compute_m_sigma(hyperparam = x, data = data,
-                    w = w, GPS_m = GPS_m)
+                    w = w, GPS_m = GPS_m, nthread = nthread)
   })
 
   # Select the combination of hyperparameters that provides the lowest

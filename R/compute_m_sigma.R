@@ -22,6 +22,8 @@
 #'               for all samples (e_gps_pred).
 #'   - Column 3: Estimated conditional standard deviation of the exposure given
 #'               covariates for all samples (e_gps_std).
+#' @param nthread An integer value that represents the number of threads to be
+#' used by internal packages.
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
@@ -46,11 +48,12 @@
 #' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
 #'                             data = data,
 #'                             w = w.all,
-#'                             GPS_m = GPS_m)
+#'                             GPS_m = GPS_m,
+#'                             nthread = 1)
 #'
 #' gp.cerf <- tune_res$est
 #'
-compute_m_sigma <- function(hyperparam, data, w, GPS_m,
+compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
                             kernel_fn = function(x) exp(-x^2)){
 
   param = unlist(hyperparam)
@@ -82,9 +85,26 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
                                  GPS = GPS)
 
 
+  lfp <- get_options("logger_file_path")
+
+  # make a cluster
+  cl <- parallel::makeCluster(nthread, type="PSOCK",
+                              outfile= lfp)
+
+  # export variables and functions to cluster cores
+  parallel::clusterExport(cl=cl,
+                          varlist = c("w", "w_obs", "scaled_obs",
+                                      "hyperparam", "inv_sigma_obs", "GPS_m",
+                                      "scale", "nthread", "noise_est",
+                                      "compute_sd_gp", "compute_weight_gp",
+                                      "compute_w_corr"),
+                          envir=environment())
 
 
-  col_all_list <- lapply(w, function(w_instance){
+
+  col_all_list <- parallel::parLapply(cl,
+                                      w,
+                                      function(w_instance){
 
     # compute weights
     weights_final <- compute_weight_gp(w = w_instance,
@@ -111,35 +131,10 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
     c(covariate_balance, est, pst_sd)
   })
 
-  col_all <- do.call(cbind, col_all_list)
+  # terminate clusters.
+  parallel::stopCluster(cl)
 
-  # col_all <- sapply(w, function(w_instance){
-  #
-  #   # compute weights
-  #   weights_final <- compute_weight_gp(w = w_instance,
-  #                                     w_obs = w_obs,
-  #                                     scaled_obs = scaled_obs,
-  #                                     hyperparam = hyperparam,
-  #                                     inv_sigma_obs = inv_sigma_obs,
-  #                                     GPS_m = GPS_m)
-  #
-  #   weights_final[weights_final<0] <- 0
-  #   weights_final <- weights_final/sum(weights_final)
-  #   # weigts.final = invers of paranthesis * kappa
-  #   # est is the same as m in the paper.
-  #   est <- data$Y%*%weights_final
-  #
-  #
-  #   pst_sd <- compute_sd_gp(w = w_instance,
-  #                           scaled_obs = scaled_obs,
-  #                           hyperparam = hyperparam,
-  #                           sigma = noise_est,
-  #                           GPS_m = GPS_m)
-  #
-  #   covariate_balance <- compute_w_corr(data, weights_final)
-  #   c(covariate_balance, est, pst_sd)
-  # })
-  # this is vector of average rho_r(w) over the range of w for every r
+  col_all <- do.call(cbind, col_all_list)
 
   n_confounders <- nrow(col_all) - 2 # est, pst_sd
   est_index <- nrow(col_all) - 1

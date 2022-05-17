@@ -14,7 +14,8 @@ test_that("compute_m_sigma works as expected!", {
    tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                                data = data,
                                w = w_all,
-                               GPS_m = GPS_m)
+                               GPS_m = GPS_m,
+                               nthread = 1)
 
    gp_cerf <- tune_res$est
 

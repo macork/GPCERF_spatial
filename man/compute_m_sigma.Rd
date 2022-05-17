@@ -5,7 +5,14 @@
 \title{Compute mean, confidence interval (?), and covariate balance in Full Gaussian
 Process (GP)}
 \usage{
-compute_m_sigma(hyperparam, data, w, GPS_m, kernel_fn = function(x) exp(-x^2))
+compute_m_sigma(
+  hyperparam,
+  data,
+  w,
+  GPS_m,
+  nthread = 1,
+  kernel_fn = function(x) exp(-x^2)
+)
 }
 \arguments{
 \item{hyperparam}{A vector of values of hyper-parameters.
@@ -34,6 +41,9 @@ for all samples (e_gps_pred).
 covariates for all samples (e_gps_std).
 }}
 
+\item{nthread}{An integer value that represents the number of threads to be
+used by internal packages.}
+
 \item{kernel_fn}{The covariance function of GP.}
 }
 \value{
@@ -61,7 +71,8 @@ GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
 tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                             data = data,
                             w = w.all,
-                            GPS_m = GPS_m)
+                            GPS_m = GPS_m,
+                            nthread = 1)
 
 gp.cerf <- tune_res$est
 
