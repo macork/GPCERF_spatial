@@ -10,8 +10,11 @@ reference:
   - title: Estimate CERF with Gaussain Process
     contents:
     - estimate_cerf_gp
+    - estimate_cerf_nngp
   - title: Utilities
     contents:
+    - generate_synthetic_data
+    - train_GPS
     - set_logger
     - get_logger
 

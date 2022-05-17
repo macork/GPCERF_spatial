@@ -11,7 +11,10 @@
 #'
 #' @return
 #' A vector of correlations between w and each column of X.
-#' @export
+#'
+#'
+#' @keywords internal
+#'
 #'
 #' @examples
 #'

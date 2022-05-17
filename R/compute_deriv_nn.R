@@ -22,7 +22,8 @@
 #'
 #' @return
 #' A scalar of estimated derivative of CERF at \code{w} in nnGP.
-#' @export
+#'
+#' @keywords internal
 #'
 #' @examples
 #'
