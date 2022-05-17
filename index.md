@@ -1,4 +1,4 @@
-# GPCERF <a href="https://NSAPH-Software.github.io/GPCERF"><img src="man/figures/png/logo_place_holder.png" align="right" width="120" /></a>
+# GPCERF <a href="https://NSAPH-Software.github.io/GPCERF"><img src="man/figures/png/gpcerf_logo.png" align="right" width="120" /></a>
 
 <!-- badges: start -->
 [![](http://www.r-pkg.org/badges/version-last-release/GPCERF)](http://www.r-pkg.org/pkg/gpcerf)

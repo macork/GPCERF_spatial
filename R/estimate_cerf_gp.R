@@ -24,6 +24,8 @@
 #'   - tune_app: A tuning approach. Available approaches:
 #'     - all: try all combinations of hyperparameters.
 #' alpha, beta, and g_sigma can be a vector of parameters.
+#' @param nthread An integer value that represents the number of threads to be
+#' used by internal packages.
 #' @param kernel_fn A kernel function. A default value is a Gaussian Kernel.
 #'
 #' @return
@@ -53,10 +55,11 @@
 #'                                 params = list(alpha = c(0.1,0.2,0.4),
 #'                                               beta=0.2,
 #'                                               g_sigma = 1,
-#'                                               tune_app = "all"))
+#'                                               tune_app = "all"),
+#'                                 nthread = 1)
 #'
 #'
-estimate_cerf_gp <- function(data, w, GPS_m, params,
+estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                              kernel_fn = function(x) exp(-x^2)){
 
 
@@ -99,7 +102,6 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   }
 
   # Choose subset of tuning parameters based on tuning approach ----------------
-
   if (getElement(params, "tune_app") == "all"){
     tune_params_subset <- tune_params
   } else if (getElement(params, "tune_app") == "at_random"){
@@ -111,7 +113,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
 
   tune_res <- apply(tune_params_subset, 1, function(x){
     compute_m_sigma(hyperparam = x, data = data,
-                    w = w, GPS_m = GPS_m)
+                    w = w, GPS_m = GPS_m, nthread = nthread)
   })
 
   # Select the combination of hyperparameters that provides the lowest
@@ -135,5 +137,4 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
 
   # return gp_cerf S3 object
   invisible(result)
-
 }

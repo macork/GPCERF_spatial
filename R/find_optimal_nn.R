@@ -19,6 +19,8 @@
 #' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.
 #' @param block_size Number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
+#' @param nthread An integer value that represents the number of threads to be
+#' used by internal packages.
 #'
 #' @return
 #' Estimated covariate balance scores for the grid of hyper-parameter values considered in \code{hyperparams}.
@@ -53,13 +55,15 @@
 #'                               GPS_m = GPS_m,
 #'                               design_mt = design_mt,
 #'                               hyperparams = hyperparam_grid,
-#'                               n_neighbor = 50, expand = 2, block_size = 2e3)
+#'                               n_neighbor = 50, expand = 2, block_size = 2e3,
+#'                               nthread = 1)
 #'
 find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                       hyperparams = expand.grid(seq(0.5,4.5,1),
                                                 seq(0.5,4.5,1),
                                                 seq(0.5,4.5,1)),
-                      n_neighbor = 50, expand = 2, block_size = 2e3){
+                      n_neighbor = 50, expand = 2, block_size = 2e3,
+                      nthread = 1){
 
 
   coord_obs <- cbind(w_obs, GPS_m$GPS)
@@ -73,13 +77,29 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   y_use_ord <- y_use[order(coord_obs[,1])]
   design_use_ord <- design_use[order(coord_obs[,1]),]
 
+  lfp <- get_options("logger_file_path")
 
   all_cb <- apply(hyperparams, 1, function(hyperparam){
-    all_res <- sapply(w, function(wi){
+
+    # make a cluster
+    cl <- parallel::makeCluster(nthread, type="PSOCK",
+                                outfile= lfp)
+
+    # export variables and functions to cluster cores
+    parallel::clusterExport(cl=cl,
+                            varlist = c("w", "GPS_m", "hyperparam",
+                                        "coord_obs_ord", "y_use_ord",
+                                        "n_neighbor", "expand", "block_size",
+                                        "compute_posterior_m_nn", "calc_ac"),
+                            envir=environment())
+
+    all_res_list <- parallel::parLapply(cl,
+                                        w,
+                                        function(wi){
       # Estimate GPS for requested w.
       GPS_w <- dnorm(wi,
-                    mean = GPS_m$e_gps_pred,
-                    sd = GPS_m$e_gps_std, log = TRUE)
+                     mean = GPS_m$e_gps_pred,
+                     sd = GPS_m$e_gps_std, log = TRUE)
 
       # Compute posterior mean
       res <- compute_posterior_m_nn(hyperparam = hyperparam,
@@ -95,6 +115,12 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
       weights <- weights/sum(weights)
       calc_ac( coord_obs[idx,1], design_use_ord[idx,], weights = weights)
     })
+
+    # terminate clusters.
+    parallel::stopCluster(cl)
+
+    all_res <- do.call(cbind, all_res_list)
+
     #covariate specific balance, averaged over w
     rowMeans(all_res)
   })
