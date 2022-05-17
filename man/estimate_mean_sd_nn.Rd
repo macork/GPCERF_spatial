@@ -13,7 +13,8 @@ estimate_mean_sd_nn(
   GPS_m,
   n_neighbor = 50,
   expand = 2,
-  block_size = 2000
+  block_size = 2000,
+  nthread = 1
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ estimate_mean_sd_nn(
 
 \item{block_size}{Number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.}
+
+\item{nthread}{An integer value that represents the number of threads to be
+used by internal packages.}
 }
 \value{
 A list of 2 elements, including:
@@ -83,6 +87,7 @@ val <- estimate_mean_sd_nn(hyperparam = hyperparam,
                            GPS_m = GPS_m,
                            n_neighbor = n_neighbor,
                            expand = expand,
-                           block_size = block_size)
+                           block_size = block_size,
+                           nthread = 1)
 
 }

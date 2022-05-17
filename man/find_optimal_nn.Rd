@@ -13,7 +13,8 @@ find_optimal_nn(
   hyperparams = expand.grid(seq(0.5, 4.5, 1), seq(0.5, 4.5, 1), seq(0.5, 4.5, 1)),
   n_neighbor = 50,
   expand = 2,
-  block_size = 2000
+  block_size = 2000,
+  nthread = 1
 )
 }
 \arguments{
@@ -41,6 +42,9 @@ set of values of all hyper-parameters.}
 
 \item{block_size}{Number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}
+
+\item{nthread}{An integer value that represents the number of threads to be
+used by internal packages.}
 }
 \value{
 Estimated covariate balance scores for the grid of hyper-parameter values considered in \code{hyperparams}.
@@ -78,6 +82,7 @@ optimal_cb <- find_optimal_nn(w_obs = data$treat,
                               GPS_m = GPS_m,
                               design_mt = design_mt,
                               hyperparams = hyperparam_grid,
-                              n_neighbor = 50, expand = 2, block_size = 2e3)
+                              n_neighbor = 50, expand = 2, block_size = 2e3,
+                              nthread = 1)
 
 }

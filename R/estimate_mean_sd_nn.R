@@ -17,6 +17,8 @@
 #' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.
 #' @param block_size Number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.
+#' @param nthread An integer value that represents the number of threads to be
+#' used by internal packages.
 #'
 #' @return
 #' A list of 2 elements, including:
@@ -57,7 +59,8 @@
 #'                            GPS_m = GPS_m,
 #'                            n_neighbor = n_neighbor,
 #'                            expand = expand,
-#'                            block_size = block_size)
+#'                            block_size = block_size,
+#'                            nthread = 1)
 #'
 estimate_mean_sd_nn <- function(hyperparam,
                                 sigma2,
@@ -67,7 +70,8 @@ estimate_mean_sd_nn <- function(hyperparam,
                                 GPS_m,
                                 n_neighbor = 50,
                                 expand = 2,
-                                block_size = 2e3){
+                                block_size = 2e3,
+                                nthread = 1){
 
 
 
@@ -81,7 +85,25 @@ estimate_mean_sd_nn <- function(hyperparam,
   y_use_ord <- y_use[order(coord_obs[,1])]
 
 
-  all_res_mean <- lapply(w, function(wi){
+  lfp <- get_options("logger_file_path")
+
+  # make a cluster
+  cl <- parallel::makeCluster(nthread, type="PSOCK",
+                              outfile= lfp)
+
+  # export variables and functions to cluster cores
+  parallel::clusterExport(cl=cl,
+                          varlist = c("w", "GPS_m", "hyperparam",
+                                      "coord_obs_ord", "y_use_ord",
+                                      "sigma2",
+                                      "n_neighbor", "expand", "block_size",
+                                      "compute_posterior_m_nn"),
+                          envir=environment())
+
+
+  all_res_mean <- parallel::parLapply(cl,
+                                      w,
+                                      function(wi){
     GPS_w <- dnorm(wi,
                   mean = GPS_m$e_gps_pred,
                   sd = GPS_m$e_gps_std, log = TRUE)
@@ -98,7 +120,9 @@ estimate_mean_sd_nn <- function(hyperparam,
   })
 
   # TODO: repeating GPS_w, merge them together.
-  all_res_sd <- lapply(w, function(wi){
+  all_res_sd <- parallel::parLapply(cl,
+                                    w,
+                                    function(wi){
     GPS_w <- dnorm(wi,
                    mean = GPS_m$e_gps_pred,
                    sd = GPS_m$e_gps_std, log = T)
@@ -113,6 +137,9 @@ estimate_mean_sd_nn <- function(hyperparam,
 
     return(val)
   })
+
+  # terminate clusters.
+  parallel::stopCluster(cl)
 
   return(list(all_res_mean, unlist(all_res_sd)))
 }

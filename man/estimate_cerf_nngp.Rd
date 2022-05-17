@@ -4,7 +4,7 @@
 \alias{estimate_cerf_nngp}
 \title{Estimate the Conditional Exposure Response Function using Nearest Neighbor Gaussian Process}
 \usage{
-estimate_cerf_nngp(data, w, GPS_m, params, kernel_fn)
+estimate_cerf_nngp(data, w, GPS_m, params, kernel_fn, nthread = 1)
 }
 \arguments{
 \item{data}{A data.table of observation data.
@@ -43,6 +43,9 @@ alpha, beta, and g_sigma can be a vector of parameters.
 }}
 
 \item{kernel_fn}{A kernel function. A default value is a Gaussian Kernel.}
+
+\item{nthread}{An integer value that represents the number of threads to be
+used by internal packages.}
 }
 \value{
 #' A cerf_nngp object that includes the following values:
@@ -74,7 +77,8 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
                                                   tune_app = "all",
                                                   n_neighbor = 20,
                                                   expand = 1,
-                                                  block_size = 1e4))
+                                                  block_size = 1e4),
+                                    nthread = 1)
 
 
 }
