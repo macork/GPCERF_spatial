@@ -6,3 +6,7 @@
 inst/doc
 tests/testthat/GPCERF.log
 R/GPCERF.log
+
+.Rprofile
+renv/*
+renv.lock
