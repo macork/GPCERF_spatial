@@ -1,5 +1,5 @@
 #' @title
-#' Calculate True CERF
+#' Calculate True CERF Values
 #'
 #' @description
 #' Derives the true CERF at exposure levels of interest when the data
