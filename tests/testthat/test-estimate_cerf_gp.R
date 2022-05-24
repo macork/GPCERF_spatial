@@ -19,7 +19,8 @@ test_that("estimate_cerf_gp works as expected!", {
                                   params = list(alpha = c(0.1,0.2,0.4),
                                                 beta=0.2,
                                                 g_sigma = 1,
-                                                tune_app = "all"))
+                                                tune_app = "all"),
+                                  nthread = 1)
 
 
   # estimate_cerf_gp returns S3 class cerf_gp

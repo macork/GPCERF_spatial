@@ -25,7 +25,10 @@
 #'
 #'
 train_GPS <- function(cov.mt, w.all){
-  GPS_mod <- xgboost::xgboost(data = cov.mt, label = w.all, nrounds=50)
+  GPS_mod <- xgboost::xgboost(data = cov.mt,
+                              label = w.all,
+                              nrounds=50,
+                              verbose = 0)
   e_gps_pred <- predict(GPS_mod,cov.mt)
   e_gps_std <- sd(w.all-e_gps_pred)
   GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std))

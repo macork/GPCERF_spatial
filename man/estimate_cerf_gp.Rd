@@ -4,7 +4,14 @@
 \alias{estimate_cerf_gp}
 \title{Estimate the Conditional Exposure Response Function using Gaussian Process}
 \usage{
-estimate_cerf_gp(data, w, GPS_m, params, kernel_fn = function(x) exp(-x^2))
+estimate_cerf_gp(
+  data,
+  w,
+  GPS_m,
+  params,
+  nthread = 1,
+  kernel_fn = function(x) exp(-x^2)
+)
 }
 \arguments{
 \item{data}{A data.table of observation data.
@@ -35,6 +42,9 @@ These parameters include:
 alpha, beta, and g_sigma can be a vector of parameters.
 }
 }}
+
+\item{nthread}{An integer value that represents the number of threads to be
+used by internal packages.}
 
 \item{kernel_fn}{A kernel function. A default value is a Gaussian Kernel.}
 }
@@ -70,7 +80,8 @@ cerf_gp_obj <- estimate_cerf_gp(sim.data,
                                 params = list(alpha = c(0.1,0.2,0.4),
                                               beta=0.2,
                                               g_sigma = 1,
-                                              tune_app = "all"))
+                                              tune_app = "all"),
+                                nthread = 1)
 
 
 }

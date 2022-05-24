@@ -22,6 +22,8 @@
 #'               for all samples (e_gps_pred).
 #'   - Column 3: Estimated conditional standard deviation of the exposure given
 #'               covariates for all samples (e_gps_std).
+#' @param nthread An integer value that represents the number of threads to be
+#' used by internal packages.
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
@@ -46,11 +48,12 @@
 #' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
 #'                             data = data,
 #'                             w = w.all,
-#'                             GPS_m = GPS_m)
+#'                             GPS_m = GPS_m,
+#'                             nthread = 1)
 #'
 #' gp.cerf <- tune_res$est
 #'
-compute_m_sigma <- function(hyperparam, data, w, GPS_m,
+compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
                             kernel_fn = function(x) exp(-x^2)){
 
   param = unlist(hyperparam)
@@ -82,15 +85,34 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
                                  GPS = GPS)
 
 
-  col_all <- sapply(w, function(w_instance){
+  lfp <- get_options("logger_file_path")
+
+  # make a cluster
+  cl <- parallel::makeCluster(nthread, type="PSOCK",
+                              outfile= lfp)
+
+  # export variables and functions to cluster cores
+  parallel::clusterExport(cl=cl,
+                          varlist = c("w", "w_obs", "scaled_obs",
+                                      "hyperparam", "inv_sigma_obs", "GPS_m",
+                                      "scale", "nthread", "noise_est",
+                                      "compute_sd_gp", "compute_weight_gp",
+                                      "compute_w_corr"),
+                          envir=environment())
+
+
+
+  col_all_list <- parallel::parLapply(cl,
+                                      w,
+                                      function(w_instance){
 
     # compute weights
     weights_final <- compute_weight_gp(w = w_instance,
-                                      w_obs = w_obs,
-                                      scaled_obs = scaled_obs,
-                                      hyperparam = hyperparam,
-                                      inv_sigma_obs = inv_sigma_obs,
-                                      GPS_m = GPS_m)
+                                       w_obs = w_obs,
+                                       scaled_obs = scaled_obs,
+                                       hyperparam = hyperparam,
+                                       inv_sigma_obs = inv_sigma_obs,
+                                       GPS_m = GPS_m)
 
     weights_final[weights_final<0] <- 0
     weights_final <- weights_final/sum(weights_final)
@@ -99,35 +121,20 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
     est <- data$Y%*%weights_final
 
 
-    # Compute credible interval
-    #t1 <- proc.time()
     pst_sd <- compute_sd_gp(w = w_instance,
                             scaled_obs = scaled_obs,
                             hyperparam = hyperparam,
                             sigma = noise_est,
                             GPS_m = GPS_m)
-    #t2 <- proc.time()
-
-    #print(paste("Time taken to estimate posterior sd: ", t2[[3]] - t1[[3]], " s."))
-
-    # weighted correlation
-    # this computes rho_r(w) for each covariate r
 
     covariate_balance <- compute_w_corr(data, weights_final)
-    # x.design = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
-    # w.mean = sum(sim.data$treat*weights_final)
-    # w.sd = sqrt(sum((sim.data$treat - w.mean)^2*weights_final))
-    # w.stan = (sim.data$treat - w.mean)/w.sd
-    #
-    # x.mean = colMeans(x.design*weights_final)
-    # x.cov = (t(x.design) - x.mean)%*%diag(weights_final)%*%t(t(x.design) - x.mean)
-    # x.stan = t(t(solve(chol(x.cov)))%*%(t(x.design) - x.mean))
-    # covariate_balance <- abs(c(t(x.stan)%*%diag(weights_final)%*%w.stan))
-
-
     c(covariate_balance, est, pst_sd)
   })
-  # this is vector of average rho_r(w) over the range of w for every r
+
+  # terminate clusters.
+  parallel::stopCluster(cl)
+
+  col_all <- do.call(cbind, col_all_list)
 
   n_confounders <- nrow(col_all) - 2 # est, pst_sd
   est_index <- nrow(col_all) - 1
