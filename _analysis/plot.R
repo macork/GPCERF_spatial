@@ -19,6 +19,6 @@ cerf_gp_obj <- estimate_cerf_gp(sim.data,
 
 plt_data = data.frame(w = cerf_gp_obj$w, mean = cerf_gp_obj$pst_mean, sd = cerf_gp_obj$pst_sd)
 ggplot2::ggplot(plt_data, aes(x = w, y = mean, ymin = mean - 1.96*sd, ymax = mean + 1.96*sd)) +
-  ggplot2::geom_abline() + ggplot2::geom_ribbon(fill = "red", alpha = 0.25) +
+  ggplot2::geom_line() + ggplot2::geom_ribbon(fill = "red", alpha = 0.25) +
   ggplot2::theme_bw() + ggplot2::ggtitle("Estimated CERF with credible band") + ggplot2::xlab("Exposure level") +
   ggplot2::ylab("Population average counterfactual outcome")
