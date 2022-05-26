@@ -91,13 +91,19 @@ estimate_mean_sd_nn <- function(hyperparam,
   cl <- parallel::makeCluster(nthread, type="PSOCK",
                               outfile= lfp)
 
+
+  # install the package on all nodes.
+  parallel::clusterEvalQ(cl, {library("GPCERF")})
+
   # export variables and functions to cluster cores
   parallel::clusterExport(cl=cl,
                           varlist = c("w", "GPS_m", "hyperparam",
                                       "coord_obs_ord", "y_use_ord",
                                       "sigma2",
                                       "n_neighbor", "expand", "block_size",
-                                      "compute_posterior_m_nn"),
+                                      "compute_posterior_m_nn",
+                                      "compute_posterior_sd_nn",
+                                      "compute_inverse", "calc_cross"),
                           envir=environment())
 
 

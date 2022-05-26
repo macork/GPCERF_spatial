@@ -11,3 +11,4 @@
 index.md
 ^.covrignore
 ^R\.log$
+^docker_singularity/*$
