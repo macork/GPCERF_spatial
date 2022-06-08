@@ -2,7 +2,7 @@
 title: "Nearest-neighbor Gaussian Processes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Nearest-neighbor-Gaussian-Processes}
+  %\VignetteIndexEntry{Nearest-neighbor Gaussian Processes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,13 +18,11 @@ knitr::opts_chunk$set(
 library(GPCERF)
 library(ggplot2)
 ```
-
 In this vignette, we present an example of using nearest-neighbor Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://fasrc.github.io/CausalGPS/index.html).
 
 ## Generate Synthetic Data
 
 We first generate a synthetic dataset with six covariates, one continuous exposure and one outcome. We consider two types of conditional distributions (normal and student's t) of the exposure given covariates. For more details of the synthetic data generation, see this [document](https://fasrc.github.io/CausalGPS/articles/Generating-Synthetic-Data.html). We then use a function `tru_R` to derive the actual ERF of this population at `w=seq(0,20,0.1)`.
-
 ```{r}
 set.seed(1)
 # Generate dataset with a normally distributed exposure given covariates

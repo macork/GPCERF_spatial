@@ -2,7 +2,7 @@
 title: "Full Gaussian Processes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{FUll-GP}
+  %\VignetteIndexEntry{Full Gaussian Processes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -27,13 +27,13 @@ In this vignette, we present an example of using full Gaussian processes approac
 We first generate a synthetic dataset with six covariates, one continuous exposure and one outcome. We consider two types of conditional distributions (normal and student's t) of the exposure given covariates. For more details of the synthetic data generation, see this [document](https://fasrc.github.io/CausalGPS/articles/Generating-Synthetic-Data.html). We then use a function `tru_R` to derive the actual ERF of this population at `w=seq(0,20,0.1)`.
 
 ```{r}
-set.seed(1)
+set.seed(134)
 # Generate dataset with a normally distributed exposure given covariates
-data_sim_normal <- generate_synthetic_data(sample_size = 500, 
+data_sim_normal <- generate_synthetic_data(sample_size = 400, 
                                           outcome_sd = 10, 
                                           gps_spec = 1)
 # Generate dataset with a t-distributed with 2df exposure given covariates
-data_sim_t <- generate_synthetic_data(sample_size = 500, 
+data_sim_t <- generate_synthetic_data(sample_size = 400, 
                                      outcome_sd = 10, 
                                      gps_spec = 2)
 
@@ -77,7 +77,7 @@ gp_res_normal <- estimate_cerf_gp(data_sim_normal,
                                                 beta=0.2,
                                                 g_sigma = 1,
                                                 tune_app = "all"),
-                                  nthread = 12)
+                                  nthread = 1)
 plot(gp_res_normal) + 
   geom_line(data = data.frame(w = w_all, y = erf_tru_normal), 
             aes(x = w, y = y, color = "True"), size = 1.5)
@@ -97,7 +97,7 @@ gp_res_t <- estimate_cerf_gp(data_sim_t,
                                                 beta=0.2,
                                                 g_sigma = 1,
                                                 tune_app = "all"),
-                                  nthread = 12)
+                                  nthread = 1)
 plot(gp_res_t) + 
   geom_line(data = data.frame(w = w_all, y = erf_tru_t), 
             aes(x = w, y = y, color = "True"), size = 1.5)
