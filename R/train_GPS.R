@@ -29,12 +29,19 @@ train_GPS <- function(cov.mt, w.all){
                               label = w.all,
                               nrounds=50,
                               verbose = 0)
+
+  logger::log_info("Started estimating GPS values ... ")
+  t_1 <- proc.time()
+
   e_gps_pred <- predict(GPS_mod,cov.mt)
   e_gps_std <- sd(w.all-e_gps_pred)
   GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std))
   GPS_m <- data.table::data.table(GPS = GPS,
                                   e_gps_pred = e_gps_pred,
                                   e_gps_std = e_gps_std)
+  t_2 <- proc.time()
+  logger::log_debug("Wall clock time to estimate GPS values:  ",
+                    " {t_2[[3]] - t_1[[3]]} s.")
 
  return(GPS_m)
 }

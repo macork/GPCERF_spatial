@@ -20,6 +20,3 @@ log_system_info <- function(){
                    "detected cores: {parallel::detectCores()[[1]]}")
 
 }
-
-
-

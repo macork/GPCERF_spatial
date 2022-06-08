@@ -2,7 +2,7 @@
 #' Find the Optimal Hyper-parameter for the Nearest Neighbor Gaussian Process
 #'
 #' @description
-#' Computes covariate balance for each combincation of provided hyper-parameters
+#' Computes covariate balance for each combination of provided hyper-parameters
 #' and selects the hyper-parameter values that minimizes the covariate balance.
 #'
 #' @param w_obs A vector of the observed exposure levels.
@@ -16,7 +16,7 @@
 #' @param hyperparams A matrix of candidate values of the hyper-parameters, each row contains a
 #' set of values of all hyper-parameters.
 #' @param n_neighbor Number of nearest neighbors on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.
+#' @param expand Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n_neighbor}.
 #' @param block_size Number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
 #' @param nthread An integer value that represents the number of threads to be
@@ -45,9 +45,9 @@
 #' w <- seq(0,20,2)
 #' design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
 #'
-#' hyperparam_grid <- expand.grid(seq(0.5,2.5,1),
+#' hyperparam_grid <- expand.grid(seq(0.5,1.0,1),
 #'                                seq(0.4,0.6,0.2),
-#'                                seq(0.5,1.5,1))
+#'                                seq(0.5))
 #'
 #' optimal_cb <- find_optimal_nn(w_obs = data$treat,
 #'                               w = w,
@@ -65,6 +65,8 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                       n_neighbor = 50, expand = 2, block_size = 2e3,
                       nthread = 1){
 
+  logger::log_info("Started finding optimal values ... ")
+  t_opt_1 <- proc.time()
 
   coord_obs <- cbind(w_obs, GPS_m$GPS)
 
@@ -79,18 +81,30 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
 
   lfp <- get_options("logger_file_path")
 
+  # make a cluster
+  t_cl_1 <- proc.time()
+  cl <- parallel::makeCluster(nthread, type="PSOCK",
+                              outfile= lfp)
+
+  # export variables and functions to cluster cores
+  parallel::clusterExport(cl=cl,
+                          varlist = c("w", "GPS_m",
+                                      "coord_obs_ord", "y_use_ord",
+                                      "n_neighbor", "expand", "block_size",
+                                      "compute_posterior_m_nn", "calc_ac"),
+                          envir=environment())
+
+  t_cl_2 <- proc.time()
+
+  logger::log_debug("Time to setup cluster with {nthread} core(s):",
+                   "{t_cl_2[[3]] - t_cl_1[[3]]} s.")
+
   all_cb <- apply(hyperparams, 1, function(hyperparam){
 
-    # make a cluster
-    cl <- parallel::makeCluster(nthread, type="PSOCK",
-                                outfile= lfp)
 
-    # export variables and functions to cluster cores
+    # export apply related parameters.
     parallel::clusterExport(cl=cl,
-                            varlist = c("w", "GPS_m", "hyperparam",
-                                        "coord_obs_ord", "y_use_ord",
-                                        "n_neighbor", "expand", "block_size",
-                                        "compute_posterior_m_nn", "calc_ac"),
+                            varlist = c("hyperparam"),
                             envir=environment())
 
     all_res_list <- parallel::parLapply(cl,
@@ -116,14 +130,19 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
       calc_ac( coord_obs[idx,1], design_use_ord[idx,], weights = weights)
     })
 
-    # terminate clusters.
-    parallel::stopCluster(cl)
-
     all_res <- do.call(cbind, all_res_list)
 
     #covariate specific balance, averaged over w
     rowMeans(all_res)
   })
+
+  # terminate clusters.
+  parallel::stopCluster(cl)
+
+  t_opt_2 <- proc.time()
+  logger::log_info("Done with finding optimal value.",
+                   "(Wall clock time: {t_opt_2[[3]] - t_opt_1[[3]]} s.} ... ")
+
 
   return(all_cb)
 }

@@ -14,3 +14,5 @@ index.md
 ^docker_singularity/*$
 ^doc$
 ^Meta$
+^functional_tests/*$
+^docs/reference/Debug$

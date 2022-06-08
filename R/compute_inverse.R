@@ -34,9 +34,7 @@ compute_inverse <- function(mtrx){
                 nrow(mtrx), ", ncol: ", ncol(mtrx)))
   }
 
-
   inv_mtrx <- chol2inv(chol(mtrx))
 
   return(inv_mtrx)
-
 }

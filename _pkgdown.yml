@@ -21,4 +21,4 @@ reference:
 articles:
   - title: Introduction
     navbar: Introduction
-    contents: [Full-GP, NN-GP]
+    contents: [Full-Gaussian-Processes, Nearest-neighbor-Gaussian-Processes]
