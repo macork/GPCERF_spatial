@@ -10,3 +10,5 @@ R/GPCERF.log
 .Rprofile
 renv/*
 renv.lock
+/doc/
+/Meta/

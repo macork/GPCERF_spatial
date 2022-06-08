@@ -30,10 +30,8 @@ and selects the hyper-parameter values that minimizes the covariate balance."><!
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Estimate-CERF-GP.html">Estimate-CERF-GP</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Collabration</h6>
-    <a class="dropdown-item" href="../articles/Developers-Guide.html">Developers-Guide</a>
+    <a class="dropdown-item" href="../articles/FUll-GP.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/NN-GP.html">Nearest-neighbour Gaussian Processes</a>
   </div>
 </li>
 <li class="nav-item">
@@ -76,7 +74,8 @@ and selects the hyper-parameter values that minimizes the covariate balance.</p>
   hyperparams <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
   n_neighbor <span class="op">=</span> <span class="fl">50</span>,
   expand <span class="op">=</span> <span class="fl">2</span>,
-  block_size <span class="op">=</span> <span class="fl">2000</span>
+  block_size <span class="op">=</span> <span class="fl">2000</span>,
+  nthread <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -105,6 +104,9 @@ set of values of all hyper-parameters.</p></dd>
 <dt>block_size</dt>
 <dd><p>Number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger <code>block_size</code> is faster, but requires more memory.</p></dd>
+<dt>nthread</dt>
+<dd><p>An integer value that represents the number of threads to be
+used by internal packages.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -120,56 +122,6 @@ balance the speed and memory requirement. Larger <code>block_size</code> is fast
 <span class="r-in"><span class="co"># Estimate GPS function</span></span>
 <span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
 <span class="r-in">                   w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]	train-rmse:8.206950 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2]	train-rmse:6.394042 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3]	train-rmse:5.031031 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4]	train-rmse:4.074021 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5]	train-rmse:3.325362 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6]	train-rmse:2.738510 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7]	train-rmse:2.303425 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [8]	train-rmse:2.037422 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [9]	train-rmse:1.778079 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10]	train-rmse:1.627036 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]	train-rmse:1.513744 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12]	train-rmse:1.383442 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]	train-rmse:1.312099 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14]	train-rmse:1.191915 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15]	train-rmse:1.096559 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16]	train-rmse:1.035653 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17]	train-rmse:0.961320 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18]	train-rmse:0.936646 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]	train-rmse:0.902146 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]	train-rmse:0.851613 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]	train-rmse:0.814890 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22]	train-rmse:0.776779 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23]	train-rmse:0.741845 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24]	train-rmse:0.715681 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]	train-rmse:0.655899 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26]	train-rmse:0.583473 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [27]	train-rmse:0.530346 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28]	train-rmse:0.467600 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29]	train-rmse:0.433730 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [30]	train-rmse:0.412744 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]	train-rmse:0.381812 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [32]	train-rmse:0.340381 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [33]	train-rmse:0.333415 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [34]	train-rmse:0.315124 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [35]	train-rmse:0.292065 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [36]	train-rmse:0.269160 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37]	train-rmse:0.245788 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [38]	train-rmse:0.226206 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]	train-rmse:0.207609 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [40]	train-rmse:0.196317 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]	train-rmse:0.179336 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [42]	train-rmse:0.167567 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43]	train-rmse:0.156670 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [44]	train-rmse:0.149022 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [45]	train-rmse:0.138442 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46]	train-rmse:0.132194 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [47]	train-rmse:0.128503 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [48]	train-rmse:0.112246 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49]	train-rmse:0.106002 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [50]	train-rmse:0.100278 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Hyperparameter</span></span>
 <span class="r-in"><span class="va">hyperparam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">1</span><span class="op">)</span></span>
@@ -191,7 +143,8 @@ balance the speed and memory requirement. Larger <code>block_size</code> is fast
 <span class="r-in">                              GPS_m <span class="op">=</span> <span class="va">GPS_m</span>,</span>
 <span class="r-in">                              design_mt <span class="op">=</span> <span class="va">design_mt</span>,</span>
 <span class="r-in">                              hyperparams <span class="op">=</span> <span class="va">hyperparam_grid</span>,</span>
-<span class="r-in">                              n_neighbor <span class="op">=</span> <span class="fl">50</span>, expand <span class="op">=</span> <span class="fl">2</span>, block_size <span class="op">=</span> <span class="fl">2e3</span><span class="op">)</span></span>
+<span class="r-in">                              n_neighbor <span class="op">=</span> <span class="fl">50</span>, expand <span class="op">=</span> <span class="fl">2</span>, block_size <span class="op">=</span> <span class="fl">2e3</span>,</span>
+<span class="r-in">                              nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
