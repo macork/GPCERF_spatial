@@ -1,0 +1,92 @@
+---
+title: "Nearest-neighbour Gaussian Processes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load}
+library(GPCERF)
+library(ggplot2)
+```
+In this vignette, we present an example of using nearest-neighbour Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://fasrc.github.io/CausalGPS/index.html).
+
+## Generate Synthetic Data
+
+We first generate a synthetic dataset with six covariates, one continuous exposure and one outcome. We consider two types of conditional distributions (normal and student's t) of the exposure given covariates. For more details of the synthetic data generation, see this [document](https://fasrc.github.io/CausalGPS/articles/Generating-Synthetic-Data.html). We then use a function `tru_R` to derive the actual ERF of this population at `w=seq(0,20,0.1)`.
+```{r data-generate}
+set.seed(1)
+# Generate dataset with a normally distributed exposure given covariates
+data_sim_normal = generate_synthetic_data(sample_size = 500, outcome_sd = 10, gps_spec = 1)
+# Generate dataset with a t-distributed with 2df exposure given covariates
+data_sim_t = generate_synthetic_data(sample_size = 500, outcome_sd = 10, gps_spec = 2)
+
+tru_R<-function(w, sim.data){
+  design.mt = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
+  mean(apply(design.mt, 1, function(x){
+    -10 - sum(c(2, 2, 3, -1,2,2)*x) -
+      w*(0.1 - 0.1*x[1] + 0.1*x[4] + 0.1*x[5] + 0.1*x[3]^2) + 0.13^2*w^3
+  }))
+}
+
+erf_tru_normal = sapply(seq(0,20,0.1), function(w) tru_R(w, data_sim_normal))
+erf_tru_t = sapply(seq(0,20,0.1), function(w) tru_R(w, data_sim_t))
+```
+
+## Estimate ERF with full Gaussian Processes
+
+### Train GPS Model
+GPCERF will first convert the covariate values into a single composite score (GPS) and then use it to fit the Gaussian processes. We use the GPS estimation function in CasaulGPS (see [here](https://fasrc.github.io/CausalGPS/articles/Estimating-GPS.html)) to get the GPS model that maps covariates into GPS.
+```{r GPS-est}
+GPS_m_normal <- train_GPS(cov.mt = as.matrix(data_sim_normal[,-(1:2)]),
+                          w.all = as.matrix(data_sim_normal$treat))
+GPS_m_t <- train_GPS(cov.mt = as.matrix(data_sim_t[,-(1:2)]),
+                          w.all = as.matrix(data_sim_t$treat))
+```
+
+We then use `estimate_cerf_nngp` to estimate the ERF of the expsoure `w`. We estimate the ERF at `w = seq(0,20,0.1)`. The estimated ERF as well as its pointwise 95\% credible band is visualized with a call to `plot`. We also plot the actual ERF on top of the estimated ERF.
+
+### Normally Distributed Exposure
+```{r gpcerf-normal}
+w_all = seq(0,20,0.1)
+data.table::setDT(data_sim_normal)
+
+nngp_res_normal <- estimate_cerf_nngp(data_sim_normal,
+                                  w_all,
+                                  GPS_m_normal,
+                                  params = list(alpha = c(0.1),
+                                                beta=0.2,
+                                                g_sigma = 1,
+                                                n_neighbor = 20,
+                                                expand = 1,
+                                                block_size = 50,
+                                                tune_app = "all"),
+                                  nthread = 1)
+plot(nngp_res_normal) + 
+  geom_line(data = data.frame(w = w_all, y = erf_tru_normal), 
+            aes(x = w, y = y, color = "True"), size = 1.5)
+```
+We can see that the estimated curve follows the true ERF closely and the 95\% credible band completely covers the true ERF. But the running time is much smaller than the full GP approach.
+
+### T-distributed Exposure
+```{r gpcerf-normal}
+data.table::setDT(data_sim_t)
+
+nngp_res_t <- estimate_cerf_nngp(data_sim_t,
+                                  w_all,
+                                  GPS_m_t,
+                                  params = list(alpha = c(0.1),
+                                                beta=0.2,
+                                                g_sigma = 1,
+                                                n_neighbor = 20,
+                                                expand = 1,
+                                                block_size = 50,
+                                                tune_app = "all"),
+                                  nthread = 1)
+plot(nngp_res_t) + 
+  geom_line(data = data.frame(w = w_all, y = erf_tru_t), 
+            aes(x = w, y = y, color = "True"), size = 1.5)
+```
+The results look very similar to the case where the exposure is normally distributed. The only difference might be that when the expsoure is t-distributed, the estimated curve tends to be less smooth.
