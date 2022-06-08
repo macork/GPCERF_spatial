@@ -38,7 +38,7 @@ set of values of all hyper-parameters.}
 
 \item{n_neighbor}{Number of nearest neighbors on one side (see also \code{expand}).}
 
-\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.}
+\item{expand}{Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n_neighbor}.}
 
 \item{block_size}{Number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}
@@ -50,7 +50,7 @@ used by internal packages.}
 Estimated covariate balance scores for the grid of hyper-parameter values considered in \code{hyperparams}.
 }
 \description{
-Computes covariate balance for each combincation of provided hyper-parameters
+Computes covariate balance for each combination of provided hyper-parameters
 and selects the hyper-parameter values that minimizes the covariate balance.
 }
 \examples{
@@ -72,9 +72,9 @@ block_size <- 10000
 w <- seq(0,20,2)
 design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
 
-hyperparam_grid <- expand.grid(seq(0.5,2.5,1),
+hyperparam_grid <- expand.grid(seq(0.5,1.0,1),
                                seq(0.4,0.6,0.2),
-                               seq(0.5,1.5,1))
+                               seq(0.5))
 
 optimal_cb <- find_optimal_nn(w_obs = data$treat,
                               w = w,

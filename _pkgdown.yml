@@ -21,8 +21,4 @@ reference:
 articles:
   - title: Introduction
     navbar: Introduction
-    contents: [Estimate-CERF-GP]
-
-  - title: Collabration
-    navbar: Collabration
-    contents: [Developers-Guide]
+    contents: [Full-Gaussian-Processes, Nearest-neighbor-Gaussian-Processes]

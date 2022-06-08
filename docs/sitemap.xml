@@ -7,13 +7,13 @@
     <loc>https://fasrc.github.io/GPCERF/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://fasrc.github.io/GPCERF/articles/Developers-Guide.html</loc>
-  </url>
-  <url>
-    <loc>https://fasrc.github.io/GPCERF/articles/Estimate-CERF-GP.html</loc>
+    <loc>https://fasrc.github.io/GPCERF/articles/Full-Gaussian-Processes.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/articles/GPCERF.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/articles/Nearest-neighbor-Gaussian-Processes.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/articles/index.html</loc>
@@ -29,6 +29,12 @@
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/GPCERF-package.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/autoplot.cerf_gp.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/autoplot.cerf_nngp.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/calc_ac.html</loc>
@@ -76,9 +82,6 @@
     <loc>https://fasrc.github.io/GPCERF/reference/estimate_mean_sd_nn.html</loc>
   </url>
   <url>
-    <loc>https://fasrc.github.io/GPCERF/reference/estimate_noise.html</loc>
-  </url>
-  <url>
     <loc>https://fasrc.github.io/GPCERF/reference/estimate_noise_gp.html</loc>
   </url>
   <url>
@@ -98,6 +101,12 @@
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/log_system_info.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/plot.cerf_gp.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/plot.cerf_nngp.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/set_logger.html</loc>

@@ -112,7 +112,8 @@ autoplot.cerf_nngp <- function(object, ...){
                                 ymax = .data$mean_vals + 1.96*.data$sd_vals),
                                 fill = "#FC4E07", alpha = 0.25) +
        ggplot2::geom_line(ggplot2::aes(.data$w_vals,.data$mean_vals),
-                       color="#FC4E07", size = 1) +
+                          color="#FC4E07",
+                          size = 1) +
        ggplot2::theme_bw() +
        ggplot2::ggtitle("Estimated CERF (nngp) with credible band (1.96sd)") +
        ggplot2::xlab("Exposure level") +

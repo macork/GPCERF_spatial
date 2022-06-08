@@ -29,6 +29,6 @@ Updates logger settings, including log level and location of the file.
 }
 \examples{
 
-set_logger("Debug")
+set_logger("mylogger.log", "INFO")
 
 }

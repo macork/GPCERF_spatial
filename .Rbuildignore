@@ -12,3 +12,7 @@ index.md
 ^.covrignore
 ^R\.log$
 ^docker_singularity/*$
+^doc$
+^Meta$
+^functional_tests/*$
+^docs/reference/Debug$

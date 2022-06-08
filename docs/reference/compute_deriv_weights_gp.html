@@ -30,10 +30,8 @@ posterior mean of the first derivative of CERF at a given exposure level."><!-- 
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Estimate-CERF-GP.html">Estimate-CERF-GP</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Collabration</h6>
-    <a class="dropdown-item" href="../articles/Developers-Guide.html">Developers-Guide</a>
+    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
 <li class="nav-item">
@@ -108,56 +106,6 @@ exposure level of interest is calculated.</p>
 <span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span>sample_size <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
 <span class="r-in">                   w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]	train-rmse:8.461345 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2]	train-rmse:6.485335 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3]	train-rmse:5.076201 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4]	train-rmse:4.097343 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5]	train-rmse:3.426320 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6]	train-rmse:2.889502 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7]	train-rmse:2.481524 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [8]	train-rmse:2.128136 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [9]	train-rmse:1.907598 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10]	train-rmse:1.699714 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]	train-rmse:1.483771 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12]	train-rmse:1.349610 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]	train-rmse:1.285631 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14]	train-rmse:1.139476 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15]	train-rmse:1.014416 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16]	train-rmse:0.925465 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17]	train-rmse:0.820259 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18]	train-rmse:0.741486 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]	train-rmse:0.663697 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]	train-rmse:0.592727 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]	train-rmse:0.558535 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22]	train-rmse:0.512294 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23]	train-rmse:0.485067 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24]	train-rmse:0.430478 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]	train-rmse:0.396569 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26]	train-rmse:0.349569 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [27]	train-rmse:0.318073 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28]	train-rmse:0.283824 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29]	train-rmse:0.248195 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [30]	train-rmse:0.222101 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]	train-rmse:0.205520 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [32]	train-rmse:0.179645 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [33]	train-rmse:0.159978 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [34]	train-rmse:0.147234 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [35]	train-rmse:0.134634 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [36]	train-rmse:0.131130 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37]	train-rmse:0.123213 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [38]	train-rmse:0.119717 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]	train-rmse:0.107584 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [40]	train-rmse:0.098846 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]	train-rmse:0.089959 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [42]	train-rmse:0.082492 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43]	train-rmse:0.078882 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [44]	train-rmse:0.077021 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [45]	train-rmse:0.071017 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46]	train-rmse:0.067609 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [47]	train-rmse:0.063541 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [48]	train-rmse:0.059992 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49]	train-rmse:0.055601 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [50]	train-rmse:0.051934 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">wi</span> <span class="op">&lt;-</span> <span class="fl">4.8</span></span>
 <span class="r-in"><span class="va">weights</span> <span class="op">&lt;-</span> <span class="fu">compute_deriv_weights_gp</span><span class="op">(</span>w <span class="op">=</span> <span class="va">wi</span>,</span>

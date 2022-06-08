@@ -30,10 +30,8 @@ Weights are defined by the covariance function of the GP."><!-- mathjax --><scri
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Estimate-CERF-GP.html">Estimate-CERF-GP</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Collabration</h6>
-    <a class="dropdown-item" href="../articles/Developers-Guide.html">Developers-Guide</a>
+    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
 <li class="nav-item">
@@ -99,7 +97,7 @@ Weights are defined by the covariance function of the GP.</p>
 <span class="r-in"><span class="co"># covariate matrix</span></span>
 <span class="r-in"><span class="va">design_mt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">.</span><span class="op">-</span><span class="fl">1</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="fl">3</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">cb</span> <span class="op">&lt;-</span> <span class="fu">calc_ac</span><span class="op">(</span>w <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>, X <span class="op">=</span> <span class="va">design_mt</span>, weights<span class="op">=</span><span class="va">weights</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">cb</span> <span class="op">&lt;-</span> <span class="fu">GPCERF</span><span class="fu">:::</span><span class="fu">calc_ac</span><span class="op">(</span>w <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>, X <span class="op">=</span> <span class="va">design_mt</span>, weights<span class="op">=</span><span class="va">weights</span><span class="op">)</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

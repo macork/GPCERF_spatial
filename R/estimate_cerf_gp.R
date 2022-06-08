@@ -45,14 +45,14 @@
 #'                    w.all = as.matrix(sim.data$treat))
 #'
 #' # exposure values
-#' w.all = seq(0,20,0.1)
+#' w.all = seq(0,20,1)
 #'
 #' data.table::setDT(sim.data)
 #'
 #' cerf_gp_obj <- estimate_cerf_gp(sim.data,
 #'                                 w.all,
 #'                                 GPS_m,
-#'                                 params = list(alpha = c(0.1,0.2,0.4),
+#'                                 params = list(alpha = c(0.1),
 #'                                               beta=0.2,
 #'                                               g_sigma = 1,
 #'                                               tune_app = "all"),

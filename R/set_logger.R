@@ -22,7 +22,7 @@
 #'
 #' @examples
 #'
-#' set_logger("Debug")
+#' set_logger("mylogger.log", "INFO")
 #'
 set_logger <- function(logger_file_path= "GPCERF.log", logger_level="INFO"){
 

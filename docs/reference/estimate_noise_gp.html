@@ -30,10 +30,8 @@ the standard deviations of the residuals."><!-- mathjax --><script src="https://
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Estimate-CERF-GP.html">Estimate-CERF-GP</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Collabration</h6>
-    <a class="dropdown-item" href="../articles/Developers-Guide.html">Developers-Guide</a>
+    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
 <li class="nav-item">
@@ -97,56 +95,6 @@ the standard deviations of the residuals.</p>
 <span class="r-in"><span class="co"># Estimate GPS function</span></span>
 <span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
 <span class="r-in">                   w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]	train-rmse:8.557412 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2]	train-rmse:6.544529 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3]	train-rmse:5.044576 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4]	train-rmse:3.991472 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5]	train-rmse:3.228516 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6]	train-rmse:2.569900 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7]	train-rmse:2.094692 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [8]	train-rmse:1.731734 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [9]	train-rmse:1.470229 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10]	train-rmse:1.274962 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]	train-rmse:1.054901 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12]	train-rmse:0.888916 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]	train-rmse:0.753736 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14]	train-rmse:0.648757 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15]	train-rmse:0.572981 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16]	train-rmse:0.502921 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17]	train-rmse:0.443061 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18]	train-rmse:0.395692 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]	train-rmse:0.347662 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]	train-rmse:0.305686 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]	train-rmse:0.273674 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22]	train-rmse:0.242320 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23]	train-rmse:0.221018 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24]	train-rmse:0.191208 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]	train-rmse:0.176630 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26]	train-rmse:0.163489 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [27]	train-rmse:0.142951 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28]	train-rmse:0.122548 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29]	train-rmse:0.112130 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [30]	train-rmse:0.096368 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]	train-rmse:0.084064 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [32]	train-rmse:0.070788 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [33]	train-rmse:0.062368 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [34]	train-rmse:0.057281 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [35]	train-rmse:0.051983 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [36]	train-rmse:0.045176 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37]	train-rmse:0.039839 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [38]	train-rmse:0.035014 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]	train-rmse:0.029088 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [40]	train-rmse:0.024278 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]	train-rmse:0.020719 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [42]	train-rmse:0.018624 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43]	train-rmse:0.016722 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [44]	train-rmse:0.015417 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [45]	train-rmse:0.013064 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46]	train-rmse:0.011746 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [47]	train-rmse:0.010214 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [48]	train-rmse:0.008645 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49]	train-rmse:0.007379 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [50]	train-rmse:0.006359 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">hyperparam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span class="r-in"></span>

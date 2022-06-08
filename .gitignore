@@ -6,7 +6,9 @@
 inst/doc
 tests/testthat/GPCERF.log
 R/GPCERF.log
-
+*.log
 .Rprofile
 renv/*
 renv.lock
+/doc/
+/Meta/

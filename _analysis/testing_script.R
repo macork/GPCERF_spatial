@@ -1,4 +1,4 @@
-library(GPCERF)
+#library(GPCERF)
 library(ggplot2)
 # exposure values
 w.all = seq(0,20,0.1)
@@ -51,7 +51,8 @@ data.table::setDT(sim.data)
 system.time( fit_res <- estimate_cerf_gp(data = sim.data, w = w.all, GPS_m = GPS_m, nthread = 4,
                                          params = list(alpha = 10^seq(0,2,length.out = 5),
                                                        beta = 10^seq(0,2,length.out = 5),
-                                                       g_sigma = c(0.1,1,10))) )
+                                                       g_sigma = c(0.1,1,10),
+                                                       tune_app = "all")) )
 
 system.time( fit_res_nn <- estimate_cerf_nngp(data = sim.data, w = w.all, GPS_m = GPS_m, nthread = 4,
                                               params = list(alpha = 10^seq(-2,0,length.out = 5),
@@ -60,7 +61,7 @@ system.time( fit_res_nn <- estimate_cerf_nngp(data = sim.data, w = w.all, GPS_m 
                                                             tune_app = "all",
                                                             n_neighbor = 10,
                                                             expand = 2,
-                                                            block_size = 50)) )
+                                                            block_size = 50)))
 
 plot(fit_res) + geom_line(data = data.frame(w = w.all, cerf = true_curve), aes(x = w, y = cerf, color = "True CERF"))
 plot(fit_res_nn) plot(fit_res) + geom_line(data = data.frame(w = w.all, cerf = true_curve), aes(x = w, y = cerf, color = "True CERF"))
