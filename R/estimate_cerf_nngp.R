@@ -165,7 +165,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
 
   t_nngp_2 <- proc.time()
   logger::log_info("Done with estimating cerf using nngp approach ",
-                   "Wall clock time: {t_nnpg_2[[3]] - t_nngp_1[[3]]} s.")
+                   "Wall clock time: {t_nngp_2[[3]] - t_nngp_1[[3]]} s.")
 
 
   # Build nngp_cerf S3 object
