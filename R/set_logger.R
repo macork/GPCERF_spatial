@@ -79,7 +79,6 @@ get_logger <- function(){
 }
 
 
-
 # Keeping logger options
 my_options <- new.env(parent = emptyenv())
 

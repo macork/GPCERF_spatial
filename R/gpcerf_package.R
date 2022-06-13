@@ -2,10 +2,10 @@
 #' The 'GPCERF' package.
 #'
 #' @description
-#' Description
+#' Provides a non-parametric Bayesian framework based on Gaussian process priors
+#' for estimating causal effects of a continuous exposure and detecting change
+#' points in the causal exposure response curves using observational data.
 #'
-#' @details
-#' Details
 #'
 #' @docType package
 #' @name GPCERF-package

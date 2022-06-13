@@ -74,6 +74,9 @@ estimate_mean_sd_nn <- function(hyperparam,
                                 nthread = 1){
 
 
+  t_est_m_sd_1 <- proc.time()
+  logger::log_info("Working on estimating mean and sd using nngp approach ...")
+
 
   coord_obs <- cbind(w_obs, GPS_m$GPS)
 
@@ -146,6 +149,12 @@ estimate_mean_sd_nn <- function(hyperparam,
 
   # terminate clusters.
   parallel::stopCluster(cl)
+
+  t_est_m_sd_2 <- proc.time()
+
+  logger::log_info("Done with estimating mean and sd using nngp approach ",
+                   "Wall clock time: {t_est_m_sd_2[[3]] - t_est_m_sd_1[[3]]} s.")
+
 
   return(list(all_res_mean, unlist(all_res_sd)))
 }
