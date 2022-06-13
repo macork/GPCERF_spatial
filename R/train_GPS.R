@@ -35,7 +35,7 @@ train_GPS <- function(cov.mt, w.all){
 
   e_gps_pred <- predict(GPS_mod,cov.mt)
   e_gps_std <- sd(w.all-e_gps_pred)
-  GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std))
+  GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std, log = T))
   GPS_m <- data.table::data.table(GPS = GPS,
                                   e_gps_pred = e_gps_pred,
                                   e_gps_std = e_gps_std)
