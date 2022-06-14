@@ -11,6 +11,8 @@ train_GPS(cov.mt, w.all, dnorm_log = FALSE)
 column is a covariate.}
 
 \item{w.all}{A vector of observed exposure levels.}
+
+\item{dnorm_log}{Logical, if TRUE, probabilities p are given as log(p).}
 }
 \value{
 A data.table that includes:

@@ -8,6 +8,7 @@
 #' @param cov.mt Covariate matrix containing all covariates. Each row is a sample and each
 #' column is a covariate.
 #' @param w.all A vector of observed exposure levels.
+#' @param dnorm_log Logical, if TRUE, probabilities p are given as log(p).
 #'
 #' @return
 #' A data.table that includes:
