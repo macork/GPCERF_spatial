@@ -136,6 +136,8 @@ estimate_mean_sd_nn <- function(hyperparam,
                    mean = GPS_m$e_gps_pred,
                    sd = GPS_m$e_gps_std, log = T)
 
+    print(paste("Sigma2 is:", sigma2))
+
     val <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                    w = wi,
                                    GPS_w = GPS_w,

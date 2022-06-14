@@ -1,6 +1,8 @@
+set_logger(logger_file_path = "functional_tests/GPCERF.log", logger_level = "DEBUG")
+
 t_1 <- proc.time()
 set.seed(19)
-sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+sim.data <- generate_synthetic_data(sample_size = 2000, gps_spec = 3)
 # Estimate GPS function
 GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
                   w.all = as.matrix(sim.data$treat))
@@ -17,7 +19,7 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
                                                   n_neighbor = 20,
                                                   expand = 1,
                                                   block_size = 1e4),
-                                    nthread = 1)
+                                    nthread = 12)
 
 t_2 <- proc.time()
-print(paste("Wall clock time: ", t_2[[3]] - t_1[[3]], "s."))
+print(paste("Wall clock time: ", t_2[[3]] - t_1[[3]], " s."))

@@ -4,7 +4,7 @@
 \alias{train_GPS}
 \title{Train Model for GPS}
 \usage{
-train_GPS(cov.mt, w.all)
+train_GPS(cov.mt, w.all, dnorm_log = FALSE)
 }
 \arguments{
 \item{cov.mt}{Covariate matrix containing all covariates. Each row is a sample and each

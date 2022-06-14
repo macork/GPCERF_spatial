@@ -98,10 +98,13 @@ compute_deriv_nn <- function(w,
   Sigma_obs_inv <- chol2inv(chol(Sigma_obs))
 
   all_weights <- sapply(id_all, function(id.ind){
+
     cross_dist <- spatstat.geom::crossdist(obs_new[id.ind,1], obs_new[id.ind,2],
                                           obs_use[,1], obs_use[,2])
-    Sigma_cross <- g_sigma*(1/alpha)*(2*outer(rep(w,length(id.ind))*(1/alpha), obs_use[,1], "-"))*
-      kernel_deriv_fn(cross_dist^2)
+
+    Sigma_cross <- g_sigma*(1/alpha)*(2*outer(rep(w,length(id.ind))*(1/alpha),
+                                              obs_use[,1], "-"))*
+                                              kernel_deriv_fn(cross_dist^2)
     #mean
     wght <- Sigma_cross%*%Sigma_obs_inv
     colSums(wght)

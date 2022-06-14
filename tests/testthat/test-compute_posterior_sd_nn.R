@@ -44,5 +44,5 @@ test_that("compute_posterior_sd_nn works as expected.", {
                                     n_neighbor = 20,
                                     expand = 1)
 
-  expect_equal(pst_sd, 0.5410388, tolerance = 0.00001)
+  expect_equal(pst_sd, 5.437376, tolerance = 0.00001)
 })
