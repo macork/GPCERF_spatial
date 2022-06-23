@@ -12,3 +12,6 @@ renv/*
 renv.lock
 /doc/
 /Meta/
+functional_tests/*.html
+functional_tests/*_cache/*
+functional_tests/*_files/*

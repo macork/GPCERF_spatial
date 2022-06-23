@@ -8,6 +8,7 @@
 #' @param cov.mt Covariate matrix containing all covariates. Each row is a sample and each
 #' column is a covariate.
 #' @param w.all A vector of observed exposure levels.
+#' @param dnorm_log Logical, if TRUE, probabilities p are given as log(p).
 #'
 #' @return
 #' A data.table that includes:
@@ -24,7 +25,7 @@
 #'                       as.matrix(mydata$treat))
 #'
 #'
-train_GPS <- function(cov.mt, w.all){
+train_GPS <- function(cov.mt, w.all, dnorm_log = FALSE){
   GPS_mod <- xgboost::xgboost(data = cov.mt,
                               label = w.all,
                               nrounds=50,
@@ -35,7 +36,7 @@ train_GPS <- function(cov.mt, w.all){
 
   e_gps_pred <- predict(GPS_mod,cov.mt)
   e_gps_std <- sd(w.all-e_gps_pred)
-  GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std))
+  GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log))
   GPS_m <- data.table::data.table(GPS = GPS,
                                   e_gps_pred = e_gps_pred,
                                   e_gps_std = e_gps_std)

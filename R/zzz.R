@@ -8,5 +8,4 @@
 
   logger::log_layout(flogger, index = 1)
   # RNGkind(kind = "L'Ecuyer-CMRG")
-
 }

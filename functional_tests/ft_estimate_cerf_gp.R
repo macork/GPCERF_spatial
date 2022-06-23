@@ -1,7 +1,7 @@
 
 t_1 <- proc.time()
 set.seed(129)
-sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+sim.data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
 
 
 # Estimate GPS function

@@ -74,6 +74,9 @@ estimate_mean_sd_nn <- function(hyperparam,
                                 nthread = 1){
 
 
+  t_est_m_sd_1 <- proc.time()
+  logger::log_info("Working on estimating mean and sd using nngp approach ...")
+
 
   coord_obs <- cbind(w_obs, GPS_m$GPS)
 
@@ -133,6 +136,8 @@ estimate_mean_sd_nn <- function(hyperparam,
                    mean = GPS_m$e_gps_pred,
                    sd = GPS_m$e_gps_std, log = T)
 
+    print(paste("Sigma2 is:", sigma2))
+
     val <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                    w = wi,
                                    GPS_w = GPS_w,
@@ -146,6 +151,12 @@ estimate_mean_sd_nn <- function(hyperparam,
 
   # terminate clusters.
   parallel::stopCluster(cl)
+
+  t_est_m_sd_2 <- proc.time()
+
+  logger::log_info("Done with estimating mean and sd using nngp approach ",
+                   "Wall clock time: {t_est_m_sd_2[[3]] - t_est_m_sd_1[[3]]} s.")
+
 
   return(list(all_res_mean, unlist(all_res_sd)))
 }
