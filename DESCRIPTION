@@ -47,4 +47,5 @@ Suggests:
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 LinkingTo: 
-    RcppArmadillo
+    RcppArmadillo,
+    Rcpp

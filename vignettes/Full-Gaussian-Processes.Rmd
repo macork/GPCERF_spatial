@@ -62,7 +62,7 @@ GPS_m_t <- train_GPS(cov.mt = as.matrix(data_sim_t[,-(1:2)]),
                           w.all = as.matrix(data_sim_t$treat))
 ```
 
-We then use `estimate_cerf_gp` to estimate the ERF of the expsoure `w`. We estimate the ERF at `w = seq(0,20,0.1)`. The estimated ERF as well as its pointwise 95\% credible band is visualized with a call to `plot`. We also plot the actual ERF on top of the estimated ERF.
+We then use `estimate_cerf_gp` to estimate the ERF of the exposure `w`. We estimate the ERF at `w = seq(0,20,0.1)`. The estimated ERF as well as its pointwise 95\% credible band is visualized with a call to `plot`. We also plot the actual ERF on top of the estimated ERF.
 
 ### Normally Distributed Exposure
 

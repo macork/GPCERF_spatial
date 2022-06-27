@@ -11,8 +11,8 @@
 #' samples; second is the GPS at the observed exposure levels. The rows are in ascending order
 #' for the first column.
 #' @param sigma2 A scaler representing \code{sigma^2}
-#' @param n_neighbor Number of nearest neighbours on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.
+#' @param n_neighbor Number of nearest neighbors on one side (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n_neighbor}.
 #'
 #' @return
 #' The posterior standard deviation of the estimated CERF at \code{w}.

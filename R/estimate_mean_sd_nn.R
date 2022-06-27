@@ -13,8 +13,8 @@
 #'   - Column 1: GPS
 #'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std)
-#' @param n_neighbor Number of nearest neighbours on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.
+#' @param n_neighbor Number of nearest neighbors on one side (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n.neighbour}.
 #' @param block_size Number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.
 #' @param nthread An integer value that represents the number of threads to be

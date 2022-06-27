@@ -35,9 +35,9 @@ estimate_mean_sd_nn(
 \item Column 3: Standard deviation of  e_gps (e_gps_std)
 }}
 
-\item{n_neighbor}{Number of nearest neighbours on one side (see also \code{expand}).}
+\item{n_neighbor}{Number of nearest neighbors on one side (see also \code{expand}).}
 
-\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.}
+\item{expand}{Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n.neighbour}.}
 
 \item{block_size}{Number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.}

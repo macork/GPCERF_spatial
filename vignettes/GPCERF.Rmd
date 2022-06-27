@@ -109,7 +109,7 @@ Input parameters:
   - beta: A scaling factor for the exposure value.   
   - g_sigma: A scaling factor for kernel function (gamma/sigma).   
   - tune_app: A tuning approach. Available approaches:   
-    - all: try all comnbinations of hyperparameters.   
+    - all: try all combinations of hyperparameters.   
   - expand: Scaling factor to determine the total number of nearest neighbors.   
   - n_neighbors: Number of nearest neighbors on one side.    
   - block_size: Number of samples included in a computation block. Mainly used to balance speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.    

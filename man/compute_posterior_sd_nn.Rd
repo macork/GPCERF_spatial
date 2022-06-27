@@ -27,9 +27,9 @@ for the first column.}
 
 \item{sigma2}{A scaler representing \code{sigma^2}}
 
-\item{n_neighbor}{Number of nearest neighbours on one side (see also \code{expand}).}
+\item{n_neighbor}{Number of nearest neighbors on one side (see also \code{expand}).}
 
-\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.}
+\item{expand}{Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n_neighbor}.}
 }
 \value{
 The posterior standard deviation of the estimated CERF at \code{w}.

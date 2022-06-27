@@ -33,9 +33,9 @@ compute_rl_deriv_nn(
 
 \item{hyperparam}{A vector of hyper-parameters in the GP model.}
 
-\item{n_neighbor}{Number of nearest neighbours on one side (see also \code{expand}).}
+\item{n_neighbor}{Number of nearest neighbors on one side (see also \code{expand}).}
 
-\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.}
+\item{expand}{Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n_neighbor}.}
 
 \item{block_size}{Number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}

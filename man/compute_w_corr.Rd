@@ -7,7 +7,7 @@
 compute_w_corr(data, weights)
 }
 \arguments{
-\item{data}{A data.table of observational data with the following colums:
+\item{data}{A data.table of observational data with the following columns:
 \itemize{
 \item Column 1: Outcome (Y)
 \item Column 2: Exposure or treatment (w)

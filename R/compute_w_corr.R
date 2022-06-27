@@ -5,7 +5,7 @@
 #' Computes weighted correlation of the observational data based on weights
 #' achieved by Gaussian Process.
 #'
-#' @param data A data.table of observational data with the following colums:
+#' @param data A data.table of observational data with the following columns:
 #'   - Column 1: Outcome (Y)
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
@@ -51,6 +51,7 @@ compute_w_corr <- function(data, weights){
 
   x_mean <- colSums(x_design*weights)
   x_cov <- (t(x_design) - x_mean)%*%diag(weights)%*%t(t(x_design) - x_mean)
+
   # when x_cov is rank deficient, return NA for all covariate balance
   if(Matrix::rankMatrix(x_cov) == nrow(x_cov)){
     x_stan <- t(t(solve(chol(x_cov)))%*%(t(x_design) - x_mean))

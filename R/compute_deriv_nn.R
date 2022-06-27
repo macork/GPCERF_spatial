@@ -13,8 +13,8 @@
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std)
 #' @param y_obs A vector of observed outcome values.
 #' @param hyperparam A vector of hyper-parameters in the GP model.
-#' @param n_neighbor Number of nearest neighbours on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.
+#' @param n_neighbor Number of nearest neighbors on one side (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n_neighbor}.
 #' @param block_size Number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
 #' @param kernel_fn The covariance function. The input is the square of Euclidean distance.
