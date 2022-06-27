@@ -18,31 +18,38 @@ compute_posterior_m_nn(
 \arguments{
 \item{hyperparam}{A set of hyperparameters in the GP model.}
 
-\item{w}{A scaler representing the exposure level for the point of interest on the CERF.}
+\item{w}{A scaler representing the exposure level for the point of interest
+on the CERF.}
 
-\item{GPS_w}{The GPS for all samples when their exposure levels are set at \code{w}.}
+\item{GPS_w}{The GPS for all samples when their exposure levels are set
+at \code{w}.}
 
-\item{obs_ord}{A matrix of two columns. First column is the observed exposure levels of all
-samples; second is the GPS at the observed exposure levels. The rows are in ascending order
-for the first column.}
+\item{obs_ord}{A matrix of two columns. First column is the observed
+exposure levels of all samples; second is the GPS at the observed exposure
+levels. The rows are in ascending order for the first column.}
 
-\item{y_obs_ord}{A vector of observed outcome values. The vector is ordered as \code{obs_ord}.}
+\item{y_obs_ord}{A vector of observed outcome values. The vector is ordered
+as \code{obs_ord}.}
 
-\item{n_neighbor}{Number of nearest neighbors on one side (see also \code{expand}).}
+\item{n_neighbor}{The number of nearest neighbors on one side
+(see also \code{expand}).}
 
-\item{expand}{Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n_neighbor}.}
+\item{expand}{Scaling factor to determine the total number of nearest
+neighbors. The total is \code{2*expand*n_neighbor}.}
 
-\item{block_size}{Number of samples included in a computation block. Mainly used to
-balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}
+\item{block_size}{Number of samples included in a computation block.
+Mainly used to balance the speed and memory requirement.
+Larger \code{block_size} is faster, but requires more memory.}
 }
 \value{
-A two column matrix. The first column is the weights assigned to each nearest neighbor.
-The second column is the corresponding observed outcome value. The weight in the last row of
-this matrix is NA and the observed outcome value is the estimated posterior mean of the CERF
-at point \code{w}, which is the weighted sum of all observed outcome values of the neighbors.
+A two-column matrix. The first column is the weights assigned to each
+nearest neighbor. The second column is the corresponding observed outcome
+value. The weight in the last row of this matrix is NA and the observed
+outcome value is the estimated posterior mean of the CERF at point \code{w},
+which is the weighted sum of all observed outcome values of the neighbors.
 }
 \description{
-Calculate the posterior mean of a point on the CERF based on the nnGP model.
+Calculates the posterior mean of a point on the CERF based on the nnGP model.
 This function also returns the weights assigned to all nearest neighbors when
 calculating the posterior mean.
 }

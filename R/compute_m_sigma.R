@@ -1,5 +1,5 @@
 #' @title
-#' Compute mean, confidence interval (?), and covariate balance in Full Gaussian
+#' Compute mean, credible interval, and covariate balance in Full Gaussian
 #'  Process (GP)
 #'
 #' @description
@@ -27,9 +27,10 @@
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
-#' A list containing two elements: 1) a vector of absolute weighted correlation of each
-#' covariate to the exposure, which is the metric for covariate balance and 2) the estimated
-#' CERF at \code{w.all} based on the hyper-parameter values in \code{param}.
+#' A list containing two elements: 1) a vector of absolute weighted correlation
+#' of each covariate to the exposure, which is the metric for covariate balance
+#' and 2) the estimated CERF at \code{w.all} based on the hyper-parameter
+#' values in \code{param}.
 #' @export
 #'
 #' @examples

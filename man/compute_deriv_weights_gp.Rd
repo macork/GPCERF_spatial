@@ -18,10 +18,11 @@ compute_deriv_weights_gp(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.table of GPS vectors. Including:
 \itemize{
-\item Column 1: GPS
-\item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
+\item Column 1: GPS values.
+\item Column 2: Prediction of exposure for covariate of each data
+sample (e_gps_pred).
 \item Column 3: Standard deviation of  e_gps (e_gps_std)
 }}
 
@@ -32,11 +33,11 @@ compute_deriv_weights_gp(
 \item{kernel_deriv_fn}{The partial derivative of the covariance function.}
 }
 \value{
-A vector of weights for all samples, based on which the posterior mean of the derivative of CERF at the
-exposure level of interest is calculated.
+A vector of weights for all samples, based on which the posterior mean of
+the derivative of CERF at the exposure level of interest is calculated.
 }
 \description{
-Calculate the weights assigned to each observed outcome when deriving the
+Calculates the weights assigned to each observed outcome when deriving the
 posterior mean of the first derivative of CERF at a given exposure level.
 }
 \examples{

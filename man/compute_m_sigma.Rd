@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_m_sigma.R
 \name{compute_m_sigma}
 \alias{compute_m_sigma}
-\title{Compute mean, confidence interval (?), and covariate balance in Full Gaussian
+\title{Compute mean, credible interval, and covariate balance in Full Gaussian
 Process (GP)}
 \usage{
 compute_m_sigma(
@@ -47,9 +47,10 @@ used by internal packages.}
 \item{kernel_fn}{The covariance function of GP.}
 }
 \value{
-A list containing two elements: 1) a vector of absolute weighted correlation of each
-covariate to the exposure, which is the metric for covariate balance and 2) the estimated
-CERF at \code{w.all} based on the hyper-parameter values in \code{param}.
+A list containing two elements: 1) a vector of absolute weighted correlation
+of each covariate to the exposure, which is the metric for covariate balance
+and 2) the estimated CERF at \code{w.all} based on the hyper-parameter
+values in \code{param}.
 }
 \description{
 Calculates the induced covariate balance associated with one hyper-parameter
