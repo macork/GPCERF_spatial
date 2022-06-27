@@ -17,7 +17,7 @@ compute_w_corr(data, weights)
 \item{weights}{A vector of weights for each observation data.}
 }
 \value{
-A vector of covariate balance
+A vector of covariate balance.
 }
 \description{
 Computes weighted correlation of the observational data based on weights

@@ -10,20 +10,26 @@
 #' @param y_obs A vector of observed outcomes
 #' @param GPS_m A data.table of GPS vectors.
 #'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
+#'   - Column 2: Prediction of exposure for covariate of each data sample
+#'   (e_gps_pred).
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std)
 #' @param design_mt The covariate matrix of all samples (intercept excluded).
-#' @param hyperparams A matrix of candidate values of the hyper-parameters, each row contains a
-#' set of values of all hyper-parameters.
-#' @param n_neighbor Number of nearest neighbors on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest neighbors. The total is \code{2*expand*n_neighbor}.
-#' @param block_size Number of samples included in a computation block. Mainly used to
-#' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
+#' @param hyperparams A matrix of candidate values of the hyper-parameters,
+#' each row contains a set of values of all hyper-parameters.
+#' @param n_neighbor The number of nearest neighbors on one side
+#' (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest
+#' neighbors. The total is \code{2*expand*n_neighbor}.
+#' @param block_size The number of samples included in a computation block.
+#' Mainly used to balance the speed and memory requirement. Larger
+#' \code{block_size} is faster, but requires more memory.
 #' @param nthread An integer value that represents the number of threads to be
 #' used by internal packages.
 #'
 #' @return
-#' Estimated covariate balance scores for the grid of hyper-parameter values considered in \code{hyperparams}.
+#' Estimated covariate balance scores for the grid of hyper-parameter values
+#' considered in \code{hyperparams}.
+#'
 #' @export
 #'
 #' @examples
@@ -32,8 +38,8 @@
 #' data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 #'
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-#'                    w.all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+#'                    w_all = as.matrix(data$treat))
 #'
 #' # Hyperparameter
 #' hyperparam <- c(0.1, 0.2, 1)

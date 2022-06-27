@@ -12,7 +12,7 @@
 #' @param weights A vector of weights for each observation data.
 #'
 #' @return
-#' A vector of covariate balance
+#' A vector of covariate balance.
 #'
 #' @export
 #'
@@ -37,8 +37,8 @@ compute_w_corr <- function(data, weights){
                 "weights (", length(weights),") should be equal."))
   }
 
-  # TODO: model.matrix will create dummy vairables for factors.
-  # Double check with Boyu.
+  # TODO: model.matrix will create dummy variables for factors.
+  # Double-check.
   conf_names <- colnames(data[,3:ncol(data)])
   frml <- paste("~",paste(conf_names, collapse = "+"), "-1", sep = "")
 

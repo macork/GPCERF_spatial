@@ -21,8 +21,10 @@ compute_weight_gp(
 
 \item{scaled_obs}{A matrix of two columns.
 \itemize{
-\item First column is the scaled GPS value of all samples (GPS * 1/sqrt(alpha))
-\item Second column is the scaled exposure value of all samples (w * 1/sqrt(beta))
+\item First column is the scaled GPS value of all samples
+(GPS * 1/sqrt(alpha))
+\item Second column is the scaled exposure value of all samples
+(w * 1/sqrt(beta))
 }}
 
 \item{hyperparam}{A vector of hyper-parameters for the GP.
@@ -32,11 +34,13 @@ compute_weight_gp(
 \item Third element: gamma/sigma
 }}
 
-\item{inv_sigma_obs}{Inverse of the covariance matrix between observed samples.}
+\item{inv_sigma_obs}{Inverse of the covariance matrix between observed
+samples.}
 
 \item{GPS_m}{A data.table of GPS vectors.
 \itemize{
-\item Column 1: A vector of estimated GPS evaluated at the observed exposure levels.
+\item Column 1: A vector of estimated GPS evaluated at the observed exposure
+levels.
 \item Column 2: Estimated conditional means of the exposure given covariates
 for all samples (e_gps_pred).
 \item Column 3: Estimated conditional standard deviation of the exposure given
@@ -46,8 +50,8 @@ covariates for all samples (e_gps_std).
 \item{kernel_fn}{The covariance function of GP.}
 }
 \value{
-A vector of the weights assigned to each sample for the calculate of posterior
-mean of CERF at \code{w}.
+A vector of the weights assigned to each sample for the calculate of
+posterior mean of CERF at \code{w}.
 }
 \description{
 Calculates the weights of observed outcomes which is then used to estimate
@@ -67,8 +71,8 @@ w = 1.8
 kernel_fn <- function(x) exp(-x^2)
 
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                   w.all = as.matrix(data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                   w_all = as.matrix(data$treat))
 
 GPS <- GPS_m$GPS
 
