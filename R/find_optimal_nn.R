@@ -133,7 +133,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
     all_res <- do.call(cbind, all_res_list)
 
     #covariate specific balance, averaged over w
-    rowMeans(all_res)
+    rowMeans(all_res, na.rm = T)
   })
 
   # terminate clusters.
