@@ -63,8 +63,8 @@ match (the lowest covariate balance) for the provided set of hyperparameters.
 set.seed(19)
 sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-                   w.all = as.matrix(sim.data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+                   w_all = as.matrix(sim.data$treat))
 # exposure values
 w.all <- seq(0,20,2)
 data.table::setDT(sim.data)

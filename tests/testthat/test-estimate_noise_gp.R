@@ -5,8 +5,8 @@ test_that("estimate_noise_gp works as expected", {
   data.table::setDT(data)
 
   # Estimate GPS function
-  GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                     w.all = as.matrix(data$treat))
+  GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                     w_all = as.matrix(data$treat))
 
   hyperparam <- c(0.1, 0.2, 1)
   noise_est <- estimate_noise_gp(hyperparam, data, GPS_m$GPS)

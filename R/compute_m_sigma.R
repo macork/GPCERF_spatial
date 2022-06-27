@@ -1,5 +1,5 @@
 #' @title
-#' Compute mean, confidence interval (?), and covariate balance in Full Gaussian
+#' Compute mean, credible interval, and covariate balance in Full Gaussian
 #'  Process (GP)
 #'
 #' @description
@@ -27,9 +27,10 @@
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
-#' A list containing two elements: 1) a vector of absolute weighted correlation of each
-#' covariate to the exposure, which is the metric for covariate balance and 2) the estimated
-#' CERF at \code{w.all} based on the hyper-parameter values in \code{param}.
+#' A list containing two elements: 1) a vector of absolute weighted correlation
+#' of each covariate to the exposure, which is the metric for covariate balance
+#' and 2) the estimated CERF at \code{w.all} based on the hyper-parameter
+#' values in \code{param}.
 #' @export
 #'
 #' @examples
@@ -37,17 +38,17 @@
 #' set.seed(912)
 #' data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
 #'
-#' w.all = seq(0,20,1)
+#' w_all <- seq(0,20,1)
 #'
 #' data.table::setDT(data)
 #'
 #' #Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-#'                    w.all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+#'                    w_all = as.matrix(data$treat))
 #'
 #' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
 #'                             data = data,
-#'                             w = w.all,
+#'                             w = w_all,
 #'                             GPS_m = GPS_m,
 #'                             nthread = 1)
 #'

@@ -2,7 +2,8 @@
 #' Estimate the CERF with the nnGP Model
 #'
 #' @description
-#' Estimates the posterior mean of the conditional exposure response function at specified exposure levels with nnGP.
+#' Estimates the posterior mean of the conditional exposure response function
+#' at specified exposure levels with nnGP.
 #'
 #' @param hyperparam A set of hyperparameters for the nnGP.
 #' @param sigma2 A scaler representing \code{sigma^2}.
@@ -11,12 +12,16 @@
 #' @param y_obs A vector of observed outcome values.
 #' @param GPS_m A data.table of GPS vectors.
 #'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
+#'   - Column 2: Prediction of exposure for covariate of each data sample
+#'   (e_gps_pred).
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std)
-#' @param n_neighbor Number of nearest neighbours on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n.neighbour}.
-#' @param block_size Number of samples included in a computation block. Mainly used to
-#' balance the speed and memory requirement. Larger \code{block.size} is faster, but requires more memory.
+#' @param n_neighbor The number of nearest neighbors on one side
+#' (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest
+#' neighbors. The total is \code{2*expand*n.neighbour}.
+#' @param block_size The number of samples included in a computation block.
+#' Mainly used to balance the speed and memory requirement. Larger
+#' \code{block.size} is faster, but requires more memory.
 #' @param nthread An integer value that represents the number of threads to be
 #' used by internal packages.
 #'
@@ -33,8 +38,8 @@
 #' data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 #'
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-#'                    w.all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+#'                    w_all = as.matrix(data$treat))
 #'
 #' # Hyperparameter
 #' hyperparam <- c(0.1, 0.2, 1)

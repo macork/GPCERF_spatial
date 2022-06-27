@@ -2,7 +2,7 @@
 #' Compute Posterior Credible Interval
 #'
 #' @description
-#' Computes posterior credible interval for requested exposure level
+#' Computes posterior credible interval for requested exposure level.
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param scaled_obs A matrix of two columns.
@@ -27,7 +27,6 @@
 #'
 #' @examples
 #'
-#'
 #' set.seed(284)
 #' #Generate synthetic data
 #' data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
@@ -40,8 +39,8 @@
 #' kernel_fn <- function(x) exp(-x^2)
 #'
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-#'                    w.all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+#'                    w_all = as.matrix(data$treat))
 #'
 #' GPS <- GPS_m$GPS
 #'

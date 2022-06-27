@@ -51,13 +51,13 @@ erf_tru_t = sapply(seq(0,20,0.1), function(w) tru_R(w, data_sim_t))
 
 ### Train GPS Model
 
-GPCERF will first convert the covariate values into a single composite score (GPS) and then use it to fit the Gaussian processes. We use the GPS estimation function in CasaulGPS (see [here](https://fasrc.github.io/CausalGPS/articles/Estimating-GPS.html)) to get the GPS model that maps covariates into GPS.
+GPCERF will first convert the covariate values into a single composite score (GPS) and then use it to fit the Gaussian processes. We use the GPS estimation function in CausalGPS (see [here](https://fasrc.github.io/CausalGPS/articles/Estimating-GPS.html)) to get the GPS model that maps covariates into GPS.
 
 ```{r}
-GPS_m_normal <- train_GPS(cov.mt = as.matrix(data_sim_normal[,-(1:2)]),
-                          w.all = as.matrix(data_sim_normal$treat))
-GPS_m_t <- train_GPS(cov.mt = as.matrix(data_sim_t[,-(1:2)]),
-                          w.all = as.matrix(data_sim_t$treat))
+GPS_m_normal <- train_GPS(cov_mt = as.matrix(data_sim_normal[,-(1:2)]),
+                          w_all = as.matrix(data_sim_normal$treat))
+GPS_m_t <- train_GPS(cov_mt = as.matrix(data_sim_t[,-(1:2)]),
+                          w_all = as.matrix(data_sim_t$treat))
 ```
 
 We then use `estimate_cerf_nngp` to estimate the ERF of the exposure `w`. We estimate the ERF at `w = seq(0,20,0.1)`. The estimated ERF as well as its pointwise 95\% credible band is visualized with a call to `plot`. We also plot the actual ERF on top of the estimated ERF.

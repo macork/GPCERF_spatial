@@ -46,10 +46,9 @@ covariates for all samples (e_gps_std).
 Posterior credible interval (scaler) for the requested exposure level (w).
 }
 \description{
-Computes posterior credible interval for requested exposure level
+Computes posterior credible interval for requested exposure level.
 }
 \examples{
-
 
 set.seed(284)
 #Generate synthetic data
@@ -63,8 +62,8 @@ w = 1.2
 kernel_fn <- function(x) exp(-x^2)
 
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                   w.all = as.matrix(data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                   w_all = as.matrix(data$treat))
 
 GPS <- GPS_m$GPS
 

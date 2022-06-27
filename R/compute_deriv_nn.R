@@ -7,15 +7,16 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m A data.table of GPS vectors.
-#'   - Column 1: GPS
+#' @param GPS_m A data.table of GPS vectors. Including:
+#'   - Column 1: GPS values.
 #'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   - Column 3: Standard deviation of  e_gps (e_gps_std).
 #' @param y_obs A vector of observed outcome values.
 #' @param hyperparam A vector of hyper-parameters in the GP model.
-#' @param n_neighbor Number of nearest neighbours on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.
-#' @param block_size Number of samples included in a computation block. Mainly used to
+#' @param n_neighbor The number of nearest neighbors on one side (see also \code{expand}).
+#' @param expand Scaling factor to determine the total number of nearest
+#' neighbors. The total is \code{2*expand*n_neighbor}.
+#' @param block_size The number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
 #' @param kernel_fn The covariance function. The input is the square of Euclidean distance.
 #' @param kernel_deriv_fn The partial derivative of the covariance function. The input is the square of Euclidean distance.
@@ -26,11 +27,10 @@
 #' @keywords internal
 #'
 #' @examples
-#'
 #' set.seed(365)
 #' data <- generate_synthetic_data(sample_size = 200)
-#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-#'                    w.all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+#'                    w_all = as.matrix(data$treat))
 #'
 #' wi <- 4.8
 #'
@@ -55,27 +55,27 @@ compute_deriv_nn <- function(w,
                              kernel_deriv_fn = function(x) -exp(-x)){
 
 
+  # Get hyperparameters
   alpha <- hyperparam[[1]]
   beta <- hyperparam[[2]]
   g_sigma <- hyperparam[[3]]
 
 
+  # Get gps and helper functions
   GPS <- GPS_m$GPS
   e_gps_pred <- GPS_m$e_gps_pred
   e_gps_std <- GPS_m$e_gps_std
 
 
-  # params[1]: alpha, params[2]: beta, params[3]: gamma
-  # cov = gamma*h(alpha*w^2 + beta*GPS^2) + diag(1)
-  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
+  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
 
   n <- length(GPS_w)
   n_block <- ceiling(n/block_size)
   obs_raw <- cbind(w_obs, GPS)
   obs_ord <- obs_raw[order(obs_raw[,1]),]
   y_obs_ord <- y_obs[order(obs_raw[,1])]
-  #params: length 3, first scale for w, second scale for GPS,
-  #third scale for exp fn
+
+
   if(w >= obs_ord[nrow(obs_ord),1]){
     idx_all <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
   }else{

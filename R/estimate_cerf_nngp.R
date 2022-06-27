@@ -45,8 +45,8 @@
 #' set.seed(19)
 #' sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-#'                    w.all = as.matrix(sim.data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+#'                    w_all = as.matrix(sim.data$treat))
 #' # exposure values
 #' w.all <- seq(0,20,2)
 #' data.table::setDT(sim.data)
@@ -67,6 +67,9 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
 
   # Log system info
   log_system_info()
+
+  # function call
+  fcall <- match.call()
 
   t_nngp_1 <- proc.time()
   logger::log_info("Working on estimating cerf using nngp approach ...")
@@ -175,8 +178,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
   result$w <- w
   result$pst_mean <- posterior_mean
   result$pst_sd <- posterior_sd
-
-
+  result$fcall <- fcall
 
   invisible(result)
 }
