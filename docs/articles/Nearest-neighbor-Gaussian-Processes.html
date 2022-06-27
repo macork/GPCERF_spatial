@@ -136,10 +136,10 @@ composite score (GPS) and then use it to fit the Gaussian processes. We
 use the GPS estimation function in CausalGPS (see <a href="https://fasrc.github.io/CausalGPS/articles/Estimating-GPS.html" class="external-link">here</a>)
 to get the GPS model that maps covariates into GPS.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">GPS_m_normal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_normal</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
-                          w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_normal</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span>
-<span class="va">GPS_m_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_t</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
-                          w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_t</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">GPS_m_normal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/train_GPS.html">train_GPS</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_normal</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
+                          w_all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_normal</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span>
+<span class="va">GPS_m_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/train_GPS.html">train_GPS</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_t</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
+                          w_all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_t</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We then use <code>estimate_cerf_nngp</code> to estimate the ERF of
 the exposure <code>w</code>. We estimate the ERF at
 <code>w = seq(0,20,0.1)</code>. The estimated ERF as well as its
@@ -208,8 +208,7 @@ smooth.</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Naeem Khoshnevis, Boyu Ren, Tanujt Dey, Danielle
-Braun.</p>
+<p>Developed by Naeem Khoshnevis, Boyu Ren, Danielle Braun.</p>
 </div>
 
 <div class="pkgdown-footer-right">

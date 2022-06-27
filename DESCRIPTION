@@ -9,7 +9,7 @@ Authors@R: c(
            role= c("aut"),            
            comment = c(ORCID = "0000-0002-5300-1184", AFFILIATION="McLean Hospital")),
     person("Tanujt", "Dey", email = "tdey@bwh.harvard.edu",
-           role= c("aut"),            
+           role= c("ctb"),            
            comment = c(ORCID = "0000-0001-5559-211X", AFFILIATION="HMS")),
     person("Danielle","Braun", email = "dbraun@hsph.harvard.edu",
            role=c("aut"),     

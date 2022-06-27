@@ -86,20 +86,21 @@ exposure level with nnGP.</p>
 <dt>w_obs</dt>
 <dd><p>A vector of observed exposure levels of all samples.</p></dd>
 <dt>GPS_m</dt>
-<dd><p>A data.table of GPS vectors.</p><ul><li><p>Column 1: GPS</p></li>
+<dd><p>A data.table of GPS vectors. Including:</p><ul><li><p>Column 1: GPS values.</p></li>
 <li><p>Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).</p></li>
-<li><p>Column 3: Standard deviation of  e_gps (e_gps_std)</p></li>
+<li><p>Column 3: Standard deviation of  e_gps (e_gps_std).</p></li>
 </ul></dd>
 <dt>y_obs</dt>
 <dd><p>A vector of observed outcome values.</p></dd>
 <dt>hyperparam</dt>
 <dd><p>A vector of hyper-parameters in the GP model.</p></dd>
 <dt>n_neighbor</dt>
-<dd><p>Number of nearest neighbors on one side (see also <code>expand</code>).</p></dd>
+<dd><p>The number of nearest neighbors on one side (see also <code>expand</code>).</p></dd>
 <dt>expand</dt>
-<dd><p>Scaling factor to determine the total number of nearest neighbors. The total is <code>2*expand*n_neighbor</code>.</p></dd>
+<dd><p>Scaling factor to determine the total number of nearest
+neighbors. The total is <code>2*expand*n_neighbor</code>.</p></dd>
 <dt>block_size</dt>
-<dd><p>Number of samples included in a computation block. Mainly used to
+<dd><p>The number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger <code>block_size</code> is faster, but requires more memory.</p></dd>
 <dt>kernel_fn</dt>
 <dd><p>The covariance function. The input is the square of Euclidean distance.</p></dd>
@@ -113,11 +114,10 @@ balance the speed and memory requirement. Larger <code>block_size</code> is fast
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">365</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">365</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span>sample_size <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
-<span class="r-in">                   w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span class="r-in">                   w_all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">wi</span> <span class="op">&lt;-</span> <span class="fl">4.8</span></span>
 <span class="r-in"></span>
@@ -137,8 +137,7 @@ balance the speed and memory requirement. Larger <code>block_size</code> is fast
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Naeem Khoshnevis, Boyu Ren, Tanujt Dey, Danielle
-Braun.</p>
+  <p></p><p>Developed by Naeem Khoshnevis, Boyu Ren, Danielle Braun.</p>
 </div>
 
 <div class="pkgdown-footer-right">
