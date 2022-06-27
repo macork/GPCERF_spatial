@@ -100,8 +100,6 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
                                       "compute_w_corr"),
                           envir=environment())
 
-
-
   col_all_list <- parallel::parLapply(cl,
                                       w,
                                       function(w_instance){
@@ -140,7 +138,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
   est_index <- nrow(col_all) - 1
   pst_sd <- nrow(col_all)
 
-  list(cb = rowMeans(col_all[1:n_confounders,]),
+  list(cb = rowMeans(col_all[1:n_confounders,], na.rm = T),
        est = col_all[est_index,],
        pst = col_all[pst_sd, ])
 }
