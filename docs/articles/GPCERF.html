@@ -111,13 +111,13 @@ level.</p>
                                        <span class="st">"cf5"</span>, <span class="st">"cf6"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
                    <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">GPS_m</span><span class="op">)</span>
-<span class="co">#&gt;           GPS  e_gps_pred e_gps_std</span>
-<span class="co">#&gt; 1: 0.00584926 13.08247280  1.393428</span>
-<span class="co">#&gt; 2: 0.28522209  7.01196003  1.393428</span>
-<span class="co">#&gt; 3: 0.21011927 10.51060486  1.393428</span>
-<span class="co">#&gt; 4: 0.16077118  0.02036178  1.393428</span>
-<span class="co">#&gt; 5: 0.28534790  3.44626927  1.393428</span>
-<span class="co">#&gt; 6: 0.24863281  5.31932926  1.393428</span></code></pre></div>
+<span class="co">#&gt;          GPS e_gps_pred e_gps_std</span>
+<span class="co">#&gt; 1: 0.2254974   6.588084  1.605535</span>
+<span class="co">#&gt; 2: 0.1979569  17.373991  1.605535</span>
+<span class="co">#&gt; 3: 0.2411608   7.738497  1.605535</span>
+<span class="co">#&gt; 4: 0.2368436  18.141748  1.605535</span>
+<span class="co">#&gt; 5: 0.2286100   8.952802  1.605535</span>
+<span class="co">#&gt; 6: 0.2335126   9.692524  1.605535</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="estimating-exposure-response-using-gaussian-processes">Estimating exposure response using Gaussian Processes<a class="anchor" aria-label="anchor" href="#estimating-exposure-response-using-gaussian-processes"></a>
@@ -187,7 +187,7 @@ required to run the process.<br>
 - beta: A scaling factor for the exposure value.<br>
 - g_sigma: A scaling factor for kernel function (gamma/sigma).<br>
 - tune_app: A tuning approach. Available approaches:<br>
-- all: try all comnbinations of hyperparameters.<br>
+- all: try all combinations of hyperparameters.<br>
 - expand: Scaling factor to determine the total number of nearest
 neighbors.<br>
 - n_neighbors: Number of nearest neighbors on one side.<br>

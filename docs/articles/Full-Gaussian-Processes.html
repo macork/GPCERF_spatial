@@ -140,7 +140,7 @@ to get the GPS model that maps covariates into GPS.</p>
 <span class="va">GPS_m_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_t</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
                           w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data_sim_t</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We then use <code>estimate_cerf_gp</code> to estimate the ERF of the
-expsoure <code>w</code>. We estimate the ERF at
+exposure <code>w</code>. We estimate the ERF at
 <code>w = seq(0,20,0.1)</code>. The estimated ERF as well as its
 pointwise 95% credible band is visualized with a call to
 <code>plot</code>. We also plot the actual ERF on top of the estimated

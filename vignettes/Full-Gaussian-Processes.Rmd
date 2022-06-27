@@ -20,7 +20,7 @@ library(GPCERF)
 library(ggplot2)
 ```
 
-In this vignette, we present an example of using full Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://fasrc.github.io/CausalGPS/index.html).
+In this vignette, we present an example of using full Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://cran.r-project.org/package=CausalGPS).
 
 ## Generate Synthetic Data
 
