@@ -68,6 +68,9 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
   # Log system info
   log_system_info()
 
+  # function call
+  fcall <- match.call()
+
   t_nngp_1 <- proc.time()
   logger::log_info("Working on estimating cerf using nngp approach ...")
 
@@ -175,8 +178,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
   result$w <- w
   result$pst_mean <- posterior_mean
   result$pst_sd <- posterior_sd
-
-
+  result$fcall <- fcall
 
   invisible(result)
 }

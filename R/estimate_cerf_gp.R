@@ -70,6 +70,9 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   # Log system info
   log_system_info()
 
+  # function call
+  fcall <- match.call()
+
   # Double-check input parameters ----------------------------------------------
   if (!is.data.table(data)){
     stop(paste0("Data should be a data.table. ",
@@ -134,6 +137,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   result$pst_mean <- gp_cerf
   result$pst_sd <- gp_post_sd
   result$w <- w
+  result$fcall <- fcall
 
   # Add best match to the gp_cerf object
 

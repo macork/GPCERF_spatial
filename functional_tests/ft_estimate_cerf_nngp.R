@@ -2,15 +2,15 @@ set_logger(logger_file_path = "functional_tests/GPCERF.log", logger_level = "DEB
 
 t_1 <- proc.time()
 set.seed(19)
-sim.data <- generate_synthetic_data(sample_size = 2000, gps_spec = 3)
+sim_data <- generate_synthetic_data(sample_size = 2000, gps_spec = 3)
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-                  w.all = as.matrix(sim.data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(sim_data[,-(1:2)]),
+                  w_all = as.matrix(sim_data$treat))
 # exposure values
-w.all <- seq(0,20,2)
-data.table::setDT(sim.data)
-cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
-                                    w.all,
+w_all <- seq(0,20,2)
+data.table::setDT(sim_data)
+cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
+                                    w_all,
                                     GPS_m,
                                     params = list(alpha = c(0.1),
                                                   beta = 0.2,
@@ -23,3 +23,6 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
 
 t_2 <- proc.time()
 print(paste("Wall clock time: ", t_2[[3]] - t_1[[3]], " s."))
+
+print(cerf_nngp_obj)
+summary(cerf_nngp_obj)

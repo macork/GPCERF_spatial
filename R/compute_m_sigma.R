@@ -38,7 +38,7 @@
 #' set.seed(912)
 #' data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
 #'
-#' w.all = seq(0,20,1)
+#' w_all <- seq(0,20,1)
 #'
 #' data.table::setDT(data)
 #'
@@ -48,7 +48,7 @@
 #'
 #' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
 #'                             data = data,
-#'                             w = w.all,
+#'                             w = w_all,
 #'                             GPS_m = GPS_m,
 #'                             nthread = 1)
 #'
