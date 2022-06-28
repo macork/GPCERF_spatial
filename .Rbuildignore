@@ -18,3 +18,4 @@ index.md
 ^docs/reference/Debug$
 ^CRAN-RELEASE$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
