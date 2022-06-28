@@ -1,7 +1,4 @@
-## GPCERF (Current Version)
-
-### Fixed
-* 
+## GPCERF (2022-06-28)
 
 ### Changed
 
@@ -22,8 +19,6 @@
 * Logger functions
 * compute_sd_gp function
 
-### Removed
-* 
 
 ## GPCERF 0.0.1 (2022-03-31)
 

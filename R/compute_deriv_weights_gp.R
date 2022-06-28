@@ -25,7 +25,7 @@
 #' @examples
 #'
 #' set.seed(915)
-#' data <- generate_synthetic_data(sample_size = 200)
+#' data <- generate_synthetic_data(sample_size = 150)
 #' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
 #'                    w_all = as.matrix(data$treat))
 #'

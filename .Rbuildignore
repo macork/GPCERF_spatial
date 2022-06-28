@@ -16,3 +16,5 @@ index.md
 ^Meta$
 ^functional_tests/*$
 ^docs/reference/Debug$
+^CRAN-RELEASE$
+^cran-comments\.md$

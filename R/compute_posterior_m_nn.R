@@ -36,7 +36,7 @@
 #' @examples
 #'
 #' set.seed(1029)
-#' data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+#' data <- generate_synthetic_data(sample_size = 150, gps_spec = 3)
 #'
 #' # Estimate GPS function
 #' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
