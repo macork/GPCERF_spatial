@@ -54,8 +54,8 @@ used by internal packages.}
 A cerf_gp object that includes the following values:
 \itemize{
 \item w, the vector of exposure levels.
-\item Computed mean for the w vector.
-\item Computed credible interval for the w vector.
+\item pst_mean, Computed mean for the w vector.
+\item pst_sd, Computed credible interval for the w vector.
 }
 }
 \description{

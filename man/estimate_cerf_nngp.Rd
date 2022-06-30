@@ -50,7 +50,9 @@ used by internal packages.}
 \value{
 #' A cerf_nngp object that includes the following values:
 \itemize{
-\item TBD
+\item w, the vector of exposure levels.
+\item pst_mean, the computed mean for the w vector.
+\item pst_sd, the computed credible interval for the w vector.
 }
 }
 \description{

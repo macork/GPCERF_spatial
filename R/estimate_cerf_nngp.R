@@ -35,8 +35,10 @@
 #' used by internal packages.
 #'
 #' @return
-#' #' A cerf_nngp object that includes the following values:
-#'  - TBD
+#' A cerf_nngp object that includes the following values:
+#'  - w, the vector of exposure levels.
+#'  - pst_mean, the computed mean for the w vector.
+#'  - pst_sd, the computed credible interval for the w vector.
 #'
 #' @export
 #'

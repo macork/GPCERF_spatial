@@ -16,6 +16,7 @@ format, and put the title in the quotes.
 - The example in the estimate_cref_nngp function takes longer than 5s to execute.
 Thanks for pointing that out. I replaced \dontrun{} with \donttest{}.
 
+- Also made sure that only one thread is used in the examples and tests. 
 
 
 Best regards, 

@@ -33,8 +33,8 @@
 #' @return
 #' A cerf_gp object that includes the following values:
 #'  - w, the vector of exposure levels.
-#'  - Computed mean for the w vector.
-#'  - Computed credible interval for the w vector.
+#'  - pst_mean, Computed mean for the w vector.
+#'  - pst_sd, Computed credible interval for the w vector.
 #'
 #' @export
 #'
