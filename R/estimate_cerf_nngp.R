@@ -42,7 +42,7 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' set.seed(19)
 #' sim.data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 #' # Estimate GPS function

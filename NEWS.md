@@ -27,6 +27,7 @@
 
 ### Changed
 
+* Removed examples from internal functions
 * w.obs -> w_obs
 * inv.Sigma.obs -> inv_sigma_obs
 * obs.use -> scaled_obs

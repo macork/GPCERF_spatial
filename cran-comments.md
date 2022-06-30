@@ -1,3 +1,28 @@
+Resubmission (June 30, 2022)
+
+Thank you so much for taking the time and reviewing the GPCERF 0.1.0 package and 
+providing feedback.
+
+Here are the changes based on your recommendations:
+
+- Converted the reference in the DESCRIPTION file into authors (year)<arXiv:...>
+format, and put the title in the quotes. 
+
+- Removed examples from the internal (not-exported) functions:
+  - calc_ac
+  - compute_deriv_nn
+  - compute_sd_gp
+
+- The example in the estimate_cref_nngp function takes longer than 5s to execute.
+Thanks for pointing that out. I replaced \dontrun{} with \donttest{}.
+
+
+
+Best regards, 
+Naeem Khoshnevis 
+FASRC - Harvard University
+
+
 Resubmission (June 28, 2022)
 
 Thank you so much for taking the time and reviewing the GPCERF 0.1.0 package. 
