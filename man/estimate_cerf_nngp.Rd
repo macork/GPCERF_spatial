@@ -48,7 +48,7 @@ alpha, beta, and g_sigma can be a vector of parameters.
 used by internal packages.}
 }
 \value{
-#' A cerf_nngp object that includes the following values:
+A cerf_nngp object that includes the following values:
 \itemize{
 \item w, the vector of exposure levels.
 \item pst_mean, the computed mean for the w vector.

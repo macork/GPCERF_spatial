@@ -17,6 +17,7 @@ format, and put the title in the quotes.
 Thanks for pointing that out. I replaced \dontrun{} with \donttest{}.
 
 - Also made sure that only one thread is used in the examples and tests. 
+- There was extra .log file that failed the automatic checks. I also removed it. 
 
 
 Best regards, 
