@@ -12,7 +12,7 @@ calculating the standard deviations of the residuals."><!-- mathjax --><script s
     
     <a class="navbar-brand me-2" href="../index.html">GPCERF</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,10 +30,8 @@ calculating the standard deviations of the residuals."><!-- mathjax --><script s
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Estimate-CERF-GP.html">Estimate-CERF-GP</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Collabration</h6>
-    <a class="dropdown-item" href="../articles/Developers-Guide.html">Developers-Guide</a>
+    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
 <li class="nav-item">
@@ -95,58 +93,8 @@ calculating the standard deviations of the residuals.</p>
 <span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span>sample_size <span class="op">=</span> <span class="fl">200</span>, gps_spec <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Estimate GPS function</span></span>
-<span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
-<span class="r-in">                   w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]	train-rmse:8.395688 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2]	train-rmse:6.617474 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3]	train-rmse:5.279930 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4]	train-rmse:4.364769 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5]	train-rmse:3.744637 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6]	train-rmse:3.177252 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7]	train-rmse:2.633350 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [8]	train-rmse:2.383285 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [9]	train-rmse:2.068275 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10]	train-rmse:1.760110 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]	train-rmse:1.591845 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12]	train-rmse:1.499740 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]	train-rmse:1.389045 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14]	train-rmse:1.269712 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15]	train-rmse:1.150313 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16]	train-rmse:0.969685 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17]	train-rmse:0.916822 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18]	train-rmse:0.881205 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]	train-rmse:0.829040 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]	train-rmse:0.773570 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]	train-rmse:0.753146 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22]	train-rmse:0.708340 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23]	train-rmse:0.627539 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24]	train-rmse:0.562319 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]	train-rmse:0.493738 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26]	train-rmse:0.443779 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [27]	train-rmse:0.390704 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28]	train-rmse:0.349077 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29]	train-rmse:0.318191 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [30]	train-rmse:0.286245 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]	train-rmse:0.277130 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [32]	train-rmse:0.245159 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [33]	train-rmse:0.221798 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [34]	train-rmse:0.214571 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [35]	train-rmse:0.207626 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [36]	train-rmse:0.196346 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37]	train-rmse:0.170350 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [38]	train-rmse:0.160296 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]	train-rmse:0.155315 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [40]	train-rmse:0.141305 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]	train-rmse:0.134786 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [42]	train-rmse:0.129128 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43]	train-rmse:0.117371 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [44]	train-rmse:0.112583 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [45]	train-rmse:0.099892 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46]	train-rmse:0.089958 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [47]	train-rmse:0.083123 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [48]	train-rmse:0.078359 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49]	train-rmse:0.072447 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [50]	train-rmse:0.067751 </span>
+<span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span class="r-in">                   w_all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Hyperparameter</span></span>
 <span class="r-in"><span class="va">hyperparam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">1</span><span class="op">)</span></span>
@@ -182,11 +130,12 @@ calculating the standard deviations of the residuals.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Naeem Khoshnevis, Boyu Ren, Tanujt Dey, Danielle Braun.</p>
+  <p></p><p>Developed by Naeem Khoshnevis, Boyu Ren, Danielle Braun.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
     </footer></div>

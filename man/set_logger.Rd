@@ -15,7 +15,7 @@ set_logger(logger_file_path = "GPCERF.log", logger_level = "INFO")
 \item TRACE
 \item DEBUG
 \item INFO (Default)
-\item SUCESS
+\item SUCCESS
 \item WARN
 \item ERROR
 \item FATAL
@@ -29,6 +29,6 @@ Updates logger settings, including log level and location of the file.
 }
 \examples{
 
-set_logger("Debug")
+set_logger("mylogger.log", "INFO")
 
 }

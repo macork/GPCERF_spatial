@@ -31,39 +31,51 @@
 #'   is faster, but requires more memory.
 #' alpha, beta, and g_sigma can be a vector of parameters.
 #' @param kernel_fn A kernel function. A default value is a Gaussian Kernel.
+#' @param nthread An integer value that represents the number of threads to be
+#' used by internal packages.
 #'
 #' @return
-#' #' A cerf_nngp object that includes the following values:
-#'  - TBD
+#' A cerf_nngp object that includes the following values:
+#'  - w, the vector of exposure levels.
+#'  - pst_mean, the computed mean for the w vector.
+#'  - pst_sd, the computed credible interval for the w vector.
 #'
 #' @export
 #'
 #' @examples
 #'
+#' \donttest{
 #' set.seed(19)
-#' sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+#' sim.data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-#'                    w.all = as.matrix(sim.data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+#'                    w_all = as.matrix(sim.data$treat))
 #' # exposure values
-#' w.all <- seq(0,20,0.5)
+#' w.all <- seq(0,20,2)
 #' data.table::setDT(sim.data)
 #' cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
 #'                                     w.all,
 #'                                     GPS_m,
-#'                                     params = list(alpha = c(0.1,0.2),
+#'                                     params = list(alpha = c(0.1),
 #'                                                   beta = 0.2,
 #'                                                   g_sigma = 1,
 #'                                                   tune_app = "all",
 #'                                                   n_neighbor = 20,
 #'                                                   expand = 1,
-#'                                                   block_size = 1e4))
+#'                                                   block_size = 1e4),
+#'                                     nthread = 1)
+#'}
 #'
-#'
-estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn){
+estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
 
   # Log system info
   log_system_info()
+
+  # function call
+  fcall <- match.call()
+
+  t_nngp_1 <- proc.time()
+  logger::log_info("Working on estimating cerf using nngp approach ...")
 
   # Double-check input parameters ----------------------------------------------
   if (!is.data.table(data)){
@@ -125,7 +137,8 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn){
                                 hyperparams = tune_params_subset,
                                 n_neighbor = n_neighbor,
                                 expand = expand,
-                                block_size = block_size)
+                                block_size = block_size,
+                                nthread = nthread)
 
 
 
@@ -149,11 +162,16 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn){
                                         GPS_m = GPS_m,
                                         n_neighbor = n_neighbor,
                                         expand = expand,
-                                        block_size = block_size)
+                                        block_size = block_size,
+                                        nthread = nthread)
 
   posterior_mean <- sapply(posterior_vals[[1]], function(x) x[nrow(x),2])
   posterior_sd <- posterior_vals[[2]]
 
+
+  t_nngp_2 <- proc.time()
+  logger::log_info("Done with estimating cerf using nngp approach ",
+                   "Wall clock time: {t_nngp_2[[3]] - t_nngp_1[[3]]} s.")
 
 
   # Build nngp_cerf S3 object
@@ -163,8 +181,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn){
   result$w <- w
   result$pst_mean <- posterior_mean
   result$pst_sd <- posterior_sd
-
-  #
+  result$fcall <- fcall
 
   invisible(result)
 }

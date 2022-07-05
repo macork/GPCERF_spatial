@@ -4,7 +4,14 @@
 \alias{estimate_cerf_gp}
 \title{Estimate the Conditional Exposure Response Function using Gaussian Process}
 \usage{
-estimate_cerf_gp(data, w, GPS_m, params, kernel_fn = function(x) exp(-x^2))
+estimate_cerf_gp(
+  data,
+  w,
+  GPS_m,
+  params,
+  nthread = 1,
+  kernel_fn = function(x) exp(-x^2)
+)
 }
 \arguments{
 \item{data}{A data.table of observation data.
@@ -19,8 +26,10 @@ estimate_cerf_gp(data, w, GPS_m, params, kernel_fn = function(x) exp(-x^2))
 \item{GPS_m}{A data.table of GPS vectors.
 \itemize{
 \item Column 1: GPS
-\item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-\item Column 3: Standard deviation of  e_gps (e_gps_std)
+\item Column 2: Prediction of exposure for covariate of each data
+sample (e_gps_pred).
+\item Column 3: Standard deviation of
+e_gps (e_gps_std)
 }}
 
 \item{params}{A list of parameters that is required to run the process.
@@ -36,12 +45,17 @@ alpha, beta, and g_sigma can be a vector of parameters.
 }
 }}
 
+\item{nthread}{An integer value that represents the number of threads to be
+used by internal packages.}
+
 \item{kernel_fn}{A kernel function. A default value is a Gaussian Kernel.}
 }
 \value{
 A cerf_gp object that includes the following values:
 \itemize{
-\item TBD
+\item w, the vector of exposure levels.
+\item pst_mean, Computed mean for the w vector.
+\item pst_sd, Computed credible interval for the w vector.
 }
 }
 \description{
@@ -56,21 +70,22 @@ sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
 
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-                   w.all = as.matrix(sim.data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+                   w_all = as.matrix(sim.data$treat))
 
 # exposure values
-w.all = seq(0,20,0.1)
+w.all = seq(0,20,1)
 
 data.table::setDT(sim.data)
 
 cerf_gp_obj <- estimate_cerf_gp(sim.data,
                                 w.all,
                                 GPS_m,
-                                params = list(alpha = c(0.1,0.2,0.4),
+                                params = list(alpha = c(0.1),
                                               beta=0.2,
                                               g_sigma = 1,
-                                              tune_app = "all"))
+                                              tune_app = "all"),
+                                nthread = 1)
 
 
 }

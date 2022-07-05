@@ -6,14 +6,14 @@ test_that("compute_sd_gp works as expected.", {
    w_obs <- obs_exposure <- data$treat
 
    # Choose an exposure level to compute CERF
-   w = 1.2
+   w <- 1.2
 
    # Define kernel function
    kernel_fn <- function(x) exp(-x^2)
 
    # Estimate GPS function
-   GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                      w.all = as.matrix(data$treat))
+   GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                      w_all = as.matrix(data$treat))
 
    GPS <- GPS_m$GPS
 

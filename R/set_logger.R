@@ -10,7 +10,7 @@
 #'   - TRACE
 #'   - DEBUG
 #'   - INFO (Default)
-#'   - SUCESS
+#'   - SUCCESS
 #'   - WARN
 #'   - ERROR
 #'   - FATAL
@@ -22,7 +22,7 @@
 #'
 #' @examples
 #'
-#' set_logger("Debug")
+#' set_logger("mylogger.log", "INFO")
 #'
 set_logger <- function(logger_file_path= "GPCERF.log", logger_level="INFO"){
 
@@ -77,7 +77,6 @@ get_logger <- function(){
   return(list(logger_file_path = get_options("logger_file_path"),
               logger_level = get_options("logger_level")))
 }
-
 
 
 # Keeping logger options

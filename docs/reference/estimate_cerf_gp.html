@@ -14,7 +14,7 @@ for the provided set of hyperparameters."><!-- mathjax --><script src="https://c
     
     <a class="navbar-brand me-2" href="../index.html">GPCERF</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,10 +32,8 @@ for the provided set of hyperparameters."><!-- mathjax --><script src="https://c
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Estimate-CERF-GP.html">Estimate-CERF-GP</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Collabration</h6>
-    <a class="dropdown-item" href="../articles/Developers-Guide.html">Developers-Guide</a>
+    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
 <li class="nav-item">
@@ -70,7 +68,14 @@ for the provided set of hyperparameters.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">estimate_cerf_gp</span><span class="op">(</span><span class="va">data</span>, <span class="va">w</span>, <span class="va">GPS_m</span>, <span class="va">params</span>, kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">estimate_cerf_gp</span><span class="op">(</span>
+  <span class="va">data</span>,
+  <span class="va">w</span>,
+  <span class="va">GPS_m</span>,
+  <span class="va">params</span>,
+  nthread <span class="op">=</span> <span class="fl">1</span>,
+  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -84,8 +89,10 @@ for the provided set of hyperparameters.</p>
 <dd><p>A vector of exposure level to compute CERF.</p></dd>
 <dt>GPS_m</dt>
 <dd><p>A data.table of GPS vectors.</p><ul><li><p>Column 1: GPS</p></li>
-<li><p>Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).</p></li>
-<li><p>Column 3: Standard deviation of  e_gps (e_gps_std)</p></li>
+<li><p>Column 2: Prediction of exposure for covariate of each data
+sample (e_gps_pred).</p></li>
+<li><p>Column 3: Standard deviation of
+e_gps (e_gps_std)</p></li>
 </ul></dd>
 <dt>params</dt>
 <dd><p>A list of parameters that is required to run the process.
@@ -96,12 +103,17 @@ These parameters include:</p><ul><li><p>alpha: A scaling factor for the GPS valu
 alpha, beta, and g_sigma can be a vector of parameters.</p></li>
 </ul></li>
 </ul></dd>
+<dt>nthread</dt>
+<dd><p>An integer value that represents the number of threads to be
+used by internal packages.</p></dd>
 <dt>kernel_fn</dt>
 <dd><p>A kernel function. A default value is a Gaussian Kernel.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A cerf_gp object that includes the following values:</p><ul><li><p>TBD</p></li>
+    <p>A cerf_gp object that includes the following values:</p><ul><li><p>w, the vector of exposure levels.</p></li>
+<li><p>pst_mean, Computed mean for the w vector.</p></li>
+<li><p>pst_sd, Computed credible interval for the w vector.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -112,77 +124,22 @@ alpha, beta, and g_sigma can be a vector of parameters.</p></li>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Estimate GPS function</span></span>
-<span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov.mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">sim.data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
-<span class="r-in">                   w.all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">sim.data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]	train-rmse:8.013595 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2]	train-rmse:6.290675 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3]	train-rmse:5.069039 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4]	train-rmse:4.109136 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5]	train-rmse:3.403551 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6]	train-rmse:2.911113 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7]	train-rmse:2.516932 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [8]	train-rmse:2.276880 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [9]	train-rmse:2.123440 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10]	train-rmse:2.042455 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11]	train-rmse:1.822187 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12]	train-rmse:1.678244 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13]	train-rmse:1.593165 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14]	train-rmse:1.470786 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15]	train-rmse:1.398698 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16]	train-rmse:1.346891 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17]	train-rmse:1.313656 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18]	train-rmse:1.273869 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]	train-rmse:1.171202 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20]	train-rmse:1.082402 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]	train-rmse:0.949546 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22]	train-rmse:0.874509 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23]	train-rmse:0.810788 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24]	train-rmse:0.767233 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25]	train-rmse:0.697216 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26]	train-rmse:0.670815 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [27]	train-rmse:0.600684 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28]	train-rmse:0.553597 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29]	train-rmse:0.528699 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [30]	train-rmse:0.502762 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]	train-rmse:0.476917 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [32]	train-rmse:0.465998 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [33]	train-rmse:0.442204 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [34]	train-rmse:0.419775 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [35]	train-rmse:0.395772 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [36]	train-rmse:0.386138 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37]	train-rmse:0.353329 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [38]	train-rmse:0.332995 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39]	train-rmse:0.317206 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [40]	train-rmse:0.301822 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]	train-rmse:0.285412 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [42]	train-rmse:0.264272 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43]	train-rmse:0.245202 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [44]	train-rmse:0.230332 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [45]	train-rmse:0.209733 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46]	train-rmse:0.200581 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [47]	train-rmse:0.180731 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [48]	train-rmse:0.160498 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49]	train-rmse:0.148313 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [50]	train-rmse:0.140261 </span>
+<span class="r-in"><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_GPS.html">train_GPS</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">sim.data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span class="r-in">                   w_all <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">sim.data</span><span class="op">$</span><span class="va">treat</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># exposure values</span></span>
-<span class="r-in"><span class="va">w.all</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span>,<span class="fl">0.1</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">w.all</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span>,<span class="fl">1</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sim.data</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">cerf_gp_obj</span> <span class="op">&lt;-</span> <span class="fu">estimate_cerf_gp</span><span class="op">(</span><span class="va">sim.data</span>,</span>
 <span class="r-in">                                <span class="va">w.all</span>,</span>
 <span class="r-in">                                <span class="va">GPS_m</span>,</span>
-<span class="r-in">                                params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.4</span><span class="op">)</span>,</span>
+<span class="r-in">                                params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span>,</span>
 <span class="r-in">                                              beta<span class="op">=</span><span class="fl">0.2</span>,</span>
 <span class="r-in">                                              g_sigma <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">                                              tune_app <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Var1 Var2 Var3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1  0.2  1.0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Var1 Var2 Var3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2  0.2  1.0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Var1 Var2 Var3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.4  0.2  1.0 </span>
+<span class="r-in">                                              tune_app <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>,</span>
+<span class="r-in">                                nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 </code></pre></div>
@@ -192,11 +149,12 @@ alpha, beta, and g_sigma can be a vector of parameters.</p></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Naeem Khoshnevis, Boyu Ren, Tanujt Dey, Danielle Braun.</p>
+  <p></p><p>Developed by Naeem Khoshnevis, Boyu Ren, Danielle Braun.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
     </footer></div>

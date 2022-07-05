@@ -2,8 +2,8 @@ test_that("compute_rl_deriv_gp works as expected!", {
 
   set.seed(127)
   data <- generate_synthetic_data(sample_size = 200)
-  GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                     w.all = as.matrix(data$treat))
+  GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                     w_all = as.matrix(data$treat))
 
   wi <- 8.6
 

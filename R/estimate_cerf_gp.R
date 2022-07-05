@@ -14,8 +14,10 @@
 #' @param w A vector of exposure level to compute CERF.
 #' @param GPS_m A data.table of GPS vectors.
 #'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   - Column 2: Prediction of exposure for covariate of each data
+#'   sample (e_gps_pred).
+#'   - Column 3: Standard deviation of
+#'   e_gps (e_gps_std)
 #' @param params A list of parameters that is required to run the process.
 #' These parameters include:
 #'   - alpha: A scaling factor for the GPS value.
@@ -24,11 +26,15 @@
 #'   - tune_app: A tuning approach. Available approaches:
 #'     - all: try all combinations of hyperparameters.
 #' alpha, beta, and g_sigma can be a vector of parameters.
+#' @param nthread An integer value that represents the number of threads to be
+#' used by internal packages.
 #' @param kernel_fn A kernel function. A default value is a Gaussian Kernel.
 #'
 #' @return
 #' A cerf_gp object that includes the following values:
-#'  - TBD
+#'  - w, the vector of exposure levels.
+#'  - pst_mean, Computed mean for the w vector.
+#'  - pst_sd, Computed credible interval for the w vector.
 #'
 #' @export
 #'
@@ -39,29 +45,33 @@
 #'
 #'
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-#'                    w.all = as.matrix(sim.data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+#'                    w_all = as.matrix(sim.data$treat))
 #'
 #' # exposure values
-#' w.all = seq(0,20,0.1)
+#' w.all = seq(0,20,1)
 #'
 #' data.table::setDT(sim.data)
 #'
 #' cerf_gp_obj <- estimate_cerf_gp(sim.data,
 #'                                 w.all,
 #'                                 GPS_m,
-#'                                 params = list(alpha = c(0.1,0.2,0.4),
+#'                                 params = list(alpha = c(0.1),
 #'                                               beta=0.2,
 #'                                               g_sigma = 1,
-#'                                               tune_app = "all"))
+#'                                               tune_app = "all"),
+#'                                 nthread = 1)
 #'
 #'
-estimate_cerf_gp <- function(data, w, GPS_m, params,
+estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                              kernel_fn = function(x) exp(-x^2)){
 
 
   # Log system info
   log_system_info()
+
+  # function call
+  fcall <- match.call()
 
   # Double-check input parameters ----------------------------------------------
   if (!is.data.table(data)){
@@ -99,7 +109,6 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   }
 
   # Choose subset of tuning parameters based on tuning approach ----------------
-
   if (getElement(params, "tune_app") == "all"){
     tune_params_subset <- tune_params
   } else if (getElement(params, "tune_app") == "at_random"){
@@ -110,9 +119,8 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   # hyperparameters. -----------------------------------------------------------
 
   tune_res <- apply(tune_params_subset, 1, function(x){
-    print(x)
     compute_m_sigma(hyperparam = x, data = data,
-                    w = w, GPS_m = GPS_m)
+                    w = w, GPS_m = GPS_m, nthread = nthread)
   })
 
   # Select the combination of hyperparameters that provides the lowest
@@ -129,6 +137,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
   result$pst_mean <- gp_cerf
   result$pst_sd <- gp_post_sd
   result$w <- w
+  result$fcall <- fcall
 
   # Add best match to the gp_cerf object
 
@@ -136,5 +145,4 @@ estimate_cerf_gp <- function(data, w, GPS_m, params,
 
   # return gp_cerf S3 object
   invisible(result)
-
 }

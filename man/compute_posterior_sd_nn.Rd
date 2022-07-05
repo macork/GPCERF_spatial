@@ -15,36 +15,40 @@ compute_posterior_sd_nn(
 )
 }
 \arguments{
-\item{hyperparam}{Values of hyperparameters in the GP model.}
+\item{hyperparam}{The values of hyperparameters in the GP model.}
 
 \item{w}{The exposure level for the point of interest on the CERF.}
 
-\item{GPS_w}{The GPS for all samples when their exposure levels are set at \code{w}.}
+\item{GPS_w}{The GPS for all samples when their exposure levels are set
+at \code{w}.}
 
-\item{obs_ord}{A matrix of two columns. First column is the observed exposure levels of all
-samples; second is the GPS at the observed exposure levels. The rows are in ascending order
-for the first column.}
+\item{obs_ord}{A matrix of two columns. The first column is the observed
+exposure levels of all samples; the second is the GPS at the observed
+exposure levels. The rows are in ascending order for the first column.}
 
-\item{sigma2}{A scaler representing \code{sigma^2}}
+\item{sigma2}{A scaler representing \code{sigma^2}.}
 
-\item{n_neighbor}{Number of nearest neighbours on one side (see also \code{expand}).}
+\item{n_neighbor}{Number of nearest neighbors on one side
+(see also \code{expand}).}
 
-\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.}
+\item{expand}{A scaling factor to determine the total number of nearest
+neighbors. The total is \code{2*expand*n_neighbor}.}
 }
 \value{
 The posterior standard deviation of the estimated CERF at \code{w}.
 }
 \description{
-Calculates the posterior standard deviation of a point on the CERF based on the nnGP model.
+Calculates the posterior standard deviation of a point on the CERF based on
+the nnGP model.
 }
 \examples{
 
 set.seed(3089)
-data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+data <- generate_synthetic_data(sample_size = 150, gps_spec = 3)
 
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                   w.all = as.matrix(data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                   w_all = as.matrix(data$treat))
 
 # Hyperparameter
 hyperparam <- c(0.1, 0.2, 1)

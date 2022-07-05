@@ -2,10 +2,17 @@
 % Please edit documentation in R/compute_m_sigma.R
 \name{compute_m_sigma}
 \alias{compute_m_sigma}
-\title{Compute mean, confidence interval (?), and covariate balance in Full Gaussian
+\title{Compute mean, credible interval, and covariate balance in Full Gaussian
 Process (GP)}
 \usage{
-compute_m_sigma(hyperparam, data, w, GPS_m, kernel_fn = function(x) exp(-x^2))
+compute_m_sigma(
+  hyperparam,
+  data,
+  w,
+  GPS_m,
+  nthread = 1,
+  kernel_fn = function(x) exp(-x^2)
+)
 }
 \arguments{
 \item{hyperparam}{A vector of values of hyper-parameters.
@@ -34,12 +41,16 @@ for all samples (e_gps_pred).
 covariates for all samples (e_gps_std).
 }}
 
+\item{nthread}{An integer value that represents the number of threads to be
+used by internal packages.}
+
 \item{kernel_fn}{The covariance function of GP.}
 }
 \value{
-A list containing two elements: 1) a vector of absolute weighted correlation of each
-covariate to the exposure, which is the metric for covariate balance and 2) the estimated
-CERF at \code{w.all} based on the hyper-parameter values in \code{param}.
+A list containing two elements: 1) a vector of absolute weighted correlation
+of each covariate to the exposure, which is the metric for covariate balance
+and 2) the estimated CERF at \code{w.all} based on the hyper-parameter
+values in \code{param}.
 }
 \description{
 Calculates the induced covariate balance associated with one hyper-parameter
@@ -50,18 +61,19 @@ configuration in full GP.
 set.seed(912)
 data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
 
-w.all = seq(0,20,0.1)
+w_all <- seq(0,20,1)
 
 data.table::setDT(data)
 
 #Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                   w.all = as.matrix(data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                   w_all = as.matrix(data$treat))
 
 tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                             data = data,
-                            w = w.all,
-                            GPS_m = GPS_m)
+                            w = w_all,
+                            GPS_m = GPS_m,
+                            nthread = 1)
 
 gp.cerf <- tune_res$est
 

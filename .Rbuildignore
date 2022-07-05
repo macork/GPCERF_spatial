@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^GPCERF\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
@@ -7,3 +9,14 @@
 ^_pkgdown\.yml$
 ^docs$
 index.md
+^.covrignore
+^R\.log$
+^\.log$
+^docker_singularity/*$
+^doc$
+^Meta$
+^functional_tests/*$
+^docs/reference/Debug$
+^CRAN-RELEASE$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

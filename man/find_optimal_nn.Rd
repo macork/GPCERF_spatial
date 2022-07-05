@@ -13,7 +13,8 @@ find_optimal_nn(
   hyperparams = expand.grid(seq(0.5, 4.5, 1), seq(0.5, 4.5, 1), seq(0.5, 4.5, 1)),
   n_neighbor = 50,
   expand = 2,
-  block_size = 2000
+  block_size = 2000,
+  nthread = 1
 )
 }
 \arguments{
@@ -26,27 +27,35 @@ find_optimal_nn(
 \item{GPS_m}{A data.table of GPS vectors.
 \itemize{
 \item Column 1: GPS
-\item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
+\item Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
 \item Column 3: Standard deviation of  e_gps (e_gps_std)
 }}
 
 \item{design_mt}{The covariate matrix of all samples (intercept excluded).}
 
-\item{hyperparams}{A matrix of candidate values of the hyper-parameters, each row contains a
-set of values of all hyper-parameters.}
+\item{hyperparams}{A matrix of candidate values of the hyper-parameters,
+each row contains a set of values of all hyper-parameters.}
 
-\item{n_neighbor}{Number of nearest neighbors on one side (see also \code{expand}).}
+\item{n_neighbor}{The number of nearest neighbors on one side
+(see also \code{expand}).}
 
-\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.}
+\item{expand}{Scaling factor to determine the total number of nearest
+neighbors. The total is \code{2*expand*n_neighbor}.}
 
-\item{block_size}{Number of samples included in a computation block. Mainly used to
-balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}
+\item{block_size}{The number of samples included in a computation block.
+Mainly used to balance the speed and memory requirement. Larger
+\code{block_size} is faster, but requires more memory.}
+
+\item{nthread}{An integer value that represents the number of threads to be
+used by internal packages.}
 }
 \value{
-Estimated covariate balance scores for the grid of hyper-parameter values considered in \code{hyperparams}.
+Estimated covariate balance scores for the grid of hyper-parameter values
+considered in \code{hyperparams}.
 }
 \description{
-Computes covariate balance for each combincation of provided hyper-parameters
+Computes covariate balance for each combination of provided hyper-parameters
 and selects the hyper-parameter values that minimizes the covariate balance.
 }
 \examples{
@@ -55,8 +64,8 @@ set.seed(89)
 data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                   w.all = as.matrix(data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                   w_all = as.matrix(data$treat))
 
 # Hyperparameter
 hyperparam <- c(0.1, 0.2, 1)
@@ -68,9 +77,9 @@ block_size <- 10000
 w <- seq(0,20,2)
 design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
 
-hyperparam_grid <- expand.grid(seq(0.5,2.5,1),
+hyperparam_grid <- expand.grid(seq(0.5,1.0,1),
                                seq(0.4,0.6,0.2),
-                               seq(0.5,1.5,1))
+                               seq(0.5))
 
 optimal_cb <- find_optimal_nn(w_obs = data$treat,
                               w = w,
@@ -78,6 +87,7 @@ optimal_cb <- find_optimal_nn(w_obs = data$treat,
                               GPS_m = GPS_m,
                               design_mt = design_mt,
                               hyperparams = hyperparam_grid,
-                              n_neighbor = 50, expand = 2, block_size = 2e3)
+                              n_neighbor = 50, expand = 2, block_size = 2e3,
+                              nthread = 1)
 
 }

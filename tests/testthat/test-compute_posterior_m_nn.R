@@ -4,8 +4,8 @@ test_that("compute_posterior_m_nn works as expected.", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                     w.all = as.matrix(data$treat))
+  GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                     w_all = as.matrix(data$treat))
 
   # Hyperparameter
   hyperparam <- c(0.1, 0.2, 1)
@@ -17,12 +17,12 @@ test_that("compute_posterior_m_nn works as expected.", {
   wi <- 0.4
 
   # Estimate GPS for the exposure level
-  GPS_w = dnorm(wi,
-                mean = GPS_m$e_gps_pred,
-                sd = GPS_m$e_gps_std, log = TRUE)
+  GPS_w <- dnorm(wi,
+                 mean = GPS_m$e_gps_pred,
+                 sd = GPS_m$e_gps_std, log = TRUE)
 
   # Order data for easy selection
-  coord_obs = cbind(data$treat, GPS_m$GPS)
+  coord_obs <- cbind(data$treat, GPS_m$GPS)
   y_use <- data$Y
 
   obs_ord <- coord_obs[order(coord_obs[,1]),]

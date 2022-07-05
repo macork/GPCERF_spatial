@@ -1,5 +1,5 @@
 #' @title
-#' Compute mean, confidence interval (?), and covariate balance in Full Gaussian
+#' Compute mean, credible interval, and covariate balance in Full Gaussian
 #'  Process (GP)
 #'
 #' @description
@@ -22,12 +22,15 @@
 #'               for all samples (e_gps_pred).
 #'   - Column 3: Estimated conditional standard deviation of the exposure given
 #'               covariates for all samples (e_gps_std).
+#' @param nthread An integer value that represents the number of threads to be
+#' used by internal packages.
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
-#' A list containing two elements: 1) a vector of absolute weighted correlation of each
-#' covariate to the exposure, which is the metric for covariate balance and 2) the estimated
-#' CERF at \code{w.all} based on the hyper-parameter values in \code{param}.
+#' A list containing two elements: 1) a vector of absolute weighted correlation
+#' of each covariate to the exposure, which is the metric for covariate balance
+#' and 2) the estimated CERF at \code{w.all} based on the hyper-parameter
+#' values in \code{param}.
 #' @export
 #'
 #' @examples
@@ -35,22 +38,23 @@
 #' set.seed(912)
 #' data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
 #'
-#' w.all = seq(0,20,0.1)
+#' w_all <- seq(0,20,1)
 #'
 #' data.table::setDT(data)
 #'
 #' #Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-#'                    w.all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+#'                    w_all = as.matrix(data$treat))
 #'
 #' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
 #'                             data = data,
-#'                             w = w.all,
-#'                             GPS_m = GPS_m)
+#'                             w = w_all,
+#'                             GPS_m = GPS_m,
+#'                             nthread = 1)
 #'
 #' gp.cerf <- tune_res$est
 #'
-compute_m_sigma <- function(hyperparam, data, w, GPS_m,
+compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
                             kernel_fn = function(x) exp(-x^2)){
 
   param = unlist(hyperparam)
@@ -71,69 +75,71 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
 
   w_obs <- data[[2]]
 
-  scaled_obs = cbind(w_obs*sqrt(1/alpha), GPS*sqrt(1/beta))
-  sigma_obs = g_sigma*kernel_fn(as.matrix(dist(scaled_obs))) + diag(nrow(scaled_obs))
+  scaled_obs <- cbind(w_obs*sqrt(1/alpha), GPS*sqrt(1/beta))
+  sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(scaled_obs))) + diag(nrow(scaled_obs))
 
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
   # Estimate noise
-  noise_est <- estimate_noise(hyperparam = hyperparam,
-                                           data = data,
-                                           GPS = GPS)
+  noise_est <- estimate_noise_gp(hyperparam = hyperparam,
+                                 data = data,
+                                 GPS = GPS)
 
 
-  col.all = sapply(w, function(w_instance){
+  lfp <- get_options("logger_file_path")
+
+  # make a cluster
+  cl <- parallel::makeCluster(nthread, type="PSOCK",
+                              outfile= lfp)
+
+  # export variables and functions to cluster cores
+  parallel::clusterExport(cl=cl,
+                          varlist = c("w", "w_obs", "scaled_obs",
+                                      "hyperparam", "inv_sigma_obs", "GPS_m",
+                                      "scale", "nthread", "noise_est",
+                                      "compute_sd_gp", "compute_weight_gp",
+                                      "compute_w_corr"),
+                          envir=environment())
+
+  col_all_list <- parallel::parLapply(cl,
+                                      w,
+                                      function(w_instance){
 
     # compute weights
-    weights.final = compute_weight_gp(w = w_instance,
-                                      w_obs = w_obs,
-                                      scaled_obs = scaled_obs,
-                                      hyperparam = hyperparam,
-                                      inv_sigma_obs = inv_sigma_obs,
-                                      GPS_m = GPS_m)
+    weights_final <- compute_weight_gp(w = w_instance,
+                                       w_obs = w_obs,
+                                       scaled_obs = scaled_obs,
+                                       hyperparam = hyperparam,
+                                       inv_sigma_obs = inv_sigma_obs,
+                                       GPS_m = GPS_m)
 
-    weights.final[weights.final<0] = 0
-    weights.final = weights.final/sum(weights.final)
+    weights_final[weights_final<0] <- 0
+    weights_final <- weights_final/sum(weights_final)
     # weigts.final = invers of paranthesis * kappa
     # est is the same as m in the paper.
-    est = data$Y%*%weights.final
+    est <- data$Y%*%weights_final
 
 
-    # Compute credible interval
-    #t1 <- proc.time()
     pst_sd <- compute_sd_gp(w = w_instance,
                             scaled_obs = scaled_obs,
                             hyperparam = hyperparam,
                             sigma = noise_est,
                             GPS_m = GPS_m)
-    #t2 <- proc.time()
 
-    #print(paste("Time taken to estimate posterior sd: ", t2[[3]] - t1[[3]], " s."))
-
-    # weighted correlation
-    # this computes rho_r(w) for each covariate r
-
-    covariate_balance <- compute_w_corr(data, weights.final)
-    # x.design = model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
-    # w.mean = sum(sim.data$treat*weights.final)
-    # w.sd = sqrt(sum((sim.data$treat - w.mean)^2*weights.final))
-    # w.stan = (sim.data$treat - w.mean)/w.sd
-    #
-    # x.mean = colMeans(x.design*weights.final)
-    # x.cov = (t(x.design) - x.mean)%*%diag(weights.final)%*%t(t(x.design) - x.mean)
-    # x.stan = t(t(solve(chol(x.cov)))%*%(t(x.design) - x.mean))
-    # covariate_balance <- abs(c(t(x.stan)%*%diag(weights.final)%*%w.stan))
-
-
+    covariate_balance <- compute_w_corr(data, weights_final)
     c(covariate_balance, est, pst_sd)
   })
-  # this is vector of average rho_r(w) over the range of w for every r
 
-  n_confounders <- nrow(col.all) - 2 # est, pst_sd
-  est_index <- nrow(col.all) - 1
-  pst_sd <- nrow(col.all)
+  # terminate clusters.
+  parallel::stopCluster(cl)
 
-  list(cb = rowMeans(col.all[1:n_confounders,]),
-       est = col.all[est_index,],
-       pst = col.all[pst_sd, ])
+  col_all <- do.call(cbind, col_all_list)
+
+  n_confounders <- nrow(col_all) - 2 # est, pst_sd
+  est_index <- nrow(col_all) - 1
+  pst_sd <- nrow(col_all)
+
+  list(cb = rowMeans(col_all[1:n_confounders,], na.rm = T),
+       est = col_all[est_index,],
+       pst = col_all[pst_sd, ])
 }

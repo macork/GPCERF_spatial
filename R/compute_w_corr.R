@@ -5,14 +5,14 @@
 #' Computes weighted correlation of the observational data based on weights
 #' achieved by Gaussian Process.
 #'
-#' @param data A data.table of observational data with the following colums:
+#' @param data A data.table of observational data with the following columns:
 #'   - Column 1: Outcome (Y)
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param weights A vector of weights for each observation data.
 #'
 #' @return
-#' A vector of covariate balance
+#' A vector of covariate balance.
 #'
 #' @export
 #'
@@ -37,8 +37,8 @@ compute_w_corr <- function(data, weights){
                 "weights (", length(weights),") should be equal."))
   }
 
-  # TODO: model.matrix will create dummy vairables for factors.
-  # Double check with Boyu.
+  # TODO: model.matrix will create dummy variables for factors.
+  # Double-check.
   conf_names <- colnames(data[,3:ncol(data)])
   frml <- paste("~",paste(conf_names, collapse = "+"), "-1", sep = "")
 
@@ -49,10 +49,15 @@ compute_w_corr <- function(data, weights){
   w_sd <- sqrt(sum((w_obs - w_mean)^2*weights))
   w_stan <- (w_obs - w_mean)/w_sd
 
-  x_mean <- colMeans(x_design*weights)
+  x_mean <- colSums(x_design*weights)
   x_cov <- (t(x_design) - x_mean)%*%diag(weights)%*%t(t(x_design) - x_mean)
-  x_stan <- t(t(solve(chol(x_cov)))%*%(t(x_design) - x_mean))
-  covariate_balance <- abs(c(t(x_stan)%*%diag(weights)%*%w_stan))
 
+  # when x_cov is rank deficient, return NA for all covariate balance
+  if(Matrix::rankMatrix(x_cov) == nrow(x_cov)){
+    x_stan <- t(t(solve(chol(x_cov)))%*%(t(x_design) - x_mean))
+    covariate_balance <- abs(c(t(x_stan)%*%diag(weights)%*%w_stan))
+  }else{
+    covariate_balance = rep(NA, nrow(x_cov))
+  }
   return(covariate_balance)
 }

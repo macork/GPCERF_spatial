@@ -5,8 +5,8 @@ test_that("estimate_cerf_gp works as expected!", {
 
   # Estimate GPS function
   # In the future, CausalGPS gps estimation will be used.
-  GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-                     w.all = as.matrix(sim.data$treat))
+  GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+                     w_all = as.matrix(sim.data$treat))
 
   # exposure values
   w.all <- seq(0,20,0.1)
@@ -19,7 +19,8 @@ test_that("estimate_cerf_gp works as expected!", {
                                   params = list(alpha = c(0.1,0.2,0.4),
                                                 beta=0.2,
                                                 g_sigma = 1,
-                                                tune_app = "all"))
+                                                tune_app = "all"),
+                                  nthread = 1)
 
 
   # estimate_cerf_gp returns S3 class cerf_gp

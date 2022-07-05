@@ -10,16 +10,15 @@ reference:
   - title: Estimate CERF with Gaussain Process
     contents:
     - estimate_cerf_gp
+    - estimate_cerf_nngp
   - title: Utilities
     contents:
+    - generate_synthetic_data
+    - train_GPS
     - set_logger
     - get_logger
 
 articles:
   - title: Introduction
     navbar: Introduction
-    contents: [Estimate-CERF-GP]
-
-  - title: Collabration
-    navbar: Collabration
-    contents: [Developers-Guide]
+    contents: [Full-Gaussian-Processes, Nearest-neighbor-Gaussian-Processes]

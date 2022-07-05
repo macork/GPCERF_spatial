@@ -4,8 +4,8 @@ test_that("compute_posterior_sd_nn works as expected.", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                     w.all = as.matrix(data$treat))
+  GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                     w_all = as.matrix(data$treat))
 
   # Hyperparameter
   hyperparam <- c(0.1, 0.2, 1)
@@ -44,5 +44,5 @@ test_that("compute_posterior_sd_nn works as expected.", {
                                     n_neighbor = 20,
                                     expand = 1)
 
-  expect_equal(pst_sd, 0.5410388, tolerance = 0.00001)
+  expect_equal(pst_sd, 5.437376, tolerance = 0.00001)
 })

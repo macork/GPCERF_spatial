@@ -2,8 +2,8 @@
 #' Change-point Detection in Full GP
 #'
 #' @description
-#' Calculate the posterior mean of the difference between left- and right-derivatives
-#' at an exposure level for the detection of change points.
+#' Calculates the posterior mean of the difference between left- and
+#' right-derivatives at an exposure level for the detection of change points.
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
@@ -16,7 +16,8 @@
 #' @param kernel_fn The covariance function.
 #' @param kernel_deriv_fn The partial derivative of the covariance function.
 #'
-#' @return A numeric value of the posterior mean of the difference between two one-sided
+#' @return
+#' A numeric value of the posterior mean of the difference between two one-sided
 #' derivatives.
 #' @export
 #'
@@ -24,8 +25,8 @@
 #'
 #' set.seed(847)
 #' data <- generate_synthetic_data(sample_size = 200)
-#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-#'                    w.all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+#'                    w_all = as.matrix(data$treat))
 #'
 #' wi <- 8.6
 #'

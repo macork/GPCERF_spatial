@@ -22,22 +22,23 @@ compute_deriv_nn(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.table of GPS vectors. Including:
 \itemize{
-\item Column 1: GPS
+\item Column 1: GPS values.
 \item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-\item Column 3: Standard deviation of  e_gps (e_gps_std)
+\item Column 3: Standard deviation of  e_gps (e_gps_std).
 }}
 
 \item{y_obs}{A vector of observed outcome values.}
 
 \item{hyperparam}{A vector of hyper-parameters in the GP model.}
 
-\item{n_neighbor}{Number of nearest neighbours on one side (see also \code{expand}).}
+\item{n_neighbor}{The number of nearest neighbors on one side (see also \code{expand}).}
 
-\item{expand}{Scaling factor to determine the total number of nearest neighbours. The total is \code{2*expand*n_neighbor}.}
+\item{expand}{Scaling factor to determine the total number of nearest
+neighbors. The total is \code{2*expand*n_neighbor}.}
 
-\item{block_size}{Number of samples included in a computation block. Mainly used to
+\item{block_size}{The number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}
 
 \item{kernel_fn}{The covariance function. The input is the square of Euclidean distance.}
@@ -51,22 +52,4 @@ A scalar of estimated derivative of CERF at \code{w} in nnGP.
 Calculates the posterior mean of the derivative of CERF at a given
 exposure level with nnGP.
 }
-\examples{
-
-set.seed(365)
-data <- generate_synthetic_data(sample_size = 200)
-GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                   w.all = as.matrix(data$treat))
-
-wi <- 4.8
-
-deriv_val <- compute_deriv_nn(w = wi,
-                              w_obs = data$treat,
-                              GPS_m = GPS_m,
-                              y_obs = data$Y,
-                              hyperparam = c(0.1,0.2,1),
-                              n_neighbor = 20,
-                              expand = 1,
-                              block_size = 1000)
-
-}
+\keyword{internal}
