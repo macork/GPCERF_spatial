@@ -12,3 +12,8 @@ arma::mat calc_cross(arma::mat cross, arma::mat within) {
   }
   return(sum);
 }
+
+// [[Rcpp::export]]
+arma::vec arma_mm(const arma::mat& m, const arma::vec& v) {
+  return m * v;
+}

@@ -34,7 +34,8 @@ Imports:
     RcppArmadillo,
     ggplot2,
     rlang,
-    Matrix
+    Matrix,
+    Rfast
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

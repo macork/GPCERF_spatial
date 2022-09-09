@@ -96,8 +96,8 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
 
   # each row is the weights for all subject for estimate of Y_i(w)
   # each column is the weight of an observed sample (w_i, c_i)
-  normalized_sigma_cross <- rep(1/length(w_obs),length(w_obs))%*%sigma_cross
-  weight <- c((normalized_sigma_cross)%*%inv_sigma_obs)
+  normalized_sigma_cross <- Rfast::colmeans(sigma_cross)   #rep(1/length(w_obs),length(w_obs))%*%sigma_cross
+  weight <- c(arma_mm(inv_sigma_obs, normalized_sigma_cross))   #c((normalized_sigma_cross)%*%inv_sigma_obs)
 
   return(weight)
 }

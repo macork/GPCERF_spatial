@@ -19,6 +19,7 @@
 #' @import data.table
 #' @import MASS
 #' @import Rcpp
+#' @import Rfast
 #' @import RcppArmadillo
 #' @importFrom spatstat.geom crossdist
 #' @useDynLib GPCERF, .registration = TRUE

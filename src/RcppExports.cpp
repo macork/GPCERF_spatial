@@ -6,11 +6,6 @@
 
 using namespace Rcpp;
 
-#ifdef RCPP_USE_GLOBAL_ROSTREAM
-Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
-Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
-#endif
-
 // calc_cross
 arma::mat calc_cross(arma::mat cross, arma::mat within);
 RcppExport SEXP _GPCERF_calc_cross(SEXP crossSEXP, SEXP withinSEXP) {
@@ -23,9 +18,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// arma_mm
+arma::vec arma_mm(const arma::mat& m, const arma::vec& v);
+RcppExport SEXP _GPCERF_arma_mm(SEXP mSEXP, SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type m(mSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(arma_mm(m, v));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_GPCERF_calc_cross", (DL_FUNC) &_GPCERF_calc_cross, 2},
+    {"_GPCERF_arma_mm", (DL_FUNC) &_GPCERF_arma_mm, 2},
     {NULL, NULL, 0}
 };
 
