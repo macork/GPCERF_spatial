@@ -84,25 +84,10 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
                                  data = data,
                                  GPS = GPS)
 
-
-  lfp <- get_options("logger_file_path")
-
-  # make a cluster
-  cl <- parallel::makeCluster(nthread, type="PSOCK",
-                              outfile= lfp)
-
-  # export variables and functions to cluster cores
-  parallel::clusterExport(cl=cl,
-                          varlist = c("w", "w_obs", "scaled_obs",
-                                      "hyperparam", "inv_sigma_obs", "GPS_m",
-                                      "scale", "nthread", "noise_est",
-                                      "compute_sd_gp", "compute_weight_gp",
-                                      "compute_w_corr"),
-                          envir=environment())
-
-  col_all_list <- parallel::parLapply(cl,
-                                      w,
-                                      function(w_instance){
+  # col_all_list <- parallel::parLapply(cl,
+  #                                     w,
+  col_all_list <- lapply(w,
+                         function(w_instance){
 
     # compute weights
     weights_final <- compute_weight_gp(w = w_instance,
@@ -128,9 +113,6 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
     covariate_balance <- compute_w_corr(data, weights_final)
     c(covariate_balance, est, pst_sd)
   })
-
-  # terminate clusters.
-  parallel::stopCluster(cl)
 
   col_all <- do.call(cbind, col_all_list)
 
