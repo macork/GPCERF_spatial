@@ -22,8 +22,6 @@
 #'               for all samples (e_gps_pred).
 #'   - Column 3: Estimated conditional standard deviation of the exposure given
 #'               covariates for all samples (e_gps_std).
-#' @param nthread An integer value that represents the number of threads to be
-#' used by internal packages.
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
@@ -53,7 +51,7 @@
 #'
 #' gp.cerf <- tune_res$est
 #'
-compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
+compute_m_sigma <- function(hyperparam, data, w, GPS_m,
                             kernel_fn = function(x) exp(-x^2)){
 
   param = unlist(hyperparam)
@@ -84,8 +82,6 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, nthread = 1,
                                  data = data,
                                  GPS = GPS)
 
-  # col_all_list <- parallel::parLapply(cl,
-  #                                     w,
   col_all_list <- lapply(w,
                          function(w_instance){
 
