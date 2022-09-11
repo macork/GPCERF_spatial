@@ -21,6 +21,7 @@
 #' @import Rcpp
 #' @import Rfast
 #' @import RcppArmadillo
+#' @import CausalGPS
 #' @importFrom spatstat.geom crossdist
 #' @useDynLib GPCERF, .registration = TRUE
 #'

@@ -26,16 +26,20 @@
 #'
 #'
 train_GPS <- function(cov.mt, w.all, dnorm_log = FALSE){
-  GPS_mod <- xgboost::xgboost(data = cov.mt,
-                              label = w.all,
-                              nrounds=50,
-                              verbose = 0)
-
   logger::log_info("Started estimating GPS values ... ")
   t_1 <- proc.time()
+  GPS_fit <- CausalGPS::estimate_gps(NA, w.all,
+                                     cov.mt,
+                                     pred_model = "sl",
+                                     gps_model = "parametric",
+                                     internal_use = T,
+                                     params = list(xgb_max_depth = c(3,4,5),
+                                                   xgb_nrounds=c(10,20,30,40,50,60)),
+                                     nthread = 1,
+                                     sl_lib = c("m_xgboost"))
 
-  e_gps_pred <- predict(GPS_mod,cov.mt)
-  e_gps_std <- sd(w.all-e_gps_pred)
+  e_gps_pred <- GPS_fit[[2]]
+  e_gps_std <- GPS_fit[[3]]
   GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log))
   GPS_m <- data.table::data.table(GPS = GPS,
                                   e_gps_pred = e_gps_pred,
