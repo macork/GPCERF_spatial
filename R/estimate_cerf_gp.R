@@ -110,28 +110,36 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
   # Compute m, "confidence interval", and covariate balance for provided
   # hyperparameters. -----------------------------------------------------------
-  lfp <- get_options("logger_file_path")
+  if(nthread > 1){
+    lfp <- get_options("logger_file_path")
 
-  # make a cluster
-  cl <- parallel::makeCluster(nthread, type="PSOCK",
-                              outfile= lfp)
+    # make a cluster
+    cl <- parallel::makeCluster(nthread, type="PSOCK",
+                                outfile= lfp)
 
-  # export variables and functions to cluster cores
-  parallel::clusterExport(cl=cl,
-                          varlist = c("w", "data", "GPS_m",
-                                      "tune_params_subset",
-                                      "kernel_fn",
-                                      "compute_m_sigma"),
-                          envir=environment())
+    # export variables and functions to cluster cores
+    parallel::clusterExport(cl=cl,
+                            varlist = c("w", "data", "GPS_m",
+                                        "tune_params_subset",
+                                        "kernel_fn",
+                                        "compute_m_sigma"),
+                            envir=environment())
 
-  tune_res <- parallel::parApply(cl, tune_params_subset, 1,
-                                 function(x){
-                                   compute_m_sigma(hyperparam = x, data = data, w = w,
-                                                   GPS_m = GPS_m, kernel_fn = kernel_fn )
-  })
+    tune_res <- parallel::parApply(cl, tune_params_subset, 1,
+                                   function(x){
+                                     compute_m_sigma(hyperparam = x, data = data, w = w,
+                                                     GPS_m = GPS_m, kernel_fn = kernel_fn )
+                                   })
 
-  # terminate clusters.
-  parallel::stopCluster(cl)
+    # terminate clusters.
+    parallel::stopCluster(cl)
+  }else{
+    tune_res <- apply(tune_params_subset, 1, function(x){
+      compute_m_sigma(hyperparam = x, data = data, w = w,
+                      GPS_m = GPS_m, kernel_fn = kernel_fn )
+      })
+  }
+
 
   # Select the combination of hyperparameters that provides the lowest
   # covariate balance ----------------------------------------------------------
