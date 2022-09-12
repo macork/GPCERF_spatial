@@ -38,8 +38,8 @@ train_GPS <- function(cov.mt, w.all, dnorm_log = FALSE){
                                      nthread = 1,
                                      sl_lib = c("m_xgboost"))
 
-  e_gps_pred <- GPS_fit[[2]]
-  e_gps_std <- GPS_fit[[3]]
+  e_gps_pred <- GPS_fit$e_gps_pred
+  e_gps_std <- GPS_fit$e_gps_std_pred
   GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log))
   GPS_m <- data.table::data.table(GPS = GPS,
                                   e_gps_pred = e_gps_pred,
