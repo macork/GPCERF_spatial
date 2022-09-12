@@ -80,9 +80,8 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning = T,
 
   # Estimate noise
   if(!tuning){
-    noise_est <- estimate_noise_gp(hyperparam = hyperparam,
-                                   data = data,
-                                   GPS = GPS)
+    noise_est <- estimate_noise_gp(data = data,
+                                   sigma_obs, inv_sigma_obs)
   }
 
   col_all_list <- lapply(w,

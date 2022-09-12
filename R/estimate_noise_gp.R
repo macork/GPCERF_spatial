@@ -31,30 +31,10 @@
 #' noise_est <- estimate_noise_gp(hyperparam, data, GPS_m$GPS)
 #'
 #'
-estimate_noise_gp <- function(hyperparam, data, GPS){
-
-
-  # Double-check input parameters ----------------------------------------------
-  if (!is.data.table(data)){
-    stop(paste0("Data should be a data.table. ",
-                "Current format: ", class(data)[1]))
-  }
-
-  alpha <- hyperparam[[1]]
-  beta <- hyperparam[[2]]
-  g_sigma <- hyperparam[[3]]
-
-  n_sample <- nrow(data)
-  w_all <- rep(data[,2][[1]], 2)
-  GPS_all <- rep(GPS, 2)
-  Sigma_all <- g_sigma*exp(-as.matrix(dist(cbind(w_all*sqrt(1/alpha),
-                                                 GPS_all*sqrt(1/beta))))) +
-    diag(2*n_sample)
-
-  noise <- sd(data[,1][[1]] - Sigma_all[1:n_sample,
-                        -(1:n_sample)]%*%chol2inv(
-                          chol(Sigma_all[-(1:n_sample),
-                                         -(1:n_sample)]))%*%data[,1][[1]])
+estimate_noise_gp <- function(data, sigma_obs, inv_sigma_obs){
+  # Need to update help docs
+  noise <- sd(data$Y - arma_mm(sigma_obs - diag(nrow(sigma_obs)),
+                               arma_mm(inv_sigma_obs, data$Y)))
 
   return(noise)
 }
