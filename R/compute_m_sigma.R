@@ -89,13 +89,15 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning = T,
                          function(w_instance){
 
     # compute weights
-    weights_final <- compute_weight_gp(w = w_instance,
+    weights_res <- compute_weight_gp(w = w_instance,
                                        w_obs = w_obs,
                                        scaled_obs = scaled_obs,
                                        hyperparam = hyperparam,
                                        inv_sigma_obs = inv_sigma_obs,
-                                       GPS_m = GPS_m)
+                                       GPS_m = GPS_m, est_sd = !tuning,
+                                       kernel_fn = kernel_fn)
 
+    weights_final = weights_res$weight
     weights_final[weights_final<0] <- 0
     weights_final <- weights_final/sum(weights_final)
     # weigts.final = invers of paranthesis * kappa
@@ -103,11 +105,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning = T,
 
     if(!tuning){
       est <- data$Y%*%weights_final
-      pst_sd <- compute_sd_gp(w = w_instance,
-                              scaled_obs = scaled_obs,
-                              hyperparam = hyperparam,
-                              sigma = noise_est,
-                              GPS_m = GPS_m)
+      pst_sd <- noise_est*sqrt(weights_res$sd_scaled^2+1)
     }
     else{
       est <- NA

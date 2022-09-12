@@ -21,6 +21,7 @@
 #'               for all samples (e_gps_pred).
 #'   - Column 3: Estimated conditional standard deviation of the exposure given
 #'               covariates for all samples (e_gps_std).
+#' @param est_sd Should the posterior se be computed (default=FALSE)
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
@@ -69,7 +70,7 @@
 #'
 #'
 compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
-                              inv_sigma_obs, GPS_m,
+                              inv_sigma_obs, GPS_m, est_sd = F,
                               kernel_fn = function(x) exp(-x^2)){
 
   alpha <- hyperparam[[1]]
@@ -99,5 +100,14 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   normalized_sigma_cross <- Rfast::colmeans(sigma_cross)   #rep(1/length(w_obs),length(w_obs))%*%sigma_cross
   weight <- c(arma_mm(inv_sigma_obs, normalized_sigma_cross))   #c((normalized_sigma_cross)%*%inv_sigma_obs)
 
-  return(weight)
+  # compute scaled posterior sd
+  if(est_sd){
+    sigma_w <- g_sigma*kernel_fn(outer(scaled_w[,2], scaled_w[,2], "-")^2) +
+      diag(nrow(scaled_w))
+    sd_scaled = sqrt(sum(sigma_w)/nrow(scaled_w)^2 - sum(weight*normalized_sigma_cross))
+  }else{
+    sd_scaled = NA
+  }
+
+  return(list(weight = weight, sd_scaled = sd_scaled))
 }
