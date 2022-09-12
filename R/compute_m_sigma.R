@@ -22,6 +22,7 @@
 #'               for all samples (e_gps_pred).
 #'   - Column 3: Estimated conditional standard deviation of the exposure given
 #'               covariates for all samples (e_gps_std).
+#' @param tuning The function is used for parameter tuning (default=TRUE) or estimation (FALSE)
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
@@ -51,7 +52,7 @@
 #'
 #' gp.cerf <- tune_res$est
 #'
-compute_m_sigma <- function(hyperparam, data, w, GPS_m,
+compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning = T,
                             kernel_fn = function(x) exp(-x^2)){
 
   param = unlist(hyperparam)
@@ -78,9 +79,11 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
   # Estimate noise
-  noise_est <- estimate_noise_gp(hyperparam = hyperparam,
-                                 data = data,
-                                 GPS = GPS)
+  if(!tuning){
+    noise_est <- estimate_noise_gp(hyperparam = hyperparam,
+                                   data = data,
+                                   GPS = GPS)
+  }
 
   col_all_list <- lapply(w,
                          function(w_instance){
@@ -97,15 +100,19 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
     weights_final <- weights_final/sum(weights_final)
     # weigts.final = invers of paranthesis * kappa
     # est is the same as m in the paper.
-    est <- data$Y%*%weights_final
 
-
-    pst_sd <- compute_sd_gp(w = w_instance,
-                            scaled_obs = scaled_obs,
-                            hyperparam = hyperparam,
-                            sigma = noise_est,
-                            GPS_m = GPS_m)
-
+    if(!tuning){
+      est <- data$Y%*%weights_final
+      pst_sd <- compute_sd_gp(w = w_instance,
+                              scaled_obs = scaled_obs,
+                              hyperparam = hyperparam,
+                              sigma = noise_est,
+                              GPS_m = GPS_m)
+    }
+    else{
+      est <- NA
+      pst_sd <- NA
+    }
     covariate_balance <- compute_w_corr(data, weights_final)
     c(covariate_balance, est, pst_sd)
   })
@@ -113,10 +120,10 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m,
   col_all <- do.call(cbind, col_all_list)
 
   n_confounders <- nrow(col_all) - 2 # est, pst_sd
-  est_index <- nrow(col_all) - 1
-  pst_sd <- nrow(col_all)
+  est_index <- nrow(col_all) -1
+  pst_index <- nrow(col_all)
 
   list(cb = rowMeans(col_all[1:n_confounders,], na.rm = T),
        est = col_all[est_index,],
-       pst = col_all[pst_sd, ])
+       pst = col_all[pst_index,])
 }

@@ -110,7 +110,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
   # Compute m, "confidence interval", and covariate balance for provided
   # hyperparameters. -----------------------------------------------------------
-  if(nthread > 1){
+  if(nthread > 1 & nrow(tune_params_subset)>1){
     lfp <- get_options("logger_file_path")
 
     # make a cluster
@@ -133,7 +133,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
     # terminate clusters.
     parallel::stopCluster(cl)
-  }else{
+  }else if(nrow(tune_params_subset)>1){
     tune_res <- apply(tune_params_subset, 1, function(x){
       compute_m_sigma(hyperparam = x, data = data, w = w,
                       GPS_m = GPS_m, kernel_fn = kernel_fn )
@@ -143,19 +143,24 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
   # Select the combination of hyperparameters that provides the lowest
   # covariate balance ----------------------------------------------------------
-  opt_idx <- order(sapply(tune_res, function(x){ mean(x$cb) }))[1]
+  if(nrow(tune_params_subset)>1){
+    opt_idx <- order(sapply(tune_res, function(x){ mean(x$cb) }))[1]
+  }else{
+    opt_idx <- 1
+  }
   opt_param <- tune_params_subset[opt_idx,]
-  gp_cerf <- tune_res[[opt_idx]]$est
-  gp_post_sd <- tune_res[[opt_idx]]$pst
+  gp_cerf_final <- compute_m_sigma(hyperparam = opt_param, data = data, w = w,
+                                   GPS_m = GPS_m, tuning = F, kernel_fn = kernel_fn)
 
   # Build gp_cerf S3 object
 
   result <- list()
   class(result) <- "cerf_gp"
 
-  result$pst_mean <- gp_cerf
-  result$pst_sd <- gp_post_sd
+  result$pst_mean <- gp_cerf_final$est
+  result$pst_sd <- gp_cerf_final$pst
   result$w <- w
+  result$cb <- gp_cerf_final$cb
   result$params <- opt_param
 
   # Add best match to the gp_cerf object
