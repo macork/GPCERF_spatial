@@ -140,7 +140,6 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
       })
   }
 
-
   # Select the combination of hyperparameters that provides the lowest
   # covariate balance ----------------------------------------------------------
   if(nrow(tune_params_subset)>1){
