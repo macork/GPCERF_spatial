@@ -36,7 +36,7 @@ train_GPS <- function(cov.mt, w.all, dnorm_log = FALSE){
                                      params = list(xgb_max_depth = c(3,4,5),
                                                    xgb_nrounds=c(10,20,30,40,50,60)),
                                      nthread = 1,
-                                     sl_lib = c("m_xgboost"))
+                                     sl_lib = c("m_xgboost", "m_ranger"))
 
   e_gps_pred <- GPS_fit$e_gps_pred
   e_gps_std <- GPS_fit$e_gps_std_pred
