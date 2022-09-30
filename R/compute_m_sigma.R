@@ -70,7 +70,6 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning = T,
   beta  <- param[2]
   g_sigma <- param[3]
 
-
   w_obs <- data[[2]]
 
   scaled_obs <- cbind(w_obs*sqrt(1/alpha), GPS*sqrt(1/beta))
