@@ -51,10 +51,10 @@ compute_w_corr <- function(data, weights){
 
   x_mean <- colSums(x_design*weights)
   x_cov <- (t(x_design) - x_mean)%*%diag(weights)%*%t(t(x_design) - x_mean)
-  x_cov_ev <- eigen(x_cov)$values
   # when x_cov is rank deficient, return NA for all covariate balance
-  if(sum(x_cov_ev<=0)==0){
-    x_stan <- t(t(solve(chol(x_cov)))%*%(t(x_design) - x_mean))
+  x_cov_chol <- tryCatch(chol(x_cov), error = function(e) NA)
+  if(!is.na(x_cov_chol[1])){
+    x_stan <- t(t(solve(x_cov_chol))%*%(t(x_design) - x_mean))
     covariate_balance <- abs(c(t(x_stan)%*%diag(weights)%*%w_stan))
   }else{
     covariate_balance = rep(NA, nrow(x_cov))
