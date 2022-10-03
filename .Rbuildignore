@@ -11,8 +11,12 @@
 index.md
 ^.covrignore
 ^R\.log$
+^\.log$
 ^docker_singularity/*$
 ^doc$
 ^Meta$
 ^functional_tests/*$
 ^docs/reference/Debug$
+^CRAN-RELEASE$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

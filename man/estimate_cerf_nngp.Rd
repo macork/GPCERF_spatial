@@ -48,9 +48,11 @@ alpha, beta, and g_sigma can be a vector of parameters.
 used by internal packages.}
 }
 \value{
-#' A cerf_nngp object that includes the following values:
+A cerf_nngp object that includes the following values:
 \itemize{
-\item TBD
+\item w, the vector of exposure levels.
+\item pst_mean, the computed mean for the w vector.
+\item pst_sd, the computed credible interval for the w vector.
 }
 }
 \description{
@@ -60,11 +62,12 @@ match (the lowest covariate balance) for the provided set of hyperparameters.
 }
 \examples{
 
+\donttest{
 set.seed(19)
-sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+sim.data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-                   w.all = as.matrix(sim.data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+                   w_all = as.matrix(sim.data$treat))
 # exposure values
 w.all <- seq(0,20,2)
 data.table::setDT(sim.data)
@@ -79,6 +82,6 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
                                                   expand = 1,
                                                   block_size = 1e4),
                                     nthread = 1)
-
+}
 
 }

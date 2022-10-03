@@ -1,13 +1,13 @@
 #' @title
-#' Train Model for GPS
+#' Train A Model for GPS
 #'
 #' @description
-#' Estimate the conditional mean and sd of exposure level as a function of covariates with
-#' xgboost algorithm.
+#' Estimates the conditional mean and sd of exposure level as a function of
+#' covariates with xgboost algorithm.
 #'
-#' @param cov.mt Covariate matrix containing all covariates. Each row is a sample and each
-#' column is a covariate.
-#' @param w.all A vector of observed exposure levels.
+#' @param cov_mt A covariate matrix containing all covariates. Each row is a
+#' sample and each column is a covariate.
+#' @param w_all A vector of observed exposure levels.
 #' @param dnorm_log Logical, if TRUE, probabilities p are given as log(p).
 #'
 #' @return
@@ -25,11 +25,17 @@
 #'                       as.matrix(mydata$treat))
 #'
 #'
-train_GPS <- function(cov.mt, w.all, dnorm_log = FALSE){
+
+train_GPS <- function(cov_mt, w_all, dnorm_log = FALSE){
+  GPS_mod <- xgboost::xgboost(data = cov_mt,
+                              label = w_all,
+                              nrounds=50,
+                              verbose = 0)
+
   logger::log_info("Started estimating GPS values ... ")
   t_1 <- proc.time()
-  GPS_fit <- CausalGPS::estimate_gps(NA, w.all,
-                                     cov.mt,
+  GPS_fit <- CausalGPS::estimate_gps(NA, w_all,
+                                     cov_mt,
                                      pred_model = "sl",
                                      gps_model = "parametric",
                                      internal_use = T,
@@ -40,7 +46,8 @@ train_GPS <- function(cov.mt, w.all, dnorm_log = FALSE){
 
   e_gps_pred <- GPS_fit$e_gps_pred
   e_gps_std <- GPS_fit$e_gps_std_pred
-  GPS <- c(stats::dnorm(w.all, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log))
+  GPS <- c(stats::dnorm(w_all, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log))
+
   GPS_m <- data.table::data.table(GPS = GPS,
                                   e_gps_pred = e_gps_pred,
                                   e_gps_std = e_gps_std)

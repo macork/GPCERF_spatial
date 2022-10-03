@@ -109,7 +109,19 @@
     <loc>https://fasrc.github.io/GPCERF/reference/plot.cerf_nngp.html</loc>
   </url>
   <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/print.cerf_gp.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/print.cerf_nngp.html</loc>
+  </url>
+  <url>
     <loc>https://fasrc.github.io/GPCERF/reference/set_logger.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/summary.cerf_gp.html</loc>
+  </url>
+  <url>
+    <loc>https://fasrc.github.io/GPCERF/reference/summary.cerf_nngp.html</loc>
   </url>
   <url>
     <loc>https://fasrc.github.io/GPCERF/reference/train_GPS.html</loc>

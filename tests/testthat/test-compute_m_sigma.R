@@ -8,8 +8,8 @@ test_that("compute_m_sigma works as expected!", {
    data.table::setDT(data)
 
    #Estimate GPS function
-   GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-                      w.all = as.matrix(data$treat))
+   GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+                      w_all = as.matrix(data$treat))
 
    tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                                data = data,

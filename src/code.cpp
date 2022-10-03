@@ -5,6 +5,7 @@ using namespace arma;
 
 // [[Rcpp::export]]
 arma::mat calc_cross(arma::mat cross, arma::mat within) {
+
   int n=cross.n_rows;
   mat sum(1,1,fill::zeros);
   for(int i=0;i<n;i++){

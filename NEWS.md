@@ -1,7 +1,12 @@
-## GPCERF (Current Version)
+## GPCERF (development)
 
-### Fixed
+### Changed
 * 
+
+### Added
+* 
+
+## GPCERF 0.1.0 (2022-07-02)
 
 ### Changed
 
@@ -22,8 +27,6 @@
 * Logger functions
 * compute_sd_gp function
 
-### Removed
-* 
 
 ## GPCERF 0.0.1 (2022-03-31)
 
@@ -32,6 +35,7 @@
 
 ### Changed
 
+* Removed examples from internal functions
 * w.obs -> w_obs
 * inv.Sigma.obs -> inv_sigma_obs
 * obs.use -> scaled_obs

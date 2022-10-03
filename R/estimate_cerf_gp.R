@@ -14,8 +14,10 @@
 #' @param w A vector of exposure level to compute CERF.
 #' @param GPS_m A data.table of GPS vectors.
 #'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   - Column 2: Prediction of exposure for covariate of each data
+#'   sample (e_gps_pred).
+#'   - Column 3: Standard deviation of
+#'   e_gps (e_gps_std)
 #' @param params A list of parameters that is required to run the process.
 #' These parameters include:
 #'   - alpha: A scaling factor for the GPS value.
@@ -30,7 +32,9 @@
 #'
 #' @return
 #' A cerf_gp object that includes the following values:
-#'  - TBD
+#'  - w, the vector of exposure levels.
+#'  - pst_mean, Computed mean for the w vector.
+#'  - pst_sd, Computed credible interval for the w vector.
 #'
 #' @export
 #'
@@ -41,8 +45,8 @@
 #'
 #'
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-#'                    w.all = as.matrix(sim.data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+#'                    w_all = as.matrix(sim.data$treat))
 #'
 #' # exposure values
 #' w.all = seq(0,20,1)
@@ -65,6 +69,9 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
   # Log system info
   log_system_info()
+
+  # function call
+  fcall <- match.call()
 
   # Double-check input parameters ----------------------------------------------
   if (!is.data.table(data)){
@@ -161,6 +168,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   result$w <- w
   result$cb <- gp_cerf_final$cb
   result$params <- opt_param
+  result$fcall <- fcall
 
   # Add best match to the gp_cerf object
 

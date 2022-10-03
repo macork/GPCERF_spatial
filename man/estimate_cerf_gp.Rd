@@ -26,8 +26,10 @@ estimate_cerf_gp(
 \item{GPS_m}{A data.table of GPS vectors.
 \itemize{
 \item Column 1: GPS
-\item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-\item Column 3: Standard deviation of  e_gps (e_gps_std)
+\item Column 2: Prediction of exposure for covariate of each data
+sample (e_gps_pred).
+\item Column 3: Standard deviation of
+e_gps (e_gps_std)
 }}
 
 \item{params}{A list of parameters that is required to run the process.
@@ -51,7 +53,9 @@ used by internal packages.}
 \value{
 A cerf_gp object that includes the following values:
 \itemize{
-\item TBD
+\item w, the vector of exposure levels.
+\item pst_mean, Computed mean for the w vector.
+\item pst_sd, Computed credible interval for the w vector.
 }
 }
 \description{
@@ -66,8 +70,8 @@ sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
 
 # Estimate GPS function
-GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-                   w.all = as.matrix(sim.data$treat))
+GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
+                   w_all = as.matrix(sim.data$treat))
 
 # exposure values
 w.all = seq(0,20,1)

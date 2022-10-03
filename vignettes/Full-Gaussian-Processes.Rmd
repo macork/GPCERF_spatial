@@ -20,7 +20,7 @@ library(GPCERF)
 library(ggplot2)
 ```
 
-In this vignette, we present an example of using full Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://fasrc.github.io/CausalGPS/index.html).
+In this vignette, we present an example of using full Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://cran.r-project.org/package=CausalGPS).
 
 ## Generate Synthetic Data
 
@@ -37,9 +37,9 @@ data_sim_t <- generate_synthetic_data(sample_size = 400,
                                      outcome_sd = 10, 
                                      gps_spec = 2)
 
-tru_R<-function(w, sim.data){
-  design.mt <- model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim.data)
-  mean(apply(design.mt, 1, function(x){
+tru_R<-function(w, sim_data){
+  design_mt <- model.matrix(~cf1+cf2+cf3+cf4+cf5+cf6-1, data = sim_data)
+  mean(apply(design_mt, 1, function(x){
     -10 - sum(c(2, 2, 3, -1,2,2)*x) -
       w*(0.1 - 0.1*x[1] + 0.1*x[4] + 0.1*x[5] + 0.1*x[3]^2) + 0.13^2*w^3
   }))
@@ -56,13 +56,13 @@ erf_tru_t <- sapply(seq(0,20,0.1), function(w) tru_R(w, data_sim_t))
 GPCERF will first convert the covariate values into a single composite score (GPS) and then use it to fit the Gaussian processes. We use the GPS estimation function in CasaulGPS (see [here](https://fasrc.github.io/CausalGPS/articles/Estimating-GPS.html)) to get the GPS model that maps covariates into GPS.
 
 ```{r}
-GPS_m_normal <- train_GPS(cov.mt = as.matrix(data_sim_normal[,-(1:2)]),
-                          w.all = as.matrix(data_sim_normal$treat))
-GPS_m_t <- train_GPS(cov.mt = as.matrix(data_sim_t[,-(1:2)]),
-                          w.all = as.matrix(data_sim_t$treat))
+GPS_m_normal <- train_GPS(cov_mt = as.matrix(data_sim_normal[,-(1:2)]),
+                          w_all = as.matrix(data_sim_normal$treat))
+GPS_m_t <- train_GPS(cov_mt = as.matrix(data_sim_t[,-(1:2)]),
+                     w_all = as.matrix(data_sim_t$treat))
 ```
 
-We then use `estimate_cerf_gp` to estimate the ERF of the expsoure `w`. We estimate the ERF at `w = seq(0,20,0.1)`. The estimated ERF as well as its pointwise 95\% credible band is visualized with a call to `plot`. We also plot the actual ERF on top of the estimated ERF.
+We then use `estimate_cerf_gp` to estimate the ERF of the exposure `w`. We estimate the ERF at `w = seq(0,20,0.1)`. The estimated ERF as well as its pointwise 95\% credible band is visualized with a call to `plot`. We also plot the actual ERF on top of the estimated ERF.
 
 ### Normally Distributed Exposure
 

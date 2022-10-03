@@ -1,7 +1,7 @@
 | Resource    |  Github Actions      |  Code Coverage  |
 | ----------  | -------------------- | --------------- |
 | Platforms   | Windows, macOS, Linux|    codecov      |
-| R CMD check | [![R build status](https://github.com/NSAPH-Software/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/NSAPH-Software/GPCERF/actions) | [![codecov](https://codecov.io/gh/NSAPH-Software/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://codecov.io/gh/NSAPH-Software/GPCERF) |
+| R CMD check | [![R build status](https://github.com/NSAPH-Software/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/NSAPH-Software/GPCERF/actions) | [![codecov](https://codecov.io/gh/NSAPH-Software/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://app.codecov.io/gh/NSAPH-Software/GPCERF) |
 
 
 # Gaussian processes for the estimation of causal exposure-response curves (GP-CERF)
@@ -21,20 +21,20 @@ library("GPCERF")
 
 
 ```r
-  sim.data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
+  sim_data <- generate_synthetic_data(sample_size = 500, gps_spec = 3)
 
   # Estimate GPS function
   # In the future, CausalGPS gps estimation will be used.
-  GPS_m <- train_GPS(cov.mt = as.matrix(sim.data[,-(1:2)]),
-                     w.all = as.matrix(sim.data$treat))
+  GPS_m <- train_GPS(cov_mt = as.matrix(sim_data[,-(1:2)]),
+                     w_all = as.matrix(sim_data$treat))
 
   # exposure values
-  w.all = seq(0,20,0.1)
+  w_all <- seq(0,20,0.1)
 
   data.table::setDT(sim.data)
 
-  cerf_gp_obj <- estimate_cerf_gp(sim.data,
-                                  w.all,
+  cerf_gp_obj <- estimate_cerf_gp(sim_data,
+                                  w_all,
                                   GPS_m,
                                   params = list(alpha = c(0.1,0.2,0.4),
                                                 beta=0.2,

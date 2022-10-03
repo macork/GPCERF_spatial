@@ -2,8 +2,8 @@
 #' Estimate the Standard Deviation of the Nugget Term in Full Gaussian Process
 #'
 #' @description
-#' Estimates the standard deviations of the nugget term in full GP by calculating
-#' the standard deviations of the residuals.
+#' Estimates the standard deviations of the nugget term in full GP by
+#' calculating the standard deviations of the residuals.
 #'
 #' @param hyperparam A vector of hyper-parameter values for the full GP.
 #' @param data A data.table of observation data.
@@ -14,6 +14,7 @@
 #'
 #' @return
 #' A scalar of estimated standard deviation of the nugget term in full GP.
+#'
 #' @export
 #'
 #' @examples
@@ -23,8 +24,8 @@
 #' data.table::setDT(data)
 #'
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov.mt = as.matrix(data[,-(1:2)]),
-#'                    w.all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
+#'                    w_all = as.matrix(data$treat))
 #'
 #' hyperparam <- c(0.1, 0.2, 1)
 #'

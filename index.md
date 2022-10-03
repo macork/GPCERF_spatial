@@ -1,9 +1,9 @@
 # GPCERF <a href="https://NSAPH-Software.github.io/GPCERF"><img src="man/figures/png/gpcerf_logo.png" align="right" width="120" /></a>
 
 <!-- badges: start -->
-[![](http://www.r-pkg.org/badges/version-last-release/GPCERF)](http://www.r-pkg.org/pkg/gpcerf)
+[![](http://www.r-pkg.org/badges/version-last-release/GPCERF)](https://CRAN.R-project.org/package=GPCERF)
 [![R build status](https://github.com/NSAPH-Software/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/NSAPH-Software/GPCERF/actions)
-[![codecov](https://codecov.io/gh/NSAPH-Software/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://codecov.io/gh/NSAPH-Software/GPCERF)
+[![codecov](https://codecov.io/gh/NSAPH-Software/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://app.codecov.io/gh/NSAPH-Software/GPCERF)
 <!-- badges: end -->
  
 

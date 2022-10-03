@@ -7,7 +7,7 @@
 compute_w_corr(data, weights)
 }
 \arguments{
-\item{data}{A data.table of observational data with the following colums:
+\item{data}{A data.table of observational data with the following columns:
 \itemize{
 \item Column 1: Outcome (Y)
 \item Column 2: Exposure or treatment (w)
@@ -17,7 +17,7 @@ compute_w_corr(data, weights)
 \item{weights}{A vector of weights for each observation data.}
 }
 \value{
-A vector of covariate balance
+A vector of covariate balance.
 }
 \description{
 Computes weighted correlation of the observational data based on weights
