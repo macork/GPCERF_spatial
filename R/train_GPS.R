@@ -27,10 +27,10 @@
 #'
 
 train_GPS <- function(cov_mt, w_all, dnorm_log = FALSE){
-  GPS_mod <- xgboost::xgboost(data = cov_mt,
-                              label = w_all,
-                              nrounds=50,
-                              verbose = 0)
+  # GPS_mod <- xgboost::xgboost(data = cov_mt,
+  #                             label = w_all,
+  #                             nrounds=50,
+  #                             verbose = 0)
 
   logger::log_info("Started estimating GPS values ... ")
   t_1 <- proc.time()
