@@ -34,23 +34,31 @@ train_GPS <- function(cov_mt, w_all, dnorm_log = FALSE){
 
   logger::log_info("Started estimating GPS values ... ")
   t_1 <- proc.time()
-  GPS_fit <- CausalGPS::estimate_gps(NA, w_all,
-                                     cov_mt,
-                                     pred_model = "sl",
-                                     gps_model = "parametric",
-                                     internal_use = T,
-                                     params = list(xgb_max_depth = c(3,4,5),
-                                                   xgb_nrounds=c(50,60)),
-                                     nthread = 1,
-                                     sl_lib = c("m_xgboost", "m_ranger"))
+  # GPS_fit <- CausalGPS::estimate_gps(NA, w_all,
+  #                                    cov_mt,
+  #                                    pred_model = "sl",
+  #                                    gps_model = "parametric",
+  #                                    internal_use = T,
+  #                                    params = list(xgb_max_depth = c(3,4,5),
+  #                                                  xgb_nrounds=c(50,60)),
+  #                                    nthread = 1,
+  #                                    sl_lib = c("m_xgboost", "m_ranger"))
+  #
+  # e_gps_pred <- GPS_fit$e_gps_pred
+  # e_gps_std <- GPS_fit$e_gps_std_pred
+  # GPS <- c(stats::dnorm(w_all, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log))
+  # GPS_m <- data.table::data.table(GPS = GPS,
+  #                                 e_gps_pred = e_gps_pred,
+  #                                 e_gps_std = e_gps_std)
+  GPS_SL <- SuperLearner::SuperLearner(Y = w_all, X = cov_mt,
+                                      SL.library = c("SL.earth", "SL.gam", "SL.glm", "SL.glm.interaction",
+                                                     "SL.mean", "SL.ranger"))
+  GPS_SL_sd <- sd(w_all - GPS_SL$SL.predict)
+  GPS_m <- data.table::data.table(GPS = dnorm(w_all, mean = GPS_SL$SL.predict, sd = GPS_SL_sd, log = dnorm_log),
+                         e_gps_pred = GPS_SL$SL.predict,
+                         e_gps_std = GPS_SL_sd)
 
-  e_gps_pred <- GPS_fit$e_gps_pred
-  e_gps_std <- GPS_fit$e_gps_std_pred
-  GPS <- c(stats::dnorm(w_all, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log))
 
-  GPS_m <- data.table::data.table(GPS = GPS,
-                                  e_gps_pred = e_gps_pred,
-                                  e_gps_std = e_gps_std)
   t_2 <- proc.time()
   logger::log_debug("Wall clock time to estimate GPS values:  ",
                     " {t_2[[3]] - t_1[[3]]} s.")
