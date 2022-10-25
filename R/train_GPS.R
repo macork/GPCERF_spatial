@@ -45,8 +45,12 @@ train_GPS <- function(cov_mt, w_all, dnorm_log = FALSE){
   #                                 e_gps_pred = e_gps_pred,
   #                                 e_gps_std = e_gps_std)
   GPS_SL <- SuperLearner::SuperLearner(Y = w_all, X = cov_mt,
-                                      SL.library = c("SL.earth")) #, "SL.gam", "SL.glm", "SL.glm.interaction",
-                                                     #"SL.mean", "SL.ranger"))
+                                      SL.library = c("SL.earth",
+                                                     "SL.gam",
+                                                     "SL.glm",
+                                                     "SL.glm.interaction",
+                                                     "SL.mean",
+                                                     "SL.ranger"))
   GPS_SL_sd <- sd(w_all - GPS_SL$SL.predict)
   GPS_m <- data.table::data.table(GPS = dnorm(w_all, mean = GPS_SL$SL.predict, sd = GPS_SL_sd, log = dnorm_log),
                          e_gps_pred = GPS_SL$SL.predict,
