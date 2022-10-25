@@ -6,13 +6,13 @@
 #' the nearest neighbor (nn) Gaussian Process (gp). The function tune the best
 #' match (the lowest covariate balance) for the provided set of hyperparameters.
 #'
-#' @param data A data.table of observation data.
+#' @param data A data.frame of observation data.
 #'   - Column 1: Outcome (Y)
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #'
 #' @param w A vector of exposure level to compute CERF.
-#' @param GPS_m A data.table of GPS vectors.
+#' @param GPS_m A data.frame of GPS vectors.
 #'   - Column 1: GPS
 #'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std)
@@ -51,7 +51,6 @@
 #' GPS_m <- train_GPS(cov_mt = sim.data[,-(1:2)], w_all = sim.data$treat)
 #' # exposure values
 #' w.all <- seq(0,20,2)
-#' data.table::setDT(sim.data)
 #' cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
 #'                                     w.all,
 #'                                     GPS_m,
@@ -77,16 +76,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
   logger::log_info("Working on estimating cerf using nngp approach ...")
 
   # Double-check input parameters ----------------------------------------------
-  if (!is.data.table(data)){
-    stop(paste0("Data should be a data.table. ",
-                "Current format: ", class(data)[1]))
-  }
-
-  if (!is.data.table(GPS_m)){
-    stop(paste0("The GPS_m should be a data.table. ",
-                "Current format: ", class(GPS_m)[1]))
-  }
-
   check_params <- function(my_param, params){
     for (item in my_param){
       if (!is.element(c(item), names(params))){

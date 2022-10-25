@@ -7,12 +7,12 @@
 #' Process (gp). The function tune the best match (the lowest covariate balance)
 #' for the provided set of hyperparameters.
 #'
-#' @param data A data.table of observation data.
+#' @param data A data.frame of observation data.
 #'   - Column 1: Outcome (Y)
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure level to compute CERF.
-#' @param GPS_m A data.table of GPS vectors.
+#' @param GPS_m A data.frame of GPS vectors.
 #'   - Column 1: GPS
 #'   - Column 2: Prediction of exposure for covariate of each data
 #'   sample (e_gps_pred).
@@ -50,7 +50,6 @@
 #' # exposure values
 #' w.all = seq(0,20,1)
 #'
-#' data.table::setDT(sim.data)
 #'
 #' cerf_gp_obj <- estimate_cerf_gp(sim.data,
 #'                                 w.all,
@@ -73,13 +72,13 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   fcall <- match.call()
 
   # Double-check input parameters ----------------------------------------------
-  if (!is.data.table(data)){
-    stop(paste0("Data should be a data.table. ",
+  if (!is.data.frame(data)){
+    stop(paste0("Data should be a data.frame. ",
                 "Current format: ", class(data)[1]))
   }
 
-  if (!is.data.table(GPS_m)){
-    stop(paste0("The GPS_m should be a data.table. ",
+  if (!is.data.frame(GPS_m)){
+    stop(paste0("The GPS_m should be a data.frame. ",
                 "Current format: ", class(GPS_m)[1]))
   }
 

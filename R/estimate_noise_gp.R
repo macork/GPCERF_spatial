@@ -6,7 +6,7 @@
 #' calculating the standard deviations of the residuals.
 #'
 #' @param hyperparam A vector of hyper-parameter values for the full GP.
-#' @param data A data.table of observation data.
+#' @param data A data.frame of observation data.
 #'   - Column 1: Outcome (Y)
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
@@ -21,7 +21,6 @@
 #'
 #' set.seed(109)
 #' data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
-#' data.table::setDT(data)
 #'
 #' # Estimate GPS function
 #' GPS_m <- train_GPS(cov_mt = data[,-(1:2)], w_all = data$treat)

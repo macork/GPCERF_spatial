@@ -18,7 +18,7 @@
 #'   - Third element: gamma/sigma
 #' @param inv_sigma_obs Inverse of the covariance matrix between observed
 #' samples.
-#' @param GPS_m A data.table of GPS vectors.
+#' @param GPS_m A data.frame of GPS vectors.
 #'   - Column 1: A vector of estimated GPS evaluated at the observed exposure
 #'   levels.
 #'   - Column 2: Estimated conditional means of the exposure given covariates

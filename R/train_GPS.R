@@ -11,7 +11,7 @@
 #' @param dnorm_log Logical, if TRUE, probabilities p are given as log(p).
 #'
 #' @return
-#' A data.table that includes:
+#' A data.frame that includes:
 #'   - a vector of estimated GPS at the observed exposure levels;
 #'   - a vector of estimated conditional means of exposure levels when the covariates are fixed
 #' at the observed values;
@@ -41,7 +41,7 @@ train_GPS <- function(cov_mt, w_all, dnorm_log = FALSE){
   # e_gps_pred <- GPS_fit$e_gps_pred
   # e_gps_std <- GPS_fit$e_gps_std_pred
   # GPS <- c(stats::dnorm(w_all, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log))
-  # GPS_m <- data.table::data.table(GPS = GPS,
+  # GPS_m <- data.frame(GPS = GPS,
   #                                 e_gps_pred = e_gps_pred,
   #                                 e_gps_std = e_gps_std)
   GPS_SL <- SuperLearner::SuperLearner(Y = w_all, X = cov_mt,
@@ -52,9 +52,9 @@ train_GPS <- function(cov_mt, w_all, dnorm_log = FALSE){
                                                      "SL.mean",
                                                      "SL.ranger"))
   GPS_SL_sd <- sd(w_all - GPS_SL$SL.predict)
-  GPS_m <- data.table::data.table(GPS = dnorm(w_all, mean = GPS_SL$SL.predict, sd = GPS_SL_sd, log = dnorm_log),
-                         e_gps_pred = GPS_SL$SL.predict,
-                         e_gps_std = GPS_SL_sd)
+  GPS_m <- data.frame(GPS = dnorm(w_all, mean = GPS_SL$SL.predict, sd = GPS_SL_sd, log = dnorm_log),
+                      e_gps_pred = GPS_SL$SL.predict,
+                      e_gps_std = GPS_SL_sd)
 
 
   t_2 <- proc.time()

@@ -5,7 +5,7 @@
 #' Computes weighted correlation of the observational data based on weights
 #' achieved by Gaussian Process.
 #'
-#' @param data A data.table of observational data with the following columns:
+#' @param data A data.frame of observational data with the following columns:
 #'   - Column 1: Outcome (Y)
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
@@ -20,15 +20,14 @@
 #'
 #' set.seed(124)
 #' mydata <- generate_synthetic_data(sample_size = 200)
-#' data.table::setDT(mydata)
 #' weights <- runif(nrow(mydata))
 #' compute_w_corr(mydata, weights)
 #'
 compute_w_corr <- function(data, weights){
 
 
-  if (!is.data.table(data)){
-    stop(paste0("The data should be a data.table. ",
+  if (!is.data.frame(data)){
+    stop(paste0("The data should be a data.frame. ",
                 "Current format: ", class(data)[1]))
   }
 

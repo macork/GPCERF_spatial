@@ -10,7 +10,7 @@
 #' @param w_obs A vector of observed exposure levels.
 #' @param w A vector of exposure levels at which the CERF is estimated.
 #' @param y_obs A vector of observed outcome values.
-#' @param GPS_m A data.table of GPS vectors.
+#' @param GPS_m A data.frame of GPS vectors.
 #'   - Column 1: GPS
 #'   - Column 2: Prediction of exposure for covariate of each data sample
 #'   (e_gps_pred).

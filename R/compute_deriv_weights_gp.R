@@ -7,7 +7,7 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m A data.table of GPS vectors. Including:
+#' @param GPS_m A data.frame of GPS vectors. Including:
 #'   - Column 1: GPS values.
 #'   - Column 2: Prediction of exposure for covariate of each data
 #'   sample (e_gps_pred).
