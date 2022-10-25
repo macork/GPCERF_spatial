@@ -32,8 +32,7 @@ data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
 data.table::setDT(data)
 
 # Estimate GPS function
-GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                   w_all = as.matrix(data$treat))
+GPS_m <- train_GPS(cov_mt = data[,-(1:2)], w_all = data$treat)
 
 hyperparam <- c(0.1, 0.2, 1)
 
