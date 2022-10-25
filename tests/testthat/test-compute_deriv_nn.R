@@ -2,8 +2,8 @@ test_that("compute_deriv_nn works as expected!", {
 
   set.seed(765)
   data <- generate_synthetic_data(sample_size = 200)
-  GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                     w_all = as.matrix(data$treat))
+  GPS_m <- train_GPS(cov_mt = as.data.frame(data[,-(1:2)]),
+                     w_all = data$treat)
 
   wi <- 4.8
 

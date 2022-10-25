@@ -17,10 +17,10 @@
 #' @import data.table
 #' @import MASS
 #' @import Rcpp
+#' @import SuperLearner
 #' @importFrom spatstat.geom crossdist
 #' @import Rfast
 #' @import RcppArmadillo
-#' @import CausalGPS
 #' @useDynLib GPCERF, .registration = TRUE
 
 #'

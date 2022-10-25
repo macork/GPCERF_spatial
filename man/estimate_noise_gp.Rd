@@ -4,17 +4,17 @@
 \alias{estimate_noise_gp}
 \title{Estimate the Standard Deviation of the Nugget Term in Full Gaussian Process}
 \usage{
-estimate_noise_gp(hyperparam, data, GPS)
+estimate_noise_gp(data, sigma_obs, inv_sigma_obs)
 }
 \arguments{
-\item{hyperparam}{A vector of hyper-parameter values for the full GP.}
-
 \item{data}{A data.table of observation data.
 \itemize{
 \item Column 1: Outcome (Y)
 \item Column 2: Exposure or treatment (w)
 \item Column 3~m: Confounders (C)
 }}
+
+\item{hyperparam}{A vector of hyper-parameter values for the full GP.}
 
 \item{GPS}{A vector of estimated GPS at the observed exposure levels.}
 }

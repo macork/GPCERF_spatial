@@ -33,5 +33,4 @@ GPS_m <- train_GPS(as.matrix(mydata[,c("cf1", "cf2", "cf3", "cf4",
                                           "cf5", "cf6")]),
                       as.matrix(mydata$treat))
 
-
 }

@@ -11,6 +11,7 @@ compute_weight_gp(
   hyperparam,
   inv_sigma_obs,
   GPS_m,
+  est_sd = F,
   kernel_fn = function(x) exp(-x^2)
 )
 }
@@ -46,6 +47,8 @@ for all samples (e_gps_pred).
 \item Column 3: Estimated conditional standard deviation of the exposure given
 covariates for all samples (e_gps_std).
 }}
+
+\item{est_sd}{Should the posterior se be computed (default=FALSE)}
 
 \item{kernel_fn}{The covariance function of GP.}
 }

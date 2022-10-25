@@ -10,7 +10,7 @@ compute_m_sigma(
   data,
   w,
   GPS_m,
-  nthread = 1,
+  tuning = T,
   kernel_fn = function(x) exp(-x^2)
 )
 }
@@ -41,8 +41,7 @@ for all samples (e_gps_pred).
 covariates for all samples (e_gps_std).
 }}
 
-\item{nthread}{An integer value that represents the number of threads to be
-used by internal packages.}
+\item{tuning}{The function is used for parameter tuning (default=TRUE) or estimation (FALSE)}
 
 \item{kernel_fn}{The covariance function of GP.}
 }
