@@ -25,8 +25,7 @@
 #'
 #' set.seed(847)
 #' data <- generate_synthetic_data(sample_size = 200)
-#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-#'                    w_all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = data[,-(1:2)], w_all = data$treat)
 #'
 #' wi <- 8.6
 #'

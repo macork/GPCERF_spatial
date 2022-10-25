@@ -42,8 +42,7 @@
 #' data.table::setDT(data)
 #'
 #' #Estimate GPS function
-#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-#'                    w_all = as.matrix(data$treat))
+#' GPS_m <- train_GPS(cov_mt = data[,-(1:2)], w_all = data$treat)
 #'
 #' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
 #'                             data = data,
