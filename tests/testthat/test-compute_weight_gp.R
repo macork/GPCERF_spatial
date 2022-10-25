@@ -17,7 +17,7 @@ test_that("multiplication works", {
   e_gps_pred <- predict(e_gps,as.matrix(data[,-(1:2)]))
   e_gps_std <- sd(data$treat-e_gps_pred)
   GPS <- dnorm(data$treat, mean = e_gps_pred, sd = e_gps_std, log = T)
-  GPS_m <- data.table(GPS, e_gps_pred, e_gps_std)
+  GPS_m <- data.frame(GPS, e_gps_pred, e_gps_std)
 
   # set hyperparameters
   hyperparam <- c(0.1, 0.4, 1)

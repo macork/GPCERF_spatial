@@ -14,7 +14,7 @@ estimate_cerf_gp(
 )
 }
 \arguments{
-\item{data}{A data.table of observation data.
+\item{data}{A data.frame of observation data.
 \itemize{
 \item Column 1: Outcome (Y)
 \item Column 2: Exposure or treatment (w)
@@ -23,7 +23,7 @@ estimate_cerf_gp(
 
 \item{w}{A vector of exposure level to compute CERF.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS
 \item Column 2: Prediction of exposure for covariate of each data
@@ -75,7 +75,6 @@ GPS_m <- train_GPS(cov_mt = sim.data[,-(1:2)], w_all = sim.data$treat)
 # exposure values
 w.all = seq(0,20,1)
 
-data.table::setDT(sim.data)
 
 cerf_gp_obj <- estimate_cerf_gp(sim.data,
                                 w.all,

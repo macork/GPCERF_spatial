@@ -7,7 +7,7 @@
 estimate_cerf_nngp(data, w, GPS_m, params, kernel_fn, nthread = 1)
 }
 \arguments{
-\item{data}{A data.table of observation data.
+\item{data}{A data.frame of observation data.
 \itemize{
 \item Column 1: Outcome (Y)
 \item Column 2: Exposure or treatment (w)
@@ -16,7 +16,7 @@ estimate_cerf_nngp(data, w, GPS_m, params, kernel_fn, nthread = 1)
 
 \item{w}{A vector of exposure level to compute CERF.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS
 \item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
@@ -69,7 +69,6 @@ sim.data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 GPS_m <- train_GPS(cov_mt = sim.data[,-(1:2)], w_all = sim.data$treat)
 # exposure values
 w.all <- seq(0,20,2)
-data.table::setDT(sim.data)
 cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
                                     w.all,
                                     GPS_m,

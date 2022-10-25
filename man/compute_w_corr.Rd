@@ -7,7 +7,7 @@
 compute_w_corr(data, weights)
 }
 \arguments{
-\item{data}{A data.table of observational data with the following columns:
+\item{data}{A data.frame of observational data with the following columns:
 \itemize{
 \item Column 1: Outcome (Y)
 \item Column 2: Exposure or treatment (w)
@@ -27,7 +27,6 @@ achieved by Gaussian Process.
 
 set.seed(124)
 mydata <- generate_synthetic_data(sample_size = 200)
-data.table::setDT(mydata)
 weights <- runif(nrow(mydata))
 compute_w_corr(mydata, weights)
 

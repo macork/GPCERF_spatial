@@ -117,9 +117,9 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
 
   # Search for the best set of parameters --------------------------------------
   design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
-  optimal_cb <- find_optimal_nn(w_obs = data[, c(2)][[1]],
+  optimal_cb <- find_optimal_nn(w_obs = data[, c(2)],
                                 w = w,
-                                y_obs = data[, c(1)][[1]],
+                                y_obs = data[, c(1)],
                                 GPS_m = GPS_m,
                                 design_mt = design_mt,
                                 hyperparams = tune_params_subset,
@@ -136,17 +136,17 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
 
   # Estimate noise -------------------------------------------------------------
   noise_nn <- estimate_noise_nn(hyperparam = nn_opt_param,
-                                w_obs = data[, c(2)][[1]],
+                                w_obs = data[, c(2)],
                                 GPS_obs = GPS_m$GPS,
-                                y_obs = data[, c(1)][[1]],
+                                y_obs = data[, c(1)],
                                 n_neighbor = n_neighbor)
 
   # Compute posterior mean and standard deviation ------------------------------
   posterior_vals <- estimate_mean_sd_nn(hyperparam = nn_opt_param,
                                         sigma2 = noise_nn,
-                                        w_obs = data[, c(2)][[1]],
+                                        w_obs = data[, c(2)],
                                         w = w,
-                                        y_obs = data[, c(1)][[1]],
+                                        y_obs = data[, c(1)],
                                         GPS_m = GPS_m,
                                         n_neighbor = n_neighbor,
                                         expand = expand,

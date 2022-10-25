@@ -14,7 +14,6 @@
 #' @author Danielle Braun
 #' @import stats
 #' @import xgboost
-#' @import data.table
 #' @import MASS
 #' @import Rcpp
 #' @import SuperLearner

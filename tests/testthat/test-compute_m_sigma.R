@@ -9,8 +9,6 @@ test_that("compute_m_sigma works as expected!", {
    GPS_m <- train_GPS(cov_mt = data[,-(1:2)],
                       w_all = data$treat)
 
-   data.table::setDT(data)
-
    tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                                data = data,
                                w = w_all,

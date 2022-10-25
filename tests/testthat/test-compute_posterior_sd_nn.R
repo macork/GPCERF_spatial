@@ -43,6 +43,7 @@ test_that("compute_posterior_sd_nn works as expected.", {
                                     sigma2 = noise,
                                     n_neighbor = 20,
                                     expand = 1)
+  expect_equal(length(pst_sd), 1L)
 
   # expect_equal(pst_sd, 5.437376, tolerance = 0.00001)
 })

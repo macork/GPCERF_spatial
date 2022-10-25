@@ -15,7 +15,7 @@ sample and each column is a covariate.}
 \item{dnorm_log}{Logical, if TRUE, probabilities p are given as log(p).}
 }
 \value{
-A data.table that includes:
+A data.frame that includes:
 \itemize{
 \item a vector of estimated GPS at the observed exposure levels;
 \item a vector of estimated conditional means of exposure levels when the covariates are fixed

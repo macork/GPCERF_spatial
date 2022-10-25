@@ -7,7 +7,6 @@ test_that("estimate_cerf_nngp works as expected!", {
                      w_all = sim.data$treat)
   # exposure values
   w.all <- seq(0,20,0.5)
-  data.table::setDT(sim.data)
   cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
                                       w.all,
                                       GPS_m,

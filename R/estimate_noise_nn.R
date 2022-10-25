@@ -13,6 +13,7 @@
 #'
 #' @return
 #' A scalar of estimated standard deviation of the nugget term in nnGP.
+#'
 #' @export
 #'
 #' @examples

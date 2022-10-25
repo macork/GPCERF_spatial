@@ -38,7 +38,7 @@ compute_weight_gp(
 \item{inv_sigma_obs}{Inverse of the covariance matrix between observed
 samples.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: A vector of estimated GPS evaluated at the observed exposure
 levels.

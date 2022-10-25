@@ -23,7 +23,6 @@ BugReports: https://github.com/NSAPH-Software/GPCERF/issues
 Copyright: Harvard University
 Imports:
     parallel,
-    data.table,
     xgboost,
     stats,
     MASS,

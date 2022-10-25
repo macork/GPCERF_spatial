@@ -34,6 +34,7 @@ test_that("estimate_noise_nn works as expected!", {
                              y_obs = y_use_ord,
                              n_neighbor = n_neighbor)
 
+  expect_equal(length(noise), 1L)
 
   #expect_equal(noise, 31.34945, tolerance = 0.0001)
 })

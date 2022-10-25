@@ -22,7 +22,7 @@ compute_m_sigma(
 \item Third element: g_sigma (gamma/sigma)
 }}
 
-\item{data}{A  data.table containing all data including outcome, exposure
+\item{data}{A  data.frame containing all data including outcome, exposure
 and covariates. In the following order:
 \itemize{
 \item Column 1: Outcome (Y)
@@ -32,7 +32,7 @@ and covariates. In the following order:
 
 \item{w}{A vector of exposure levels at which the CERF is estimated.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: A vector of estimated GPS evaluated at the observed exposure levels.
 \item Column 2: Estimated conditional means of the exposure given covariates
@@ -62,16 +62,13 @@ data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
 
 w_all <- seq(0,20,1)
 
-data.table::setDT(data)
-
 #Estimate GPS function
 GPS_m <- train_GPS(cov_mt = data[,-(1:2)], w_all = data$treat)
 
 tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                             data = data,
                             w = w_all,
-                            GPS_m = GPS_m,
-                            nthread = 1)
+                            GPS_m = GPS_m)
 
 gp.cerf <- tune_res$est
 

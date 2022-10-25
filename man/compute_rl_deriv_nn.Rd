@@ -22,7 +22,7 @@ compute_rl_deriv_nn(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS values.
 \item Column 2: Prediction of exposure for covariate of each data

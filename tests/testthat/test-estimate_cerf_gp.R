@@ -11,8 +11,6 @@ test_that("estimate_cerf_gp works as expected!", {
   # exposure values
   w.all <- seq(0,20,0.1)
 
-  data.table::setDT(sim.data)
-
   cerf_gp_obj <- estimate_cerf_gp(data = sim.data,
                                   w = w.all,
                                   GPS_m = GPS_m,

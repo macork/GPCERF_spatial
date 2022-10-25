@@ -28,7 +28,7 @@ estimate_mean_sd_nn(
 
 \item{y_obs}{A vector of observed outcome values.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS
 \item Column 2: Prediction of exposure for covariate of each data sample
