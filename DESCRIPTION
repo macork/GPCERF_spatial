@@ -29,9 +29,9 @@ Imports:
     spatstat.geom,
     logger,
     Rcpp,
+    RcppArmadillo,
     ggplot2,
     rlang,
-    Matrix,
     Rfast,
     SuperLearner
 Encoding: UTF-8

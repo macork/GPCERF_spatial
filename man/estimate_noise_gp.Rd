@@ -14,9 +14,9 @@ estimate_noise_gp(data, sigma_obs, inv_sigma_obs)
 \item Column 3~m: Confounders (C)
 }}
 
-\item{hyperparam}{A vector of hyper-parameter values for the full GP.}
+\item{sigma_obs}{Covariance matrix between observed covariates.}
 
-\item{GPS}{A vector of estimated GPS at the observed exposure levels.}
+\item{inv_sigma_obs}{Inverse of the covariance matrix between observed covariates.}
 }
 \value{
 A scalar of estimated standard deviation of the nugget term in full GP.
@@ -24,18 +24,4 @@ A scalar of estimated standard deviation of the nugget term in full GP.
 \description{
 Estimates the standard deviations of the nugget term in full GP by
 calculating the standard deviations of the residuals.
-}
-\examples{
-
-set.seed(109)
-data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
-
-# Estimate GPS function
-GPS_m <- train_GPS(cov_mt = data[,-(1:2)], w_all = data$treat)
-
-hyperparam <- c(0.1, 0.2, 1)
-
-noise_est <- estimate_noise_gp(hyperparam, data, GPS_m$GPS)
-
-
 }

@@ -29,8 +29,7 @@
 #' @param kernel_fn The covariance function of GP.
 #'
 #' @return
-#' A vector of the weights assigned to each sample for the calculate of
-#' posterior mean of CERF at \code{w}.
+#' A list of two elements, weight and standard deviation.
 #'
 #' @export
 #'
@@ -74,7 +73,7 @@
 #'
 #'
 compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
-                              inv_sigma_obs, GPS_m, est_sd = F,
+                              inv_sigma_obs, GPS_m, est_sd = FALSE,
                               kernel_fn = function(x) exp(-x^2)){
 
   alpha <- hyperparam[[1]]

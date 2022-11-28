@@ -39,6 +39,6 @@ test_that("multiplication works", {
                               GPS_m = GPS_m,
                               kernel_fn = kernel_fn)
 
-  expect_equal(length(weight), 200L)
-  expect_equal(weight[28], 1.588098e-03, tolerance = 10e-5)
+  expect_equal(length(weight$weight), 200L)
+  expect_equal(weight$weight[28], 1.588098e-03, tolerance = 10e-5)
 })

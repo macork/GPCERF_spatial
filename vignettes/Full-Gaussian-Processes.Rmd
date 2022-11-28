@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 ```{r load}
 library(GPCERF)
 library(ggplot2)
+library(data.table)
 ```
 
 In this vignette, we present an example of using full Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://cran.r-project.org/package=CausalGPS).

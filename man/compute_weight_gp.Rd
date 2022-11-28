@@ -11,7 +11,7 @@ compute_weight_gp(
   hyperparam,
   inv_sigma_obs,
   GPS_m,
-  est_sd = F,
+  est_sd = FALSE,
   kernel_fn = function(x) exp(-x^2)
 )
 }
@@ -53,8 +53,7 @@ covariates for all samples (e_gps_std).
 \item{kernel_fn}{The covariance function of GP.}
 }
 \value{
-A vector of the weights assigned to each sample for the calculate of
-posterior mean of CERF at \code{w}.
+A list of two elements, weight and standard deviation.
 }
 \description{
 Calculates the weights of observed outcomes which is then used to estimate
