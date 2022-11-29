@@ -46,12 +46,15 @@
 #'
 #' \donttest{
 #' set.seed(19)
-#' sim.data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
+#' data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov_mt = sim.data[,-(1:2)], w_all = sim.data$treat)
+#' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+#'                    w_all = data$treat,
+#'                    sl_lib = c("SL.xgboost"),
+#'                    dnorm_log = FALSE)
 #' # exposure values
 #' w.all <- seq(0,20,2)
-#' cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
+#' cerf_nngp_obj <- estimate_cerf_nngp(data,
 #'                                     w.all,
 #'                                     GPS_m,
 #'                                     params = list(alpha = c(0.1),

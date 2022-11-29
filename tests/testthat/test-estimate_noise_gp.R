@@ -5,8 +5,10 @@ test_that("estimate_noise_gp works as expected", {
 
 
   # Estimate GPS function
-  GPS_m <- train_GPS(cov_mt = data[,-(1:2)],
-                     w_all = data$treat)
+  GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+                     w_all = data$treat,
+                     sl_lib = c("SL.xgboost"),
+                     dnorm_log = FALSE)
 
   GPS <- GPS_m$GPS
   e_gps_pred <- GPS_m$e_gps_pred

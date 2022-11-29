@@ -1,7 +1,10 @@
 ## GPCERF (development)
 
 ### Changed
-* 
+* In compute_m_sigma, tuning option does not have a default value. 
+* train_gps does not have default values.
+* train_gps accepts vector of the SuperLearner package's libraries.
+* train_GPS -> train_gps
 
 ### Added
 * 

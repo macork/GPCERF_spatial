@@ -41,18 +41,21 @@
 #' @examples
 #'
 #' set.seed(129)
-#' sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+#' data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 #'
 #'
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov_mt = sim.data[,-(1:2)], w_all = sim.data$treat)
+#' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+#'                    w_all = data$treat,
+#'                    sl_lib = c("SL.xgboost"),
+#'                    dnorm_log = FALSE)
 #'
 #' # exposure values
-#' w.all = seq(0,20,1)
+#' w_all <- seq(0,20,1)
 #'
 #'
-#' cerf_gp_obj <- estimate_cerf_gp(sim.data,
-#'                                 w.all,
+#' cerf_gp_obj <- estimate_cerf_gp(data,
+#'                                 w_all,
 #'                                 GPS_m,
 #'                                 params = list(alpha = c(0.1),
 #'                                               beta=0.2,
@@ -132,16 +135,25 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
     tune_res <- parallel::parApply(cl, tune_params_subset, 1,
                                    function(x){
-                                     compute_m_sigma(hyperparam = x, data = data, w = w,
-                                                     GPS_m = GPS_m, kernel_fn = kernel_fn )
+                                     compute_m_sigma(hyperparam = x,
+                                                     data = data,
+                                                     w = w,
+                                                     GPS_m = GPS_m,
+                                                     tuning = TRUE,
+                                                     kernel_fn = kernel_fn )
                                    })
 
     # terminate clusters.
     parallel::stopCluster(cl)
   }else if(nrow(tune_params_subset)>1){
     tune_res <- apply(tune_params_subset, 1, function(x){
-      compute_m_sigma(hyperparam = x, data = data, w = w,
-                      GPS_m = GPS_m, kernel_fn = kernel_fn )
+      compute_m_sigma(hyperparam = x,
+                      data = data,
+                      w = w,
+                      GPS_m = GPS_m,
+                      tuning = TRUE,
+                      kernel_fn = kernel_fn
+                      )
       })
   }
 
@@ -153,8 +165,12 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
     opt_idx <- 1
   }
   opt_param <- tune_params_subset[opt_idx,]
-  gp_cerf_final <- compute_m_sigma(hyperparam = opt_param, data = data, w = w,
-                                   GPS_m = GPS_m, tuning = F, kernel_fn = kernel_fn)
+  gp_cerf_final <- compute_m_sigma(hyperparam = opt_param,
+                                   data = data,
+                                   w = w,
+                                   GPS_m = GPS_m,
+                                   tuning = FALSE,
+                                   kernel_fn = kernel_fn)
 
   # Build gp_cerf S3 object
 

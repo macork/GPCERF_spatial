@@ -40,16 +40,20 @@
 #' w_all <- seq(0,20,1)
 #'
 #' #Estimate GPS function
-#' GPS_m <- train_GPS(cov_mt = data[,-(1:2)], w_all = data$treat)
+#' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+#'                    w_all = data$treat,
+#'                    sl_lib = c("SL.xgboost"),
+#'                    dnorm_log = FALSE)
 #'
 #' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
 #'                             data = data,
 #'                             w = w_all,
-#'                             GPS_m = GPS_m)
+#'                             GPS_m = GPS_m,
+#'                             tuning = TRUE)
 #'
 #' gp.cerf <- tune_res$est
 #'
-compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning = T,
+compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
                             kernel_fn = function(x) exp(-x^2)){
 
   param = unlist(hyperparam)
