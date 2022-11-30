@@ -60,8 +60,10 @@ compute_posterior_sd_nn <-  function(hyperparam,
   sigma_sq1 <- (1+g_sigma)*sigma2/n
 
   #cross variance
-  cross_cov <- sigma2*g_sigma*exp(-spatstat.geom::crossdist(obs_new[,1],obs_new[,2],
-                                                                obs_use[,1],obs_use[,2])^2)
+  cross_cov <- sigma2*g_sigma*exp(-spatstat.geom::crossdist(obs_new[,1],
+                                                            obs_new[,2],
+                                                            obs_use[,1],
+                                                            obs_use[,2])^2)
 
   sigma_sq2 <- c(calc_cross(cross_cov, cov_use_inv))/n^2
   posterior_sd <- sqrt(sigma_sq1 - sigma_sq2 + sigma2)

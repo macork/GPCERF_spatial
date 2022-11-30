@@ -20,7 +20,7 @@
 #' @export
 #'
 #' @examples
-#' data <- generate_synthetic_data()
+#' data <- generate_synthetic_data(sample_size = 200)
 #' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
 #'                   w_all = data$treat,
 #'                   sl_lib = c("SL.xgboost"),

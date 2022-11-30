@@ -75,7 +75,7 @@ We then use `estimate_cerf_nngp` to estimate the ERF of the exposure `w`. We est
 ### Normally Distributed Exposure
 
 ```{r}
-w_all = seq(0,20,0.1)
+w_all <-  seq(0,20,0.1)
 
 nngp_res_normal <- estimate_cerf_nngp(data_sim_normal,
                                       w_all,

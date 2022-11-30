@@ -77,9 +77,9 @@ sim_data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
 # Estimate GPS function
 GPS_m <- train_gps(cov_mt = sim_data[,-(1:2)],
-                  w_all = sim_data$treat,
-                  sl_lib = c("SL.xgboost"),
-                  dnorm_log = FALSE)
+                   w_all = sim_data$treat,
+                   sl_lib = c("SL.xgboost"),
+                   dnorm_log = FALSE)
 
 # exposure values
 w_all = seq(0,20,0.1)
@@ -133,7 +133,7 @@ GPS_m <- train_gps(cov_mt = sim_data[,-(1:2)],
                   sl_lib = c("SL.xgboost"),
                   dnorm_log = FALSE)
 # exposure values
-w.all <- seq(0,20,0.5)
+w_all <- seq(0,20,0.5)
 cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
                                     w_all,
                                     GPS_m,

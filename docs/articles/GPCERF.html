@@ -115,12 +115,12 @@ level.</p>
 <span><span class="co">#&gt; Loading required package: nnls</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">GPS_m</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         GPS e_gps_pred e_gps_std</span></span>
-<span><span class="co">#&gt; 1 0.1441525   7.492165 0.9942912</span></span>
-<span><span class="co">#&gt; 2 0.4010361  10.122408 0.9942912</span></span>
-<span><span class="co">#&gt; 3 0.3649921   9.792160 0.9942912</span></span>
-<span><span class="co">#&gt; 4 0.2170269   8.198086 0.9942912</span></span>
-<span><span class="co">#&gt; 5 0.3677082  11.007902 0.9942912</span></span>
-<span><span class="co">#&gt; 6 0.2981837   4.127127 0.9942912</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 0.3550474  12.653499 0.9526493</span></span>
+<span><span class="co">#&gt; 2 0.4142460  12.401060 0.9526493</span></span>
+<span><span class="co">#&gt; 3 0.2654932   8.561660 0.9526493</span></span>
+<span><span class="co">#&gt; 4 0.4151502   3.557796 0.9526493</span></span>
+<span><span class="co">#&gt; 5 0.1311092  12.806971 0.9526493</span></span>
+<span><span class="co">#&gt; 6 0.2664229  14.362410 0.9526493</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="estimating-exposure-response-using-gaussian-processes">Estimating exposure response using Gaussian Processes<a class="anchor" aria-label="anchor" href="#estimating-exposure-response-using-gaussian-processes"></a>
@@ -154,9 +154,9 @@ value is a Gaussian kernel.</p>
 <span></span>
 <span><span class="co"># Estimate GPS function</span></span>
 <span><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/train_gps.html">train_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">sim_data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>                  w_all <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">treat</span>,</span>
-<span>                  sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span>
-<span>                  dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                   w_all <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">treat</span>,</span>
+<span>                   sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span>
+<span>                   dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># exposure values</span></span>
 <span><span class="va">w_all</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span>,<span class="fl">0.1</span><span class="op">)</span></span>
@@ -214,7 +214,7 @@ value is a Gaussian kernel.</p>
 <span>                  sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span>
 <span>                  dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co"># exposure values</span></span>
-<span><span class="va">w.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span>,<span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">w_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span>,<span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="va">cerf_nngp_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_cerf_nngp.html">estimate_cerf_nngp</a></span><span class="op">(</span><span class="va">sim_data</span>,</span>
 <span>                                    <span class="va">w_all</span>,</span>
 <span>                                    <span class="va">GPS_m</span>,</span>

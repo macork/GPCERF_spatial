@@ -2,7 +2,7 @@
 
 ### Changed
 * find_optimal_nn becomes an internal function. 
-* estimate_noise_gp and estimate_noise_nn become an internal function. 
+* estimate_noise_gp and estimate_noise_nn become internal functions. 
 * estimate_mean_sd_nn becomes an internal function.
 * compute_weight_gp becomes an internal function.
 * compute_w_corr accepts w and confounders separately.  
