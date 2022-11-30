@@ -5,7 +5,7 @@
 #' Updates logger settings, including log level and location of the file.
 #'
 #' @param logger_file_path A path (including file name) to log the messages.
-#' (Default: CausalGPS.log)
+#' (Default: GPCERF.log)
 #' @param logger_level The log level. Available levels include:
 #'   - TRACE
 #'   - DEBUG

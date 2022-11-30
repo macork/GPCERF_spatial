@@ -15,14 +15,4 @@ Inverse matrix
 \description{
 Computes inverse of a covariate matrix using Choleski decomposition.
 }
-\examples{
-
-set.seed(934)
-A <- runif(10)
-B <- runif(10)
-C = cbind(A, B)
-kernel_fn = function(x) exp(-x^2)
-D = kernel_fn(as.matrix(dist(C)))
-inv_sigma_obs <- compute_inverse(D)
-
-}
+\keyword{internal}
