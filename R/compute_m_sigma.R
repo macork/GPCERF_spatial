@@ -28,30 +28,10 @@
 #' @return
 #' A list containing two elements: 1) a vector of absolute weighted correlation
 #' of each covariate to the exposure, which is the metric for covariate balance
-#' and 2) the estimated CERF at \code{w.all} based on the hyper-parameter
+#' and 2) the estimated CERF at \code{w_all} based on the hyper-parameter
 #' values in \code{param}.
-#' @export
 #'
-#' @examples
-#'
-#' set.seed(912)
-#' data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
-#'
-#' w_all <- seq(0,20,1)
-#'
-#' #Estimate GPS function
-#' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-#'                    w_all = data$treat,
-#'                    sl_lib = c("SL.xgboost"),
-#'                    dnorm_log = FALSE)
-#'
-#' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
-#'                             data = data,
-#'                             w = w_all,
-#'                             GPS_m = GPS_m,
-#'                             tuning = TRUE)
-#'
-#' gp.cerf <- tune_res$est
+#' @keywords internal
 #'
 compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
                             kernel_fn = function(x) exp(-x^2)){
@@ -113,7 +93,9 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
       est <- NA
       pst_sd <- NA
     }
-    covariate_balance <- compute_w_corr(data, weights_final)
+    covariate_balance <- compute_w_corr(w = data[[2]],
+                                        confounders = data[,3:ncol(data)],
+                                        weights_final)
     c(covariate_balance, est, pst_sd)
   })
 

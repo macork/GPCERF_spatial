@@ -26,7 +26,6 @@
 #' @return
 #' Posterior credible interval (scaler) for the requested exposure level (w).
 #'
-
 compute_sd_gp <- function(w,
                           scaled_obs,
                           hyperparam,

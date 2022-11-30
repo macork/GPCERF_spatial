@@ -16,7 +16,8 @@ estimate_noise_gp(data, sigma_obs, inv_sigma_obs)
 
 \item{sigma_obs}{Covariance matrix between observed covariates.}
 
-\item{inv_sigma_obs}{Inverse of the covariance matrix between observed covariates.}
+\item{inv_sigma_obs}{Inverse of the covariance matrix between observed
+covariates.}
 }
 \value{
 A scalar of estimated standard deviation of the nugget term in full GP.
@@ -25,3 +26,4 @@ A scalar of estimated standard deviation of the nugget term in full GP.
 Estimates the standard deviations of the nugget term in full GP by
 calculating the standard deviations of the residuals.
 }
+\keyword{internal}
