@@ -132,8 +132,10 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                                     block_size = block_size)
       idx <- res[-nrow(res),1]
       weights <- res[-nrow(res),2]
-      weights <- weights/sum(weights)
-      calc_ac( coord_obs[idx,1], design_use_ord[idx,], weights = weights)
+      # weights <- weights/sum(weights)
+      X <- data.table::setDT(design_use_ord[idx,])
+      compute_w_corr(X, weights)
+      # calc_ac( coord_obs[idx,1], design_use_ord[idx,], weights = weights)
     })
 
     all_res <- do.call(cbind, all_res_list)
