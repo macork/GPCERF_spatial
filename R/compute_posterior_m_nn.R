@@ -123,7 +123,7 @@ compute_posterior_m_nn <- function(hyperparam,
     colSums(weights_tmp)
   })
   weights <- rowSums(all_weights)/n
-  weights[weights<0] <- weights
+  weights[weights<0] <- 0
   weights <- weights/sum(weights)
 
   est <- c(used_y%*%weights)
