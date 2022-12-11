@@ -66,7 +66,7 @@
 #'                                     nthread = 1)
 #'}
 #'
-estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
+estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthread = 1){
 
   # Log system info
   log_system_info()
@@ -128,7 +128,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
   block_size <- getElement(params, "block_size")
 
   # Search for the best set of parameters --------------------------------------
-  design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
+  design_mt <- as.data.frame(model.matrix(formula, data = data))
   optimal_cb <- find_optimal_nn(w_obs = data[, c(2)][[1]],
                                 w = w,
                                 y_obs = data[, c(1)][[1]],
@@ -165,8 +165,8 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, nthread = 1){
                                         block_size = block_size,
                                         nthread = nthread)
 
-  posterior_mean <- sapply(posterior_vals[[1]], function(x) x[nrow(x),2])
-  posterior_sd <- posterior_vals[[2]]
+  posterior_mean <- posterior_vals[,1]
+  posterior_sd <- posterior_vals[,2]
 
 
   t_nngp_2 <- proc.time()
