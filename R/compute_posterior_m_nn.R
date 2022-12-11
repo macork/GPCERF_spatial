@@ -118,11 +118,12 @@ compute_posterior_m_nn <- function(hyperparam,
                                                        used_obs[,1],
                                                        used_obs[,2]))
     #mean
-    w <- cov_cross%*%cov_used_inv
-    w[w<0] <- 0
-    colSums(w)
+    weights_tmp <- cov_cross%*%cov_used_inv
+    # w[w<0] <- 0
+    colSums(weights_tmp)
   })
   weights <- rowSums(all_weights)/n
+  weights[weights<0] <- weights
   weights <- weights/sum(weights)
 
   est <- c(used_y%*%weights)
