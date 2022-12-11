@@ -115,14 +115,14 @@ estimate_mean_sd_nn <- function(hyperparam,
                           envir=environment())
 
 
-  all_res_mean <- parallel::parLapply(cl,
+  all_res <- parallel::parLapply(cl,
                                       w,
                                       function(wi){
     GPS_w <- dnorm(wi,
                   mean = GPS_m$e_gps_pred,
                   sd = GPS_m$e_gps_std, log = TRUE)
 
-    compute_posterior_m_nn(hyperparam = hyperparam,
+    mean <- compute_posterior_m_nn(hyperparam = hyperparam,
                            w = wi,
                            GPS_w = GPS_w,
                            obs_ord = coord_obs_ord,
@@ -130,17 +130,7 @@ estimate_mean_sd_nn <- function(hyperparam,
                            n_neighbor = n_neighbor,
                            expand = expand,
                            block_size = block_size)
-
-  })
-
-  # TODO: repeating GPS_w, merge them together.
-  all_res_sd <- parallel::parLapply(cl,
-                                    w,
-                                    function(wi){
-    GPS_w <- dnorm(wi,
-                   mean = GPS_m$e_gps_pred,
-                   sd = GPS_m$e_gps_std, log = TRUE)
-
+    mean <- mean[nrow(mean),2]
     val <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                    w = wi,
                                    GPS_w = GPS_w,
@@ -148,9 +138,27 @@ estimate_mean_sd_nn <- function(hyperparam,
                                    sigma2 = sigma2,
                                    n_neighbor = n_neighbor,
                                    expand = expand)
-
-    return(val)
+    c(mean, val)
   })
+
+  # TODO: repeating GPS_w, merge them together.
+  # all_res_sd <- parallel::parLapply(cl,
+  #                                   w,
+  #                                   function(wi){
+  #   GPS_w <- dnorm(wi,
+  #                  mean = GPS_m$e_gps_pred,
+  #                  sd = GPS_m$e_gps_std, log = TRUE)
+  #
+  #   val <- compute_posterior_sd_nn(hyperparam = hyperparam,
+  #                                  w = wi,
+  #                                  GPS_w = GPS_w,
+  #                                  obs_ord = coord_obs_ord,
+  #                                  sigma2 = sigma2,
+  #                                  n_neighbor = n_neighbor,
+  #                                  expand = expand)
+  #
+  #   return(val)
+  # })
 
   # terminate clusters.
   parallel::stopCluster(cl)
@@ -160,6 +168,7 @@ estimate_mean_sd_nn <- function(hyperparam,
   logger::log_info("Done with estimating mean and sd using nngp approach ",
                    "Wall clock time: {t_est_m_sd_2[[3]] - t_est_m_sd_1[[3]]} s.")
 
-
-  return(list(all_res_mean, unlist(all_res_sd)))
+  all_res <- do.call(rbind, all_res)
+  # return(list(all_res_mean, unlist(all_res_sd)))
+  return(all_res)
 }
