@@ -157,7 +157,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
 
   # Compute posterior mean and standard deviation ------------------------------
   posterior_vals <- estimate_mean_sd_nn(hyperparam = nn_opt_param,
-                                        sigma2 = noise_nn,
+                                        sigma2 = noise_nn^2,
                                         w_obs = data[, c(2)][[1]],
                                         w = w,
                                         y_obs = data[, c(1)][[1]],
