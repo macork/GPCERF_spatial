@@ -129,7 +129,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
 
   # Search for the best set of parameters --------------------------------------
   design_mt <- as.data.frame(model.matrix(formula, data = data))
-  optimal_cb <- find_optimal_nn(w_obs = data[, c(2)][[1]],
+  optimal_cb_res <- find_optimal_nn(w_obs = data[, c(2)][[1]],
                                 w = w,
                                 y_obs = data[, c(1)][[1]],
                                 GPS_m = GPS_m,
@@ -141,9 +141,10 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
                                 nthread = nthread)
 
 
-
   # Extract the optimum hyperparameters
-  opt_idx_nn <- order(colMeans(abs(optimal_cb)))[1]
+  all_cb_res <- sapply(optimal_cb_res, '[[', 'cb')
+  opt_idx_nn <- order(colMeans(abs(all_cb_res)))[1]
+  posterior_mean <- optimal_cb_res[[opt_idx_nn]]$est
   nn_opt_param <- unlist(tune_params_subset[opt_idx_nn,])
 
   # Estimate noise -------------------------------------------------------------
@@ -151,7 +152,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
                                 w_obs = data[, c(2)][[1]],
                                 GPS_obs = GPS_m$GPS,
                                 y_obs = data[, c(1)][[1]],
-                                n_neighbor = n_neighbor)
+                                n_neighbor = n_neighbor*expand)
 
   # Compute posterior mean and standard deviation ------------------------------
   posterior_vals <- estimate_mean_sd_nn(hyperparam = nn_opt_param,
@@ -165,8 +166,8 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
                                         block_size = block_size,
                                         nthread = nthread)
 
-  posterior_mean <- posterior_vals[,1]
-  posterior_sd <- posterior_vals[,2]
+  # posterior_mean <- posterior_vals[,1]
+  posterior_sd <- posterior_vals
 
 
   t_nngp_2 <- proc.time()
@@ -179,6 +180,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
   class(result) <- "cerf_nngp"
 
   result$w <- w
+  result$cb <- optimal_cb_res[[opt_idx_nn]]$cb
   result$pst_mean <- posterior_mean
   result$pst_sd <- posterior_sd
   result$fcall <- fcall
