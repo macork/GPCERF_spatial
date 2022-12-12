@@ -72,7 +72,7 @@ estimate_noise_nn <- function(hyperparam,
     if(i_min - 1 + n_neighbor >= length(w_obs)){
       idx_use <- (length(w_obs)-n_neighbor + 1):(length(w_obs))
     }else{
-      idx_use <- i_min:(i_min + n_neighbor -1)
+      idx_use <- i_min:(i_min + n_neighbor - 1)
     }
 
     dist_all <- g_sigma*exp(-as.matrix(dist(obs_ord[c(i,idx_use),]))^2) + diag(n_neighbor+1)
