@@ -105,7 +105,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   logger::log_debug("Time to setup cluster with {nthread} core(s):",
                    "{t_cl_2[[3]] - t_cl_1[[3]]} s.")
 
-  all_cb <- apply(hyperparams, 1, function(hyperparam){
+  all_res <- apply(hyperparams, 1, function(hyperparam){
 
 
     # export apply related parameters.
@@ -133,15 +133,20 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
       idx <- res[-nrow(res),1]
       weights <- res[-nrow(res),2]
       # weights <- weights/sum(weights)
-      X <- data.table::setDT(design_use_ord[idx,])
-      compute_w_corr(X, weights)
+      # note input of compute_w_coord: first col is obs response, second col is obs exposure
+      # rest are covariates
+      X <- data.table::setDT(cbind( y_use_ord, coord_obs_ord[,1], design_use_ord)[idx,])
+      cb = compute_w_corr(X, weights)
       # calc_ac( coord_obs[idx,1], design_use_ord[idx,], weights = weights)
+      list(cb = cb, est = res[nrow(res),2])
     })
 
-    all_res <- do.call(cbind, all_res_list)
+    all_cb_tmp <- do.call(cbind, lapply(all_res_list, '[[', 'cb'))
+    all_est_tmp <- sapply(all_res_list, '[[', 'est')
 
     #covariate specific balance, averaged over w
-    rowMeans(all_res, na.rm = T)
+    list( cb = rowMeans(all_cb_tmp, na.rm = T),
+          est = all_est_tmp )
   })
 
   # terminate clusters.
@@ -152,5 +157,5 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                    "(Wall clock time: {t_opt_2[[3]] - t_opt_1[[3]]} s.} ... ")
 
 
-  return(all_cb)
+  return(all_res)
 }
