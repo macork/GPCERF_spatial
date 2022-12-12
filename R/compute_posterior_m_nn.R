@@ -77,6 +77,7 @@ compute_posterior_m_nn <- function(hyperparam,
                                    GPS_w,
                                    obs_ord,
                                    y_obs_ord,
+                                   kernel_fn = function(x) exp(-x^2),
                                    n_neighbor = 10,
                                    expand = 5,
                                    block_size = 1e4){
@@ -107,22 +108,23 @@ compute_posterior_m_nn <- function(hyperparam,
   }
 
   used_obs <- t(t(obs_ord[idx_select,])*(1/sqrt(c(alpha, beta))))
-  cov_used_inv <- compute_inverse(g_sigma*exp(-as.matrix(dist(used_obs))^2) + diag(nrow(used_obs)))
+  cov_used_inv <- compute_inverse(g_sigma*kernel_fn(as.matrix(dist(used_obs))) + diag(nrow(used_obs)))
   used_y <- y_obs_ord[idx_select]
 
   w_obs <- t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
   id_all <- split(1:n, ceiling(seq_along(1:n)/n_block))
   all_weights <- sapply(id_all, function(id_ind){
-    cov_cross <- g_sigma*exp(-spatstat.geom::crossdist(w_obs[id_ind,1],
-                                                       w_obs[id_ind,2],
-                                                       used_obs[,1],
-                                                       used_obs[,2]))
-    #mean
-    weights_tmp <- cov_cross%*%cov_used_inv
+    cov_cross <- g_sigma*kernel_fn(spatstat.geom::crossdist(w_obs[id_ind,1],
+                                                            w_obs[id_ind,2],
+                                                            used_obs[,1],
+                                                            used_obs[,2]))
+    #weight
+    c(arma_mm(cov_used_inv, Rfast::colsums(cov_cross)))
+    # weights_tmp <- cov_cross%*%cov_used_inv
     # w[w<0] <- 0
-    colSums(weights_tmp)
+    # colSums(weights_tmp)
   })
-  weights <- rowSums(all_weights)/n
+  weights <- Rfast::rowsums(all_weights)/n
   weights[weights<0] <- 0
   weights <- weights/sum(weights)
 
