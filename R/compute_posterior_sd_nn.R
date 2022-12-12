@@ -74,6 +74,7 @@ compute_posterior_sd_nn <-  function(hyperparam,
                                      GPS_w,
                                      obs_ord,
                                      sigma2,
+                                     kernel_fn = function(x) exp(-x^2),
                                      n_neighbor = 10,
                                      expand = 1){
 
@@ -98,18 +99,20 @@ compute_posterior_sd_nn <-  function(hyperparam,
   }
 
   obs_use <- t(t(obs_ord[idx_all,])*(1/sqrt(c(alpha, beta))))
-  cov_use_inv <- chol2inv(chol(sigma2*(g_sigma*exp(-as.matrix(dist(obs_use))^2) +
-                                           diag(nrow(obs_use)))))
+  cov_use_inv <- compute_inverse(sigma2*(g_sigma*kernel_fn(as.matrix(dist(obs_use))) +
+                                           diag(nrow(obs_use))))
   obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
 
   #within variance
   sigma_sq1 <- (1+g_sigma)*sigma2/n
 
   #cross variance
-  cross_cov <- sigma2*g_sigma*exp(-spatstat.geom::crossdist(obs_new[,1],obs_new[,2],
-                                                                obs_use[,1],obs_use[,2])^2)
+  cross_cov <- sigma2*g_sigma*kernel_fn(spatstat.geom::crossdist(obs_new[,1],obs_new[,2],
+                                                                obs_use[,1],obs_use[,2]))
+  cross_cov_colS <- Rfast::colsums(cross_cov)
+  cross_cov_mult <- c(arma_mm(cov_use_inv, cross_cov_colS))
 
-  sigma_sq2 <- c(calc_cross(cross_cov, cov_use_inv))/n^2
+  sigma_sq2 <- c(cross_cov_colS%*%cross_cov_mult)/n^2
   posterior_sd <- sqrt(sigma_sq1 - sigma_sq2 + sigma2)
 
   logger::log_debug("w: {w}, sigma_sq1: {sigma_sq1}, sigma_sq2: {sigma_sq2},",
