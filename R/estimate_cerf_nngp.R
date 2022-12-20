@@ -6,13 +6,13 @@
 #' the nearest neighbor (nn) Gaussian Process (gp). The function tune the best
 #' match (the lowest covariate balance) for the provided set of hyperparameters.
 #'
-#' @param data A data.table of observation data.
+#' @param data A data.frame of observation data.
 #'   - Column 1: Outcome (Y)
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #'
 #' @param w A vector of exposure level to compute CERF.
-#' @param GPS_m A data.table of GPS vectors.
+#' @param GPS_m A data.frame of GPS vectors.
 #'   - Column 1: GPS
 #'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std)
@@ -46,14 +46,15 @@
 #'
 #' \donttest{
 #' set.seed(19)
-#' sim.data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
+#' data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 #' # Estimate GPS function
-#' GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
-#'                    w_all = as.matrix(sim.data$treat))
+#' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+#'                    w_all = data$treat,
+#'                    sl_lib = c("SL.xgboost"),
+#'                    dnorm_log = FALSE)
 #' # exposure values
 #' w.all <- seq(0,20,2)
-#' data.table::setDT(sim.data)
-#' cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
+#' cerf_nngp_obj <- estimate_cerf_nngp(data,
 #'                                     w.all,
 #'                                     GPS_m,
 #'                                     params = list(alpha = c(0.1),
@@ -78,16 +79,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
   logger::log_info("Working on estimating cerf using nngp approach ...")
 
   # Double-check input parameters ----------------------------------------------
-  if (!is.data.table(data)){
-    stop(paste0("Data should be a data.table. ",
-                "Current format: ", class(data)[1]))
-  }
-
-  if (!is.data.table(GPS_m)){
-    stop(paste0("The GPS_m should be a data.table. ",
-                "Current format: ", class(GPS_m)[1]))
-  }
-
   check_params <- function(my_param, params){
     for (item in my_param){
       if (!is.element(c(item), names(params))){
@@ -131,7 +122,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
   design_mt <- as.data.frame(model.matrix(formula, data = data))
   optimal_cb_res <- find_optimal_nn(w_obs = data[, c(2)][[1]],
                                 w = w,
-                                y_obs = data[, c(1)][[1]],
+                                y_obs = data[, c(1)],
                                 GPS_m = GPS_m,
                                 design_mt = design_mt,
                                 hyperparams = tune_params_subset,
@@ -149,7 +140,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
 
   # Estimate noise -------------------------------------------------------------
   noise_nn <- estimate_noise_nn(hyperparam = nn_opt_param,
-                                w_obs = data[, c(2)][[1]],
+                                w_obs = data[, c(2)],
                                 GPS_obs = GPS_m$GPS,
                                 y_obs = data[, c(1)][[1]],
                                 n_neighbor = n_neighbor*expand,
@@ -160,7 +151,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
                                         sigma2 = noise_nn^2,
                                         w_obs = data[, c(2)][[1]],
                                         w = w,
-                                        y_obs = data[, c(1)][[1]],
+                                        y_obs = data[, c(1)],
                                         GPS_m = GPS_m,
                                         n_neighbor = n_neighbor,
                                         expand = expand,

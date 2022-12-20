@@ -1,7 +1,20 @@
 ## GPCERF (development)
 
 ### Changed
-* 
+* find_optimal_nn becomes an internal function. 
+* estimate_noise_gp and estimate_noise_nn become internal functions. 
+* estimate_mean_sd_nn becomes an internal function.
+* compute_weight_gp becomes an internal function.
+* compute_w_corr accepts w and confounders separately.  
+* compute_posterior_sd_nn becomes an internal function.
+* compute_posterior_m_nn becomes an internal function.
+* compute_derive_weights_gp becomes an internal function. 
+* compute_m_sigma becomes an internal function.
+* compute_inverse becomes an internal function. 
+* In compute_m_sigma, tuning option does not have a default value. 
+* train_gps does not have default values.
+* train_gps accepts vector of the SuperLearner package's libraries.
+* train_GPS -> train_gps
 
 ### Added
 * 

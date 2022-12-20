@@ -10,13 +10,13 @@
 #'   - First element: alpha
 #'   - Second element: beta
 #'   - Third element: g_sigma (gamma/sigma)
-#' @param data A  data.table containing all data including outcome, exposure
+#' @param data A  data.frame containing all data including outcome, exposure
 #' and covariates. In the following order:
 #'   - Column 1: Outcome (Y)
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure levels at which the CERF is estimated.
-#' @param GPS_m A data.table of GPS vectors.
+#' @param GPS_m A data.frame of GPS vectors.
 #'   - Column 1: A vector of estimated GPS evaluated at the observed exposure levels.
 #'   - Column 2: Estimated conditional means of the exposure given covariates
 #'               for all samples (e_gps_pred).
@@ -28,32 +28,12 @@
 #' @return
 #' A list containing two elements: 1) a vector of absolute weighted correlation
 #' of each covariate to the exposure, which is the metric for covariate balance
-#' and 2) the estimated CERF at \code{w.all} based on the hyper-parameter
+#' and 2) the estimated CERF at \code{w_all} based on the hyper-parameter
 #' values in \code{param}.
-#' @export
 #'
-#' @examples
+#' @keywords internal
 #'
-#' set.seed(912)
-#' data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
-#'
-#' w_all <- seq(0,20,1)
-#'
-#' data.table::setDT(data)
-#'
-#' #Estimate GPS function
-#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-#'                    w_all = as.matrix(data$treat))
-#'
-#' tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
-#'                             data = data,
-#'                             w = w_all,
-#'                             GPS_m = GPS_m,
-#'                             nthread = 1)
-#'
-#' gp.cerf <- tune_res$est
-#'
-compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning = T,
+compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
                             kernel_fn = function(x) exp(-x^2)){
 
   param = unlist(hyperparam)
@@ -113,7 +93,9 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning = T,
       est <- NA
       pst_sd <- NA
     }
-    covariate_balance <- compute_w_corr(data, weights_final)
+    covariate_balance <- compute_w_corr(w = data[[2]],
+                                        confounders = data[,3:ncol(data)],
+                                        weights_final)
     c(covariate_balance, est, pst_sd)
   })
 

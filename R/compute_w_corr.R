@@ -5,10 +5,8 @@
 #' Computes weighted correlation of the observational data based on weights
 #' achieved by Gaussian Process.
 #'
-#' @param data A data.table of observational data with the following columns:
-#'   - Column 1: Outcome (Y)
-#'   - Column 2: Exposure or treatment (w)
-#'   - Column 3~m: Confounders (C)
+#' @param w A vector of exposure values for the observed data.
+#' @param confounders A data.frame of observational confounders.
 #' @param weights A vector of weights for each observation data.
 #'
 #' @return
@@ -20,40 +18,52 @@
 #'
 #' set.seed(124)
 #' mydata <- generate_synthetic_data(sample_size = 200)
-#' data.table::setDT(mydata)
 #' weights <- runif(nrow(mydata))
-#' compute_w_corr(mydata, weights)
+#' compute_w_corr(mydata$treat,
+#'                mydata[, 3:ncol(mydata)],
+#'                weights)
 #'
-compute_w_corr <- function(data, weights){
+compute_w_corr <- function(w, confounders, weights){
 
 
-  if (!is.data.table(data)){
-    stop(paste0("The data should be a data.table. ",
-                "Current format: ", class(data)[1]))
+  if (!is.data.frame(confounders)){
+    stop(paste0("The confounders should be a data.frame. ",
+                "Current format: ", class(confounders)[1]))
   }
 
-  if (nrow(data) != length(weights)){
-    stop(paste0("Number of data samples (", nrow(data), ") and length of ",
-                "weights (", length(weights),") should be equal."))
+  if (!is.vector(w)){
+    stop(paste0("The w param should be a vector. ",
+                "Current format: ", class(confounders)[1]))
+  }
+
+  if (nrow(confounders) != length(weights)){
+    stop(paste0("Number of data samples in confounder (", nrow(confounders),
+                ") and length of ", "weights (", length(weights),
+                ") should be equal."))
+  }
+
+  if (length(w) != length(weights)){
+    stop(paste0("Number of data samples in w (", length(w),
+                ") and length of ", "weights (", length(weights),
+                ") should be equal."))
   }
 
   # TODO: model.matrix will create dummy variables for factors.
   # Double-check.
-  conf_names <- colnames(data[,3:ncol(data)])
+  conf_names <- colnames(confounders)
   frml <- paste("~",paste(conf_names, collapse = "+"), "-1", sep = "")
 
-  w_obs <- data[[2]]
-
-  x_design <- model.matrix(as.formula(frml), data = data)
-  w_mean <- sum(w_obs*weights)
-  w_sd <- sqrt(sum((w_obs - w_mean)^2*weights))
-  w_stan <- (w_obs - w_mean)/w_sd
+  x_design <- model.matrix(as.formula(frml), data = confounders)
+  w_mean <- sum(w*weights)
+  w_sd <- sqrt(sum((w - w_mean)^2*weights))
+  w_stan <- (w - w_mean)/w_sd
 
   x_mean <- colSums(x_design*weights)
   x_cov <- (t(x_design) - x_mean)%*%diag(weights)%*%t(t(x_design) - x_mean)
 
   # when x_cov is rank deficient, return NA for all covariate balance
-  x_stan <- tryCatch(t(t(solve(chol(x_cov)))%*%(t(x_design) - x_mean)), error = function(e) NA)
+  x_stan <- tryCatch(t(t(solve(chol(x_cov)))%*%(t(x_design) - x_mean)),
+                     error = function(e) NA)
   if(!is.na(x_stan[1])){
     covariate_balance <- abs(c(t(x_stan)%*%diag(weights)%*%w_stan))
   }else{
