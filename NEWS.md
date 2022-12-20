@@ -1,7 +1,11 @@
 ## GPCERF (development)
 
 ### Changed
-* find_optimal_nn becomes an internal function. 
+* estimate_mean_sd_nn now only computes the posterior variance.
+* find_optimal_nn now returns the posterior mean and covariate balance for the optimal hyper-parameter values.
+* Add parallelization options to estimate_noise_nn.R.
+* Add an argument kernel_fn to all nn related functions to allow for user-defined kernel functions.
+* find_optimal_nn becomes an internal function.
 * estimate_noise_gp and estimate_noise_nn become internal functions. 
 * estimate_mean_sd_nn becomes an internal function.
 * compute_weight_gp becomes an internal function.
