@@ -16,6 +16,7 @@
 #' levels. The rows are in ascending order for the first column.
 #' @param y_obs_ord A vector of observed outcome values. The vector is ordered
 #' as \code{obs_ord}.
+#' @param kernel_fn The covariance function of the GP.
 #' @param n_neighbor The number of nearest neighbors on one side
 #' (see also \code{expand}).
 #' @param expand Scaling factor to determine the total number of nearest

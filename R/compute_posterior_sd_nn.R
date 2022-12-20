@@ -13,6 +13,7 @@
 #' exposure levels of all samples; the second is the GPS at the observed
 #' exposure levels. The rows are in ascending order for the first column.
 #' @param sigma2 A scaler representing \code{sigma^2}.
+#' @param kernel_fn The covariance function of the GP.
 #' @param n_neighbor Number of nearest neighbors on one side
 #' (see also \code{expand}).
 #' @param expand A scaling factor to determine the total number of nearest

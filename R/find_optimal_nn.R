@@ -16,6 +16,7 @@
 #' @param design_mt The covariate matrix of all samples (intercept excluded).
 #' @param hyperparams A matrix of candidate values of the hyper-parameters,
 #' each row contains a set of values of all hyper-parameters.
+#' @param kernel_fn The covariance function of the GP.
 #' @param n_neighbor The number of nearest neighbors on one side
 #' (see also \code{expand}).
 #' @param expand Scaling factor to determine the total number of nearest
@@ -36,6 +37,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                       hyperparams = expand.grid(seq(0.5,4.5,1),
                                                 seq(0.5,4.5,1),
                                                 seq(0.5,4.5,1)),
+                      kernel_fn = function(x) exp(-x^2),
                       n_neighbor = 50, expand = 2, block_size = 2e3,
                       nthread = 1){
 
@@ -63,9 +65,9 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   # export variables and functions to cluster cores
   parallel::clusterExport(cl=cl,
                           varlist = c("w", "GPS_m",
-                                      "coord_obs_ord", "y_use_ord",
+                                      "coord_obs_ord", "y_use_ord", "kernel_fn",
                                       "n_neighbor", "expand", "block_size",
-                                      "compute_posterior_m_nn", "calc_ac"),
+                                      "compute_posterior_m_nn", "compute_w_corr"),
                           envir=environment())
 
   t_cl_2 <- proc.time()
@@ -96,6 +98,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                                     obs_ord = coord_obs_ord,
                                     y_obs_ord = y_use_ord,
                                     n_neighbor = n_neighbor,
+                                    kernel_fn = kernel_fn,
                                     expand = expand,
                                     block_size = block_size)
       idx <- res[-nrow(res),1]
@@ -103,8 +106,8 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
       # weights <- weights/sum(weights)
       # note input of compute_w_coord: first col is obs response, second col is obs exposure
       # rest are covariates
-      X <- data.table::setDT(cbind( y_use_ord, coord_obs_ord[,1], design_use_ord)[idx,])
-      cb = compute_w_corr(X, weights)
+      # X <- data.table::setDT(cbind( y_use_ord, coord_obs_ord[,1], design_use_ord)[idx,])
+      cb = compute_w_corr(w = coord_obs_ord[idx,1], confounders = design_use_ord[idx,], weights)
       # calc_ac( coord_obs[idx,1], design_use_ord[idx,], weights = weights)
       list(cb = cb, est = res[nrow(res),2])
     })

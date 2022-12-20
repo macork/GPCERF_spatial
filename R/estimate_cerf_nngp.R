@@ -31,6 +31,7 @@
 #'   is faster, but requires more memory.
 #' alpha, beta, and g_sigma can be a vector of parameters.
 #' @param kernel_fn A kernel function. A default value is a Gaussian Kernel.
+#' @param formula A formula to indicate the design matrix of the model for GPS.
 #' @param nthread An integer value that represents the number of threads to be
 #' used by internal packages.
 #'
@@ -67,7 +68,8 @@
 #'                                     nthread = 1)
 #'}
 #'
-estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthread = 1){
+estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn = function(x) exp(-x^2),
+                               formula, nthread = 1){
 
   # Log system info
   log_system_info()
@@ -120,13 +122,14 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
 
   # Search for the best set of parameters --------------------------------------
   design_mt <- as.data.frame(model.matrix(formula, data = data))
-  optimal_cb_res <- find_optimal_nn(w_obs = data[, c(2)][[1]],
+  optimal_cb_res <- find_optimal_nn(w_obs = data[, c(2)],
                                 w = w,
                                 y_obs = data[, c(1)],
                                 GPS_m = GPS_m,
                                 design_mt = design_mt,
                                 hyperparams = tune_params_subset,
                                 n_neighbor = n_neighbor,
+                                kernel_fn = kernel_fn,
                                 expand = expand,
                                 block_size = block_size,
                                 nthread = nthread)
@@ -142,17 +145,19 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
   noise_nn <- estimate_noise_nn(hyperparam = nn_opt_param,
                                 w_obs = data[, c(2)],
                                 GPS_obs = GPS_m$GPS,
-                                y_obs = data[, c(1)][[1]],
+                                y_obs = data[, c(1)],
+                                kernel_fn = kernel_fn,
                                 n_neighbor = n_neighbor*expand,
                                 nthread = nthread)
 
   # Compute posterior mean and standard deviation ------------------------------
   posterior_vals <- estimate_mean_sd_nn(hyperparam = nn_opt_param,
                                         sigma2 = noise_nn^2,
-                                        w_obs = data[, c(2)][[1]],
+                                        w_obs = data[, c(2)],
                                         w = w,
                                         y_obs = data[, c(1)],
                                         GPS_m = GPS_m,
+                                        kernel_fn = kernel_fn,
                                         n_neighbor = n_neighbor,
                                         expand = expand,
                                         block_size = block_size,
@@ -160,7 +165,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn, formula, nthre
 
   # posterior_mean <- posterior_vals[,1]
   posterior_sd <- posterior_vals
-
 
   t_nngp_2 <- proc.time()
   logger::log_info("Done with estimating cerf using nngp approach ",

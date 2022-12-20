@@ -15,6 +15,7 @@
 #'   - Column 2: Prediction of exposure for covariate of each data sample
 #'   (e_gps_pred).
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std)
+#' @param kernel_fn The covariance function of the GP.
 #' @param n_neighbor The number of nearest neighbors on one side
 #' (see also \code{expand}).
 #' @param expand Scaling factor to determine the total number of nearest
@@ -38,6 +39,7 @@ estimate_mean_sd_nn <- function(hyperparam,
                                 w,
                                 y_obs,
                                 GPS_m,
+                                kernel_fn = function(x) exp(-x^2),
                                 n_neighbor = 50,
                                 expand = 2,
                                 block_size = 2e3,
@@ -72,7 +74,7 @@ estimate_mean_sd_nn <- function(hyperparam,
   parallel::clusterExport(cl=cl,
                           varlist = c("w", "GPS_m", "hyperparam",
                                       "coord_obs_ord", "y_use_ord",
-                                      "sigma2",
+                                      "sigma2", "kernel_fn",
                                       "n_neighbor", "expand", "block_size",
                                       "compute_posterior_m_nn",
                                       "compute_posterior_sd_nn",
@@ -101,6 +103,7 @@ estimate_mean_sd_nn <- function(hyperparam,
                                    GPS_w = GPS_w,
                                    obs_ord = coord_obs_ord,
                                    sigma2 = sigma2,
+                                   kernel_fn = kernel_fn,
                                    n_neighbor = n_neighbor,
                                    expand = expand)
     # c(mean, val)

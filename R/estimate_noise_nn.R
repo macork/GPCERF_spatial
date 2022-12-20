@@ -10,6 +10,8 @@
 #' @param GPS_obs A vector of estimated GPS evaluated at the observed exposure levels.
 #' @param y_obs A vector of observed outcomes.
 #' @param n_neighbor Number of nearest neighbors on one side.
+#' @param n_thread Number of cpus used in the estimation.
+#' @param kernel_fn The covariance function of the GP.
 #'
 #' @return
 #' A scalar of estimated standard deviation of the nugget term in nnGP.
@@ -22,7 +24,7 @@ estimate_noise_nn <- function(hyperparam,
                               y_obs,
                               n_neighbor,
                               nthread,
-                              kern_fn = function(x) exp(-x^2)){
+                              kernel_fn = function(x) exp(-x^2)){
 
 
   t_1 <- proc.time()
@@ -42,7 +44,7 @@ estimate_noise_nn <- function(hyperparam,
                               outfile= lfp)
   parallel::clusterExport(cl=cl,
                           varlist = c("w_obs","obs_ord", "y_ord",
-                                      "n_neighbor", "kern_fn", "g_sigma",
+                                      "n_neighbor", "kernel_fn", "g_sigma",
                                       "arma_mm"),
                           envir=environment())
 
@@ -56,7 +58,7 @@ estimate_noise_nn <- function(hyperparam,
       idx_use <- i_min:(i_min + n_neighbor - 1)
     }
 
-    cov_all <- g_sigma*kern_fn(as.matrix(dist(obs_ord[c(i,idx_use),]))) + diag(n_neighbor+1)
+    cov_all <- g_sigma*kernel_fn(as.matrix(dist(obs_ord[c(i,idx_use),]))) + diag(n_neighbor+1)
     w <- c(arma_mm(compute_inverse(cov_all[-1,-1]), cov_all[1,-1]))
     c(w%*%y_ord[idx_use]) - y_ord[i]
   })
