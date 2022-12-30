@@ -180,6 +180,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn = function(x) e
   result$pst_mean <- posterior_mean
   result$pst_sd <- posterior_sd
   result$fcall <- fcall
+  result$params <- nn_opt_param
 
   invisible(result)
 }
