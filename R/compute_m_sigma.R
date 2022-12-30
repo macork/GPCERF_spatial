@@ -77,10 +77,10 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
                                        kernel_fn = kernel_fn)
 
     weights_final = weights_res$weight
-    weights_final[weights_final<0] <- 0
-    if(sum(weights_final)>0){
-      weights_final <- weights_final/sum(weights_final)
-    }
+    # weights_final[weights_final<0] <- 0
+    # if(sum(weights_final)>0){
+    #   weights_final <- weights_final/sum(weights_final)
+    # }
 
     # weigts.final = invers of paranthesis * kappa
     # est is the same as m in the paper.

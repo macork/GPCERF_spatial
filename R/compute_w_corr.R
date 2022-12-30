@@ -53,6 +53,12 @@ compute_w_corr <- function(w, confounders, weights){
   conf_names <- colnames(confounders)
   frml <- paste("~",paste(conf_names, collapse = "+"), "-1", sep = "")
 
+  # normalize weights here
+  weights[weights<0] <- 0
+  if(sum(weights)>0){
+    weights <- weights/sum(weights)
+  }
+
   x_design <- model.matrix(as.formula(frml), data = confounders)
   w_mean <- sum(w*weights)
   w_sd <- sqrt(sum((w - w_mean)^2*weights))
