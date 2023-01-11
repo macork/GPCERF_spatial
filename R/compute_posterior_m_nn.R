@@ -88,7 +88,9 @@ compute_posterior_m_nn <- function(hyperparam,
   })
   weights <- Rfast::rowsums(all_weights)/n
   weights[weights<0] <- 0
-  weights <- weights/sum(weights)
+  if(sum(weights)>0){
+    weights <- weights/sum(weights)
+  }
 
   est <- c(used_y%*%weights)
 
