@@ -105,7 +105,8 @@ estimate_mean_sd_nn <- function(hyperparam,
                                    sigma2 = sigma2,
                                    kernel_fn = kernel_fn,
                                    n_neighbor = n_neighbor,
-                                   expand = expand)
+                                   expand = expand,
+                                   block_size = block_size)
     # c(mean, val)
     val
   })
