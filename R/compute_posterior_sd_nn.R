@@ -18,6 +18,9 @@
 #' (see also \code{expand}).
 #' @param expand A scaling factor to determine the total number of nearest
 #' neighbors. The total is \code{2*expand*n_neighbor}.
+#' @param block_size Number of samples included in a computation block.
+#' Mainly used to balance the speed and memory requirement.
+#' Larger \code{block_size} is faster, but requires more memory.
 #'
 #' @return
 #' The posterior standard deviation of the estimated CERF at \code{w}.
@@ -31,7 +34,8 @@ compute_posterior_sd_nn <-  function(hyperparam,
                                      sigma2,
                                      kernel_fn = function(x) exp(-x^2),
                                      n_neighbor = 10,
-                                     expand = 1){
+                                     expand = 1,
+                                     block_size = 1e4){
 
   alpha <- hyperparam[[1]]
   beta <- hyperparam[[2]]
@@ -39,6 +43,8 @@ compute_posterior_sd_nn <-  function(hyperparam,
 
 
   n <- length(GPS_w)
+  # Compute number of blocks
+  n_block <- base::ceiling(n/block_size)
 
   if(w >= obs_ord[nrow(obs_ord),1]){
     idx_all <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
@@ -62,9 +68,19 @@ compute_posterior_sd_nn <-  function(hyperparam,
   sigma_sq1 <- (1+g_sigma)*sigma2/n
 
   #cross variance
-  cross_cov <- sigma2*g_sigma*kernel_fn(spatstat.geom::crossdist(obs_new[,1],obs_new[,2],
-                                                                obs_use[,1],obs_use[,2]))
-  cross_cov_colS <- Rfast::colsums(cross_cov)
+  #also use block to free up memories
+  id_all <- split(1:n, ceiling(seq_along(1:n)/n_block))
+  cross_cov_colS <- Rfast::rowsums(sapply(id_all, function(id_ind){
+    cross_cov <- sigma2*g_sigma*kernel_fn(spatstat.geom::crossdist(obs_new[id_ind,1],
+                                                            obs_new[id_ind,2],
+                                                            obs_use[,1],
+                                                            obs_use[,2]))
+    Rfast::colsums(cross_cov)
+  }))
+
+  # cross_cov <- sigma2*g_sigma*kernel_fn(spatstat.geom::crossdist(obs_new[,1],obs_new[,2],
+  #                                                               obs_use[,1],obs_use[,2]))
+  # cross_cov_colS <- Rfast::colsums(cross_cov)
   cross_cov_mult <- c(arma_mm(cov_use_inv, cross_cov_colS))
 
   sigma_sq2 <- c(cross_cov_colS%*%cross_cov_mult)/n^2
