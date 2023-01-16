@@ -87,6 +87,7 @@ nngp_res_normal <- estimate_cerf_nngp(data_sim_normal,
                                                     expand = 1,
                                                     block_size = 50,
                                                     tune_app = "all"),
+                                      formula = ~ . - 1 - Y - treat,
                                       nthread = 1)
 plot(nngp_res_normal) + 
   geom_line(data = data.frame(w = w_all, y = erf_tru_normal), 
@@ -108,6 +109,7 @@ nngp_res_t <- estimate_cerf_nngp(data_sim_t,
                                                 expand = 1,
                                                 block_size = 50,
                                                 tune_app = "all"),
+                                  formula = ~ . - 1 - Y - treat,
                                   nthread = 1)
 plot(nngp_res_t) + 
   geom_line(data = data.frame(w = w_all, y = erf_tru_t), 
