@@ -65,6 +65,7 @@
 #'                                                   n_neighbor = 20,
 #'                                                   expand = 1,
 #'                                                   block_size = 1e4),
+#'                                     formula = ~ . - 1 - Y - treat,
 #'                                     nthread = 1)
 #'}
 #'
