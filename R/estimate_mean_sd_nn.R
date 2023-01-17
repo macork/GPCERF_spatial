@@ -27,9 +27,7 @@
 #' used by internal packages.
 #'
 #' @return
-#' A list of 2 elements, including:
-#' - the returned value from \code{compute_posterior_m_nn}
-#' - the returned value from \code{compute_posterior_sd_nn}
+#' A vector of returned value from \code{compute_posterior_sd_nn}.
 #'
 #' @keywords internal
 #'

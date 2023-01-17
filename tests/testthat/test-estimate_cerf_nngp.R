@@ -19,7 +19,8 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                     tune_app = "all",
                                                     n_neighbor = 20,
                                                     expand = 1,
-                                                    block_size = 1e4))
+                                                    block_size = 1e4),
+                                      formula = ~ . - 1 - Y - treat)
 
   expect_s3_class(cerf_nngp_obj, "cerf_nngp")
 

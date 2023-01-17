@@ -69,8 +69,9 @@
 #'                                     nthread = 1)
 #'}
 #'
-estimate_cerf_nngp <- function(data, w, GPS_m, params, kernel_fn = function(x) exp(-x^2),
-                               formula, nthread = 1){
+estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
+                               kernel_fn = function(x) exp(-x^2),
+                               nthread = 1){
 
   # Log system info
   log_system_info()
