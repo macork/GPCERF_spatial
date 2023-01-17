@@ -10,6 +10,7 @@ compute_posterior_m_nn(
   GPS_w,
   obs_ord,
   y_obs_ord,
+  kernel_fn = function(x) exp(-x^2),
   n_neighbor = 10,
   expand = 5,
   block_size = 10000
@@ -30,6 +31,8 @@ levels. The rows are in ascending order for the first column.}
 
 \item{y_obs_ord}{A vector of observed outcome values. The vector is ordered
 as \code{obs_ord}.}
+
+\item{kernel_fn}{The covariance function of the GP.}
 
 \item{n_neighbor}{The number of nearest neighbors on one side
 (see also \code{expand}).}

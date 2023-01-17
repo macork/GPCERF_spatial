@@ -34,6 +34,7 @@ train_gps <- function(cov_mt, w_all, sl_lib, dnorm_log){
   GPS_SL <- SuperLearner::SuperLearner(Y = w_all,
                                        X = as.data.frame(cov_mt),
                                        SL.library = sl_lib)
+
   GPS_SL_sd <- sd(w_all - GPS_SL$SL.predict)
   GPS_m <- data.frame(GPS = dnorm(w_all,
                                   mean = GPS_SL$SL.predict,

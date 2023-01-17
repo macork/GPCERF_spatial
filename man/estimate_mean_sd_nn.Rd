@@ -11,6 +11,7 @@ estimate_mean_sd_nn(
   w,
   y_obs,
   GPS_m,
+  kernel_fn = function(x) exp(-x^2),
   n_neighbor = 50,
   expand = 2,
   block_size = 2000,
@@ -36,6 +37,8 @@ estimate_mean_sd_nn(
 \item Column 3: Standard deviation of  e_gps (e_gps_std)
 }}
 
+\item{kernel_fn}{The covariance function of the GP.}
+
 \item{n_neighbor}{The number of nearest neighbors on one side
 (see also \code{expand}).}
 
@@ -50,11 +53,7 @@ Mainly used to balance the speed and memory requirement. Larger
 used by internal packages.}
 }
 \value{
-A list of 2 elements, including:
-\itemize{
-\item the returned value from \code{compute_posterior_m_nn}
-\item the returned value from \code{compute_posterior_sd_nn}
-}
+A vector of returned value from \code{compute_posterior_sd_nn}.
 }
 \description{
 Estimates the posterior mean of the conditional exposure response function

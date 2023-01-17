@@ -10,8 +10,10 @@ compute_posterior_sd_nn(
   GPS_w,
   obs_ord,
   sigma2,
+  kernel_fn = function(x) exp(-x^2),
   n_neighbor = 10,
-  expand = 1
+  expand = 1,
+  block_size = 10000
 )
 }
 \arguments{
@@ -28,11 +30,17 @@ exposure levels. The rows are in ascending order for the first column.}
 
 \item{sigma2}{A scaler representing \code{sigma^2}.}
 
+\item{kernel_fn}{The covariance function of the GP.}
+
 \item{n_neighbor}{Number of nearest neighbors on one side
 (see also \code{expand}).}
 
 \item{expand}{A scaling factor to determine the total number of nearest
 neighbors. The total is \code{2*expand*n_neighbor}.}
+
+\item{block_size}{Number of samples included in a computation block.
+Mainly used to balance the speed and memory requirement.
+Larger \code{block_size} is faster, but requires more memory.}
 }
 \value{
 The posterior standard deviation of the estimated CERF at \code{w}.

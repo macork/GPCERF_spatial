@@ -34,7 +34,8 @@ test_that("estimate_noise_nn works as expected!", {
                              w_obs = data$treat,
                              GPS_obs = GPS_m$GPS,
                              y_obs = y_use_ord,
-                             n_neighbor = n_neighbor)
+                             n_neighbor = n_neighbor,
+                             nthread = 1)
 
   expect_equal(length(noise), 1L)
 

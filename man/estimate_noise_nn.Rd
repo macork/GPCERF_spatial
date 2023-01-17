@@ -4,7 +4,15 @@
 \alias{estimate_noise_nn}
 \title{Estimate the Standard Deviation (noise) of the Nugget Term in nnGP}
 \usage{
-estimate_noise_nn(hyperparam, w_obs, GPS_obs, y_obs, n_neighbor)
+estimate_noise_nn(
+  hyperparam,
+  w_obs,
+  GPS_obs,
+  y_obs,
+  n_neighbor,
+  nthread,
+  kernel_fn = function(x) exp(-x^2)
+)
 }
 \arguments{
 \item{hyperparam}{A vector of hyper-parameter values.}
@@ -16,6 +24,10 @@ estimate_noise_nn(hyperparam, w_obs, GPS_obs, y_obs, n_neighbor)
 \item{y_obs}{A vector of observed outcomes.}
 
 \item{n_neighbor}{Number of nearest neighbors on one side.}
+
+\item{kernel_fn}{The covariance function of the GP.}
+
+\item{n_thread}{Number of cpus used in the estimation.}
 }
 \value{
 A scalar of estimated standard deviation of the nugget term in nnGP.

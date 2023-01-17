@@ -20,7 +20,8 @@ test_that("estimate_mean_sd_nn works as expected!", {
                              w_obs = data$treat,
                              GPS_obs = GPS_m$GPS,
                              y_obs = data$Y,
-                             n_neighbor = n_neighbor)
+                             n_neighbor = n_neighbor,
+                             nthread = 1)
 
   # compute posterior mean and standard deviation for vector of w.
   w <- seq(0,20,1)
@@ -34,13 +35,12 @@ test_that("estimate_mean_sd_nn works as expected!", {
                              expand = expand,
                              block_size = block_size)
 
-  expect_equal(length(val), 2L)
+  expect_equal(length(val), 21)
   # There are length(w) elements in the first item and the second item.
-  expect_equal(length(val[[1]]), 21L)
-  expect_equal(length(val[[2]]), 21L)
+  # expect_equal(length(val[[1]]), 21L)
+  # expect_equal(length(val[[2]]), 21L)
 
-  # First element returns number of neighbors + mean value
-  expect_equal(nrow(val[[1]][[10]]), 31L)
+  expect_equal(val[10], 5.068975, tolerance = 0.0001)
 
   #expect_equal(val[[1]][[12]][29,2], 0.0003256218, tolerance = 0.0001)
 

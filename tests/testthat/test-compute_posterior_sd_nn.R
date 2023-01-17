@@ -35,7 +35,8 @@ test_that("compute_posterior_sd_nn works as expected.", {
                              w_obs = data$treat,
                              GPS_obs = GPS_m$GPS,
                              y_obs = y_use_ord,
-                             n_neighbor = n_neighbor)
+                             n_neighbor = n_neighbor,
+                             nthread = 1)
 
   # compute posterior standard deviation
   pst_sd <- compute_posterior_sd_nn(hyperparam = hyperparam,

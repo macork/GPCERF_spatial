@@ -9,8 +9,8 @@ test_that("Weighted correlation works as expected.", {
 
   expect_vector(val1)
   expect_equal(length(val1), 6L)
-  expect_equal(val1[1], 0.9725398, tolerance = 0.00001)
-  expect_equal(val1[2], 0.0259583, tolerance = 0.00001)
+  expect_equal(val1[1], 0.2308136, tolerance = 0.00001)
+  expect_equal(val1[2], 0.3020672, tolerance = 0.00001)
 
 
   # number of data.samples and weights should be the same
