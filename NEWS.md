@@ -1,15 +1,17 @@
 ## GPCERF (development)
 
 ### Changed
+* estimate_noise_nn now allows for parallelization with an added argument nthread for the number of cpus used in parallel.
 * estimate_mean_sd_nn now only computes the posterior variance.
 * find_optimal_nn now returns the posterior mean and covariate balance for the optimal hyper-parameter values.
 * Add parallelization options to estimate_noise_nn.R.
 * Add an argument kernel_fn to all nn related functions to allow for user-defined kernel functions.
+* Add an argument formula to all nn related functions to allow for user-defined design matrix.
 * find_optimal_nn becomes an internal function.
 * estimate_noise_gp and estimate_noise_nn become internal functions. 
 * estimate_mean_sd_nn becomes an internal function.
 * compute_weight_gp becomes an internal function.
-* compute_w_corr accepts w and confounders separately.  
+* compute_w_corr accepts w and confounders separately. It also normalizes w internally.  
 * compute_posterior_sd_nn becomes an internal function.
 * compute_posterior_m_nn becomes an internal function.
 * compute_derive_weights_gp becomes an internal function. 
