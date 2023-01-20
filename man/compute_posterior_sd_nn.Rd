@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_posterior_sd_nn.R
 \name{compute_posterior_sd_nn}
 \alias{compute_posterior_sd_nn}
-\title{Calculate Posterior Standard Deviations for nnGP Model}
+\title{Calculate posterior standard deviations for nnGP model}
 \usage{
 compute_posterior_sd_nn(
   hyperparam,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_mean_sd_nn.R
 \name{estimate_mean_sd_nn}
 \alias{estimate_mean_sd_nn}
-\title{Estimate the CERF with the nnGP Model}
+\title{Estimate the CERF with the nnGP model}
 \usage{
 estimate_mean_sd_nn(
   hyperparam,
@@ -43,11 +43,11 @@ estimate_mean_sd_nn(
 (see also \code{expand}).}
 
 \item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n.neighbour}.}
+neighbors. The total is \code{2 * expand * n_neighbour}.}
 
 \item{block_size}{The number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement. Larger
-\code{block.size} is faster, but requires more memory.}
+\code{block_size} is faster, but requires more memory.}
 
 \item{nthread}{An integer value that represents the number of threads to be
 used by internal packages.}

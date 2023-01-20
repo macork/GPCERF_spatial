@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_optimal_nn.R
 \name{find_optimal_nn}
 \alias{find_optimal_nn}
-\title{Find the Optimal Hyper-parameter for the Nearest Neighbor Gaussian Process}
+\title{Find the optimal hyper-parameter for the nearest neighbor Gaussian process}
 \usage{
 find_optimal_nn(
   w_obs,
@@ -44,7 +44,7 @@ each row contains a set of values of all hyper-parameters.}
 (see also \code{expand}).}
 
 \item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n_neighbor}.}
+neighbors. The total is \code{2 * expand * n_neighbor}.}
 
 \item{block_size}{The number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement. Larger

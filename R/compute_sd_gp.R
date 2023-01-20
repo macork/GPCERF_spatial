@@ -1,5 +1,5 @@
 #' @title
-#' Compute Posterior Credible Interval
+#' Compute posterior credible interval
 #'
 #' @description
 #' Computes posterior credible interval for requested exposure level.
@@ -31,7 +31,7 @@ compute_sd_gp <- function(w,
                           hyperparam,
                           sigma,
                           GPS_m,
-                          kernel_fn = function(x) exp(-x^2)){
+                          kernel_fn = function(x) exp(-x ^ 2)) {
 
 
   alpha <- hyperparam[[1]]
@@ -43,17 +43,23 @@ compute_sd_gp <- function(w,
   # Compute GPS for requested w
   e_gps_pred <- GPS_m$e_gps_pred
   e_gps_std <- GPS_m$e_gps_std
-  GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
+  GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
 
   # Compute helper matrix for the new w and corresponding GPS.
-  scaled_w <- cbind( w/sqrt(1/alpha), GPS_w/sqrt(1/beta))
+  scaled_w <- cbind(w / sqrt(1 / alpha), GPS_w / sqrt(1 / beta))
 
   scaled_combined <- rbind(scaled_w, scaled_obs)
-  Sigma_all <- (g_sigma*kernel_fn(as.matrix(stats::dist(scaled_combined))) + diag(n*2))*sigma^2
+  Sigma_all <- (g_sigma*kernel_fn(as.matrix(stats::dist(scaled_combined))) +
+                diag(n * 2)) * sigma ^ 2
   Sigma_within_w <- Sigma_all[1:n, 1:n]
   Sigma_cross <- Sigma_all[1:n, -(1:n)]
   Sigma_within_obs <- Sigma_all[-(1:n), -(1:n)]
-  Sigma_conditional <- Sigma_within_w - Sigma_cross%*%chol2inv(chol(Sigma_within_obs))%*%t(Sigma_cross)
-  posterior_sd <- sqrt(rep(1/n,n)%*%Sigma_conditional%*%rep(1/n,n) + sigma^2)
+  Sigma_conditional <- Sigma_within_w -
+                       Sigma_cross %*%
+                       chol2inv(chol(Sigma_within_obs)) %*%
+                       t(Sigma_cross)
+  posterior_sd <- sqrt(rep(1 / n, n) %*%
+                  Sigma_conditional %*%
+                  rep(1 / n, n) + sigma ^ 2)
   return(posterior_sd)
 }

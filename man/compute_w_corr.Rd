@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_w_corr.R
 \name{compute_w_corr}
 \alias{compute_w_corr}
-\title{Compute Weighted Correlation}
+\title{Compute weighted correlation}
 \usage{
 compute_w_corr(w, confounders, weights)
 }

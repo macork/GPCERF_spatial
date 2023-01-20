@@ -2,7 +2,8 @@
 % Please edit documentation in R/estimate_cerf_nngp.R
 \name{estimate_cerf_nngp}
 \alias{estimate_cerf_nngp}
-\title{Estimate the Conditional Exposure Response Function using Nearest Neighbor Gaussian Process}
+\title{Estimate the conditional exposure response function using nearest neighbor
+Gaussian process}
 \usage{
 estimate_cerf_nngp(
   data,
@@ -42,7 +43,7 @@ These parameters include:
 \item all: try all combinations of hyperparameters.
 }
 \item expand: Scaling factor to determine the total number of nearest neighbors.
-The total is \code{2*expand*n.neighbour}.
+The total is \code{2 * expand * n_neighbour}.
 \item n_neighbor: Number of nearest neighbors on one side.
 \item block_size: Number of samples included in a computation block. Mainly
 used to balance the speed and memory requirement. Larger \code{block_size}

@@ -2,8 +2,8 @@
 % Please edit documentation in R/compute_m_sigma.R
 \name{compute_m_sigma}
 \alias{compute_m_sigma}
-\title{Compute mean, credible interval, and covariate balance in Full Gaussian
-Process (GP)}
+\title{Compute mean, credible interval, and covariate balance in full Gaussian
+process (GP)}
 \usage{
 compute_m_sigma(
   hyperparam,
@@ -19,7 +19,7 @@ compute_m_sigma(
 \itemize{
 \item First element: alpha
 \item Second element: beta
-\item Third element: g_sigma (gamma/sigma)
+\item Third element: g_sigma (gamma / sigma)
 }}
 
 \item{data}{A  data.frame containing all data including outcome, exposure
@@ -34,22 +34,27 @@ and covariates. In the following order:
 
 \item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
-\item Column 1: A vector of estimated GPS evaluated at the observed exposure levels.
+\item Column 1: A vector of estimated GPS evaluated at the observed exposure
+levels.
 \item Column 2: Estimated conditional means of the exposure given covariates
 for all samples (e_gps_pred).
 \item Column 3: Estimated conditional standard deviation of the exposure given
 covariates for all samples (e_gps_std).
 }}
 
-\item{tuning}{The function is used for parameter tuning (default=TRUE) or estimation (FALSE)}
+\item{tuning}{The function is used for parameter tuning (default = TRUE)
+or estimation (FALSE)}
 
 \item{kernel_fn}{The covariance function of GP.}
 }
 \value{
-A list containing two elements: 1) a vector of absolute weighted correlation
-of each covariate to the exposure, which is the metric for covariate balance
-and 2) the estimated CERF at \code{w_all} based on the hyper-parameter
-values in \code{param}.
+A list containing two elements:
+\itemize{
+\item A vector of absolute weighted correlation of each covariate to the
+exposure, which is the metric for covariate balance
+\item An estimated CERF at \code{w_all} based on the hyper-parameter values in
+\code{param}.
+}
 }
 \description{
 Calculates the induced covariate balance associated with one hyper-parameter

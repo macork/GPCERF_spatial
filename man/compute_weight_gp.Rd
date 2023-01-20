@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_weight_gp.R
 \name{compute_weight_gp}
 \alias{compute_weight_gp}
-\title{Calculate Weights for Estimation of a Point on CERF}
+\title{Calculate weights for estimation of a point on CERF}
 \usage{
 compute_weight_gp(
   w,
@@ -23,7 +23,7 @@ compute_weight_gp(
 \item{scaled_obs}{A matrix of two columns.
 \itemize{
 \item First column is the scaled GPS value of all samples
-(GPS * 1/sqrt(alpha))
+(GPS * 1 / sqrt(alpha))
 \item Second column is the scaled exposure value of all samples
 (w * 1/sqrt(beta))
 }}

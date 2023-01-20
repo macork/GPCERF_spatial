@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_rl_deriv_gp.R
 \name{compute_rl_deriv_gp}
 \alias{compute_rl_deriv_gp}
-\title{Change-point Detection in Full GP}
+\title{Detect change-point in full GP}
 \usage{
 compute_rl_deriv_gp(
   w,

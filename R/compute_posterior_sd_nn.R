@@ -1,5 +1,5 @@
 #' @title
-#' Calculate Posterior Standard Deviations for nnGP Model
+#' Calculate posterior standard deviations for nnGP model
 #'
 #' @description
 #' Calculates the posterior standard deviation of a point on the CERF based on
@@ -32,10 +32,10 @@ compute_posterior_sd_nn <-  function(hyperparam,
                                      GPS_w,
                                      obs_ord,
                                      sigma2,
-                                     kernel_fn = function(x) exp(-x^2),
+                                     kernel_fn = function(x) exp(-x ^ 2),
                                      n_neighbor = 10,
                                      expand = 1,
-                                     block_size = 1e4){
+                                     block_size = 1e4) {
 
   alpha <- hyperparam[[1]]
   beta <- hyperparam[[2]]
@@ -44,52 +44,49 @@ compute_posterior_sd_nn <-  function(hyperparam,
 
   n <- length(GPS_w)
   # Compute number of blocks
-  n_block <- base::ceiling(n/block_size)
+  n_block <- base::ceiling(n / block_size)
 
-  if(w >= obs_ord[nrow(obs_ord),1]){
+  if (w >= obs_ord[nrow(obs_ord), 1]) {
     idx_all <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
-  }else{
-    idx_anchor <- which.max(obs_ord[,1]>=w)
-    idx_start <- max(1, idx_anchor - n_neighbor*expand)
-    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor*expand)
-    if(idx_end == nrow(obs_ord)){
-      idx_all <- seq(idx_end - n_neighbor*2*expand + 1, idx_end, 1)
-    }else{
-      idx_all <- seq(idx_start, idx_start+n_neighbor*2*expand-1, 1)
+  } else {
+    idx_anchor <- which.max(obs_ord[, 1] >= w)
+    idx_start <- max(1, idx_anchor - n_neighbor * expand)
+    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor * expand)
+    if (idx_end == nrow(obs_ord)) {
+      idx_all <- seq(idx_end - n_neighbor * 2 * expand + 1, idx_end, 1)
+    } else {
+      idx_all <- seq(idx_start, idx_start + n_neighbor * 2 * expand - 1, 1)
     }
   }
 
-  obs_use <- t(t(obs_ord[idx_all,])*(1/sqrt(c(alpha, beta))))
-  cov_use_inv <- compute_inverse(sigma2*(g_sigma*kernel_fn(as.matrix(dist(obs_use))) +
-                                           diag(nrow(obs_use))))
-  obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
+  obs_use <- t(t(obs_ord[idx_all, ]) * (1 / sqrt(c(alpha, beta))))
+  cov_use_inv <- compute_inverse(sigma2 *
+                   (g_sigma * kernel_fn(as.matrix(dist(obs_use))) +
+                              diag(nrow(obs_use))))
+  obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(alpha, beta))))
 
   #within variance
-  sigma_sq1 <- (1+g_sigma)*sigma2/n
+  sigma_sq1 <- (1 + g_sigma) * sigma2 / n
 
   #cross variance
   #also use block to free up memories
-  id_all <- split(1:n, ceiling(seq_along(1:n)/n_block))
+  id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
   cross_cov_colS <- Rfast::rowsums(sapply(id_all, function(id_ind){
-    cross_cov <- sigma2*g_sigma*kernel_fn(spatstat.geom::crossdist(obs_new[id_ind,1],
-                                                            obs_new[id_ind,2],
-                                                            obs_use[,1],
-                                                            obs_use[,2]))
+    cross_cov <- sigma2 * g_sigma *
+                  kernel_fn(spatstat.geom::crossdist(obs_new[id_ind, 1],
+                                                     obs_new[id_ind, 2],
+                                                     obs_use[, 1],
+                                                     obs_use[, 2]))
     Rfast::colsums(cross_cov)
   }))
 
-  # cross_cov <- sigma2*g_sigma*kernel_fn(spatstat.geom::crossdist(obs_new[,1],obs_new[,2],
-  #                                                               obs_use[,1],obs_use[,2]))
-  # cross_cov_colS <- Rfast::colsums(cross_cov)
   cross_cov_mult <- c(arma_mm(cov_use_inv, cross_cov_colS))
 
-  sigma_sq2 <- c(cross_cov_colS%*%cross_cov_mult)/n^2
+  sigma_sq2 <- c(cross_cov_colS %*% cross_cov_mult) / n ^ 2
   posterior_sd <- sqrt(sigma_sq1 - sigma_sq2 + sigma2)
 
   logger::log_debug("w: {w}, sigma_sq1: {sigma_sq1}, sigma_sq2: {sigma_sq2},",
                     "sigma2: {sigma2}")
-
-
 
   return(posterior_sd)
 }
