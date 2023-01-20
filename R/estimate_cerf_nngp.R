@@ -1,5 +1,6 @@
 #' @title
-#' Estimate the Conditional Exposure Response Function using Nearest Neighbor Gaussian Process
+#' Estimate the conditional exposure response function using nearest neighbor
+#' Gaussian process
 #'
 #' @description
 #' Estimates the conditional exposure response function (cerf) using
@@ -24,7 +25,7 @@
 #'   - tune_app: A tuning approach. Available approaches:
 #'     - all: try all combinations of hyperparameters.
 #'   - expand: Scaling factor to determine the total number of nearest neighbors.
-#'   The total is \code{2*expand*n.neighbour}.
+#'   The total is \code{2 * expand * n_neighbour}.
 #'   - n_neighbor: Number of nearest neighbors on one side.
 #'   - block_size: Number of samples included in a computation block. Mainly
 #'   used to balance the speed and memory requirement. Larger \code{block_size}
@@ -70,8 +71,8 @@
 #'}
 #'
 estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
-                               kernel_fn = function(x) exp(-x^2),
-                               nthread = 1){
+                               kernel_fn = function(x) exp(-x ^ 2),
+                               nthread = 1) {
 
   # Log system info
   log_system_info()
@@ -83,9 +84,9 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   logger::log_info("Working on estimating cerf using nngp approach ...")
 
   # Double-check input parameters ----------------------------------------------
-  check_params <- function(my_param, params){
-    for (item in my_param){
-      if (!is.element(c(item), names(params))){
+  check_params <- function(my_param, params) {
+    for (item in my_param) {
+      if (!is.element(c(item), names(params))) {
         stop(paste0("The required parameter, ", item,", is not provided. ",
                     "Current parameters: ", paste(unlist(names(params)),
                                                   collapse = ", ")))
@@ -104,7 +105,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                               getElement(params, "beta"),
                               getElement(params, "g_sigma"))
 
-  if (nrow(tune_params) == 0){
+  if (nrow(tune_params) == 0) {
     stop(paste("Something went wrong with tuning parameters. ",
                "The expanded grid has not been generated."))
   }
@@ -125,23 +126,23 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   # Search for the best set of parameters --------------------------------------
   design_mt <- as.data.frame(model.matrix(formula, data = data))
   optimal_cb_res <- find_optimal_nn(w_obs = data[, c(2)],
-                                w = w,
-                                y_obs = data[, c(1)],
-                                GPS_m = GPS_m,
-                                design_mt = design_mt,
-                                hyperparams = tune_params_subset,
-                                n_neighbor = n_neighbor,
-                                kernel_fn = kernel_fn,
-                                expand = expand,
-                                block_size = block_size,
-                                nthread = nthread)
+                                    w = w,
+                                    y_obs = data[, c(1)],
+                                    GPS_m = GPS_m,
+                                    design_mt = design_mt,
+                                    hyperparams = tune_params_subset,
+                                    n_neighbor = n_neighbor,
+                                    kernel_fn = kernel_fn,
+                                    expand = expand,
+                                    block_size = block_size,
+                                    nthread = nthread)
 
 
   # Extract the optimum hyperparameters
   all_cb_res <- sapply(optimal_cb_res, '[[', 'cb')
   opt_idx_nn <- order(colMeans(abs(all_cb_res)))[1]
   posterior_mean <- optimal_cb_res[[opt_idx_nn]]$est
-  nn_opt_param <- unlist(tune_params_subset[opt_idx_nn,])
+  nn_opt_param <- unlist(tune_params_subset[opt_idx_nn, ])
 
   # Estimate noise -------------------------------------------------------------
   noise_nn <- estimate_noise_nn(hyperparam = nn_opt_param,
@@ -149,12 +150,12 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                                 GPS_obs = GPS_m$GPS,
                                 y_obs = data[, c(1)],
                                 kernel_fn = kernel_fn,
-                                n_neighbor = n_neighbor*expand,
+                                n_neighbor = n_neighbor * expand,
                                 nthread = nthread)
 
   # Compute posterior mean and standard deviation ------------------------------
   posterior_vals <- estimate_mean_sd_nn(hyperparam = nn_opt_param,
-                                        sigma2 = noise_nn^2,
+                                        sigma2 = noise_nn ^ 2,
                                         w_obs = data[, c(2)],
                                         w = w,
                                         y_obs = data[, c(1)],
@@ -165,7 +166,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                                         block_size = block_size,
                                         nthread = nthread)
 
-  # posterior_mean <- posterior_vals[,1]
   posterior_sd <- posterior_vals
 
   t_nngp_2 <- proc.time()

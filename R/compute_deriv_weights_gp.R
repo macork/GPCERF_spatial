@@ -1,5 +1,5 @@
 #' @title
-#' Calculate Derivatives of CERF
+#' Calculate derivatives of CERF
 #'
 #' @description
 #' Calculates the weights assigned to each observed outcome when deriving the
@@ -43,14 +43,17 @@ compute_deriv_weights_gp <- function(w,
   GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
   n <- length(GPS_w)
 
-  obs_use <- cbind( w_obs*sqrt(1/alpha), GPS*sqrt(1/beta) )
-  obs_new <- cbind( w*sqrt(1/alpha), GPS_w*sqrt(1/beta) )
-  Sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(obs_use))^2) + diag(nrow(obs_use))
-  cross_dist <- spatstat.geom::crossdist(obs_new[,1], obs_new[,2],
-                                        obs_use[,1], obs_use[,2])
-  Sigma_cross <- g_sigma*sqrt(1/alpha)*kernel_deriv_fn(cross_dist^2)*
-    (2*outer(rep(w,n), w_obs, "-"))
-  weights_all <- Sigma_cross%*%chol2inv(chol(Sigma_obs))
+  obs_use <- cbind(w_obs * sqrt(1 / alpha), GPS * sqrt(1 / beta))
+  obs_new <- cbind(w * sqrt(1 / alpha), GPS_w * sqrt(1 / beta))
+  Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
+               diag(nrow(obs_use))
+  cross_dist <- spatstat.geom::crossdist(obs_new[, 1], obs_new[, 2],
+                                         obs_use[, 1], obs_use[, 2])
+
+  #TODO: Needs refactoring. `outer` function uses significant amount of memory.
+  Sigma_cross <- g_sigma * sqrt(1 / alpha) * kernel_deriv_fn(cross_dist ^ 2) *
+                         (2 * outer(rep(w, n), w_obs, "-"))
+  weights_all <- Sigma_cross %*% chol2inv(chol(Sigma_obs))
 
   return(colMeans(weights_all))
 }

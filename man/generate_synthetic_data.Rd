@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_synthetic_data.R
 \name{generate_synthetic_data}
 \alias{generate_synthetic_data}
-\title{Generate Synthetic Data for GPCERF Package}
+\title{Generate synthetic data for GPCERF package}
 \usage{
 generate_synthetic_data(
   sample_size = 1000,
@@ -12,10 +12,10 @@ generate_synthetic_data(
 )
 }
 \arguments{
-\item{sample_size}{Number of data samples.}
+\item{sample_size}{A number of data samples.}
 
 \item{outcome_sd}{Standard deviation used to generate the outcome in the
-synthetic dataset.}
+synthetic data set.}
 
 \item{gps_spec}{A numeric value (1-6) that indicates the GPS model used to
 generate the continuous exposure.}
@@ -23,8 +23,8 @@ generate the continuous exposure.}
 \item{cova_spec}{A numeric value (1-2) to modify the covariates.}
 }
 \value{
-A data frame of the synthetic data. Outcome is labeled as Y, exposure as w, and
-covariates cf1-6.
+A data frame of the synthetic data. Outcome is labeled as Y, exposure as w,
+and covariates cf1-6.
 }
 \description{
 Generates synthetic data set based on different GPS models and covariates.

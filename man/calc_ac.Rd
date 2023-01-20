@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_ac.R
 \name{calc_ac}
 \alias{calc_ac}
-\title{Calculate Covariate Balance}
+\title{Calculate covariate balance}
 \usage{
 calc_ac(w, X, weights)
 }

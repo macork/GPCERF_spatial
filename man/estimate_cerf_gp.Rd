@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_cerf_gp.R
 \name{estimate_cerf_gp}
 \alias{estimate_cerf_gp}
-\title{Estimate the Conditional Exposure Response Function using Gaussian Process}
+\title{Estimate the conditional exposure response function using Gaussian process}
 \usage{
 estimate_cerf_gp(
   data,

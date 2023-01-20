@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_sd_gp.R
 \name{compute_sd_gp}
 \alias{compute_sd_gp}
-\title{Compute Posterior Credible Interval}
+\title{Compute posterior credible interval}
 \usage{
 compute_sd_gp(
   w,

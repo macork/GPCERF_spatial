@@ -27,8 +27,8 @@ test_that("compute_posterior_m_nn works as expected.", {
   coord_obs <- cbind(data$treat, GPS_m$GPS)
   y_use <- data$Y
 
-  obs_ord <- coord_obs[order(coord_obs[,1]),]
-  y_use_ord <- y_use[order(coord_obs[,1])]
+  obs_ord <- coord_obs[order(coord_obs[, 1]), ]
+  y_use_ord <- y_use[order(coord_obs[, 1])]
 
   val <- compute_posterior_m_nn(hyperparam = hyperparam,
                                 w = wi,
@@ -42,7 +42,4 @@ test_that("compute_posterior_m_nn works as expected.", {
 
   expect_equal(nrow(val), 21L)
   expect_equal(ncol(val), 2L)
-  #expect_equal(val[10,2], 5.720794e-01, tolerance = 0.00001)
-  #expect_equal(val[21,2], 2.056833e+00, tolerance = 0.00001)
-  #expect_true(is.na(val[21,1]))
 })

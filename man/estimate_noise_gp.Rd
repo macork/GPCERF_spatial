@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_noise_gp.R
 \name{estimate_noise_gp}
 \alias{estimate_noise_gp}
-\title{Estimate the Standard Deviation of the Nugget Term in Full Gaussian Process}
+\title{Estimate the standard deviation of the nugget term in full Gaussian process}
 \usage{
 estimate_noise_gp(data, sigma_obs, inv_sigma_obs)
 }

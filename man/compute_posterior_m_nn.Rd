@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_posterior_m_nn.R
 \name{compute_posterior_m_nn}
 \alias{compute_posterior_m_nn}
-\title{Calculate Posterior Means for nnGP Model}
+\title{Calculate posterior means for nnGP model}
 \usage{
 compute_posterior_m_nn(
   hyperparam,
@@ -38,7 +38,7 @@ as \code{obs_ord}.}
 (see also \code{expand}).}
 
 \item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n_neighbor}.}
+neighbors. The total is \code{2 * expand * n_neighbor}.}
 
 \item{block_size}{Number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement.

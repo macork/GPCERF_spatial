@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_rl_deriv_nn.R
 \name{compute_rl_deriv_nn}
 \alias{compute_rl_deriv_nn}
-\title{Calculate Right Minus Left Derivatives for Change-point Detection in nnGP}
+\title{Calculate right minus left derivatives for change-point detection in nnGP}
 \usage{
 compute_rl_deriv_nn(
   w,

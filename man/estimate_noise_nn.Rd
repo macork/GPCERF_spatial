@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_noise_nn.R
 \name{estimate_noise_nn}
 \alias{estimate_noise_nn}
-\title{Estimate the Standard Deviation (noise) of the Nugget Term in nnGP}
+\title{Estimate the standard deviation (noise) of the nugget term in nnGP}
 \usage{
 estimate_noise_nn(
   hyperparam,
@@ -19,21 +19,22 @@ estimate_noise_nn(
 
 \item{w_obs}{A vector of observed exposure levels.}
 
-\item{GPS_obs}{A vector of estimated GPS evaluated at the observed exposure levels.}
+\item{GPS_obs}{A vector of estimated GPS evaluated at the observed exposure
+levels.}
 
 \item{y_obs}{A vector of observed outcomes.}
 
-\item{n_neighbor}{Number of nearest neighbors on one side.}
+\item{n_neighbor}{A number of nearest neighbors on one side.}
 
 \item{kernel_fn}{The covariance function of the GP.}
 
-\item{n_thread}{Number of cpus used in the estimation.}
+\item{n_thread}{A number of cores used in the estimation.}
 }
 \value{
 A scalar of estimated standard deviation of the nugget term in nnGP.
 }
 \description{
-Estimate the standard deviations of the nugget term (noise) in nnGP by
+Estimates the standard deviations of the nugget term (noise) in nnGP by
 calculating the standard deviations of the residuals.
 }
 \keyword{internal}

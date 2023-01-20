@@ -71,8 +71,10 @@ the nnGP model.</p>
 <span>  <span class="va">GPS_w</span>,</span>
 <span>  <span class="va">obs_ord</span>,</span>
 <span>  <span class="va">sigma2</span>,</span>
+<span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  n_neighbor <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  expand <span class="op">=</span> <span class="fl">1</span></span>
+<span>  expand <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  block_size <span class="op">=</span> <span class="fl">10000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -101,6 +103,10 @@ exposure levels. The rows are in ascending order for the first column.</p></dd>
 <dd><p>A scaler representing <code>sigma^2</code>.</p></dd>
 
 
+<dt>kernel_fn</dt>
+<dd><p>The covariance function of the GP.</p></dd>
+
+
 <dt>n_neighbor</dt>
 <dd><p>Number of nearest neighbors on one side
 (see also <code>expand</code>).</p></dd>
@@ -109,6 +115,12 @@ exposure levels. The rows are in ascending order for the first column.</p></dd>
 <dt>expand</dt>
 <dd><p>A scaling factor to determine the total number of nearest
 neighbors. The total is <code>2*expand*n_neighbor</code>.</p></dd>
+
+
+<dt>block_size</dt>
+<dd><p>Number of samples included in a computation block.
+Mainly used to balance the speed and memory requirement.
+Larger <code>block_size</code> is faster, but requires more memory.</p></dd>
 
 </dl></div>
     <div class="section level2">

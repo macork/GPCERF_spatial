@@ -4,7 +4,7 @@ test_that("estimate_mean_sd_nn works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+  GPS_m <- train_gps(cov_mt = data[, -(1:2)],
                      w_all = data$treat,
                      sl_lib = c("SL.xgboost"),
                      dnorm_log = FALSE)
@@ -24,7 +24,7 @@ test_that("estimate_mean_sd_nn works as expected!", {
                              nthread = 1)
 
   # compute posterior mean and standard deviation for vector of w.
-  w <- seq(0,20,1)
+  w <- seq(0, 20, 1)
   val <- estimate_mean_sd_nn(hyperparam = hyperparam,
                              sigma2 = noise,
                              w_obs = data$treat,
@@ -36,12 +36,5 @@ test_that("estimate_mean_sd_nn works as expected!", {
                              block_size = block_size)
 
   expect_equal(length(val), 21)
-  # There are length(w) elements in the first item and the second item.
-  # expect_equal(length(val[[1]]), 21L)
-  # expect_equal(length(val[[2]]), 21L)
-
   expect_equal(val[10], 5.068975, tolerance = 0.0001)
-
-  #expect_equal(val[[1]][[12]][29,2], 0.0003256218, tolerance = 0.0001)
-
 })

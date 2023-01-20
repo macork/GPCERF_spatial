@@ -4,7 +4,7 @@ test_that("compute_inverse works as expected.", {
   A <- runif(10)
   B <- runif(10)
   C = cbind(A, B)
-  kernel_fn = function(x) exp(-x^2)
+  kernel_fn = function(x) exp(-x ^ 2)
   D = kernel_fn(as.matrix(dist(C)))
   inv_sigma_obs <- compute_inverse(D)
 
@@ -18,5 +18,4 @@ test_that("compute_inverse works as expected.", {
 
   non_sq_mat <- matrix(runif(100), ncol = 20)
   expect_error(compute_inverse(non_sq_mat))
-
 })

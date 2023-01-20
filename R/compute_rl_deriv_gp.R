@@ -1,5 +1,5 @@
 #' @title
-#' Change-point Detection in Full GP
+#' Detect change-point in full GP
 #'
 #' @description
 #' Calculates the posterior mean of the difference between left- and
@@ -47,20 +47,21 @@ compute_rl_deriv_gp <- function(w,
                                 kernel_deriv_fn = function(x) -exp(-x)){
   # left side weights
   left_weights <-  compute_deriv_weights_gp(w = w,
-                                            w_obs = w_obs[w_obs<w],
-                                            GPS_m = GPS_m[w_obs<w,],
+                                            w_obs = w_obs[w_obs < w],
+                                            GPS_m = GPS_m[w_obs < w,],
                                             hyperparam = hyperparam,
                                             kernel_fn = kernel_fn,
                                             kernel_deriv_fn = kernel_deriv_fn)
 
   # right side weights
   right_weights <-  compute_deriv_weights_gp(w = w,
-                                             w_obs = w_obs[w_obs>=w],
-                                             GPS_m = GPS_m[w_obs>=w,],
+                                             w_obs = w_obs[w_obs >= w],
+                                             GPS_m = GPS_m[w_obs >= w,],
                                              hyperparam = hyperparam,
                                              kernel_fn = kernel_fn,
                                              kernel_deriv_fn = kernel_deriv_fn)
 
   # compute derivative
-  return(right_weights%*%y_obs[w_obs>=w] - left_weights%*%y_obs[w_obs<w])
+  return(right_weights %*% y_obs[w_obs >= w] -
+         left_weights %*% y_obs[w_obs < w])
 }

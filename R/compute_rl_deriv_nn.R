@@ -1,5 +1,5 @@
 #' @title
-#' Calculate Right Minus Left Derivatives for Change-point Detection in nnGP
+#' Calculate right minus left derivatives for change-point detection in nnGP
 #'
 #' @description
 #' Calculates the posterior mean of the difference between left- and
@@ -63,12 +63,12 @@ compute_rl_deriv_nn <-  function(w,
                                  block_size,
                                  kernel_fn = function(x) exp(-x),
                                  kernel_deriv_fn = function(x) -exp(-x)
-                                 ){
+                                 ) {
 
   left_deriv <- compute_deriv_nn(w,
-                                 w_obs[w_obs<w],
-                                 GPS_m[w_obs<w,],
-                                 y_obs[w_obs<w],
+                                 w_obs[w_obs < w],
+                                 GPS_m[w_obs < w,],
+                                 y_obs[w_obs < w],
                                  hyperparam,
                                  n_neighbor = n_neighbor,
                                  expand = expand,
@@ -77,9 +77,9 @@ compute_rl_deriv_nn <-  function(w,
                                  kernel_deriv_fn = kernel_deriv_fn)
 
   right_deriv <- compute_deriv_nn(w,
-                                  w_obs[w_obs>=w],
-                                  GPS_m[w_obs>=w,],
-                                  y_obs[w_obs>=w],
+                                  w_obs[w_obs >= w],
+                                  GPS_m[w_obs >= w,],
+                                  y_obs[w_obs >= w],
                                   hyperparam,
                                   n_neighbor = n_neighbor,
                                   expand = expand,

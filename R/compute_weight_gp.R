@@ -1,5 +1,5 @@
 #' @title
-#' Calculate Weights for Estimation of a Point on CERF
+#' Calculate weights for estimation of a point on CERF
 #'
 #' @description
 #' Calculates the weights of observed outcomes which is then used to estimate
@@ -9,7 +9,7 @@
 #' @param w_obs A vector of observed exposure levels of all samples.
 #' @param scaled_obs A matrix of two columns.
 #'   - First column is the scaled GPS value of all samples
-#'   (GPS * 1/sqrt(alpha))
+#'   (GPS * 1 / sqrt(alpha))
 #'   - Second column is the scaled exposure value of all samples
 #'   (w * 1/sqrt(beta))
 #' @param hyperparam A vector of hyper-parameters for the GP.
@@ -35,7 +35,7 @@
 #'
 compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
                               inv_sigma_obs, GPS_m, est_sd = FALSE,
-                              kernel_fn = function(x) exp(-x^2)){
+                              kernel_fn = function(x) exp(-x ^ 2)){
 
   alpha <- hyperparam[[1]]
   beta <- hyperparam[[2]]
@@ -47,30 +47,31 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
 
   # TODO: The following section is repeated between this function
   # and compute_sd_gp function.
-  GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = T)
-  scaled_w <- cbind( w*sqrt(1/alpha), GPS_w*sqrt(1/beta) )
+  GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
+  scaled_w <- cbind(w * sqrt(1 / alpha), GPS_w * sqrt(1 / beta))
 
   # kappa
   # sigma_cross = kappa/sigma^2 : Is always n*n matrix.
   # each column of sigma_cross is ki.
   # statspat.geom::crossdist
-  sigma_cross <- g_sigma*kernel_fn(crossdist(scaled_w[,1],
-                                             scaled_w[,2],
-                                             scaled_obs[,1],
-                                             scaled_obs[,2]))
+  sigma_cross <- g_sigma * kernel_fn(crossdist(scaled_w[, 1],
+                                               scaled_w[, 2],
+                                               scaled_obs[, 1],
+                                               scaled_obs[, 2]))
 
   # each row is the weights for all subject for estimate of Y_i(w)
   # each column is the weight of an observed sample (w_i, c_i)
-  normalized_sigma_cross <- Rfast::colmeans(sigma_cross)   #rep(1/length(w_obs),length(w_obs))%*%sigma_cross
-  weight <- c(arma_mm(inv_sigma_obs, normalized_sigma_cross))   #c((normalized_sigma_cross)%*%inv_sigma_obs)
+  normalized_sigma_cross <- Rfast::colmeans(sigma_cross)
+  weight <- c(arma_mm(inv_sigma_obs, normalized_sigma_cross))
 
   # compute scaled posterior sd
-  if(est_sd){
+  if (est_sd) {
     sigma_w <- g_sigma*kernel_fn(outer(scaled_w[,2], scaled_w[,2], "-")^2) +
       diag(nrow(scaled_w))
-    sd_scaled = sqrt(sum(sigma_w)/nrow(scaled_w)^2 - sum(weight*normalized_sigma_cross))
-  }else{
-    sd_scaled = NA
+    sd_scaled = sqrt(sum(sigma_w)/nrow(scaled_w)^2 -
+                     sum(weight*normalized_sigma_cross))
+  } else {
+    sd_scaled <- NA
   }
 
   return(list(weight = weight, sd_scaled = sd_scaled))

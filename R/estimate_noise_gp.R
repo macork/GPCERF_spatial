@@ -1,5 +1,5 @@
 #' @title
-#' Estimate the Standard Deviation of the Nugget Term in Full Gaussian Process
+#' Estimate the standard deviation of the nugget term in full Gaussian process
 #'
 #' @description
 #' Estimates the standard deviations of the nugget term in full GP by
@@ -18,7 +18,7 @@
 #'
 #' @keywords internal
 #'
-estimate_noise_gp <- function(data, sigma_obs, inv_sigma_obs){
+estimate_noise_gp <- function(data, sigma_obs, inv_sigma_obs) {
 
   noise <- sd(data$Y - arma_mm(sigma_obs - diag(nrow(sigma_obs)),
                                arma_mm(inv_sigma_obs, data$Y)))

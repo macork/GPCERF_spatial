@@ -2,7 +2,7 @@
 % Please edit documentation in R/set_logger.R
 \name{set_logger}
 \alias{set_logger}
-\title{Set Logger Settings}
+\title{Set logger settings}
 \usage{
 set_logger(logger_file_path = "GPCERF.log", logger_level = "INFO")
 }

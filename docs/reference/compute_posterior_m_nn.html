@@ -74,6 +74,7 @@ calculating the posterior mean.</p>
 <span>  <span class="va">GPS_w</span>,</span>
 <span>  <span class="va">obs_ord</span>,</span>
 <span>  <span class="va">y_obs_ord</span>,</span>
+<span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  n_neighbor <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  expand <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  block_size <span class="op">=</span> <span class="fl">10000</span></span>
@@ -105,6 +106,10 @@ levels. The rows are in ascending order for the first column.</p></dd>
 <dt>y_obs_ord</dt>
 <dd><p>A vector of observed outcome values. The vector is ordered
 as <code>obs_ord</code>.</p></dd>
+
+
+<dt>kernel_fn</dt>
+<dd><p>The covariance function of the GP.</p></dd>
 
 
 <dt>n_neighbor</dt>

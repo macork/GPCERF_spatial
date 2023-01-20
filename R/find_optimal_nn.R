@@ -1,5 +1,5 @@
 #' @title
-#' Find the Optimal Hyper-parameter for the Nearest Neighbor Gaussian Process
+#' Find the optimal hyper-parameter for the nearest neighbor Gaussian process
 #'
 #' @description
 #' Computes covariate balance for each combination of provided hyper-parameters
@@ -20,7 +20,7 @@
 #' @param n_neighbor The number of nearest neighbors on one side
 #' (see also \code{expand}).
 #' @param expand Scaling factor to determine the total number of nearest
-#' neighbors. The total is \code{2*expand*n_neighbor}.
+#' neighbors. The total is \code{2 * expand * n_neighbor}.
 #' @param block_size The number of samples included in a computation block.
 #' Mainly used to balance the speed and memory requirement. Larger
 #' \code{block_size} is faster, but requires more memory.
@@ -34,12 +34,12 @@
 #' @keywords internal
 #'
 find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
-                      hyperparams = expand.grid(seq(0.5,4.5,1),
-                                                seq(0.5,4.5,1),
-                                                seq(0.5,4.5,1)),
-                      kernel_fn = function(x) exp(-x^2),
-                      n_neighbor = 50, expand = 2, block_size = 2e3,
-                      nthread = 1){
+                            hyperparams = expand.grid(seq(0.5,4.5,1),
+                                                      seq(0.5,4.5,1),
+                                                      seq(0.5,4.5,1)),
+                            kernel_fn = function(x) exp(-x^2),
+                            n_neighbor = 50, expand = 2, block_size = 2e3,
+                            nthread = 1) {
 
   logger::log_info("Started finding optimal values ... ")
   t_opt_1 <- proc.time()
@@ -47,41 +47,40 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   coord_obs <- cbind(w_obs, GPS_m$GPS)
 
   #Remove unobserved outputs
-  coord_obs <- coord_obs[!is.na(y_obs),]
+  coord_obs <- coord_obs[!is.na(y_obs), ]
   y_use <- y_obs[!is.na(y_obs)]
-  design_use <- design_mt[!is.na(y_obs),]
+  design_use <- design_mt[!is.na(y_obs), ]
 
-  coord_obs_ord <- coord_obs[order(coord_obs[,1]),]
-  y_use_ord <- y_use[order(coord_obs[,1])]
-  design_use_ord <- design_use[order(coord_obs[,1]),]
+  coord_obs_ord <- coord_obs[order(coord_obs[, 1]), ]
+  y_use_ord <- y_use[order(coord_obs[, 1])]
+  design_use_ord <- design_use[order(coord_obs[, 1]), ]
 
   lfp <- get_options("logger_file_path")
 
   # make a cluster
   t_cl_1 <- proc.time()
-  cl <- parallel::makeCluster(nthread, type="PSOCK",
-                              outfile= lfp)
+  cl <- parallel::makeCluster(nthread, type = "PSOCK",
+                              outfile = lfp)
 
   # export variables and functions to cluster cores
-  parallel::clusterExport(cl=cl,
+  parallel::clusterExport(cl = cl,
                           varlist = c("w", "GPS_m",
                                       "coord_obs_ord", "y_use_ord", "kernel_fn",
                                       "n_neighbor", "expand", "block_size",
-                                      "compute_posterior_m_nn", "compute_w_corr"),
-                          envir=environment())
+                                      "compute_posterior_m_nn",
+                                      "compute_w_corr"),
+                          envir = environment())
 
   t_cl_2 <- proc.time()
 
   logger::log_debug("Time to setup cluster with {nthread} core(s):",
                    "{t_cl_2[[3]] - t_cl_1[[3]]} s.")
 
-  all_res <- apply(hyperparams, 1, function(hyperparam){
+  all_res <- apply(hyperparams, 1, function(hyperparam) {
 
-
-    # export apply related parameters.
-    parallel::clusterExport(cl=cl,
+    parallel::clusterExport(cl = cl,
                             varlist = c("hyperparam"),
-                            envir=environment())
+                            envir = environment())
 
     all_res_list <- parallel::parLapply(cl,
                                         w,
@@ -101,26 +100,21 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                                     kernel_fn = kernel_fn,
                                     expand = expand,
                                     block_size = block_size)
-      idx <- res[-nrow(res),1]
-      weights <- res[-nrow(res),2]
-      # weights <- weights/sum(weights)
-      # note input of compute_w_coord: first col is obs response, second col is obs exposure
-      # rest are covariates
-      # X <- data.table::setDT(cbind( y_use_ord, coord_obs_ord[,1], design_use_ord)[idx,])
-      cb = compute_w_corr(w = coord_obs_ord[idx,1], confounders = design_use_ord[idx,], weights)
-      # calc_ac( coord_obs[idx,1], design_use_ord[idx,], weights = weights)
-      list(cb = cb, est = res[nrow(res),2])
+      idx <- res[-nrow(res), 1]
+      weights <- res[-nrow(res), 2]
+      cb <- compute_w_corr(w = coord_obs_ord[idx, 1],
+                           confounders = design_use_ord[idx, ], weights)
+      list(cb = cb, est = res[nrow(res), 2])
     })
 
     all_cb_tmp <- do.call(cbind, lapply(all_res_list, '[[', 'cb'))
     all_est_tmp <- sapply(all_res_list, '[[', 'est')
 
     #covariate specific balance, averaged over w
-    list( cb = rowMeans(all_cb_tmp, na.rm = T),
+    list( cb = rowMeans(all_cb_tmp, na.rm = TRUE),
           est = all_est_tmp )
   })
 
-  # terminate clusters.
   parallel::stopCluster(cl)
 
   t_opt_2 <- proc.time()

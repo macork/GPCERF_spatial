@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_deriv_weights_gp.R
 \name{compute_deriv_weights_gp}
 \alias{compute_deriv_weights_gp}
-\title{Calculate Derivatives of CERF}
+\title{Calculate derivatives of CERF}
 \usage{
 compute_deriv_weights_gp(
   w,
