@@ -4,6 +4,7 @@
 [![](http://www.r-pkg.org/badges/version-last-release/GPCERF)](https://CRAN.R-project.org/package=GPCERF)
 [![R build status](https://github.com/NSAPH-Software/GPCERF/workflows/R-CMD-check/badge.svg)](https://github.com/NSAPH-Software/GPCERF/actions)
 [![codecov](https://codecov.io/gh/NSAPH-Software/GPCERF/branch/develop/graph/badge.svg?token=066ISL822N)](https://app.codecov.io/gh/NSAPH-Software/GPCERF)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/GPCERF)](http://www.r-pkg.org/pkg/gpcerf)
 <!-- badges: end -->
  
 

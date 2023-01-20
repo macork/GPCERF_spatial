@@ -33,7 +33,7 @@ compute_w_corr <- function(w, confounders, weights) {
 
   if (!is.vector(w)) {
     stop(paste0("The w param should be a vector. ",
-                "Current format: ", class(confounders)[1]))
+                "Current format: ", class(w)[1]))
   }
 
   if (nrow(confounders) != length(weights)){

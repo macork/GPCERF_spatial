@@ -40,16 +40,7 @@ set_logger <- function(logger_file_path = "GPCERF.log",
   set_options("logger_file_path", logger_file_path)
   set_options("logger_level", logger_level)
 
-  if (!is.null(logger_level)) {
-    if (is.element(logger_level, available_levels)) {
-      logger::log_threshold(logger_level)
-    } else {
-      stop(paste("Logger level is not valid. Available levels: ",
-                 paste(available_levels, collapse = " ")))
-    }
-  } else {
-    logger::log_threshold(logger::INFO, index = 1)
-  }
+  logger::log_threshold(logger_level)
 }
 
 #' @title

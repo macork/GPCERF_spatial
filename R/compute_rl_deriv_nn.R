@@ -34,7 +34,7 @@
 #' @export
 #'
 #' @examples
-#'
+#' \donttest{
 #' set.seed(325)
 #' data <- generate_synthetic_data(sample_size = 200)
 #' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
@@ -51,8 +51,8 @@
 #'                                  hyperparam = c(0.2,0.4,1.2),
 #'                                  n_neighbor = 20,
 #'                                  expand = 1,
-#'                                  block_size = 1000)
-#'
+#'                                  block_size = 10)
+#'}
 compute_rl_deriv_nn <-  function(w,
                                  w_obs,
                                  GPS_m,
