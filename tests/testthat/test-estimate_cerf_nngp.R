@@ -23,6 +23,30 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                     block_size = 1e4),
                                       formula = ~ . - 1 - Y - treat)
 
+  expect_error(estimate_cerf_nngp(data,
+                                  w_all,
+                                  GPS_m,
+                                  params = list(alpha = c(0.1, 0.2),
+                                                beta = 0.2,
+                                                g_sigma = 1,
+                                                tune_app = "at_random",
+                                                n_neighbor = 20,
+                                                expand = 1,
+                                                block_size = 1e4),
+                                  formula = ~ . - 1 - Y - treat))
+
+  expect_error(estimate_cerf_nngp(data,
+                                  w_all,
+                                  GPS_m,
+                                  params = list(alpha = c(0.1, 0.2),
+                                                beta = 0.2,
+                                                g_sigma = 1,
+                                                tune_app = "abc",
+                                                n_neighbor = 20,
+                                                expand = 1,
+                                                block_size = 1e4),
+                                  formula = ~ . - 1 - Y - treat))
+
   expect_s3_class(cerf_nngp_obj, "cerf_nngp")
 
   expect_equal(length(cerf_nngp_obj$pst_mean), 41L)

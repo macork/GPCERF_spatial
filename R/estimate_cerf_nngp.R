@@ -116,6 +116,10 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
     tune_params_subset <- tune_params
   } else if (getElement(params, "tune_app") == "at_random"){
     stop("This approach is not implemented.")
+  } else {
+    stop(paste("The provided tune_app approach, ",
+               getElement(params, "tune_app"),
+               ", is not supported."))
   }
 
   # Get other parameters -------------------------------------------------------

@@ -116,7 +116,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   } else {
     stop(paste("The provided tune_app approach, ",
                getElement(params, "tune_app"),
-               " is not accepted."))
+               " is not supported."))
   }
 
   # Compute m, "confidence interval", and covariate balance for provided
