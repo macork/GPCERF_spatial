@@ -72,6 +72,7 @@ and selects the hyper-parameter values that minimizes the covariate balance.</p>
 <span>  <span class="va">GPS_m</span>,</span>
 <span>  <span class="va">design_mt</span>,</span>
 <span>  hyperparams <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  n_neighbor <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  expand <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  block_size <span class="op">=</span> <span class="fl">2000</span>,</span>
@@ -108,6 +109,10 @@ and selects the hyper-parameter values that minimizes the covariate balance.</p>
 <dt>hyperparams</dt>
 <dd><p>A matrix of candidate values of the hyper-parameters,
 each row contains a set of values of all hyper-parameters.</p></dd>
+
+
+<dt>kernel_fn</dt>
+<dd><p>The covariance function of the GP.</p></dd>
 
 
 <dt>n_neighbor</dt>

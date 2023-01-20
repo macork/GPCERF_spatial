@@ -9,7 +9,7 @@
 #'
 #' @export
 #'
-print.cerf_gp <- function(x, ...){
+print.cerf_gp <- function(x, ...) {
   x <- unclass(x)
 
   cat(" GPCERF Full Gaussian Process exposure rate function object\n")
@@ -29,7 +29,7 @@ print.cerf_gp <- function(x, ...){
 #' @return
 #' Returns summary of data
 #' @export
-summary.cerf_gp <- function(object, ...){
+summary.cerf_gp <- function(object, ...) {
 
   cat("GPCERF Full Gaussian Process exposure rate function object summary\n")
   cat_list <- function(input){
@@ -79,7 +79,6 @@ print.cerf_nngp <- function(x, ...){
 }
 
 
-
 #' @title
 #' print summary of cerf_nngp object
 #'
@@ -88,8 +87,10 @@ print.cerf_nngp <- function(x, ...){
 #'
 #' @return
 #' Returns summary of data.
+#'
 #' @export
-summary.cerf_nngp <- function(object, ...){
+#'
+summary.cerf_nngp <- function(object, ...) {
 
   cat("GPCERF Nearest Neighbore Gaussian Process exposure rate function object summary\n")
   cat_list <- function(input){

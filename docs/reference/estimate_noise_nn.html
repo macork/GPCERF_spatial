@@ -65,7 +65,15 @@ calculating the standard deviations of the residuals.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_noise_nn</span><span class="op">(</span><span class="va">hyperparam</span>, <span class="va">w_obs</span>, <span class="va">GPS_obs</span>, <span class="va">y_obs</span>, <span class="va">n_neighbor</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_noise_nn</span><span class="op">(</span></span>
+<span>  <span class="va">hyperparam</span>,</span>
+<span>  <span class="va">w_obs</span>,</span>
+<span>  <span class="va">GPS_obs</span>,</span>
+<span>  <span class="va">y_obs</span>,</span>
+<span>  <span class="va">n_neighbor</span>,</span>
+<span>  <span class="va">nthread</span>,</span>
+<span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -88,6 +96,14 @@ calculating the standard deviations of the residuals.</p>
 
 <dt>n_neighbor</dt>
 <dd><p>Number of nearest neighbors on one side.</p></dd>
+
+
+<dt>kernel_fn</dt>
+<dd><p>The covariance function of the GP.</p></dd>
+
+
+<dt>n_thread</dt>
+<dd><p>Number of cpus used in the estimation.</p></dd>
 
 </dl></div>
     <div class="section level2">

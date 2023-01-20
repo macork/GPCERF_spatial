@@ -1,5 +1,5 @@
 #' @title
-#' Set Logger Settings
+#' Set logger settings
 #'
 #' @description
 #' Updates logger settings, including log level and location of the file.
@@ -24,12 +24,13 @@
 #'
 #' set_logger("mylogger.log", "INFO")
 #'
-set_logger <- function(logger_file_path= "GPCERF.log", logger_level="INFO"){
+set_logger <- function(logger_file_path = "GPCERF.log",
+                       logger_level = "INFO") {
 
   available_levels <- c("TRACE", "DEBUG", "INFO", "SUCCESS", "WARN",
                         "ERROR", "FATAL")
 
-  if (!is.element(logger_level, available_levels)){
+  if (!is.element(logger_level, available_levels)) {
     stop(paste("logger_level: ", logger_level, " is not valid."))
   }
 
@@ -39,24 +40,20 @@ set_logger <- function(logger_file_path= "GPCERF.log", logger_level="INFO"){
   set_options("logger_file_path", logger_file_path)
   set_options("logger_level", logger_level)
 
-  #create_matching$logger_file_path <- logger_file_path
-
-  if (!is.null(logger_level)){
-    if (is.element(logger_level, available_levels)){
-
+  if (!is.null(logger_level)) {
+    if (is.element(logger_level, available_levels)) {
       logger::log_threshold(logger_level)
-
     } else {
       stop(paste("Logger level is not valid. Available levels: ",
                  paste(available_levels, collapse = " ")))
     }
   } else {
-    logger::log_threshold(logger::INFO,index = 1)
+    logger::log_threshold(logger::INFO, index = 1)
   }
 }
 
 #' @title
-#' Get Logger Settings
+#' Get logger settings
 #'
 #' @description
 #' Returns current logger settings.
@@ -72,7 +69,7 @@ set_logger <- function(logger_file_path= "GPCERF.log", logger_level="INFO"){
 #' set_logger("mylogger.log", "INFO")
 #' log_meta <- get_logger()
 #'
-get_logger <- function(){
+get_logger <- function() {
 
   return(list(logger_file_path = get_options("logger_file_path"),
               logger_level = get_options("logger_level")))
@@ -82,14 +79,14 @@ get_logger <- function(){
 # Keeping logger options
 my_options <- new.env(parent = emptyenv())
 
-get_options <- function(k, v){
+get_options <- function(k, v) {
   my_options[[k]]
 }
 
-set_options <- function(k, v){
+set_options <- function(k, v) {
   my_options[[k]] <- v
 }
 
-list_options <- function(){
+list_options <- function() {
   names(my_options)
 }

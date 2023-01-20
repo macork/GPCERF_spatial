@@ -1,5 +1,5 @@
 #' @title
-#' Train A Model for Generalized Propensity Score
+#' Train a model for generalized propensity score
 #'
 #' @description
 #' Estimates the conditional mean and sd of exposure level as a function of
@@ -27,7 +27,7 @@
 #'                   dnorm_log = FALSE)
 #'
 
-train_gps <- function(cov_mt, w_all, sl_lib, dnorm_log){
+train_gps <- function(cov_mt, w_all, sl_lib, dnorm_log) {
 
   logger::log_info("Started estimating GPS values ... ")
   t_1 <- proc.time()
