@@ -1,5 +1,5 @@
 #' @title
-#' Calculate Derivatives of CERF for nnGP
+#' Calculate derivatives of CERF for nnGP
 #'
 #' @description
 #' Calculates the posterior mean of the derivative of CERF at a given
@@ -15,7 +15,7 @@
 #' @param hyperparam A vector of hyper-parameters in the GP model.
 #' @param n_neighbor The number of nearest neighbors on one side (see also \code{expand}).
 #' @param expand Scaling factor to determine the total number of nearest
-#' neighbors. The total is \code{2*expand*n_neighbor}.
+#' neighbors. The total is \code{2 * expand * n_neighbor}.
 #' @param block_size The number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
 #' @param kernel_fn The covariance function. The input is the square of Euclidean distance.

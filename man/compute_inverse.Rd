@@ -2,15 +2,15 @@
 % Please edit documentation in R/compute_inverse.R
 \name{compute_inverse}
 \alias{compute_inverse}
-\title{Compute Matrix Inverse For a Covariate Matrix}
+\title{Compute matrix inverse for a covariate matrix}
 \usage{
 compute_inverse(mtrx)
 }
 \arguments{
-\item{mtrx}{An n*n covariate matrix}
+\item{mtrx}{An \code{n * n} covariate matrix}
 }
 \value{
-Inverse matrix
+A matrix that represent the inverse of the input matrix.
 }
 \description{
 Computes inverse of a covariate matrix using Choleski decomposition.
