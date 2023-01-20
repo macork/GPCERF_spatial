@@ -60,7 +60,7 @@ right-derivatives at an exposure level for the detection of change points.
 nnGP approximation is used.
 }
 \examples{
-
+\donttest{
 set.seed(325)
 data <- generate_synthetic_data(sample_size = 200)
 GPS_m <- train_gps(cov_mt = data[,-(1:2)],
@@ -77,6 +77,6 @@ deriv_val <- compute_rl_deriv_nn(w = wi,
                                  hyperparam = c(0.2,0.4,1.2),
                                  n_neighbor = 20,
                                  expand = 1,
-                                 block_size = 1000)
-
+                                 block_size = 10)
+}
 }

@@ -1,10 +1,9 @@
 ## GPCERF (development)
 
 ### Changed
-* estimate_noise_nn now allows for parallelization with an added argument nthread for the number of cpus used in parallel.
+* estimate_noise_nn now allows for parallelization with an added argument `nthread` for the number of cpus used in parallel.
 * estimate_mean_sd_nn now only computes the posterior variance.
 * find_optimal_nn now returns the posterior mean and covariate balance for the optimal hyper-parameter values.
-* Add parallelization options to estimate_noise_nn.R.
 * Add an argument kernel_fn to all nn related functions to allow for user-defined kernel functions.
 * Add an argument formula to all nn related functions to allow for user-defined design matrix.
 * find_optimal_nn becomes an internal function.
@@ -22,8 +21,6 @@
 * train_gps accepts vector of the SuperLearner package's libraries.
 * train_GPS -> train_gps
 
-### Added
-* 
 
 ## GPCERF 0.1.0 (2022-07-02)
 

@@ -43,9 +43,9 @@ Calculates the posterior mean of the difference between left- and
 right-derivatives at an exposure level for the detection of change points.
 }
 \examples{
-
+\donttest{
 set.seed(847)
-data <- generate_synthetic_data(sample_size = 200)
+data <- generate_synthetic_data(sample_size = 100)
 GPS_m <- train_gps(cov_mt = data[,-(1:2)],
                    w_all = data$treat,
                    sl_lib = c("SL.xgboost"),
@@ -58,5 +58,5 @@ val <- compute_rl_deriv_gp(w = wi,
                            y_obs = data$Y,
                            GPS_m = GPS_m,
                            hyperparam = c(1,1,2))
-
+}
 }

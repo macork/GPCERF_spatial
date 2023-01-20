@@ -38,9 +38,9 @@
 #' @export
 #'
 #' @examples
-#'
+#' \donttest{
 #' set.seed(129)
-#' data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+#' data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
 #'
 #'
 #' # Estimate GPS function
@@ -50,7 +50,7 @@
 #'                    dnorm_log = FALSE)
 #'
 #' # exposure values
-#' w_all <- seq(0,20,1)
+#' w_all <- seq(0,10,1)
 #'
 #'
 #' cerf_gp_obj <- estimate_cerf_gp(data,
@@ -61,7 +61,7 @@
 #'                                               g_sigma = 1,
 #'                                               tune_app = "all"),
 #'                                 nthread = 1)
-#'
+#' }
 #'
 estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                              kernel_fn = function(x) exp(-x ^ 2)){
@@ -113,6 +113,10 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
     tune_params_subset <- tune_params
   } else if (getElement(params, "tune_app") == "at_random") {
     stop("This approach is not implemented.")
+  } else {
+    stop(paste("The provided tune_app approach, ",
+               getElement(params, "tune_app"),
+               " is not accepted."))
   }
 
   # Compute m, "confidence interval", and covariate balance for provided

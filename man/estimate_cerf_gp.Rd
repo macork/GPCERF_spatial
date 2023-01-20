@@ -64,9 +64,9 @@ Process (gp). The function tune the best match (the lowest covariate balance)
 for the provided set of hyperparameters.
 }
 \examples{
-
+\donttest{
 set.seed(129)
-data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
 
 
 # Estimate GPS function
@@ -76,7 +76,7 @@ GPS_m <- train_gps(cov_mt = data[,-(1:2)],
                    dnorm_log = FALSE)
 
 # exposure values
-w_all <- seq(0,20,1)
+w_all <- seq(0,10,1)
 
 
 cerf_gp_obj <- estimate_cerf_gp(data,
@@ -87,6 +87,6 @@ cerf_gp_obj <- estimate_cerf_gp(data,
                                               g_sigma = 1,
                                               tune_app = "all"),
                                 nthread = 1)
-
+}
 
 }

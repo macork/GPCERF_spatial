@@ -30,10 +30,11 @@ Estimates the conditional mean and sd of exposure level as a function of
 covariates.
 }
 \examples{
+\donttest{
 data <- generate_synthetic_data(sample_size = 200)
 GPS_m <- train_gps(cov_mt = data[,-(1:2)],
                   w_all = data$treat,
                   sl_lib = c("SL.xgboost"),
                   dnorm_log = FALSE)
-
+}
 }
