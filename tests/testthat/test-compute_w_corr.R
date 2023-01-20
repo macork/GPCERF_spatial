@@ -15,9 +15,8 @@ test_that("Weighted correlation works as expected.", {
 
   # number of data.samples and weights should be the same
   data3 <- generate_synthetic_data(sample_size = 50)
-  weights3 <- runif(nrow(data3)+20)
+  weights3 <- runif(nrow(data3) + 20)
   expect_error(compute_w_corr(w = data3$treat,
                               confounders = data3[, 3:ncol(data3)],
                               weights = weights3))
-
 })

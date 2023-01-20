@@ -4,7 +4,7 @@ test_that("estimate_noise_nn works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+  GPS_m <- train_gps(cov_mt = data[, -(1:2)],
                      w_all = data$treat,
                      sl_lib = c("SL.xgboost"),
                      dnorm_log = FALSE)
@@ -21,14 +21,15 @@ test_that("estimate_noise_nn works as expected!", {
   # Estimate GPS for the exposure level
   GPS_w = dnorm(wi,
                 mean = GPS_m$e_gps_pred,
-                sd = GPS_m$e_gps_std, log = TRUE)
+                sd = GPS_m$e_gps_std,
+                log = TRUE)
 
   # Order data for easy selection
   coord_obs = cbind(data$treat, GPS_m$GPS)
   y_use <- data$Y
 
-  obs_ord <- coord_obs[order(coord_obs[,1]),]
-  y_use_ord <- y_use[order(coord_obs[,1])]
+  obs_ord <- coord_obs[order(coord_obs[, 1]), ]
+  y_use_ord <- y_use[order(coord_obs[, 1])]
 
   noise <- estimate_noise_nn(hyperparam = hyperparam,
                              w_obs = data$treat,
@@ -38,6 +39,4 @@ test_that("estimate_noise_nn works as expected!", {
                              nthread = 1)
 
   expect_equal(length(noise), 1L)
-
-  #expect_equal(noise, 31.34945, tolerance = 0.0001)
 })

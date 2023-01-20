@@ -7,7 +7,7 @@ test_that("calc_ac works as expected!", {
 
   # generate random weights
   weights <- runif(nrow(data))
-  weights <- weights/sum(weights)
+  weights <- weights / sum(weights)
 
   # covariate matrix
   design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
