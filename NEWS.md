@@ -1,6 +1,6 @@
-## GPCERF 0.2.0 (2023-01-21)
+# GPCERF 0.2.0 (2023-01-21)
 
-### Changed
+## Changed
 * estimate_noise_nn now allows for parallelization with an added argument `nthread` for the number of CPUs used in parallel.
 * estimate_mean_sd_nn now only computes the posterior variance.
 * find_optimal_nn now returns the posterior mean and covariate balance for the optimal hyper-parameter values.
@@ -22,9 +22,9 @@
 * train_GPS -> train_gps
 
 
-## GPCERF 0.1.0 (2022-07-02)
+# GPCERF 0.1.0 (2022-07-02)
 
-### Changed
+## Changed
 
 * nn_cp_calc -> compute_rl_deriv_nn
 * deriv_nn_fast -> compute_deriv_nn
@@ -37,19 +37,16 @@
 * w.est -> w 
 * nn_balance -> best_nn_cb
 
-### Added
+## Added
 
 * Package website using pkgdown
 * Logger functions
 * compute_sd_gp function
 
 
-## GPCERF 0.0.1 (2022-03-31)
+# GPCERF 0.0.1 (2022-03-31)
 
-### Fixed
-* 
-
-### Changed
+## Changed
 
 * Removed examples from internal functions
 * w.obs -> w_obs
@@ -60,12 +57,9 @@
 * data.generate -> generate_synthetic_data 
 
 
-### Added
+## Added
 
 * estimate_noise function
 * estimate_cerf_gp function
 * compute_inverse function
 * compute_w_corr function
-
-### Removed
-* 
