@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">GPCERF</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,31 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="gpcerf-020-2023-01-21">GPCERF 0.2.0 (2023-01-21)<a class="anchor" aria-label="anchor" href="#gpcerf-020-2023-01-21"></a></h2>
+<div class="section level3">
+<h3 id="changed-0-2-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-2-0"></a></h3>
+<ul><li>estimate_noise_nn now allows for parallelization with an added argument <code>nthread</code> for the number of CPUs used in parallel.</li>
+<li>estimate_mean_sd_nn now only computes the posterior variance.</li>
+<li>find_optimal_nn now returns the posterior mean and covariate balance for the optimal hyper-parameter values.</li>
+<li>Add an argument kernel_fn to all nn related functions to allow for user-defined kernel functions.</li>
+<li>Add an argument formula to all nn related functions to allow for user-defined design matrix.</li>
+<li>find_optimal_nn becomes an internal function.</li>
+<li>estimate_noise_gp and estimate_noise_nn become internal functions.</li>
+<li>estimate_mean_sd_nn becomes an internal function.</li>
+<li>compute_weight_gp becomes an internal function.</li>
+<li>compute_w_corr accepts w and confounders separately. It also normalizes w internally.<br></li>
+<li>compute_posterior_sd_nn becomes an internal function.</li>
+<li>compute_posterior_m_nn becomes an internal function.</li>
+<li>compute_derive_weights_gp becomes an internal function.</li>
+<li>compute_m_sigma becomes an internal function.</li>
+<li>compute_inverse becomes an internal function.</li>
+<li>In compute_m_sigma, tuning option does not have a default value.</li>
+<li>train_gps does not have default values.</li>
+<li>train_gps accepts vector of the SuperLearner package’s libraries.</li>
+<li>train_GPS -&gt; train_gps</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="gpcerf-010-2022-07-02">GPCERF 0.1.0 (2022-07-02)<a class="anchor" aria-label="anchor" href="#gpcerf-010-2022-07-02"></a></h2><p class="text-muted">CRAN release: 2022-07-02</p>
 <div class="section level3">
 <h3 id="changed-0-1-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-1-0"></a></h3>
@@ -80,10 +105,6 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="gpcerf-001-2022-03-31">GPCERF 0.0.1 (2022-03-31)<a class="anchor" aria-label="anchor" href="#gpcerf-001-2022-03-31"></a></h2>
 <div class="section level3">
-<h3 id="fixed-0-0-1">Fixed<a class="anchor" aria-label="anchor" href="#fixed-0-0-1"></a></h3>
-<ul><li>
-</li></ul></div>
-<div class="section level3">
 <h3 id="changed-0-0-1">Changed<a class="anchor" aria-label="anchor" href="#changed-0-0-1"></a></h3>
 <ul><li>Removed examples from internal functions</li>
 <li>w.obs -&gt; w_obs</li>
@@ -100,10 +121,6 @@
 <li>compute_inverse function</li>
 <li>compute_w_corr function</li>
 </ul></div>
-<div class="section level3">
-<h3 id="removed-0-0-1">Removed<a class="anchor" aria-label="anchor" href="#removed-0-0-1"></a></h3>
-<ul><li>
-</li></ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
