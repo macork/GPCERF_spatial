@@ -99,7 +99,7 @@ synthetic data generation function from the R package <a href="https://cran.r-pr
 continuous exposure and one outcome. We consider two types of
 conditional distributions (normal and student’s t) of the exposure given
 covariates. For more details of the synthetic data generation, see this
-<a href="https://fasrc.github.io/CausalGPS/articles/Generating-Synthetic-Data.html" class="external-link">document</a>.
+<a href="https://nsaph-software.github.io/CausalGPS/articles/Generating-Synthetic-Data.html" class="external-link">document</a>.
 We then use a function <code>tru_R</code> to derive the actual ERF of
 this population at <code>w=seq(0,20,0.1)</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -135,7 +135,7 @@ this population at <code>w=seq(0,20,0.1)</code>.</p>
 </h3>
 <p>GPCERF will first convert the covariate values into a single
 composite score (GPS) and then use it to fit the Gaussian processes. We
-use the GPS estimation function in CasaulGPS (see <a href="https://fasrc.github.io/CausalGPS/articles/Estimating-GPS.html" class="external-link">here</a>)
+use the GPS estimation function in CasaulGPS (see <a href="https://nsaph-software.github.io/CausalGPS/articles/Estimating-GPS.html" class="external-link">here</a>)
 to get the GPS model that maps covariates into GPS.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">GPS_m_normal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/train_gps.html">train_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">data_sim_normal</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span>
