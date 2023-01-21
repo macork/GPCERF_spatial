@@ -1,7 +1,7 @@
-## GPCERF (development)
+## GPCERF 0.2.0 (2023-01-21)
 
 ### Changed
-* estimate_noise_nn now allows for parallelization with an added argument `nthread` for the number of cpus used in parallel.
+* estimate_noise_nn now allows for parallelization with an added argument `nthread` for the number of CPUs used in parallel.
 * estimate_mean_sd_nn now only computes the posterior variance.
 * find_optimal_nn now returns the posterior mean and covariate balance for the optimal hyper-parameter values.
 * Add an argument kernel_fn to all nn related functions to allow for user-defined kernel functions.
