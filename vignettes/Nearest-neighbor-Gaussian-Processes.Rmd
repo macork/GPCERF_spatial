@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 library(GPCERF)
 library(ggplot2)
 ```
-In this vignette, we present an example of using nearest-neighbor Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://fasrc.github.io/CausalGPS/index.html).
+In this vignette, we present an example of using nearest-neighbor Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://nsaph-software.github.io/CausalGPS/index.html).
 
 ## Generate Synthetic Data
 
-We first generate a synthetic dataset with six covariates, one continuous exposure and one outcome. We consider two types of conditional distributions (normal and student's t) of the exposure given covariates. For more details of the synthetic data generation, see this [document](https://fasrc.github.io/CausalGPS/articles/Generating-Synthetic-Data.html). We then use a function `tru_R` to derive the actual ERF of this population at `w=seq(0,20,0.1)`.
+We first generate a synthetic dataset with six covariates, one continuous exposure and one outcome. We consider two types of conditional distributions (normal and student's t) of the exposure given covariates. For more details of the synthetic data generation, see this [document](https://nsaph-software.github.io/CausalGPS/articles/Generating-Synthetic-Data.html). We then use a function `tru_R` to derive the actual ERF of this population at `w=seq(0,20,0.1)`.
 ```{r}
 set.seed(1)
 # Generate dataset with a normally distributed exposure given covariates
@@ -53,7 +53,7 @@ erf_tru_t <- sapply(seq(0,20,0.1), function(w) tru_R(w, data_sim_t))
 
 ### Train GPS Model
 
-GPCERF will first convert the covariate values into a single composite score (GPS) and then use it to fit the Gaussian processes. We use the GPS estimation function in CausalGPS (see [here](https://fasrc.github.io/CausalGPS/articles/Estimating-GPS.html)) to get the GPS model that maps covariates into GPS.
+GPCERF will first convert the covariate values into a single composite score (GPS) and then use it to fit the Gaussian processes. We use the GPS estimation function in CausalGPS (see [here](https://nsaph-software.github.io/CausalGPS/articles/Estimating-GPS.html)) to get the GPS model that maps covariates into GPS.
 
 ```{r}
 GPS_m_normal <- train_gps(cov_mt = data_sim_normal[, -(1:2)],

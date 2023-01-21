@@ -1,3 +1,15 @@
+Re-submission (January 21, 2023)
+
+Thank you for taking the time to review the GPCERF 0.2.0 package. I fixed the 
+URL issues.  
+
+
+Best regards,
+Naeem Khoshnevis
+RCD - HUIT Harvard University
+
+
+
 Submission (January 21, 2023)
 Thank you for taking the time to review the GPCERF 0.2.0 package. In this update we:
 - Enhanced both approaches to use multiple CPU cores.
