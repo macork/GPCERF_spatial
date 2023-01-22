@@ -1,4 +1,4 @@
-# GPCERF 0.2.0 (2023-01-21)
+# GPCERF 0.2.0 (2023-01-22)
 
 ## Changed
 * estimate_noise_nn now allows for parallelization with an added argument `nthread` for the number of CPUs used in parallel.
