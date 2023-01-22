@@ -1,5 +1,5 @@
 #' @title
-#' Calculate Posterior Standard Deviations for nnGP Model
+#' Calculate posterior standard deviations for nnGP model
 #'
 #' @description
 #' Calculates the posterior standard deviation of a point on the CERF based on
@@ -13,69 +13,29 @@
 #' exposure levels of all samples; the second is the GPS at the observed
 #' exposure levels. The rows are in ascending order for the first column.
 #' @param sigma2 A scaler representing \code{sigma^2}.
+#' @param kernel_fn The covariance function of the GP.
 #' @param n_neighbor Number of nearest neighbors on one side
 #' (see also \code{expand}).
 #' @param expand A scaling factor to determine the total number of nearest
 #' neighbors. The total is \code{2*expand*n_neighbor}.
+#' @param block_size Number of samples included in a computation block.
+#' Mainly used to balance the speed and memory requirement.
+#' Larger \code{block_size} is faster, but requires more memory.
 #'
 #' @return
 #' The posterior standard deviation of the estimated CERF at \code{w}.
-#' @export
 #'
-#' @examples
-#'
-#' set.seed(3089)
-#' data <- generate_synthetic_data(sample_size = 150, gps_spec = 3)
-#'
-#' # Estimate GPS function
-#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-#'                    w_all = as.matrix(data$treat))
-#'
-#' # Hyperparameter
-#' hyperparam <- c(0.1, 0.2, 1)
-#' n_neighbor <- 10
-#' expand <- 1
-#' block_size <- 10000
-#'
-#' # Exposure level
-#' wi <- 0.4
-#'
-#' # Estimate GPS for the exposure level
-#' GPS_w = dnorm(wi,
-#'               mean = GPS_m$e_gps_pred,
-#'               sd = GPS_m$e_gps_std, log = TRUE)
-#'
-#' # Order data for easy selection
-#' coord_obs = cbind(data$treat, GPS_m$GPS)
-#' y_use <- data$Y
-#'
-#' obs_ord <- coord_obs[order(coord_obs[,1]),]
-#' y_use_ord <- y_use[order(coord_obs[,1])]
-#'
-#' # compute noise
-#' noise <- estimate_noise_nn(hyperparam = hyperparam,
-#'                            w_obs = data$treat,
-#'                            GPS_obs = GPS_m$GPS,
-#'                            y_obs = y_use_ord,
-#'                            n_neighbor = n_neighbor)
-#'
-#' # compute posterior standard deviation
-#' pst_sd <- compute_posterior_sd_nn(hyperparam = hyperparam,
-#'                                   w = wi,
-#'                                   GPS_w = GPS_w,
-#'                                   obs_ord = obs_ord,
-#'                                   sigma2 = noise,
-#'                                   n_neighbor = 20,
-#'                                   expand = 1)
-#'
+#' @keywords internal
 #'
 compute_posterior_sd_nn <-  function(hyperparam,
                                      w,
                                      GPS_w,
                                      obs_ord,
                                      sigma2,
+                                     kernel_fn = function(x) exp(-x ^ 2),
                                      n_neighbor = 10,
-                                     expand = 1){
+                                     expand = 1,
+                                     block_size = 1e4) {
 
   alpha <- hyperparam[[1]]
   beta <- hyperparam[[2]]
@@ -83,39 +43,50 @@ compute_posterior_sd_nn <-  function(hyperparam,
 
 
   n <- length(GPS_w)
+  # Compute number of blocks
+  n_block <- base::ceiling(n / block_size)
 
-  if(w >= obs_ord[nrow(obs_ord),1]){
+  if (w >= obs_ord[nrow(obs_ord), 1]) {
     idx_all <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
-  }else{
-    idx_anchor <- which.max(obs_ord[,1]>=w)
-    idx_start <- max(1, idx_anchor - n_neighbor*expand)
-    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor*expand)
-    if(idx_end == nrow(obs_ord)){
-      idx_all <- seq(idx_end - n_neighbor*2*expand + 1, idx_end, 1)
-    }else{
-      idx_all <- seq(idx_start, idx_start+n_neighbor*2*expand-1, 1)
+  } else {
+    idx_anchor <- which.max(obs_ord[, 1] >= w)
+    idx_start <- max(1, idx_anchor - n_neighbor * expand)
+    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor * expand)
+    if (idx_end == nrow(obs_ord)) {
+      idx_all <- seq(idx_end - n_neighbor * 2 * expand + 1, idx_end, 1)
+    } else {
+      idx_all <- seq(idx_start, idx_start + n_neighbor * 2 * expand - 1, 1)
     }
   }
 
-  obs_use <- t(t(obs_ord[idx_all,])*(1/sqrt(c(alpha, beta))))
-  cov_use_inv <- chol2inv(chol(sigma2*(g_sigma*exp(-as.matrix(dist(obs_use))^2) +
-                                           diag(nrow(obs_use)))))
-  obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
+  obs_use <- t(t(obs_ord[idx_all, ]) * (1 / sqrt(c(alpha, beta))))
+  cov_use_inv <- compute_inverse(sigma2 *
+                   (g_sigma * kernel_fn(as.matrix(dist(obs_use))) +
+                              diag(nrow(obs_use))))
+  obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(alpha, beta))))
 
   #within variance
-  sigma_sq1 <- (1+g_sigma)*sigma2/n
+  sigma_sq1 <- (1 + g_sigma) * sigma2 / n
 
   #cross variance
-  cross_cov <- sigma2*g_sigma*exp(-spatstat.geom::crossdist(obs_new[,1],obs_new[,2],
-                                                                obs_use[,1],obs_use[,2])^2)
+  #also use block to free up memories
+  id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
+  cross_cov_colS <- Rfast::rowsums(sapply(id_all, function(id_ind){
+    cross_cov <- sigma2 * g_sigma *
+                  kernel_fn(spatstat.geom::crossdist(obs_new[id_ind, 1],
+                                                     obs_new[id_ind, 2],
+                                                     obs_use[, 1],
+                                                     obs_use[, 2]))
+    Rfast::colsums(cross_cov)
+  }))
 
-  sigma_sq2 <- c(calc_cross(cross_cov, cov_use_inv))/n^2
+  cross_cov_mult <- c(arma_mm(cov_use_inv, cross_cov_colS))
+
+  sigma_sq2 <- c(cross_cov_colS %*% cross_cov_mult) / n ^ 2
   posterior_sd <- sqrt(sigma_sq1 - sigma_sq2 + sigma2)
 
   logger::log_debug("w: {w}, sigma_sq1: {sigma_sq1}, sigma_sq2: {sigma_sq2},",
                     "sigma2: {sigma2}")
-
-
 
   return(posterior_sd)
 }

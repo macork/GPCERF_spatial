@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_mean_sd_nn.R
 \name{estimate_mean_sd_nn}
 \alias{estimate_mean_sd_nn}
-\title{Estimate the CERF with the nnGP Model}
+\title{Estimate the CERF with the nnGP model}
 \usage{
 estimate_mean_sd_nn(
   hyperparam,
@@ -11,6 +11,7 @@ estimate_mean_sd_nn(
   w,
   y_obs,
   GPS_m,
+  kernel_fn = function(x) exp(-x^2),
   n_neighbor = 50,
   expand = 2,
   block_size = 2000,
@@ -28,7 +29,7 @@ estimate_mean_sd_nn(
 
 \item{y_obs}{A vector of observed outcome values.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS
 \item Column 2: Prediction of exposure for covariate of each data sample
@@ -36,63 +37,26 @@ estimate_mean_sd_nn(
 \item Column 3: Standard deviation of  e_gps (e_gps_std)
 }}
 
+\item{kernel_fn}{The covariance function of the GP.}
+
 \item{n_neighbor}{The number of nearest neighbors on one side
 (see also \code{expand}).}
 
 \item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n.neighbour}.}
+neighbors. The total is \code{2 * expand * n_neighbour}.}
 
 \item{block_size}{The number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement. Larger
-\code{block.size} is faster, but requires more memory.}
+\code{block_size} is faster, but requires more memory.}
 
 \item{nthread}{An integer value that represents the number of threads to be
 used by internal packages.}
 }
 \value{
-A list of 2 elements, including:
-\itemize{
-\item the returned value from \code{compute_posterior_m_nn}
-\item the returned value from \code{compute_posterior_sd_nn}
-}
+A vector of returned value from \code{compute_posterior_sd_nn}.
 }
 \description{
 Estimates the posterior mean of the conditional exposure response function
 at specified exposure levels with nnGP.
 }
-\examples{
-
-set.seed(86)
-data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
-
-# Estimate GPS function
-GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                   w_all = as.matrix(data$treat))
-
-# Hyperparameter
-hyperparam <- c(0.1, 0.2, 1)
-n_neighbor <- 15
-expand <- 1
-block_size <- 10000
-
-# compute noise
-noise <- estimate_noise_nn(hyperparam = hyperparam,
-                           w_obs = data$treat,
-                           GPS_obs = GPS_m$GPS,
-                           y_obs = data$Y,
-                           n_neighbor = n_neighbor)
-
-# compute posterior mean and standard deviation for vector of w.
-w <- seq(0,20,1)
-val <- estimate_mean_sd_nn(hyperparam = hyperparam,
-                           sigma2 = noise,
-                           w_obs = data$treat,
-                           w = w,
-                           y_obs = data$Y,
-                           GPS_m = GPS_m,
-                           n_neighbor = n_neighbor,
-                           expand = expand,
-                           block_size = block_size,
-                           nthread = 1)
-
-}
+\keyword{internal}

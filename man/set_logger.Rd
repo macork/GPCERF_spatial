@@ -2,13 +2,13 @@
 % Please edit documentation in R/set_logger.R
 \name{set_logger}
 \alias{set_logger}
-\title{Set Logger Settings}
+\title{Set logger settings}
 \usage{
 set_logger(logger_file_path = "GPCERF.log", logger_level = "INFO")
 }
 \arguments{
 \item{logger_file_path}{A path (including file name) to log the messages.
-(Default: CausalGPS.log)}
+(Default: GPCERF.log)}
 
 \item{logger_level}{The log level. Available levels include:
 \itemize{

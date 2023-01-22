@@ -5,3 +5,7 @@ calc_cross <- function(cross, within) {
     .Call(`_GPCERF_calc_cross`, cross, within)
 }
 
+arma_mm <- function(m, v) {
+    .Call(`_GPCERF_arma_mm`, m, v)
+}
+

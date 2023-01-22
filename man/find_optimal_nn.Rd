@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_optimal_nn.R
 \name{find_optimal_nn}
 \alias{find_optimal_nn}
-\title{Find the Optimal Hyper-parameter for the Nearest Neighbor Gaussian Process}
+\title{Find the optimal hyper-parameter for the nearest neighbor Gaussian process}
 \usage{
 find_optimal_nn(
   w_obs,
@@ -11,6 +11,7 @@ find_optimal_nn(
   GPS_m,
   design_mt,
   hyperparams = expand.grid(seq(0.5, 4.5, 1), seq(0.5, 4.5, 1), seq(0.5, 4.5, 1)),
+  kernel_fn = function(x) exp(-x^2),
   n_neighbor = 50,
   expand = 2,
   block_size = 2000,
@@ -24,7 +25,7 @@ find_optimal_nn(
 
 \item{y_obs}{A vector of observed outcomes}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS
 \item Column 2: Prediction of exposure for covariate of each data sample
@@ -37,11 +38,13 @@ find_optimal_nn(
 \item{hyperparams}{A matrix of candidate values of the hyper-parameters,
 each row contains a set of values of all hyper-parameters.}
 
+\item{kernel_fn}{The covariance function of the GP.}
+
 \item{n_neighbor}{The number of nearest neighbors on one side
 (see also \code{expand}).}
 
 \item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n_neighbor}.}
+neighbors. The total is \code{2 * expand * n_neighbor}.}
 
 \item{block_size}{The number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement. Larger
@@ -58,36 +61,4 @@ considered in \code{hyperparams}.
 Computes covariate balance for each combination of provided hyper-parameters
 and selects the hyper-parameter values that minimizes the covariate balance.
 }
-\examples{
-
-set.seed(89)
-data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
-
-# Estimate GPS function
-GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                   w_all = as.matrix(data$treat))
-
-# Hyperparameter
-hyperparam <- c(0.1, 0.2, 1)
-n_neighbor <- 10
-expand <- 1
-block_size <- 10000
-
-# compute posterior mean and standard deviation for vector of w.
-w <- seq(0,20,2)
-design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
-
-hyperparam_grid <- expand.grid(seq(0.5,1.0,1),
-                               seq(0.4,0.6,0.2),
-                               seq(0.5))
-
-optimal_cb <- find_optimal_nn(w_obs = data$treat,
-                              w = w,
-                              y_obs = data$Y,
-                              GPS_m = GPS_m,
-                              design_mt = design_mt,
-                              hyperparams = hyperparam_grid,
-                              n_neighbor = 50, expand = 2, block_size = 2e3,
-                              nthread = 1)
-
-}
+\keyword{internal}

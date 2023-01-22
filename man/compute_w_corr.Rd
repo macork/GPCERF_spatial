@@ -2,17 +2,14 @@
 % Please edit documentation in R/compute_w_corr.R
 \name{compute_w_corr}
 \alias{compute_w_corr}
-\title{Compute Weighted Correlation}
+\title{Compute weighted correlation}
 \usage{
-compute_w_corr(data, weights)
+compute_w_corr(w, confounders, weights)
 }
 \arguments{
-\item{data}{A data.table of observational data with the following columns:
-\itemize{
-\item Column 1: Outcome (Y)
-\item Column 2: Exposure or treatment (w)
-\item Column 3~m: Confounders (C)
-}}
+\item{w}{A vector of exposure values for the observed data.}
+
+\item{confounders}{A data.frame of observational confounders.}
 
 \item{weights}{A vector of weights for each observation data.}
 }
@@ -27,8 +24,9 @@ achieved by Gaussian Process.
 
 set.seed(124)
 mydata <- generate_synthetic_data(sample_size = 200)
-data.table::setDT(mydata)
 weights <- runif(nrow(mydata))
-compute_w_corr(mydata, weights)
+compute_w_corr(mydata$treat,
+               mydata[, 3:ncol(mydata)],
+               weights)
 
 }

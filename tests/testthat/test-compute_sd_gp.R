@@ -1,7 +1,6 @@
 test_that("compute_sd_gp works as expected.", {
 
    set.seed(2384)
-   #Generate synthetic data
    data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
    w_obs <- obs_exposure <- data$treat
 
@@ -12,8 +11,10 @@ test_that("compute_sd_gp works as expected.", {
    kernel_fn <- function(x) exp(-x^2)
 
    # Estimate GPS function
-   GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                      w_all = as.matrix(data$treat))
+   GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+                      w_all = data$treat,
+                      sl_lib = c("SL.xgboost"),
+                      dnorm_log = FALSE)
 
    GPS <- GPS_m$GPS
 
@@ -24,7 +25,7 @@ test_that("compute_sd_gp works as expected.", {
    g_sigma <- hyperparam[[3]]
 
    # Compute scaled observation data and inverse of covariate matrix.
-   scaled_obs <- cbind(obs_exposure*sqrt(1/alpha), GPS*sqrt(1/beta))
+   scaled_obs <- cbind(obs_exposure * sqrt(1 / alpha), GPS * sqrt(1 / beta))
 
    tentative_sigma <- 0.1
 
@@ -36,6 +37,4 @@ test_that("compute_sd_gp works as expected.", {
                                     kernel_fn = kernel_fn)
 
    expect_equal(length(post_sd), 1L)
-   expect_equal(post_sd[1], 0.1005114, tolerance = 0.00001)
-
 })

@@ -2,12 +2,21 @@
 % Please edit documentation in R/estimate_cerf_nngp.R
 \name{estimate_cerf_nngp}
 \alias{estimate_cerf_nngp}
-\title{Estimate the Conditional Exposure Response Function using Nearest Neighbor Gaussian Process}
+\title{Estimate the conditional exposure response function using nearest neighbor
+Gaussian process}
 \usage{
-estimate_cerf_nngp(data, w, GPS_m, params, kernel_fn, nthread = 1)
+estimate_cerf_nngp(
+  data,
+  w,
+  GPS_m,
+  params,
+  formula,
+  kernel_fn = function(x) exp(-x^2),
+  nthread = 1
+)
 }
 \arguments{
-\item{data}{A data.table of observation data.
+\item{data}{A data.frame of observation data.
 \itemize{
 \item Column 1: Outcome (Y)
 \item Column 2: Exposure or treatment (w)
@@ -16,7 +25,7 @@ estimate_cerf_nngp(data, w, GPS_m, params, kernel_fn, nthread = 1)
 
 \item{w}{A vector of exposure level to compute CERF.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS
 \item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
@@ -34,13 +43,15 @@ These parameters include:
 \item all: try all combinations of hyperparameters.
 }
 \item expand: Scaling factor to determine the total number of nearest neighbors.
-The total is \code{2*expand*n.neighbour}.
+The total is \code{2 * expand * n_neighbour}.
 \item n_neighbor: Number of nearest neighbors on one side.
 \item block_size: Number of samples included in a computation block. Mainly
 used to balance the speed and memory requirement. Larger \code{block_size}
 is faster, but requires more memory.
 alpha, beta, and g_sigma can be a vector of parameters.
 }}
+
+\item{formula}{A formula to indicate the design matrix of the model for GPS.}
 
 \item{kernel_fn}{A kernel function. A default value is a Gaussian Kernel.}
 
@@ -64,14 +75,15 @@ match (the lowest covariate balance) for the provided set of hyperparameters.
 
 \donttest{
 set.seed(19)
-sim.data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
+data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 # Estimate GPS function
-GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
-                   w_all = as.matrix(sim.data$treat))
+GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+                   w_all = data$treat,
+                   sl_lib = c("SL.xgboost"),
+                   dnorm_log = FALSE)
 # exposure values
 w.all <- seq(0,20,2)
-data.table::setDT(sim.data)
-cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
+cerf_nngp_obj <- estimate_cerf_nngp(data,
                                     w.all,
                                     GPS_m,
                                     params = list(alpha = c(0.1),
@@ -81,6 +93,7 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim.data,
                                                   n_neighbor = 20,
                                                   expand = 1,
                                                   block_size = 1e4),
+                                    formula = ~ . - 1 - Y - treat,
                                     nthread = 1)
 }
 

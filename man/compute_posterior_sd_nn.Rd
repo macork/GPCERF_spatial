@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_posterior_sd_nn.R
 \name{compute_posterior_sd_nn}
 \alias{compute_posterior_sd_nn}
-\title{Calculate Posterior Standard Deviations for nnGP Model}
+\title{Calculate posterior standard deviations for nnGP model}
 \usage{
 compute_posterior_sd_nn(
   hyperparam,
@@ -10,8 +10,10 @@ compute_posterior_sd_nn(
   GPS_w,
   obs_ord,
   sigma2,
+  kernel_fn = function(x) exp(-x^2),
   n_neighbor = 10,
-  expand = 1
+  expand = 1,
+  block_size = 10000
 )
 }
 \arguments{
@@ -28,11 +30,17 @@ exposure levels. The rows are in ascending order for the first column.}
 
 \item{sigma2}{A scaler representing \code{sigma^2}.}
 
+\item{kernel_fn}{The covariance function of the GP.}
+
 \item{n_neighbor}{Number of nearest neighbors on one side
 (see also \code{expand}).}
 
 \item{expand}{A scaling factor to determine the total number of nearest
 neighbors. The total is \code{2*expand*n_neighbor}.}
+
+\item{block_size}{Number of samples included in a computation block.
+Mainly used to balance the speed and memory requirement.
+Larger \code{block_size} is faster, but requires more memory.}
 }
 \value{
 The posterior standard deviation of the estimated CERF at \code{w}.
@@ -41,51 +49,4 @@ The posterior standard deviation of the estimated CERF at \code{w}.
 Calculates the posterior standard deviation of a point on the CERF based on
 the nnGP model.
 }
-\examples{
-
-set.seed(3089)
-data <- generate_synthetic_data(sample_size = 150, gps_spec = 3)
-
-# Estimate GPS function
-GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                   w_all = as.matrix(data$treat))
-
-# Hyperparameter
-hyperparam <- c(0.1, 0.2, 1)
-n_neighbor <- 10
-expand <- 1
-block_size <- 10000
-
-# Exposure level
-wi <- 0.4
-
-# Estimate GPS for the exposure level
-GPS_w = dnorm(wi,
-              mean = GPS_m$e_gps_pred,
-              sd = GPS_m$e_gps_std, log = TRUE)
-
-# Order data for easy selection
-coord_obs = cbind(data$treat, GPS_m$GPS)
-y_use <- data$Y
-
-obs_ord <- coord_obs[order(coord_obs[,1]),]
-y_use_ord <- y_use[order(coord_obs[,1])]
-
-# compute noise
-noise <- estimate_noise_nn(hyperparam = hyperparam,
-                           w_obs = data$treat,
-                           GPS_obs = GPS_m$GPS,
-                           y_obs = y_use_ord,
-                           n_neighbor = n_neighbor)
-
-# compute posterior standard deviation
-pst_sd <- compute_posterior_sd_nn(hyperparam = hyperparam,
-                                  w = wi,
-                                  GPS_w = GPS_w,
-                                  obs_ord = obs_ord,
-                                  sigma2 = noise,
-                                  n_neighbor = 20,
-                                  expand = 1)
-
-
-}
+\keyword{internal}

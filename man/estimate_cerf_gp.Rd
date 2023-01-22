@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_cerf_gp.R
 \name{estimate_cerf_gp}
 \alias{estimate_cerf_gp}
-\title{Estimate the Conditional Exposure Response Function using Gaussian Process}
+\title{Estimate the conditional exposure response function using Gaussian process}
 \usage{
 estimate_cerf_gp(
   data,
@@ -14,7 +14,7 @@ estimate_cerf_gp(
 )
 }
 \arguments{
-\item{data}{A data.table of observation data.
+\item{data}{A data.frame of observation data.
 \itemize{
 \item Column 1: Outcome (Y)
 \item Column 2: Exposure or treatment (w)
@@ -23,7 +23,7 @@ estimate_cerf_gp(
 
 \item{w}{A vector of exposure level to compute CERF.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS
 \item Column 2: Prediction of exposure for covariate of each data
@@ -64,28 +64,29 @@ Process (gp). The function tune the best match (the lowest covariate balance)
 for the provided set of hyperparameters.
 }
 \examples{
-
+\donttest{
 set.seed(129)
-sim.data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
+data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
 
 
 # Estimate GPS function
-GPS_m <- train_GPS(cov_mt = as.matrix(sim.data[,-(1:2)]),
-                   w_all = as.matrix(sim.data$treat))
+GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+                   w_all = data$treat,
+                   sl_lib = c("SL.xgboost"),
+                   dnorm_log = FALSE)
 
 # exposure values
-w.all = seq(0,20,1)
+w_all <- seq(0,10,1)
 
-data.table::setDT(sim.data)
 
-cerf_gp_obj <- estimate_cerf_gp(sim.data,
-                                w.all,
+cerf_gp_obj <- estimate_cerf_gp(data,
+                                w_all,
                                 GPS_m,
                                 params = list(alpha = c(0.1),
                                               beta=0.2,
                                               g_sigma = 1,
                                               tune_app = "all"),
                                 nthread = 1)
-
+}
 
 }

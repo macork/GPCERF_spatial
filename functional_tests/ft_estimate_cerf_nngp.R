@@ -19,6 +19,7 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
                                                   n_neighbor = 20,
                                                   expand = 1,
                                                   block_size = 1e4),
+                                    formula = ~ . - 1 - Y - treat,
                                     nthread = 12)
 
 t_2 <- proc.time()
@@ -39,5 +40,6 @@ profvis::profvis({
                                                     n_neighbor = 20,
                                                     expand = 1,
                                                     block_size = 1e4),
+                                      formula = ~ . - 1 - Y - treat,
                                       nthread = 1)
 })

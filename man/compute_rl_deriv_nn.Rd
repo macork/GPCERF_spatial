@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_rl_deriv_nn.R
 \name{compute_rl_deriv_nn}
 \alias{compute_rl_deriv_nn}
-\title{Calculate Right Minus Left Derivatives for Change-point Detection in nnGP}
+\title{Calculate right minus left derivatives for change-point detection in nnGP}
 \usage{
 compute_rl_deriv_nn(
   w,
@@ -22,7 +22,7 @@ compute_rl_deriv_nn(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS values.
 \item Column 2: Prediction of exposure for covariate of each data
@@ -60,11 +60,13 @@ right-derivatives at an exposure level for the detection of change points.
 nnGP approximation is used.
 }
 \examples{
-
+\donttest{
 set.seed(325)
 data <- generate_synthetic_data(sample_size = 200)
-GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                   w_all = as.matrix(data$treat))
+GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+                   w_all = data$treat,
+                   sl_lib = c("SL.xgboost"),
+                   dnorm_log = FALSE)
 
 wi <- 12.2
 
@@ -75,6 +77,6 @@ deriv_val <- compute_rl_deriv_nn(w = wi,
                                  hyperparam = c(0.2,0.4,1.2),
                                  n_neighbor = 20,
                                  expand = 1,
-                                 block_size = 1000)
-
+                                 block_size = 10)
+}
 }

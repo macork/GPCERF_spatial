@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_rl_deriv_gp.R
 \name{compute_rl_deriv_gp}
 \alias{compute_rl_deriv_gp}
-\title{Change-point Detection in Full GP}
+\title{Detect change-point in full GP}
 \usage{
 compute_rl_deriv_gp(
   w,
@@ -21,7 +21,7 @@ compute_rl_deriv_gp(
 
 \item{y_obs}{A vector of observed outcome values of all samples.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: GPS
 \item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
@@ -43,11 +43,13 @@ Calculates the posterior mean of the difference between left- and
 right-derivatives at an exposure level for the detection of change points.
 }
 \examples{
-
+\donttest{
 set.seed(847)
-data <- generate_synthetic_data(sample_size = 200)
-GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                   w_all = as.matrix(data$treat))
+data <- generate_synthetic_data(sample_size = 100)
+GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+                   w_all = data$treat,
+                   sl_lib = c("SL.xgboost"),
+                   dnorm_log = FALSE)
 
 wi <- 8.6
 
@@ -56,5 +58,5 @@ val <- compute_rl_deriv_gp(w = wi,
                            y_obs = data$Y,
                            GPS_m = GPS_m,
                            hyperparam = c(1,1,2))
-
+}
 }

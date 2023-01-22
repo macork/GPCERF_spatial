@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_sd_gp.R
 \name{compute_sd_gp}
 \alias{compute_sd_gp}
-\title{Compute Posterior Credible Interval}
+\title{Compute posterior credible interval}
 \usage{
 compute_sd_gp(
   w,
@@ -31,7 +31,7 @@ compute_sd_gp(
 
 \item{sigma}{A scaler that represents noise.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
 \item Column 1: A vector of estimated GPS evaluated at the observed exposure levels.
 \item Column 2: Estimated conditional means of the exposure given covariates

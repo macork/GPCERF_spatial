@@ -1,5 +1,5 @@
 #' @title
-#' Change-point Detection in Full GP
+#' Detect change-point in full GP
 #'
 #' @description
 #' Calculates the posterior mean of the difference between left- and
@@ -8,7 +8,7 @@
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
 #' @param y_obs A vector of observed outcome values of all samples.
-#' @param GPS_m A data.table of GPS vectors.
+#' @param GPS_m A data.frame of GPS vectors.
 #'   - Column 1: GPS
 #'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std)
@@ -22,11 +22,13 @@
 #' @export
 #'
 #' @examples
-#'
+#' \donttest{
 #' set.seed(847)
-#' data <- generate_synthetic_data(sample_size = 200)
-#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-#'                    w_all = as.matrix(data$treat))
+#' data <- generate_synthetic_data(sample_size = 100)
+#' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+#'                    w_all = data$treat,
+#'                    sl_lib = c("SL.xgboost"),
+#'                    dnorm_log = FALSE)
 #'
 #' wi <- 8.6
 #'
@@ -35,7 +37,7 @@
 #'                            y_obs = data$Y,
 #'                            GPS_m = GPS_m,
 #'                            hyperparam = c(1,1,2))
-#'
+#' }
 compute_rl_deriv_gp <- function(w,
                                 w_obs,
                                 y_obs,
@@ -45,20 +47,21 @@ compute_rl_deriv_gp <- function(w,
                                 kernel_deriv_fn = function(x) -exp(-x)){
   # left side weights
   left_weights <-  compute_deriv_weights_gp(w = w,
-                                            w_obs = w_obs[w_obs<w],
-                                            GPS_m = GPS_m[w_obs<w,],
+                                            w_obs = w_obs[w_obs < w],
+                                            GPS_m = GPS_m[w_obs < w,],
                                             hyperparam = hyperparam,
                                             kernel_fn = kernel_fn,
                                             kernel_deriv_fn = kernel_deriv_fn)
 
   # right side weights
   right_weights <-  compute_deriv_weights_gp(w = w,
-                                             w_obs = w_obs[w_obs>=w],
-                                             GPS_m = GPS_m[w_obs>=w,],
+                                             w_obs = w_obs[w_obs >= w],
+                                             GPS_m = GPS_m[w_obs >= w,],
                                              hyperparam = hyperparam,
                                              kernel_fn = kernel_fn,
                                              kernel_deriv_fn = kernel_deriv_fn)
 
   # compute derivative
-  return(right_weights%*%y_obs[w_obs>=w] - left_weights%*%y_obs[w_obs<w])
+  return(right_weights %*% y_obs[w_obs >= w] -
+         left_weights %*% y_obs[w_obs < w])
 }

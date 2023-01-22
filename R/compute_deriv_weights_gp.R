@@ -1,5 +1,5 @@
 #' @title
-#' Calculate Derivatives of CERF
+#' Calculate derivatives of CERF
 #'
 #' @description
 #' Calculates the weights assigned to each observed outcome when deriving the
@@ -7,7 +7,7 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m A data.table of GPS vectors. Including:
+#' @param GPS_m A data.frame of GPS vectors. Including:
 #'   - Column 1: GPS values.
 #'   - Column 2: Prediction of exposure for covariate of each data
 #'   sample (e_gps_pred).
@@ -20,20 +20,7 @@
 #' A vector of weights for all samples, based on which the posterior mean of
 #' the derivative of CERF at the exposure level of interest is calculated.
 #'
-#' @export
-#'
-#' @examples
-#'
-#' set.seed(915)
-#' data <- generate_synthetic_data(sample_size = 150)
-#' GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-#'                    w_all = as.matrix(data$treat))
-#'
-#' wi <- 4.8
-#' weights <- compute_deriv_weights_gp(w = wi,
-#'                                     w_obs = data$treat,
-#'                                     GPS_m = GPS_m,
-#'                                     hyperparam = c(1,1,2))
+#' @keywords internal
 #'
 compute_deriv_weights_gp <- function(w,
                                      w_obs,
@@ -56,14 +43,17 @@ compute_deriv_weights_gp <- function(w,
   GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
   n <- length(GPS_w)
 
-  obs_use <- cbind( w_obs*sqrt(1/alpha), GPS*sqrt(1/beta) )
-  obs_new <- cbind( w*sqrt(1/alpha), GPS_w*sqrt(1/beta) )
-  Sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(obs_use))^2) + diag(nrow(obs_use))
-  cross_dist <- spatstat.geom::crossdist(obs_new[,1], obs_new[,2],
-                                        obs_use[,1], obs_use[,2])
-  Sigma_cross <- g_sigma*sqrt(1/alpha)*kernel_deriv_fn(cross_dist^2)*
-    (2*outer(rep(w,n), w_obs, "-"))
-  weights_all <- Sigma_cross%*%chol2inv(chol(Sigma_obs))
+  obs_use <- cbind(w_obs * sqrt(1 / alpha), GPS * sqrt(1 / beta))
+  obs_new <- cbind(w * sqrt(1 / alpha), GPS_w * sqrt(1 / beta))
+  Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
+               diag(nrow(obs_use))
+  cross_dist <- spatstat.geom::crossdist(obs_new[, 1], obs_new[, 2],
+                                         obs_use[, 1], obs_use[, 2])
+
+  #TODO: Needs refactoring. `outer` function uses significant amount of memory.
+  Sigma_cross <- g_sigma * sqrt(1 / alpha) * kernel_deriv_fn(cross_dist ^ 2) *
+                         (2 * outer(rep(w, n), w_obs, "-"))
+  weights_all <- Sigma_cross %*% chol2inv(chol(Sigma_obs))
 
   return(colMeans(weights_all))
 }

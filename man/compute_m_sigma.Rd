@@ -2,15 +2,15 @@
 % Please edit documentation in R/compute_m_sigma.R
 \name{compute_m_sigma}
 \alias{compute_m_sigma}
-\title{Compute mean, credible interval, and covariate balance in Full Gaussian
-Process (GP)}
+\title{Compute mean, credible interval, and covariate balance in full Gaussian
+process (GP)}
 \usage{
 compute_m_sigma(
   hyperparam,
   data,
   w,
   GPS_m,
-  nthread = 1,
+  tuning,
   kernel_fn = function(x) exp(-x^2)
 )
 }
@@ -19,10 +19,10 @@ compute_m_sigma(
 \itemize{
 \item First element: alpha
 \item Second element: beta
-\item Third element: g_sigma (gamma/sigma)
+\item Third element: g_sigma (gamma / sigma)
 }}
 
-\item{data}{A  data.table containing all data including outcome, exposure
+\item{data}{A  data.frame containing all data including outcome, exposure
 and covariates. In the following order:
 \itemize{
 \item Column 1: Outcome (Y)
@@ -32,49 +32,32 @@ and covariates. In the following order:
 
 \item{w}{A vector of exposure levels at which the CERF is estimated.}
 
-\item{GPS_m}{A data.table of GPS vectors.
+\item{GPS_m}{A data.frame of GPS vectors.
 \itemize{
-\item Column 1: A vector of estimated GPS evaluated at the observed exposure levels.
+\item Column 1: A vector of estimated GPS evaluated at the observed exposure
+levels.
 \item Column 2: Estimated conditional means of the exposure given covariates
 for all samples (e_gps_pred).
 \item Column 3: Estimated conditional standard deviation of the exposure given
 covariates for all samples (e_gps_std).
 }}
 
-\item{nthread}{An integer value that represents the number of threads to be
-used by internal packages.}
+\item{tuning}{The function is used for parameter tuning (default = TRUE)
+or estimation (FALSE)}
 
 \item{kernel_fn}{The covariance function of GP.}
 }
 \value{
-A list containing two elements: 1) a vector of absolute weighted correlation
-of each covariate to the exposure, which is the metric for covariate balance
-and 2) the estimated CERF at \code{w.all} based on the hyper-parameter
-values in \code{param}.
+A list containing two elements:
+\itemize{
+\item A vector of absolute weighted correlation of each covariate to the
+exposure, which is the metric for covariate balance
+\item An estimated CERF at \code{w_all} based on the hyper-parameter values in
+\code{param}.
+}
 }
 \description{
 Calculates the induced covariate balance associated with one hyper-parameter
 configuration in full GP.
 }
-\examples{
-
-set.seed(912)
-data <- generate_synthetic_data(sample_size = 250, gps_spec = 3)
-
-w_all <- seq(0,20,1)
-
-data.table::setDT(data)
-
-#Estimate GPS function
-GPS_m <- train_GPS(cov_mt = as.matrix(data[,-(1:2)]),
-                   w_all = as.matrix(data$treat))
-
-tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
-                            data = data,
-                            w = w_all,
-                            GPS_m = GPS_m,
-                            nthread = 1)
-
-gp.cerf <- tune_res$est
-
-}
+\keyword{internal}

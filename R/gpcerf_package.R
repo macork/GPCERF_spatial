@@ -14,11 +14,14 @@
 #' @author Danielle Braun
 #' @import stats
 #' @import xgboost
-#' @import data.table
 #' @import MASS
 #' @import Rcpp
+#' @import SuperLearner
 #' @importFrom spatstat.geom crossdist
+#' @import Rfast
+#' @import RcppArmadillo
 #' @useDynLib GPCERF, .registration = TRUE
+
 #'
 #' @references
 #' Ren, B., Wu, X., Braun, D., Pillai, N. and Dominici, F., 2021. Bayesian

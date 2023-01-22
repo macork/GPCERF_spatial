@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_deriv_nn.R
 \name{compute_deriv_nn}
 \alias{compute_deriv_nn}
-\title{Calculate Derivatives of CERF for nnGP}
+\title{Calculate derivatives of CERF for nnGP}
 \usage{
 compute_deriv_nn(
   w,
@@ -22,7 +22,7 @@ compute_deriv_nn(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{A data.table of GPS vectors. Including:
+\item{GPS_m}{A data.frame of GPS vectors. Including:
 \itemize{
 \item Column 1: GPS values.
 \item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
@@ -36,7 +36,7 @@ compute_deriv_nn(
 \item{n_neighbor}{The number of nearest neighbors on one side (see also \code{expand}).}
 
 \item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n_neighbor}.}
+neighbors. The total is \code{2 * expand * n_neighbor}.}
 
 \item{block_size}{The number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}
