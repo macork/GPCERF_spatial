@@ -66,7 +66,6 @@
 estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                              kernel_fn = function(x) exp(-x ^ 2)){
 
-
   # Log system info
   log_system_info()
 

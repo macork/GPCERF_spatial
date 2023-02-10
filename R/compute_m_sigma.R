@@ -65,7 +65,8 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   # Estimate noise
   if(!tuning) {
     noise_est <- estimate_noise_gp(data = data,
-                                   sigma_obs, inv_sigma_obs)
+                                   sigma_obs = sigma_obs,
+                                   inv_sigma_obs = inv_sigma_obs)
   }
 
   col_all_list <- lapply(w,
@@ -110,7 +111,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   est_index <- nrow(col_all) -1
   pst_index <- nrow(col_all)
 
-  list(cb = rowMeans(col_all[1:n_confounders, ], na.rm = T),
+  list(cb = rowMeans(col_all[1:n_confounders, ], na.rm = TRUE),
        est = col_all[est_index, ],
        pst = col_all[pst_index, ])
 }

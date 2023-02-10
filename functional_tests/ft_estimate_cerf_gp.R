@@ -1,7 +1,8 @@
+
 rm(list = ls())
 t_1 <- proc.time()
 set.seed(129)
-data <- generate_synthetic_data(sample_size = 200, gps_spec = 1)
+data <- generate_synthetic_data(sample_size = 300, gps_spec = 1)
 
 
 # Estimate GPS function
@@ -16,11 +17,11 @@ w_all <- seq(0,20,1)
 cerf_gp_obj <- estimate_cerf_gp(data,
                                 w_all,
                                 GPS_m,
-                                params = list(alpha = c(0.1),
-                                              beta=0.2,
-                                              g_sigma = 1,
+                                params = list(alpha = c(0.1, 0.2, 0.3),
+                                              beta = c(0.2, 0.4, 0.6),
+                                              g_sigma = c(0.5, 0.8),
                                               tune_app = "all"),
-                                nthread = 2)
+                                nthread = 1)
 
 t_2 <- proc.time()
 print(paste("Wall clock time: ", t_2[[3]] - t_1[[3]], "s."))
