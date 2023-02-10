@@ -69,12 +69,12 @@ compute_posterior_m_nn <- function(hyperparam,
     }
   }
 
-  used_obs <- t(t(obs_ord[idx_select, ]) * (1 / sqrt(c(alpha, beta))))
+  used_obs <- t(t(obs_ord[idx_select, ]) * (1 / sqrt(c(beta, alpha))))
   cov_used_inv <- compute_inverse(g_sigma * kernel_fn(as.matrix(dist(used_obs)))
                                   + diag(nrow(used_obs)))
   used_y <- y_obs_ord[idx_select]
 
-  w_obs <- t(t(cbind(w, GPS_w)) * (1/sqrt(c(alpha, beta))))
+  w_obs <- t(t(cbind(w, GPS_w)) * (1/sqrt(c(beta, alpha))))
   id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
 
   all_weights <- sapply(id_all, function(id_ind){

@@ -56,7 +56,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
 
   w_obs <- data[[2]]
 
-  scaled_obs <- cbind(w_obs * sqrt(1 / alpha), GPS * sqrt(1 / beta))
+  scaled_obs <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
   sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(scaled_obs))) +
                diag(nrow(scaled_obs))
 

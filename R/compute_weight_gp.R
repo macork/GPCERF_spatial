@@ -48,7 +48,7 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   # TODO: The following section is repeated between this function
   # and compute_sd_gp function.
   GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
-  scaled_w <- cbind(w * sqrt(1 / alpha), GPS_w * sqrt(1 / beta))
+  scaled_w <- cbind(w * sqrt(1 / beta), GPS_w * sqrt(1 / alpha))
 
   # kappa
   # sigma_cross = kappa/sigma^2 : Is always n*n matrix.

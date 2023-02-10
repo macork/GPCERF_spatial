@@ -43,8 +43,8 @@ compute_deriv_weights_gp <- function(w,
   GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
   n <- length(GPS_w)
 
-  obs_use <- cbind(w_obs * sqrt(1 / alpha), GPS * sqrt(1 / beta))
-  obs_new <- cbind(w * sqrt(1 / alpha), GPS_w * sqrt(1 / beta))
+  obs_use <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
+  obs_new <- cbind(w * sqrt(1 / beta), GPS_w * sqrt(1 / alpha))
   Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
                diag(nrow(obs_use))
   cross_dist <- spatstat.geom::crossdist(obs_new[, 1], obs_new[, 2],

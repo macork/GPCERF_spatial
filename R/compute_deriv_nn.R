@@ -72,10 +72,10 @@ compute_deriv_nn <- function(w,
     }
   }
 
-  obs_use <- t(t(obs_ord[idx_all,])*(1/sqrt(c(alpha, beta))))
+  obs_use <- t(t(obs_ord[idx_all,])*(1/sqrt(c(beta, alpha))))
   y_use <- y_obs_ord[idx_all]
 
-  obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
+  obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(beta, alpha))))
   id_all <- split(1:n, ceiling(seq_along(1:n)/n_block))
   Sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(obs_use))^2) + diag(nrow(obs_use))
   Sigma_obs_inv <- chol2inv(chol(Sigma_obs))

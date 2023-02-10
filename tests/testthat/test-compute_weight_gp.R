@@ -41,5 +41,5 @@ test_that("multiplication works", {
                               kernel_fn = kernel_fn)
 
   expect_equal(length(weight$weight), 200L)
-  expect_equal(weight$weight[28], 1.588098e-03, tolerance = 10e-5)
+  expect_equal(weight$weight[28], 1.001301e-06, tolerance = 10e-5)
 })

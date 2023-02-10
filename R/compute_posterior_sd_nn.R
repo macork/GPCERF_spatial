@@ -59,11 +59,11 @@ compute_posterior_sd_nn <-  function(hyperparam,
     }
   }
 
-  obs_use <- t(t(obs_ord[idx_all, ]) * (1 / sqrt(c(alpha, beta))))
+  obs_use <- t(t(obs_ord[idx_all, ]) * (1 / sqrt(c(beta, alpha))))
   cov_use_inv <- compute_inverse(sigma2 *
                    (g_sigma * kernel_fn(as.matrix(dist(obs_use))) +
                               diag(nrow(obs_use))))
-  obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(alpha, beta))))
+  obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(beta, alpha))))
 
   #within variance
   sigma_sq1 <- (1 + g_sigma) * sigma2 / n
