@@ -5,6 +5,8 @@ set.seed(129)
 data <- generate_synthetic_data(sample_size = 300, gps_spec = 1)
 
 
+GPCERF::set_logger(logger_level = "TRACE")
+
 # Estimate GPS function
 GPS_m <- train_gps(cov_mt = data[,-(1:2)],
                    w_all = data$treat,

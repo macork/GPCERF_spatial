@@ -26,6 +26,8 @@
 compute_w_corr <- function(w, confounders, weights) {
 
 
+  logger::log_trace("Computing covariate balance ... ")
+
   if (!is.data.frame(confounders)) {
     stop(paste0("The confounders should be a data.frame. ",
                 "Current format: ", class(confounders)[1]))

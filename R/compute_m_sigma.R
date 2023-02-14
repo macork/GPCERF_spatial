@@ -54,11 +54,26 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   beta  <- param[2]
   g_sigma <- param[3]
 
+  logger::log_trace("Should go through tuning? {tuning}")
+  logger::log_trace("Running for tune parameters: ",
+                    "alpha: {alpha}, beta: {beta}, g_sigma: {g_sigma} ...")
+
   w_obs <- data[[2]]
 
+  #TODO: Following the paper and alpha beta convention, first column should be
+  # GPS scaled with alpha, and second column should be w scaled with beta.
+
   scaled_obs <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
+
+  t_sigma_obs_1 <- proc.time()
   sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(scaled_obs))) +
                diag(nrow(scaled_obs))
+  t_sigma_obs_2 <- proc.time()
+
+  logger::log_trace("Wall clock time to generate covariance matrix ",
+                    "({nrow(sigma_obs)},{ncol(sigma_obs)}): ",
+                    "{t_sigma_obs_2[[3]] - t_sigma_obs_1[[3]]} s.")
+
 
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
@@ -67,7 +82,11 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
     noise_est <- estimate_noise_gp(data = data,
                                    sigma_obs = sigma_obs,
                                    inv_sigma_obs = inv_sigma_obs)
+    logger::log_debug("Estimated noise: {noise_est} ")
   }
+
+  logger::log_info("Computing weight and covariate balance for each requested ",
+                   "exposure value ... ")
 
   col_all_list <- lapply(w,
                          function(w_instance) {
@@ -94,8 +113,9 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
     if(!tuning) {
       est <- data$Y %*% weights_final
       pst_sd <- noise_est * sqrt(weights_res$sd_scaled ^ 2 + 1)
-    }
-    else{
+      logger::log_trace("Posterior for w = {w_instance} ==> ",
+                        "mu: {est}, var:{pst_sd}")
+    } else {
       est <- NA
       pst_sd <- NA
     }
@@ -105,13 +125,24 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
     c(covariate_balance, est, pst_sd)
   })
 
+  logger::log_info("Done with computing weight and covariate balance for ",
+                   "each requested exposure value. ")
+
   col_all <- do.call(cbind, col_all_list)
 
   n_confounders <- nrow(col_all) - 2 # est, pst_sd
   est_index <- nrow(col_all) -1
   pst_index <- nrow(col_all)
 
-  list(cb = rowMeans(col_all[1:n_confounders, ], na.rm = TRUE),
+  logger::log_trace("Matrix ({nrow(col_all)}, ncol{col_all}) of ",
+                    "cov. b. for each requested w was generated. ",
+                    "Last two rows are posterior place holders.")
+
+  # compute one covariate balance per hyper parameters. This is done by taking
+  # average over all requested w values.
+  col_all_w_average <- rowMeans(col_all[1:n_confounders, ], na.rm = TRUE)
+
+  list(cb = col_all_w_average,
        est = col_all[est_index, ],
        pst = col_all[pst_index, ])
 }

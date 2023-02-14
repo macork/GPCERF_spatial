@@ -102,6 +102,9 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                               getElement(params, "beta"),
                               getElement(params, "g_sigma"))
 
+  logger::log_trace("Number of provided combination of tune parameters: ",
+                    "{nrow(tune_params)}")
+
   if (nrow(tune_params) == 0) {
     stop(paste("Something went wrong with tuning parameters. ",
                "The expanded grid has not been generated."))
@@ -118,9 +121,15 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                " is not supported."))
   }
 
+  logger::log_trace("Number of selected combination of tune parameters: ",
+                    "{nrow(tune_params_subset)}")
+
   # Compute m, "confidence interval", and covariate balance for provided
   # hyperparameters. -----------------------------------------------------------
   if(nthread > 1 && nrow(tune_params_subset) > 1) {
+
+    logger::log_trace("Starting a cluster with {nthread} threads ...")
+
     lfp <- get_options("logger_file_path")
 
     # make a cluster
@@ -146,6 +155,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                                    })
 
     parallel::stopCluster(cl)
+    logger::log_trace("Cluster with {nthread} threads was terminated.")
   } else if (nrow(tune_params_subset) > 1) {
     tune_res <- apply(tune_params_subset, 1, function(x) {
       compute_m_sigma(hyperparam = x,
@@ -156,6 +166,17 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                       kernel_fn = kernel_fn)
       })
   }
+
+  logger::log_debug("Number of generated tuning results: {length(tune_res)}")
+
+  # Tuning results include:
+  # cb: covariate balance for each confounder. This is the average of all
+  #     all covariate balance for each requested exposure values.
+  # est: Posterior mean for all requested exposure values (vector of
+  #      NA if tuning).
+  # pst: Posterior standard deviation for all requested exposure values (vector
+  #.     of NA if tuning.)
+
 
   # Select the combination of hyperparameters that provides the lowest
   # covariate balance ----------------------------------------------------------
