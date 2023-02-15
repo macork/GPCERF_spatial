@@ -134,7 +134,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   est_index <- nrow(col_all) -1
   pst_index <- nrow(col_all)
 
-  logger::log_trace("Matrix ({nrow(col_all)}, ncol{col_all}) of ",
+  logger::log_trace("Matrix ({nrow(col_all)}, {ncol(col_all)}) of ",
                     "cov. b. for each requested w was generated. ",
                     "Last two rows are posterior place holders.")
 

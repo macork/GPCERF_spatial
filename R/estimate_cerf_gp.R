@@ -69,6 +69,9 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   # Log system info
   log_system_info()
 
+  # timing the function
+  st_time_gp <- proc.time()
+
   # function call
   fcall <- match.call()
 
@@ -193,6 +196,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                                    tuning = FALSE,
                                    kernel_fn = kernel_fn)
 
+
   # Build gp_cerf S3 object
   result <- list()
   class(result) <- "cerf_gp"
@@ -207,6 +211,11 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   # Add best match to the gp_cerf object
 
   # Add other useful info form the processing to the gp_cerf object
+
+
+  et_time_gp <- proc.time()
+  logger::log_debug("Wall clock time to run estimate_cerf_gp:",
+                    " {(et_time_gp -   st_time_gp)[[3]]} seconds.")
 
   # return gp_cerf S3 object
   invisible(result)

@@ -2,7 +2,11 @@
 rm(list = ls())
 t_1 <- proc.time()
 set.seed(129)
-data <- generate_synthetic_data(sample_size = 300, gps_spec = 1)
+data <- generate_synthetic_data(sample_size = 5000, gps_spec = 1)
+
+m_xgboost <- function(nthread = 12, ...) {
+  SuperLearner::SL.xgboost(nthread = nthread, ...)
+}
 
 
 GPCERF::set_logger(logger_level = "TRACE")
@@ -10,7 +14,7 @@ GPCERF::set_logger(logger_level = "TRACE")
 # Estimate GPS function
 GPS_m <- train_gps(cov_mt = data[,-(1:2)],
                    w_all = data$treat,
-                   sl_lib = c("SL.xgboost"),
+                   sl_lib = c("m_xgboost"),
                    dnorm_log = FALSE)
 
 # exposure values
@@ -23,7 +27,7 @@ cerf_gp_obj <- estimate_cerf_gp(data,
                                               beta = c(0.2, 0.4, 0.6),
                                               g_sigma = c(0.5, 0.8),
                                               tune_app = "all"),
-                                nthread = 1)
+                                nthread = 4)
 
 t_2 <- proc.time()
 print(paste("Wall clock time: ", t_2[[3]] - t_1[[3]], "s."))
