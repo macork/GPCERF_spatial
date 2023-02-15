@@ -47,6 +47,8 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   coord_obs <- cbind(w_obs, GPS_m$GPS)
 
   #Remove unobserved outputs
+  # TODO: Move this in the begging of the code, either drop any unobserved values,
+  # or raise an error to the users to remove them before using the code.
   coord_obs <- coord_obs[!is.na(y_obs), ]
   y_use <- y_obs[!is.na(y_obs)]
   design_use <- design_mt[!is.na(y_obs), ]

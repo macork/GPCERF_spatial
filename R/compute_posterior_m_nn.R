@@ -26,6 +26,7 @@
 #' Larger \code{block_size} is faster, but requires more memory.
 #'
 #' @return
+#' TODO: The first column is the selected index and the second column is weight.
 #' A two-column matrix. The first column is the weights assigned to each
 #' nearest neighbor. The second column is the corresponding observed outcome
 #' value. The weight in the last row of this matrix is NA and the observed
@@ -53,12 +54,13 @@ compute_posterior_m_nn <- function(hyperparam,
   n <- base::length(GPS_w)
 
   # Compute number of blocks
-  n_block <- base::ceiling(n / block_size)
+  # n_block <- base::ceiling(n / block_size)
 
 
   if(w >= obs_ord[nrow(obs_ord),1]){
     idx_select <- seq(nrow(obs_ord) - expand * n_neighbor + 1, nrow(obs_ord), 1)
   }else{
+    # which.max returns the index of first TRUE value.
     idx_anchor <- which.max(obs_ord[,1] >= w)
     idx_start <- max(1, idx_anchor - n_neighbor * expand)
     idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor*expand)
@@ -75,7 +77,7 @@ compute_posterior_m_nn <- function(hyperparam,
   used_y <- y_obs_ord[idx_select]
 
   w_obs <- t(t(cbind(w, GPS_w)) * (1/sqrt(c(beta, alpha))))
-  id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
+  id_all <- split(1:n, ceiling(seq_along(1:n) / block_size))
 
   all_weights <- sapply(id_all, function(id_ind){
     cov_cross <- g_sigma * kernel_fn(spatstat.geom::crossdist(w_obs[id_ind,1],
