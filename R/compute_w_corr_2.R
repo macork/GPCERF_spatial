@@ -37,6 +37,13 @@ compute_w_corr_2 <- function(w,
                              covariate,
                              weight){
 
+
+  if (!is.data.frame(covariate)){
+    stop(paste("covariate should be a data.frame, the provided one is: ",
+               class(covariate)))
+  }
+
+
   # detect numeric columns
   col_n <- colnames(covariate)[unlist(lapply(covariate, is.numeric))]
 
