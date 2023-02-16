@@ -42,8 +42,6 @@ These parameters include:
 \itemize{
 \item all: try all combinations of hyperparameters.
 }
-\item expand: Scaling factor to determine the total number of nearest neighbors.
-The total is \code{2 * expand * n_neighbour}.
 \item n_neighbor: Number of nearest neighbors on one side.
 \item block_size: Number of samples included in a computation block. Mainly
 used to balance the speed and memory requirement. Larger \code{block_size}
@@ -91,7 +89,6 @@ cerf_nngp_obj <- estimate_cerf_nngp(data,
                                                   g_sigma = 1,
                                                   tune_app = "all",
                                                   n_neighbor = 20,
-                                                  expand = 1,
                                                   block_size = 1e4),
                                     formula = ~ . - 1 - Y - treat,
                                     nthread = 1)

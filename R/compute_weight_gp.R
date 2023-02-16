@@ -77,6 +77,7 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   # compute scaled posterior sd
   if (est_sd) {
     # TODO: It seems we are computing noise based on GPS value. Is that correct?
+    # It is GPS.
     sigma_w <- g_sigma*kernel_fn(outer(scaled_w[,2], scaled_w[,2], "-")^2) +
       diag(nrow(scaled_w))
     sd_scaled = sqrt(sum(sigma_w)/nrow(scaled_w)^2 -

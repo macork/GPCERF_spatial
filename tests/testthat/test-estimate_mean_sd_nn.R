@@ -12,7 +12,6 @@ test_that("estimate_mean_sd_nn works as expected!", {
   # Hyperparameter
   hyperparam <- c(0.1, 0.2, 1)
   n_neighbor <- 15
-  expand <- 1
   block_size <- 10000
 
   # compute noise
@@ -32,7 +31,6 @@ test_that("estimate_mean_sd_nn works as expected!", {
                              y_obs = data$Y,
                              GPS_m = GPS_m,
                              n_neighbor = n_neighbor,
-                             expand = expand,
                              block_size = block_size)
 
   expect_equal(length(val), 21)

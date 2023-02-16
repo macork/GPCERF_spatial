@@ -1,7 +1,7 @@
 # GPCERF (developing)
 
 ## Changed
-- 
+- The nearest neighbor approach does not get `expand` as an input parameter (`n_neighbor` * `expand` --> `n_neighbor`).
 
 
 # GPCERF 0.2.0 (2023-01-22)

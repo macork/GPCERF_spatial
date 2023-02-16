@@ -24,8 +24,6 @@
 #'   - g_sigma: A scaling factor for kernel function (gamma/sigma).
 #'   - tune_app: A tuning approach. Available approaches:
 #'     - all: try all combinations of hyperparameters.
-#'   - expand: Scaling factor to determine the total number of nearest neighbors.
-#'   The total is \code{2 * expand * n_neighbour}.
 #'   - n_neighbor: Number of nearest neighbors on one side.
 #'   - block_size: Number of samples included in a computation block. Mainly
 #'   used to balance the speed and memory requirement. Larger \code{block_size}
@@ -64,7 +62,6 @@
 #'                                                   g_sigma = 1,
 #'                                                   tune_app = "all",
 #'                                                   n_neighbor = 20,
-#'                                                   expand = 1,
 #'                                                   block_size = 1e4),
 #'                                     formula = ~ . - 1 - Y - treat,
 #'                                     nthread = 1)
@@ -95,8 +92,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   }
 
   check_params(c("alpha", "beta", "g_sigma",
-                 "tune_app", "n_neighbor",
-                 "expand", "block_size"), params)
+                 "tune_app", "n_neighbor", "block_size"), params)
 
   # TODO: Check values of parameters, too.
 
@@ -124,7 +120,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
 
   # Get other parameters -------------------------------------------------------
   n_neighbor <- getElement(params, "n_neighbor")
-  expand <- getElement(params, "expand")
   block_size <- getElement(params, "block_size")
 
   # Search for the best set of parameters --------------------------------------
@@ -137,7 +132,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                                     hyperparams = tune_params_subset,
                                     n_neighbor = n_neighbor,
                                     kernel_fn = kernel_fn,
-                                    expand = expand,
                                     block_size = block_size,
                                     nthread = nthread)
 
@@ -154,7 +148,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                                 GPS_obs = GPS_m$GPS,
                                 y_obs = data[, c(1)],
                                 kernel_fn = kernel_fn,
-                                n_neighbor = n_neighbor * expand,
+                                n_neighbor = n_neighbor,
                                 nthread = nthread)
 
   # Compute posterior mean and standard deviation ------------------------------
@@ -166,7 +160,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                                         GPS_m = GPS_m,
                                         kernel_fn = kernel_fn,
                                         n_neighbor = n_neighbor,
-                                        expand = expand,
                                         block_size = block_size,
                                         nthread = nthread)
 

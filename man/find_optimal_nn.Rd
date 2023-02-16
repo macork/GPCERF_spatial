@@ -13,7 +13,6 @@ find_optimal_nn(
   hyperparams = expand.grid(seq(0.5, 4.5, 1), seq(0.5, 4.5, 1), seq(0.5, 4.5, 1)),
   kernel_fn = function(x) exp(-x^2),
   n_neighbor = 50,
-  expand = 2,
   block_size = 2000,
   nthread = 1
 )
@@ -40,11 +39,7 @@ each row contains a set of values of all hyper-parameters.}
 
 \item{kernel_fn}{The covariance function of the GP.}
 
-\item{n_neighbor}{The number of nearest neighbors on one side
-(see also \code{expand}).}
-
-\item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2 * expand * n_neighbor}.}
+\item{n_neighbor}{The number of nearest neighbors on one side.}
 
 \item{block_size}{The number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement. Larger

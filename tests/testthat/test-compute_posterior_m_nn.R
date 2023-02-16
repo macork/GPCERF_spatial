@@ -12,7 +12,6 @@ test_that("compute_posterior_m_nn works as expected.", {
   # Hyperparameter
   hyperparam <- c(0.1, 0.2, 1)
   n_neighbor <- 10
-  expand <- 1
   block_size <- 10000
 
   # Exposure level
@@ -36,7 +35,6 @@ test_that("compute_posterior_m_nn works as expected.", {
                                 obs_ord = obs_ord,
                                 y_obs_ord = y_use_ord,
                                 n_neighbor = n_neighbor,
-                                expand = expand,
                                 block_size = block_size)
 
 

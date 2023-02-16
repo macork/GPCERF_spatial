@@ -15,10 +15,7 @@
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std).
 #' @param y_obs A vector of observed outcome values.
 #' @param hyperparam A vector of hyper-parameters in the GP model.
-#' @param n_neighbor The number of nearest neighbors on one side
-#' (see also \code{expand}).
-#' @param expand A scaling factor to determine the total number of nearest
-#' neighbors. The total is \code{2*expand*n_neighbor}.
+#' @param n_neighbor The number of nearest neighbors on one side.
 #' @param block_size The number of samples included in a computation block.
 #' Mainly used to balance the speed and memory requirement. Larger
 #' \code{block_size} is faster, but requires more memory.
@@ -50,7 +47,6 @@
 #'                                  y_obs = data$Y,
 #'                                  hyperparam = c(0.2,0.4,1.2),
 #'                                  n_neighbor = 20,
-#'                                  expand = 1,
 #'                                  block_size = 10)
 #'}
 compute_rl_deriv_nn <-  function(w,
@@ -59,7 +55,6 @@ compute_rl_deriv_nn <-  function(w,
                                  y_obs,
                                  hyperparam,
                                  n_neighbor,
-                                 expand,
                                  block_size,
                                  kernel_fn = function(x) exp(-x),
                                  kernel_deriv_fn = function(x) -exp(-x)
@@ -71,7 +66,6 @@ compute_rl_deriv_nn <-  function(w,
                                  y_obs[w_obs < w],
                                  hyperparam,
                                  n_neighbor = n_neighbor,
-                                 expand = expand,
                                  block_size = block_size,
                                  kernel_fn = kernel_fn,
                                  kernel_deriv_fn = kernel_deriv_fn)
@@ -82,7 +76,6 @@ compute_rl_deriv_nn <-  function(w,
                                   y_obs[w_obs >= w],
                                   hyperparam,
                                   n_neighbor = n_neighbor,
-                                  expand = expand,
                                   block_size = block_size,
                                   kernel_fn = kernel_fn,
                                   kernel_deriv_fn = kernel_deriv_fn)

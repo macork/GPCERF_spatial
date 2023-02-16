@@ -19,7 +19,6 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                     g_sigma = 1,
                                                     tune_app = "all",
                                                     n_neighbor = 20,
-                                                    expand = 1,
                                                     block_size = 1e4),
                                       formula = ~ . - 1 - Y - treat)
 
@@ -31,7 +30,6 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                 g_sigma = 1,
                                                 tune_app = "at_random",
                                                 n_neighbor = 20,
-                                                expand = 1,
                                                 block_size = 1e4),
                                   formula = ~ . - 1 - Y - treat))
 
@@ -43,7 +41,6 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                 g_sigma = 1,
                                                 tune_app = "abc",
                                                 n_neighbor = 20,
-                                                expand = 1,
                                                 block_size = 1e4),
                                   formula = ~ . - 1 - Y - treat))
 

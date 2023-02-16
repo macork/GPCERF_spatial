@@ -13,9 +13,7 @@
 #'   - Column 3: Standard deviation of  e_gps (e_gps_std).
 #' @param y_obs A vector of observed outcome values.
 #' @param hyperparam A vector of hyper-parameters in the GP model.
-#' @param n_neighbor The number of nearest neighbors on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest
-#' neighbors. The total is \code{2 * expand * n_neighbor}.
+#' @param n_neighbor The number of nearest neighbors on one side.
 #' @param block_size The number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
 #' @param kernel_fn The covariance function. The input is the square of Euclidean distance.
@@ -32,7 +30,6 @@ compute_deriv_nn <- function(w,
                              y_obs,
                              hyperparam,
                              n_neighbor,
-                             expand,
                              block_size,
                              kernel_fn = function(x) exp(-x),
                              kernel_deriv_fn = function(x) -exp(-x)){
@@ -60,15 +57,15 @@ compute_deriv_nn <- function(w,
 
 
   if(w >= obs_ord[nrow(obs_ord),1]){
-    idx_all <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
+    idx_all <- seq( nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
   }else{
     idx_anchor <- which.max(obs_ord[,1]>=w)
-    idx_start <- max(1, idx_anchor - n_neighbor*expand)
-    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor*expand)
+    idx_start <- max(1, idx_anchor - n_neighbor)
+    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor)
     if(idx_end == nrow(obs_ord)){
-      idx_all <- seq(idx_end - n_neighbor*2*expand + 1, idx_end, 1)
+      idx_all <- seq(idx_end - n_neighbor*2 + 1, idx_end, 1)
     }else{
-      idx_all <- seq(idx_start, idx_start+n_neighbor*2*expand-1, 1)
+      idx_all <- seq(idx_start, idx_start+n_neighbor*2-1, 1)
     }
   }
 
@@ -85,6 +82,8 @@ compute_deriv_nn <- function(w,
     cross_dist <- spatstat.geom::crossdist(obs_new[id.ind,1], obs_new[id.ind,2],
                                           obs_use[,1], obs_use[,2])
 
+
+    # alpha or beta is related to w.
     Sigma_cross <- g_sigma*(1/alpha)*(2*outer(rep(w,length(id.ind))*(1/alpha),
                                               obs_use[,1], "-"))*
                                               kernel_deriv_fn(cross_dist^2)

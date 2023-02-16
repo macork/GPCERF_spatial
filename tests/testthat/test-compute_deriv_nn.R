@@ -15,7 +15,6 @@ test_that("compute_deriv_nn works as expected!", {
                                 y_obs = data$Y,
                                 hyperparam = c(0.1,0.2,1),
                                 n_neighbor = 20,
-                                expand = 1,
                                 block_size = 1000)
 
   expect_equal(length(deriv_val), 1L)

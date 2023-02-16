@@ -11,7 +11,6 @@ compute_deriv_nn(
   y_obs,
   hyperparam,
   n_neighbor,
-  expand,
   block_size,
   kernel_fn = function(x) exp(-x),
   kernel_deriv_fn = function(x) -exp(-x)
@@ -33,10 +32,7 @@ compute_deriv_nn(
 
 \item{hyperparam}{A vector of hyper-parameters in the GP model.}
 
-\item{n_neighbor}{The number of nearest neighbors on one side (see also \code{expand}).}
-
-\item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2 * expand * n_neighbor}.}
+\item{n_neighbor}{The number of nearest neighbors on one side.}
 
 \item{block_size}{The number of samples included in a computation block. Mainly used to
 balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}

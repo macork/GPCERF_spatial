@@ -12,7 +12,6 @@ test_that("estimate_noise_nn works as expected!", {
   # Hyperparameter
   hyperparam <- c(0.1, 0.2, 1)
   n_neighbor <- 10
-  expand <- 1
   block_size <- 10000
 
   # Exposure level

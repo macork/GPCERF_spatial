@@ -12,7 +12,6 @@ test_that("compute_posterior_sd_nn works as expected.", {
   # Hyperparameter
   hyperparam <- c(0.1, 0.2, 1)
   n_neighbor <- 10
-  expand <- 1
   block_size <- 10000
 
   # Exposure level
@@ -45,7 +44,6 @@ test_that("compute_posterior_sd_nn works as expected.", {
                                     GPS_w = GPS_w,
                                     obs_ord = obs_ord,
                                     sigma2 = noise,
-                                    n_neighbor = 20,
-                                    expand = 1)
+                                    n_neighbor = 20)
   expect_equal(length(pst_sd), 1L)
 })

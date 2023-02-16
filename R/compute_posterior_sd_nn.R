@@ -14,10 +14,7 @@
 #' exposure levels. The rows are in ascending order for the first column.
 #' @param sigma2 A scaler representing \code{sigma^2}.
 #' @param kernel_fn The covariance function of the GP.
-#' @param n_neighbor Number of nearest neighbors on one side
-#' (see also \code{expand}).
-#' @param expand A scaling factor to determine the total number of nearest
-#' neighbors. The total is \code{2*expand*n_neighbor}.
+#' @param n_neighbor Number of nearest neighbors on one side.
 #' @param block_size Number of samples included in a computation block.
 #' Mainly used to balance the speed and memory requirement.
 #' Larger \code{block_size} is faster, but requires more memory.
@@ -34,7 +31,6 @@ compute_posterior_sd_nn <-  function(hyperparam,
                                      sigma2,
                                      kernel_fn = function(x) exp(-x ^ 2),
                                      n_neighbor = 10,
-                                     expand = 1,
                                      block_size = 1e4) {
 
   alpha <- hyperparam[[1]]
@@ -47,15 +43,15 @@ compute_posterior_sd_nn <-  function(hyperparam,
   n_block <- base::ceiling(n / block_size)
 
   if (w >= obs_ord[nrow(obs_ord), 1]) {
-    idx_all <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
+    idx_all <- seq( nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
   } else {
     idx_anchor <- which.max(obs_ord[, 1] >= w)
-    idx_start <- max(1, idx_anchor - n_neighbor * expand)
-    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor * expand)
+    idx_start <- max(1, idx_anchor - n_neighbor)
+    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor)
     if (idx_end == nrow(obs_ord)) {
-      idx_all <- seq(idx_end - n_neighbor * 2 * expand + 1, idx_end, 1)
+      idx_all <- seq(idx_end - n_neighbor * 2 + 1, idx_end, 1)
     } else {
-      idx_all <- seq(idx_start, idx_start + n_neighbor * 2 * expand - 1, 1)
+      idx_all <- seq(idx_start, idx_start + n_neighbor * 2 - 1, 1)
     }
   }
 

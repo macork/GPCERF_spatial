@@ -11,7 +11,6 @@ test_that("find_optimal_nn works as expected!", {
   # Hyperparameter
   hyperparam <- c(0.1, 0.2, 1)
   n_neighbor <- 10
-  expand <- 1
   block_size <- 10000
 
   # compute posterior mean and standard deviation for vector of w.
@@ -29,8 +28,7 @@ test_that("find_optimal_nn works as expected!", {
                                 GPS_m = GPS_m,
                                 design_mt = design_mt,
                                 hyperparams = hyperparam_grid,
-                                n_neighbor = 50,
-                                expand = 2,
+                                n_neighbor = 100,
                                 block_size = 2e3)
 
   all_cb_res <- sapply(optimal_cb, '[[', 'cb')

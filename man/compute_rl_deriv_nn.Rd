@@ -11,7 +11,6 @@ compute_rl_deriv_nn(
   y_obs,
   hyperparam,
   n_neighbor,
-  expand,
   block_size,
   kernel_fn = function(x) exp(-x),
   kernel_deriv_fn = function(x) -exp(-x)
@@ -34,11 +33,7 @@ sample (e_gps_pred).
 
 \item{hyperparam}{A vector of hyper-parameters in the GP model.}
 
-\item{n_neighbor}{The number of nearest neighbors on one side
-(see also \code{expand}).}
-
-\item{expand}{A scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n_neighbor}.}
+\item{n_neighbor}{The number of nearest neighbors on one side.}
 
 \item{block_size}{The number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement. Larger
@@ -76,7 +71,6 @@ deriv_val <- compute_rl_deriv_nn(w = wi,
                                  y_obs = data$Y,
                                  hyperparam = c(0.2,0.4,1.2),
                                  n_neighbor = 20,
-                                 expand = 1,
                                  block_size = 10)
 }
 }

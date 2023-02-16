@@ -17,10 +17,7 @@
 #' @param hyperparams A matrix of candidate values of the hyper-parameters,
 #' each row contains a set of values of all hyper-parameters.
 #' @param kernel_fn The covariance function of the GP.
-#' @param n_neighbor The number of nearest neighbors on one side
-#' (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest
-#' neighbors. The total is \code{2 * expand * n_neighbor}.
+#' @param n_neighbor The number of nearest neighbors on one side.
 #' @param block_size The number of samples included in a computation block.
 #' Mainly used to balance the speed and memory requirement. Larger
 #' \code{block_size} is faster, but requires more memory.
@@ -38,7 +35,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                                                       seq(0.5,4.5,1),
                                                       seq(0.5,4.5,1)),
                             kernel_fn = function(x) exp(-x^2),
-                            n_neighbor = 50, expand = 2, block_size = 2e3,
+                            n_neighbor = 50, block_size = 2e3,
                             nthread = 1) {
 
   logger::log_info("Started finding optimal values ... ")
@@ -68,7 +65,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   parallel::clusterExport(cl = cl,
                           varlist = c("w", "GPS_m",
                                       "coord_obs_ord", "y_use_ord", "kernel_fn",
-                                      "n_neighbor", "expand", "block_size",
+                                      "n_neighbor", "block_size",
                                       "compute_posterior_m_nn",
                                       "compute_w_corr"),
                           envir = environment())
@@ -100,7 +97,6 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                                     y_obs_ord = y_use_ord,
                                     n_neighbor = n_neighbor,
                                     kernel_fn = kernel_fn,
-                                    expand = expand,
                                     block_size = block_size)
       idx <- res[-nrow(res), 1]
       weights <- res[-nrow(res), 2]
