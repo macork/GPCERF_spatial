@@ -92,12 +92,14 @@ for the provided set of hyperparameters.</p>
 
 
 <dt>GPS_m</dt>
-<dd><p>A data.frame of GPS vectors.</p><ul><li><p>Column 1: GPS</p></li>
-<li><p>Column 2: Prediction of exposure for covariate of each data
-sample (e_gps_pred).</p></li>
-<li><p>Column 3: Standard deviation of
-e_gps (e_gps_std)</p></li>
-</ul></dd>
+<dd><p>An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE</p></dd>
 
 
 <dt>params</dt>
