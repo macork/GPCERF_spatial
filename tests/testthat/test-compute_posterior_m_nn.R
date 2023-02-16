@@ -40,4 +40,46 @@ test_that("compute_posterior_m_nn works as expected.", {
 
   expect_equal(nrow(val), 21L)
   expect_equal(ncol(val), 2L)
+
+  # testing getting the same results with different block size
+
+  val_1 <- compute_posterior_m_nn(hyperparam = hyperparam,
+                                  w = wi,
+                                  GPS_w = GPS_w,
+                                  obs_ord = obs_ord,
+                                  y_obs_ord = y_use_ord,
+                                  n_neighbor = n_neighbor,
+                                  block_size = 40)
+
+  val_2 <- compute_posterior_m_nn(hyperparam = hyperparam,
+                                  w = wi,
+                                  GPS_w = GPS_w,
+                                  obs_ord = obs_ord,
+                                  y_obs_ord = y_use_ord,
+                                  n_neighbor = n_neighbor,
+                                  block_size = 50)
+
+  val_3 <- compute_posterior_m_nn(hyperparam = hyperparam,
+                                  w = wi,
+                                  GPS_w = GPS_w,
+                                  obs_ord = obs_ord,
+                                  y_obs_ord = y_use_ord,
+                                  n_neighbor = n_neighbor,
+                                  block_size = 65)
+
+  val_4 <- compute_posterior_m_nn(hyperparam = hyperparam,
+                                  w = wi,
+                                  GPS_w = GPS_w,
+                                  obs_ord = obs_ord,
+                                  y_obs_ord = y_use_ord,
+                                  n_neighbor = n_neighbor,
+                                  block_size = 10000)
+
+  expect_equal(val_1[15, 2], val_2[15, 2], tolerance = 0.000001)
+  expect_equal(val_1[15, 2], val_3[15, 2], tolerance = 0.000001)
+  expect_equal(val_1[15, 2], val_4[15, 2], tolerance = 0.000001)
+  expect_equal(val_2[12, 2], val_1[12, 2], tolerance = 0.000001)
+  expect_equal(val_2[12, 2], val_3[12, 2], tolerance = 0.000001)
+  expect_equal(val_2[12, 2], val_4[12, 2], tolerance = 0.000001)
+
 })

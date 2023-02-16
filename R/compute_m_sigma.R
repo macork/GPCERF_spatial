@@ -64,6 +64,8 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   # GPS scaled with alpha, and second column should be w scaled with beta.
 
   scaled_obs <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
+  colnames(scaled_obs) <- c('w_sc_obs','gps_sc_obs')
+
 
   t_sigma_obs_1 <- proc.time()
   sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(scaled_obs))) +

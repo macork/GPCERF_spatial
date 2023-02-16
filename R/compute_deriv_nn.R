@@ -79,6 +79,7 @@ compute_deriv_nn <- function(w,
 
   all_weights <- sapply(id_all, function(id.ind){
 
+    # TODO: change index to column name.
     cross_dist <- spatstat.geom::crossdist(obs_new[id.ind,1], obs_new[id.ind,2],
                                           obs_use[,1], obs_use[,2])
 

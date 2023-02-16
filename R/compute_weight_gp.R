@@ -51,16 +51,17 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   # and compute_sd_gp function.
   GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
   scaled_w <- cbind(w * sqrt(1 / beta), GPS_w * sqrt(1 / alpha))
+  colnames(scaled_w) <- c('w_sc_for_w','gps_sc_for_w')
 
   # kappa
   # sigma_cross = kappa/sigma^2 : Is always n*n matrix.
   # each column of sigma_cross is ki.
   # statspat.geom::crossdist
 
-  sigma_cross <- g_sigma * kernel_fn(crossdist(scaled_w[, 1],
-                                               scaled_w[, 2],
-                                               scaled_obs[, 1],
-                                               scaled_obs[, 2]))
+  sigma_cross <- g_sigma * kernel_fn(crossdist(scaled_w[, "w_sc_for_w"],
+                                               scaled_w[, "gps_sc_for_w"],
+                                               scaled_obs[, "w_sc_obs"],
+                                               scaled_obs[, "gps_sc_obs"]))
 
   logger::log_trace("sigma_cross {class(sigma_cross)[1]} ",
                     "({nrow(sigma_cross)}, {ncol(sigma_cross)}) ",
