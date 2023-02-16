@@ -1,9 +1,8 @@
 rm(list = ls())
 
 
-t_1 <- proc.time()
 set.seed(109)
-data <- generate_synthetic_data(sample_size = 50000, gps_spec = 1)
+data <- generate_synthetic_data(sample_size = 10000, gps_spec = 1)
 
 m_xgboost <- function(nthread = 12, ...) {
   SuperLearner::SL.xgboost(nthread = nthread, ...)
@@ -16,11 +15,13 @@ GPCERF::set_logger(logger_level = "TRACE")
 GPS_m <- train_gps(cov_mt = data[,-(1:2)],
                    w_all = data$treat,
                    sl_lib = c("m_xgboost"),
-                   dnorm_log = FALSE)
+                   dnorm_log = TRUE)
+
 
 # exposure values
 w_all <- seq(0,20,1)
 
+t_1 <- proc.time()
 cerf_nngp_obj <- estimate_cerf_nngp(data,
                                     w_all,
                                     GPS_m,
@@ -28,9 +29,9 @@ cerf_nngp_obj <- estimate_cerf_nngp(data,
                                                   beta = 0.2,
                                                   g_sigma = 1,
                                                   tune_app = "all",
-                                                  n_neighbor = 20,
+                                                  n_neighbor = 500,
                                                   expand = 1,
-                                                  block_size = 1e4),
+                                                  block_size = 1000),
                                     formula = ~ . - 1 - Y - treat,
                                     nthread = 12)
 
