@@ -32,15 +32,14 @@ and covariates. In the following order:
 
 \item{w}{A vector of exposure levels at which the CERF is estimated.}
 
-\item{GPS_m}{A data.frame of GPS vectors.
-\itemize{
-\item Column 1: A vector of estimated GPS evaluated at the observed exposure
-levels.
-\item Column 2: Estimated conditional means of the exposure given covariates
-for all samples (e_gps_pred).
-\item Column 3: Estimated conditional standard deviation of the exposure given
-covariates for all samples (e_gps_std).
-}}
+\item{GPS_m}{An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE}
 
 \item{tuning}{The function is used for parameter tuning (default = TRUE)
 or estimation (FALSE)}

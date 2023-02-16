@@ -49,5 +49,10 @@ train_gps <- function(cov_mt, w_all, sl_lib, dnorm_log) {
   logger::log_debug("Wall clock time to estimate GPS values:  ",
                     " {t_2[[3]] - t_1[[3]]} s.")
 
- return(GPS_m)
+  result <- list()
+  class(result) <- "gps"
+  result$gps <- GPS_m
+  result$used_params <- list(dnorm_log = dnorm_log)
+
+ return(result)
 }

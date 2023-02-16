@@ -10,11 +10,14 @@
 #' @param w_obs A vector of observed exposure levels.
 #' @param w A vector of exposure levels at which the CERF is estimated.
 #' @param y_obs A vector of observed outcome values.
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data sample
-#'   (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std)
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param kernel_fn The covariance function of the GP.
 #' @param n_neighbor The number of nearest neighbors on one side.
 #' @param block_size The number of samples included in a computation block.
@@ -44,7 +47,7 @@ estimate_mean_sd_nn <- function(hyperparam,
   logger::log_info("Working on estimating mean and sd using nngp approach ...")
 
 
-  coord_obs <- cbind(w_obs, GPS_m$GPS)
+  coord_obs <- cbind(w_obs, GPS_m$gps$GPS)
 
   #Remove missing outputs
   coord_obs <- coord_obs[!is.na(y_obs), ]
@@ -79,8 +82,9 @@ estimate_mean_sd_nn <- function(hyperparam,
                                  w,
                                  function(wi){
     GPS_w <- dnorm(wi,
-                  mean = GPS_m$e_gps_pred,
-                  sd = GPS_m$e_gps_std, log = TRUE)
+                  mean = GPS_m$gps$e_gps_pred,
+                  sd = GPS_m$gps$e_gps_std,
+                  log = GPS_m$used_params$dnorm_log)
 
     val <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                    w = wi,

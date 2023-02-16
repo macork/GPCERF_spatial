@@ -13,10 +13,14 @@
 #'   - Column 3~m: Confounders (C)
 #'
 #' @param w A vector of exposure level to compute CERF.
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std)
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param params A list of parameters that is required to run the process.
 #' These parameters include:
 #'   - alpha: A scaling factor for the GPS value.
@@ -94,6 +98,11 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   check_params(c("alpha", "beta", "g_sigma",
                  "tune_app", "n_neighbor", "block_size"), params)
 
+  if (!inherits(GPS_m, "gps")) {
+    stop(paste0("The GPS_m should be a gps class. ",
+                "Current format: ", class(GPS_m)[1]))
+  }
+
   # TODO: Check values of parameters, too.
 
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------
@@ -145,7 +154,7 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   # Estimate noise -------------------------------------------------------------
   noise_nn <- estimate_noise_nn(hyperparam = nn_opt_param,
                                 w_obs = data[, c(2)],
-                                GPS_obs = GPS_m$GPS,
+                                GPS_obs = GPS_m$gps$GPS,
                                 y_obs = data[, c(1)],
                                 kernel_fn = kernel_fn,
                                 n_neighbor = n_neighbor,

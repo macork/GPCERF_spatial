@@ -16,13 +16,14 @@
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure levels at which the CERF is estimated.
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: A vector of estimated GPS evaluated at the observed exposure
-#'   levels.
-#'   - Column 2: Estimated conditional means of the exposure given covariates
-#'               for all samples (e_gps_pred).
-#'   - Column 3: Estimated conditional standard deviation of the exposure given
-#'               covariates for all samples (e_gps_std).
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param tuning The function is used for parameter tuning (default = TRUE)
 #' or estimation (FALSE)
 #' @param kernel_fn The covariance function of GP.
@@ -41,9 +42,9 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
 
   param <- unlist(hyperparam)
 
-  GPS <- GPS_m$GPS
-  e_gps_pred <- GPS_m$e_gps_pred
-  e_gps_std <- GPS_m$e_gps_std
+  GPS <- GPS_m$gps$GPS
+  #e_gps_pred <- GPS_m$e_gps_pred
+  #e_gps_std <- GPS_m$e_gps_std
 
   # mi(w)
   # param 1: alpha

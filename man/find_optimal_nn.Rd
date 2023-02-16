@@ -24,13 +24,14 @@ find_optimal_nn(
 
 \item{y_obs}{A vector of observed outcomes}
 
-\item{GPS_m}{A data.frame of GPS vectors.
-\itemize{
-\item Column 1: GPS
-\item Column 2: Prediction of exposure for covariate of each data sample
+\item{GPS_m}{An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
 (e_gps_pred).
-\item Column 3: Standard deviation of  e_gps (e_gps_std)
-}}
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE}
 
 \item{design_mt}{The covariate matrix of all samples (intercept excluded).}
 

@@ -7,10 +7,14 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m A data.frame of GPS vectors. Including:
-#'   - Column 1: GPS values.
-#'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std).
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param y_obs A vector of observed outcome values.
 #' @param hyperparam A vector of hyper-parameters in the GP model.
 #' @param n_neighbor The number of nearest neighbors on one side.
@@ -42,12 +46,12 @@ compute_deriv_nn <- function(w,
 
 
   # Get gps and helper functions
-  GPS <- GPS_m$GPS
-  e_gps_pred <- GPS_m$e_gps_pred
-  e_gps_std <- GPS_m$e_gps_std
+  GPS <- GPS_m$gps$GPS
+  e_gps_pred <- GPS_m$gps$e_gps_pred
+  e_gps_std <- GPS_m$gps$e_gps_std
+  dnorm_log <- GPS_m$used_params$dnorm_log
 
-
-  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
+  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
 
   n <- length(GPS_w)
   n_block <- ceiling(n/block_size)

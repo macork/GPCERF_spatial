@@ -19,12 +19,12 @@ test_that("estimate_noise_nn works as expected!", {
 
   # Estimate GPS for the exposure level
   GPS_w = dnorm(wi,
-                mean = GPS_m$e_gps_pred,
-                sd = GPS_m$e_gps_std,
-                log = TRUE)
+                mean = GPS_m$gps$e_gps_pred,
+                sd = GPS_m$gps$e_gps_std,
+                log = GPS_m$used_params$dnorm_log)
 
   # Order data for easy selection
-  coord_obs = cbind(data$treat, GPS_m$GPS)
+  coord_obs = cbind(data$treat, GPS_m$gps$GPS)
   y_use <- data$Y
 
   obs_ord <- coord_obs[order(coord_obs[, 1]), ]
@@ -32,7 +32,7 @@ test_that("estimate_noise_nn works as expected!", {
 
   noise <- estimate_noise_nn(hyperparam = hyperparam,
                              w_obs = data$treat,
-                             GPS_obs = GPS_m$GPS,
+                             GPS_obs = GPS_m$gps$GPS,
                              y_obs = y_use_ord,
                              n_neighbor = n_neighbor,
                              nthread = 1)

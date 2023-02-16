@@ -11,12 +11,14 @@
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure level to compute CERF.
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data
-#'   sample (e_gps_pred).
-#'   - Column 3: Standard deviation of
-#'   e_gps (e_gps_std)
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param params A list of parameters that is required to run the process.
 #' These parameters include:
 #'   - alpha: A scaling factor for the GPS value.
@@ -81,8 +83,8 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                 "Current format: ", class(data)[1]))
   }
 
-  if (!is.data.frame(GPS_m)) {
-    stop(paste0("The GPS_m should be a data.frame. ",
+  if (!inherits(GPS_m, "gps")) {
+    stop(paste0("The GPS_m should be a gps class. ",
                 "Current format: ", class(GPS_m)[1]))
   }
 

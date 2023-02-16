@@ -8,11 +8,14 @@
 #' @param w_obs A vector of the observed exposure levels.
 #' @param w A vector of exposure levels at which CERF will be estimated.
 #' @param y_obs A vector of observed outcomes
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data sample
-#'   (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std)
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param design_mt The covariate matrix of all samples (intercept excluded).
 #' @param hyperparams A matrix of candidate values of the hyper-parameters,
 #' each row contains a set of values of all hyper-parameters.
@@ -41,7 +44,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   logger::log_info("Started finding optimal values ... ")
   t_opt_1 <- proc.time()
 
-  coord_obs <- cbind(w_obs, GPS_m$GPS)
+  coord_obs <- cbind(w_obs, GPS_m$gps$GPS)
 
   #Remove unobserved outputs
   # TODO: Move this in the begging of the code, either drop any unobserved values,
@@ -86,8 +89,9 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                                         function(wi){
       # Estimate GPS for requested w.
       GPS_w <- dnorm(wi,
-                     mean = GPS_m$e_gps_pred,
-                     sd = GPS_m$e_gps_std, log = TRUE)
+                     mean = GPS_m$gps$e_gps_pred,
+                     sd = GPS_m$gps$e_gps_std,
+                     log = GPS_m$used_params$dnorm_log)
 
       # Compute posterior mean
       res <- compute_posterior_m_nn(hyperparam = hyperparam,
