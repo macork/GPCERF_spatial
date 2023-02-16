@@ -59,9 +59,7 @@ compute_deriv_weights_gp <- function(w,
                                          obs_use[, "w_sc_obs"],
                                          obs_use[, "gps_sc_obs"])
 
-  #TODO: Needs refactoring. `outer` function uses significant amount of memory.
-  # alpha or beta here should be the one that is related to w.
-  Sigma_cross <- g_sigma * sqrt(1 / alpha) * kernel_deriv_fn(cross_dist ^ 2) *
+  Sigma_cross <- g_sigma * sqrt(1 / beta) * kernel_deriv_fn(cross_dist ^ 2) *
                          (2 * outer(rep(w, n), w_obs, "-"))
   weights_all <- Sigma_cross %*% chol2inv(chol(Sigma_obs))
 

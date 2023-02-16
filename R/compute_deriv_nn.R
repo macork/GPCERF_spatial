@@ -88,8 +88,7 @@ compute_deriv_nn <- function(w,
                                           obs_use[,1], obs_use[,2])
 
 
-    # alpha or beta is related to w.
-    Sigma_cross <- g_sigma*(1/alpha)*(2*outer(rep(w,length(id.ind))*(1/alpha),
+    Sigma_cross <- g_sigma*(1/beta)*(2*outer(rep(w,length(id.ind))*(1/beta),
                                               obs_use[,1], "-"))*
                                               kernel_deriv_fn(cross_dist^2)
     #mean

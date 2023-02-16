@@ -100,6 +100,10 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
   check_params(c("alpha", "beta", "g_sigma", "tune_app"), params)
 
+  # Note: In the package, alpha is used to scale w and beta is used to scale
+  # GPS following the same convention in the method paper.
+
+
   # TODO: Check values of parameters, too.
 
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------

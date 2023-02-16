@@ -110,6 +110,10 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                               getElement(params, "beta"),
                               getElement(params, "g_sigma"))
 
+  # Note: In the package, alpha is used to scale w and beta is used to scale
+  # GPS following the same convention in the method paper.
+
+
   if (nrow(tune_params) == 0) {
     stop(paste("Something went wrong with tuning parameters. ",
                "The expanded grid has not been generated."))
