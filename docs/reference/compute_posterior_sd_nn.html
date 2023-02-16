@@ -73,7 +73,6 @@ the nnGP model.</p>
 <span>  <span class="va">sigma2</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  n_neighbor <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  expand <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  block_size <span class="op">=</span> <span class="fl">10000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -108,13 +107,7 @@ exposure levels. The rows are in ascending order for the first column.</p></dd>
 
 
 <dt>n_neighbor</dt>
-<dd><p>Number of nearest neighbors on one side
-(see also <code>expand</code>).</p></dd>
-
-
-<dt>expand</dt>
-<dd><p>A scaling factor to determine the total number of nearest
-neighbors. The total is <code>2*expand*n_neighbor</code>.</p></dd>
+<dd><p>Number of nearest neighbors on one side.</p></dd>
 
 
 <dt>block_size</dt>

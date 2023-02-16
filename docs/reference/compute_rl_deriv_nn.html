@@ -75,7 +75,6 @@ nnGP approximation is used.</p>
 <span>  <span class="va">y_obs</span>,</span>
 <span>  <span class="va">hyperparam</span>,</span>
 <span>  <span class="va">n_neighbor</span>,</span>
-<span>  <span class="va">expand</span>,</span>
 <span>  <span class="va">block_size</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  kernel_deriv_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">)</span></span>
@@ -109,13 +108,7 @@ sample (e_gps_pred).</p></li>
 
 
 <dt>n_neighbor</dt>
-<dd><p>The number of nearest neighbors on one side
-(see also <code>expand</code>).</p></dd>
-
-
-<dt>expand</dt>
-<dd><p>A scaling factor to determine the total number of nearest
-neighbors. The total is <code>2*expand*n_neighbor</code>.</p></dd>
+<dd><p>The number of nearest neighbors on one side.</p></dd>
 
 
 <dt>block_size</dt>
@@ -160,7 +153,6 @@ derivatives.</p>
 <span class="r-in"><span>                                 y_obs <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Y</span>,</span></span>
 <span class="r-in"><span>                                 hyperparam <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">1.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                 n_neighbor <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>                                 expand <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                 block_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>

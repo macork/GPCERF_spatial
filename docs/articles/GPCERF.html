@@ -114,13 +114,13 @@ level.</p>
 <span>                  dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: nnls</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">GPS_m</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          GPS e_gps_pred e_gps_std</span></span>
-<span><span class="co">#&gt; 1 0.36674758  10.086928  0.936055</span></span>
-<span><span class="co">#&gt; 2 0.30574172  11.261931  0.936055</span></span>
-<span><span class="co">#&gt; 3 0.39768439  10.378152  0.936055</span></span>
-<span><span class="co">#&gt; 4 0.41981813   2.999809  0.936055</span></span>
-<span><span class="co">#&gt; 5 0.36642315  13.837541  0.936055</span></span>
-<span><span class="co">#&gt; 6 0.08141111  16.977625  0.936055</span></span></code></pre></div>
+<span><span class="co">#&gt;         GPS e_gps_pred e_gps_std</span></span>
+<span><span class="co">#&gt; 1 0.1037666   5.536163  1.057786</span></span>
+<span><span class="co">#&gt; 2 0.3473597   7.342423  1.057786</span></span>
+<span><span class="co">#&gt; 3 0.1525547  19.653717  1.057786</span></span>
+<span><span class="co">#&gt; 4 0.2691452  14.050136  1.057786</span></span>
+<span><span class="co">#&gt; 5 0.3767842  20.834261  1.057786</span></span>
+<span><span class="co">#&gt; 6 0.1154903   4.920284  1.057786</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="estimating-exposure-response-using-gaussian-processes">Estimating exposure response using Gaussian Processes<a class="anchor" aria-label="anchor" href="#estimating-exposure-response-using-gaussian-processes"></a>
@@ -193,8 +193,6 @@ required to run the process.<br>
 - g_sigma: A scaling factor for kernel function (gamma/sigma).<br>
 - tune_app: A tuning approach. Available approaches:<br>
 - all: try all combinations of hyperparameters.<br>
-- expand: Scaling factor to determine the total number of nearest
-neighbors.<br>
 - n_neighbors: Number of nearest neighbors on one side.<br>
 - block_size: Number of samples included in a computation block. Mainly
 used to balance speed and memory requirement. Larger is faster, but
@@ -223,7 +221,6 @@ value is a Gaussian kernel.</p>
 <span>                                                  g_sigma <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                                                  tune_app <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>                                                  n_neighbor <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                                                  expand <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                                                  block_size <span class="op">=</span> <span class="fl">1e4</span><span class="op">)</span>,</span>
 <span>                                    formula <span class="op">=</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">Y</span> <span class="op">-</span> <span class="va">treat</span>,</span>
 <span>                                    nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>

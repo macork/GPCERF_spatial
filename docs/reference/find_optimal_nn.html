@@ -74,7 +74,6 @@ and selects the hyper-parameter values that minimizes the covariate balance.</p>
 <span>  hyperparams <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  n_neighbor <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  expand <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  block_size <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>  nthread <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -116,13 +115,7 @@ each row contains a set of values of all hyper-parameters.</p></dd>
 
 
 <dt>n_neighbor</dt>
-<dd><p>The number of nearest neighbors on one side
-(see also <code>expand</code>).</p></dd>
-
-
-<dt>expand</dt>
-<dd><p>Scaling factor to determine the total number of nearest
-neighbors. The total is <code>2 * expand * n_neighbor</code>.</p></dd>
+<dd><p>The number of nearest neighbors on one side.</p></dd>
 
 
 <dt>block_size</dt>
