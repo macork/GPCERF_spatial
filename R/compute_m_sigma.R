@@ -122,9 +122,9 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
       est <- NA
       pst_sd <- NA
     }
-    cov_balance_obj <- compute_w_corr_2(w = data[[2]],
-                                        covariate = data[, 3:ncol(data)],
-                                        weight = weights_final)
+    cov_balance_obj <- compute_w_corr(w = data[[2]],
+                                      covariate = data[, 3:ncol(data)],
+                                      weight = weights_final)
     covariate_balance <- as.vector(cov_balance_obj$absolute_corr)
     c(covariate_balance, est, pst_sd)
   })
