@@ -70,7 +70,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                                       "coord_obs_ord", "y_use_ord", "kernel_fn",
                                       "n_neighbor", "block_size",
                                       "compute_posterior_m_nn",
-                                      "compute_w_corr"),
+                                      "compute_w_corr_2"),
                           envir = environment())
 
   t_cl_2 <- proc.time()
@@ -104,8 +104,10 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
                                     block_size = block_size)
       idx <- res[-nrow(res), 1]
       weights <- res[-nrow(res), 2]
-      cb <- compute_w_corr(w = coord_obs_ord[idx, 1],
-                           confounders = design_use_ord[idx, ], weights)
+      cb_obj <- compute_w_corr_2(w = coord_obs_ord[idx, 1],
+                           covariate = design_use_ord[idx, ],
+                           weight = weights)
+      cb = as.vector(cb_obj$absolute_corr)
       list(cb = cb, est = res[nrow(res), 2])
     })
 

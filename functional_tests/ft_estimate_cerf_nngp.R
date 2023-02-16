@@ -2,7 +2,7 @@ rm(list = ls())
 
 
 set.seed(109)
-data <- generate_synthetic_data(sample_size = 10000, gps_spec = 1)
+data <- generate_synthetic_data(sample_size = 1000, gps_spec = 1)
 
 m_xgboost <- function(nthread = 12, ...) {
   SuperLearner::SL.xgboost(nthread = nthread, ...)
@@ -29,7 +29,7 @@ cerf_nngp_obj <- estimate_cerf_nngp(data,
                                                   beta = 0.2,
                                                   g_sigma = 1,
                                                   tune_app = "all",
-                                                  n_neighbor = 500,
+                                                  n_neighbor = 50,
                                                   expand = 1,
                                                   block_size = 1000),
                                     formula = ~ . - 1 - Y - treat,

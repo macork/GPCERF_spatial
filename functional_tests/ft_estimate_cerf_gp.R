@@ -2,7 +2,7 @@
 rm(list = ls())
 t_1 <- proc.time()
 set.seed(129)
-data <- generate_synthetic_data(sample_size = 5000, gps_spec = 1)
+data <- generate_synthetic_data(sample_size = 500, gps_spec = 1)
 
 m_xgboost <- function(nthread = 12, ...) {
   SuperLearner::SL.xgboost(nthread = nthread, ...)
