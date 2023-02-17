@@ -49,20 +49,9 @@ estimate_mean_sd_nn <- function(hyperparam,
 
   coord_obs <- cbind(w_obs, GPS_m$gps$GPS)
 
-  #Remove missing outputs
-  #coord_obs <- coord_obs[!is.na(y_obs), ]
-  #y_use <- y_obs[!is.na(y_obs)]
-
   if (any(is.na(y_obs))){
     stop("y_obs has missing value(s).")
   }
-
-  #TODO: change y_use to y_obs and drop this line.
-  y_use <- y_obs
-
-  coord_obs_ord <- coord_obs[order(coord_obs[, 1]), ]
-  y_use_ord <- y_use[order(coord_obs[, 1])]
-
 
   lfp <- get_options("logger_file_path")
 
@@ -76,7 +65,7 @@ estimate_mean_sd_nn <- function(hyperparam,
   # export variables and functions to cluster cores
   parallel::clusterExport(cl=cl,
                           varlist = c("w", "GPS_m", "hyperparam",
-                                      "coord_obs_ord", "y_use_ord",
+                                      "coord_obs", "y_obs",
                                       "sigma2", "kernel_fn",
                                       "n_neighbor", "block_size",
                                       "compute_posterior_m_nn",
@@ -96,7 +85,7 @@ estimate_mean_sd_nn <- function(hyperparam,
     val <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                    w = wi,
                                    GPS_w = GPS_w,
-                                   obs_ord = coord_obs_ord,
+                                   obs_ord = coord_obs,
                                    sigma2 = sigma2,
                                    kernel_fn = kernel_fn,
                                    n_neighbor = n_neighbor,
