@@ -32,7 +32,7 @@ print.cerf_gp <- function(x, ...) {
 summary.cerf_gp <- function(object, ...) {
 
   cat("GPCERF Full Gaussian Process exposure rate function object\n")
-  cat("\nOptimal hyper parameters: \n")
+  cat(paste0("\nOptimal hyper parameters(#trial: ",object$num_of_trial,"): \n"))
   cat(paste(" ", names(object$optimal_params), "=",
             object$optimal_params))
   cat("\n\nOptimal covariate balance: ")
