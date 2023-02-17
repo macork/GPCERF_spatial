@@ -50,8 +50,15 @@ estimate_mean_sd_nn <- function(hyperparam,
   coord_obs <- cbind(w_obs, GPS_m$gps$GPS)
 
   #Remove missing outputs
-  coord_obs <- coord_obs[!is.na(y_obs), ]
-  y_use <- y_obs[!is.na(y_obs)]
+  #coord_obs <- coord_obs[!is.na(y_obs), ]
+  #y_use <- y_obs[!is.na(y_obs)]
+
+  if (any(is.na(y_obs))){
+    stop("y_obs has missing value(s).")
+  }
+
+  #TODO: change y_use to y_obs and drop this line.
+  y_use <- y_obs
 
   coord_obs_ord <- coord_obs[order(coord_obs[, 1]), ]
   y_use_ord <- y_use[order(coord_obs[, 1])]

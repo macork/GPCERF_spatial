@@ -46,16 +46,19 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
 
   coord_obs <- cbind(w_obs, GPS_m$gps$GPS)
 
-  #Remove unobserved outputs
-  # TODO: Move this in the begging of the code, either drop any unobserved values,
-  # or raise an error to the users to remove them before using the code.
-  coord_obs <- coord_obs[!is.na(y_obs), ]
-  y_use <- y_obs[!is.na(y_obs)]
-  design_use <- design_mt[!is.na(y_obs), ]
 
-  coord_obs_ord <- coord_obs[order(coord_obs[, 1]), ]
-  y_use_ord <- y_use[order(coord_obs[, 1])]
-  design_use_ord <- design_use[order(coord_obs[, 1]), ]
+  # TODO: change the names.
+  y_use <- y_obs
+  design_use <- design_mt
+
+  # coord_obs_ord <- coord_obs[order(coord_obs[, 1]), ]
+  # y_use_ord <- y_use[order(coord_obs[, 1])]
+  # design_use_ord <- design_use[order(coord_obs[, 1]), ]
+
+  # TODO: change the names.
+  coord_obs_ord <- coord_obs
+  y_use_ord <- y_use
+  design_use_ord <- design_use
 
   lfp <- get_options("logger_file_path")
 

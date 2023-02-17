@@ -49,4 +49,20 @@ test_that("estimate_cerf_nngp works as expected!", {
   expect_equal(length(cerf_nngp_obj$pst_mean), 41L)
   expect_equal(length(cerf_nngp_obj$w), 41L)
   expect_equal(cerf_nngp_obj$w[31], w_all[31], tolerance = 0.00001)
+
+  # expect error with missing data
+  data_na <- data
+  data_na$cf2[3] <- NA
+  expect_error(estimate_cerf_nngp(data_na,
+                                  w_all,
+                                  GPS_m,
+                                  params = list(alpha = c(0.1, 0.2),
+                                                beta = 0.2,
+                                                g_sigma = 1,
+                                                tune_app = "all",
+                                                n_neighbor = 20,
+                                                block_size = 1e4),
+                                  formula = ~ . - 1 - Y - treat))
+
+
 })

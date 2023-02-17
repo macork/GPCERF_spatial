@@ -102,6 +102,20 @@ test_that("estimate_cerf_gp works as expected!", {
                                                 tune_app = "xyz"),
                                   nthread = 1))
 
+  # check for data with missing values
+  data_na <- data
+  data_na$cf1[2] <- NA
+
+  expect_error(cerf_gp_obj <- estimate_cerf_gp(
+                                  data = data_na,
+                                  w = w_all,
+                                  GPS_m = GPS_m,
+                                  params = list(alpha = c(0.1, 0.2, 0.4),
+                                                beta = 0.2,
+                                                g_sigma = 1,
+                                                tune_app = "all"),
+                                  nthread = 1))
+
 
   # Check with two threads -----------------------------------------------------
   set.seed(129)
@@ -130,5 +144,4 @@ test_that("estimate_cerf_gp works as expected!", {
 
   expect_equal(length(cerf_gp_obj_2$pst_mean), 301L)
   expect_equal(length(cerf_gp_obj_2$w), 301L)
-
 })

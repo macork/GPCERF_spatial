@@ -78,6 +78,10 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   fcall <- match.call()
 
   # Double-check input parameters ----------------------------------------------
+  if (any(is.na(data))){
+    stop("At this time, data with missing values is not supported.")
+  }
+
   if (!is.data.frame(data)) {
     stop(paste0("Data should be a data.frame. ",
                 "Current format: ", class(data)[1]))
@@ -102,7 +106,6 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
   # Note: In the package, alpha is used to scale w and beta is used to scale
   # GPS following the same convention in the method paper.
-
 
   # TODO: Check values of parameters, too.
 

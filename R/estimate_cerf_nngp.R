@@ -85,6 +85,10 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   logger::log_info("Working on estimating cerf using nngp approach ...")
 
   # Double-check input parameters ----------------------------------------------
+  if (any(is.na(data))){
+    stop("At this time, data with missing values is not supported.")
+  }
+
   check_params <- function(my_param, params) {
     for (item in my_param) {
       if (!is.element(c(item), names(params))) {
@@ -104,6 +108,9 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   }
 
   # TODO: Check values of parameters, too.
+
+  # Order data based on w
+  data <- data[order(data[, c(2)]), ]
 
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------
   tune_params <-  expand.grid(getElement(params, "alpha"),
