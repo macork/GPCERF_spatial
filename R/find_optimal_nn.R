@@ -46,20 +46,6 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
 
   coord_obs <- cbind(w_obs, GPS_m$gps$GPS)
 
-
-  # TODO: change the names.
-  y_use <- y_obs
-  design_use <- design_mt
-
-  # coord_obs_ord <- coord_obs[order(coord_obs[, 1]), ]
-  # y_use_ord <- y_use[order(coord_obs[, 1])]
-  # design_use_ord <- design_use[order(coord_obs[, 1]), ]
-
-  # TODO: change the names.
-  coord_obs_ord <- coord_obs
-  y_use_ord <- y_use
-  design_use_ord <- design_use
-
   lfp <- get_options("logger_file_path")
 
   # make a cluster
@@ -70,7 +56,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   # export variables and functions to cluster cores
   parallel::clusterExport(cl = cl,
                           varlist = c("w", "GPS_m",
-                                      "coord_obs_ord", "y_use_ord", "kernel_fn",
+                                      "coord_obs", "y_obs", "kernel_fn",
                                       "n_neighbor", "block_size",
                                       "compute_posterior_m_nn",
                                       "compute_w_corr"),
@@ -100,15 +86,15 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
       res <- compute_posterior_m_nn(hyperparam = hyperparam,
                                     w = wi,
                                     GPS_w = GPS_w,
-                                    obs_ord = coord_obs_ord,
-                                    y_obs_ord = y_use_ord,
+                                    obs_ord = coord_obs,
+                                    y_obs_ord = y_obs,
                                     n_neighbor = n_neighbor,
                                     kernel_fn = kernel_fn,
                                     block_size = block_size)
       idx <- res[-nrow(res), 1]
       weights <- res[-nrow(res), 2]
       cb_obj <- compute_w_corr(w = coord_obs_ord[idx, 1],
-                               covariate = design_use_ord[idx, ],
+                               covariate = design_mt[idx, ],
                                weight = weights)
       cb = as.vector(cb_obj$absolute_corr)
       list(cb = cb, est = res[nrow(res), 2])
