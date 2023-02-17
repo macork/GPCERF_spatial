@@ -37,8 +37,8 @@ sample, and each column is a covariate.
 
 ```{r}
 mydata <- generate_synthetic_data()
-GPS_m <- train_gps(cov_mt = mydata[,c("cf1", "cf2", "cf3", "cf4",
-                                       "cf5", "cf6")],
+GPS_m <- estimate_gps(cov_mt = mydata[,c("cf1", "cf2", "cf3", "cf4",
+                                         "cf5", "cf6")],
                   w_all = mydata$treat,
                   sl_lib = c("SL.xgboost"),
                   dnorm_log = FALSE)
