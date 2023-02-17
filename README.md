@@ -25,8 +25,10 @@ library("GPCERF")
 
   # Estimate GPS function
   # In the future, CausalGPS gps estimation will be used.
-  GPS_m <- train_GPS(cov_mt = as.matrix(sim_data[,-(1:2)]),
-                     w_all = as.matrix(sim_data$treat))
+  GPS_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
+                        w_all = sim_data$treat,
+                        sl_lib = c("SL.xgboost"),
+                        dnorm_log = FALSE)
 
   # exposure values
   w_all <- seq(0,20,0.1)

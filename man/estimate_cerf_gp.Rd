@@ -70,10 +70,10 @@ data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
 
 
 # Estimate GPS function
-GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                   w_all = data$treat,
-                   sl_lib = c("SL.xgboost"),
-                   dnorm_log = FALSE)
+GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+                      w_all = data$treat,
+                      sl_lib = c("SL.xgboost"),
+                      dnorm_log = FALSE)
 
 # exposure values
 w_all <- seq(0,10,1)

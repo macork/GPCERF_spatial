@@ -6,10 +6,10 @@ test_that("compute_m_sigma works as expected!", {
    w_all <- seq(0, 20, 0.1)
 
    #Estimate GPS function
-   GPS_m <- train_gps(cov_mt = data[, -(1:2)],
-                      w_all = data$treat,
-                      sl_lib = c("SL.xgboost"),
-                      dnorm_log = FALSE)
+   GPS_m <- estimate_gps(cov_mt = data[, -(1:2)],
+                         w_all = data$treat,
+                         sl_lib = c("SL.xgboost"),
+                         dnorm_log = FALSE)
 
    tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                                data = data,

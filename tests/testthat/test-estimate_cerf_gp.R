@@ -4,10 +4,10 @@ test_that("estimate_cerf_gp works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                     w_all = data$treat,
-                     sl_lib = c("SL.xgboost"),
-                     dnorm_log = FALSE)
+  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+                        w_all = data$treat,
+                        sl_lib = c("SL.xgboost"),
+                        dnorm_log = FALSE)
 
   # exposure values
   w_all <- seq(0, 20, 0.1)
@@ -33,10 +33,10 @@ test_that("estimate_cerf_gp works as expected!", {
   data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
   w_all <- seq(0, 20, 0.1)
   # Estimate GPS function
-  GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                     w_all = data$treat,
-                     sl_lib = c("SL.xgboost"),
-                     dnorm_log = FALSE)
+  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+                        w_all = data$treat,
+                        sl_lib = c("SL.xgboost"),
+                        dnorm_log = FALSE)
 
   GPS_mm <- GPS_m
   GPS_mm$gps <- GPS_mm$gps[1:99, ]
@@ -57,10 +57,10 @@ test_that("estimate_cerf_gp works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                     w_all = data$treat,
-                     sl_lib = c("SL.xgboost"),
-                     dnorm_log = FALSE)
+  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+                        w_all = data$treat,
+                        sl_lib = c("SL.xgboost"),
+                        dnorm_log = FALSE)
 
   # exposure values
   w_all <- seq(0, 20, 0.1)
@@ -147,10 +147,10 @@ test_that("estimate_cerf_gp works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                     w_all = data$treat,
-                     sl_lib = c("SL.xgboost"),
-                     dnorm_log = FALSE)
+  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+                        w_all = data$treat,
+                        sl_lib = c("SL.xgboost"),
+                        dnorm_log = FALSE)
 
   # exposure values
   w_all <- seq(0, 30, 0.1)
