@@ -32,7 +32,7 @@ autoplot.cerf_gp <- function(object, ...) {
                          mean_vals = object$posterior$mean,
                          sd_vals = object$posterior$sd)
 
-  g <- ggplot2::ggplot(tmp_data) +
+  g1 <- ggplot2::ggplot(tmp_data) +
        ggplot2::geom_ribbon(ggplot2::aes(.data$w_vals,
                                 y = .data$mean_vals,
                                 ymin = .data$mean_vals - 1.96 * .data$sd_vals,
@@ -45,7 +45,50 @@ autoplot.cerf_gp <- function(object, ...) {
         ggplot2::xlab("Exposure level") +
         ggplot2::ylab("Population average counterfactual outcome")
 
-  return(g)
+
+  balance <- data.frame(original = object$cb_org,
+                        adjusted = object$cb)
+
+  balance$covar_label <- row.names(balance)
+
+  # sort data.frame based on original data correlation values
+  balance <- balance[order(balance$original), ]
+  covar_label <- balance$covar_label
+  row.names(balance) <- NULL
+  n_cov <- length(balance$original)
+  m_balance <- reshape(balance,
+                       direction = "long",
+                       varying = 1:2,
+                       v.names = "value",
+                       times = c("original", "adjusted"),
+                       idvar = "covar_label")
+
+  rownames(m_balance) <- NULL
+  m_balance$covariates <- rep(seq(1, n_cov, 1), 2)
+  colnames(m_balance)[colnames(m_balance) == "time"] <- "Data"
+
+  default_gg_title <- "Covariate Balance"
+  default_gg_labs <- list(x = "Absolute Weighted Correlation", y= "Covariates")
+
+  color_var <- c("#1E88E5", "#FFC107")
+
+  g2 <- ggplot2::ggplot(data = m_balance,
+                       ggplot2::aes(x=.data$value,
+                                    y=.data$covariates,
+                                    color=.data$Data)) +
+    ggplot2::geom_point() +
+    ggplot2::geom_path() +
+    ggplot2::scale_y_discrete(limit = factor(1:n_cov),labels = covar_label) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
+    ggplot2::labs(x = default_gg_labs$x,
+                  y = default_gg_labs$y) +
+    ggplot2::ggtitle(default_gg_title) +
+    ggplot2::scale_color_manual(values = color_var)
+
+  p <- cowplot::plot_grid(g1, g2, ncol = 2)
+
+  return(p)
 }
 
 
