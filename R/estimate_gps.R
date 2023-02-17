@@ -1,9 +1,9 @@
 #' @title
-#' Train a model for generalized propensity score
+#' Estimate a model for generalized propensity score
 #'
 #' @description
-#' Estimates the conditional mean and sd of exposure level as a function of
-#' covariates.
+#' Estimates a model for generalized propensity score (GPS) using parametric
+#' approach.
 #'
 #' @param cov_mt A covariate matrix containing all covariates. Each row is a
 #' data sample and each column is a covariate.
@@ -23,13 +23,13 @@
 #' @examples
 #' \donttest{
 #' data <- generate_synthetic_data(sample_size = 200)
-#' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-#'                   w_all = data$treat,
-#'                   sl_lib = c("SL.xgboost"),
-#'                   dnorm_log = FALSE)
+#' GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+#'                       w_all = data$treat,
+#'                       sl_lib = c("SL.xgboost"),
+#'                       dnorm_log = FALSE)
 #' }
 
-train_gps <- function(cov_mt, w_all, sl_lib, dnorm_log) {
+estimate_gps <- function(cov_mt, w_all, sl_lib, dnorm_log) {
 
   logger::log_info("Started estimating GPS values ... ")
   t_1 <- proc.time()

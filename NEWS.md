@@ -1,6 +1,8 @@
 # GPCERF (developing)
 
 ## Changed
+- `estimate_gps` now returns the used exposure level, too. 
+- `train_gps` --> `estimate_gps` 
 - The nearest neighbor approach does not get `expand` as an input parameter (`n_neighbor` * `expand` --> `n_neighbor`).
 - The weighted covariate balance now is computed using the wCorr package.
 
