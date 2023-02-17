@@ -19,8 +19,7 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                     g_sigma = 1,
                                                     tune_app = "all",
                                                     n_neighbor = 20,
-                                                    block_size = 1e4),
-                                      formula = ~ . - 1 - Y - treat)
+                                                    block_size = 1e4))
 
   expect_error(estimate_cerf_nngp(data,
                                   w_all,
@@ -30,8 +29,7 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                 g_sigma = 1,
                                                 tune_app = "at_random",
                                                 n_neighbor = 20,
-                                                block_size = 1e4),
-                                  formula = ~ . - 1 - Y - treat))
+                                                block_size = 1e4)))
 
   expect_error(estimate_cerf_nngp(data,
                                   w_all,
@@ -41,14 +39,13 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                 g_sigma = 1,
                                                 tune_app = "abc",
                                                 n_neighbor = 20,
-                                                block_size = 1e4),
-                                  formula = ~ . - 1 - Y - treat))
+                                                block_size = 1e4)))
 
   expect_s3_class(cerf_nngp_obj, "cerf_nngp")
 
-  expect_equal(length(cerf_nngp_obj$pst_mean), 41L)
-  expect_equal(length(cerf_nngp_obj$w), 41L)
-  expect_equal(cerf_nngp_obj$w[31], w_all[31], tolerance = 0.00001)
+  expect_equal(length(cerf_nngp_obj$posterior$mean), 41L)
+  expect_equal(length(cerf_nngp_obj$posterior$w), 41L)
+  expect_equal(cerf_nngp_obj$posterior$w[31], w_all[31], tolerance = 0.00001)
 
   # expect error with missing data
   data_na <- data
@@ -61,8 +58,7 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                 g_sigma = 1,
                                                 tune_app = "all",
                                                 n_neighbor = 20,
-                                                block_size = 1e4),
-                                  formula = ~ . - 1 - Y - treat))
+                                                block_size = 1e4)))
 
   # Check non-consistent data and GPS object. ----------------------------------
   # Different size
@@ -86,8 +82,7 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                 g_sigma = 1,
                                                 tune_app = "all",
                                                 n_neighbor = 20,
-                                                block_size = 1e4),
-                                  formula = ~ . - 1 - Y - treat))
+                                                block_size = 1e4)))
 
   # Same size but different exposure values
   GPS_mx <- GPS_m
@@ -101,6 +96,5 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                 g_sigma = 1,
                                                 tune_app = "all",
                                                 n_neighbor = 20,
-                                                block_size = 1e4),
-                                  formula = ~ . - 1 - Y - treat))
+                                                block_size = 1e4)))
 })

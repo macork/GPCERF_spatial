@@ -10,7 +10,6 @@ estimate_cerf_nngp(
   w,
   GPS_m,
   params,
-  formula,
   kernel_fn = function(x) exp(-x^2),
   nthread = 1
 )
@@ -51,8 +50,6 @@ is faster, but requires more memory.
 alpha, beta, and g_sigma can be a vector of parameters.
 }}
 
-\item{formula}{A formula to indicate the design matrix of the model for GPS.}
-
 \item{kernel_fn}{A kernel function. A default value is a Gaussian Kernel.}
 
 \item{nthread}{An integer value that represents the number of threads to be
@@ -92,7 +89,6 @@ cerf_nngp_obj <- estimate_cerf_nngp(data,
                                                   tune_app = "all",
                                                   n_neighbor = 20,
                                                   block_size = 1e4),
-                                    formula = ~ . - 1 - Y - treat,
                                     nthread = 1)
 }
 

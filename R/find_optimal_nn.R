@@ -96,7 +96,8 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
       cb_obj <- compute_w_corr(w = coord_obs[idx, 1],
                                covariate = design_mt[idx, ],
                                weight = weights)
-      cb = as.vector(cb_obj$absolute_corr)
+      #cb = as.vector(cb_obj$absolute_corr)
+      cb = cb_obj$absolute_corr
       list(cb = cb, est = res[nrow(res), 2])
     })
 
@@ -105,7 +106,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
 
     #covariate specific balance, averaged over w
     list(cb = rowMeans(all_cb_tmp, na.rm = TRUE),
-        est = all_est_tmp )
+         est = all_est_tmp )
   })
 
   parallel::stopCluster(cl)

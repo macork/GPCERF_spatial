@@ -1,6 +1,8 @@
 # GPCERF (developing)
 
 ## Changed
+- `plot`s of exposure response function objects include covariate balance.
+- `formula` is no longer need in nn functions.
 - `estimate_gps` now returns the used exposure level, too. 
 - `train_gps` --> `estimate_gps` 
 - The nearest neighbor approach does not get `expand` as an input parameter (`n_neighbor` * `expand` --> `n_neighbor`).
