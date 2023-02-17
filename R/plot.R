@@ -28,9 +28,9 @@ autoplot.cerf_gp <- function(object, ...) {
   }
 
   # extract data
-  tmp_data <- data.frame(w_vals = object$w,
-                         mean_vals = object$pst_mean,
-                         sd_vals = object$pst_sd)
+  tmp_data <- data.frame(w_vals = object$posterior$w,
+                         mean_vals = object$posterior$mean,
+                         sd_vals = object$posterior$sd)
 
   g <- ggplot2::ggplot(tmp_data) +
        ggplot2::geom_ribbon(ggplot2::aes(.data$w_vals,

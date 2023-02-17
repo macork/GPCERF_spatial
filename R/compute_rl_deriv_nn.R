@@ -8,17 +8,17 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: GPS values.
-#'   - Column 2: Prediction of exposure for covariate of each data
-#'   sample (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std).
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param y_obs A vector of observed outcome values.
 #' @param hyperparam A vector of hyper-parameters in the GP model.
-#' @param n_neighbor The number of nearest neighbors on one side
-#' (see also \code{expand}).
-#' @param expand A scaling factor to determine the total number of nearest
-#' neighbors. The total is \code{2*expand*n_neighbor}.
+#' @param n_neighbor The number of nearest neighbors on one side.
 #' @param block_size The number of samples included in a computation block.
 #' Mainly used to balance the speed and memory requirement. Larger
 #' \code{block_size} is faster, but requires more memory.
@@ -50,7 +50,6 @@
 #'                                  y_obs = data$Y,
 #'                                  hyperparam = c(0.2,0.4,1.2),
 #'                                  n_neighbor = 20,
-#'                                  expand = 1,
 #'                                  block_size = 10)
 #'}
 compute_rl_deriv_nn <-  function(w,
@@ -59,30 +58,32 @@ compute_rl_deriv_nn <-  function(w,
                                  y_obs,
                                  hyperparam,
                                  n_neighbor,
-                                 expand,
                                  block_size,
                                  kernel_fn = function(x) exp(-x),
                                  kernel_deriv_fn = function(x) -exp(-x)
                                  ) {
 
+  GPS_m_left <- GPS_m
+  GPS_m_left$gps <- GPS_m_left$gps[w_obs < w,]
   left_deriv <- compute_deriv_nn(w,
                                  w_obs[w_obs < w],
-                                 GPS_m[w_obs < w,],
+                                 GPS_m_left,
                                  y_obs[w_obs < w],
                                  hyperparam,
                                  n_neighbor = n_neighbor,
-                                 expand = expand,
                                  block_size = block_size,
                                  kernel_fn = kernel_fn,
                                  kernel_deriv_fn = kernel_deriv_fn)
 
+
+  GPS_m_right <- GPS_m
+  GPS_m_right$gps <- GPS_m_right$gps[w_obs >= w,]
   right_deriv <- compute_deriv_nn(w,
                                   w_obs[w_obs >= w],
-                                  GPS_m[w_obs >= w,],
+                                  GPS_m_right,
                                   y_obs[w_obs >= w],
                                   hyperparam,
                                   n_neighbor = n_neighbor,
-                                  expand = expand,
                                   block_size = block_size,
                                   kernel_fn = kernel_fn,
                                   kernel_deriv_fn = kernel_deriv_fn)

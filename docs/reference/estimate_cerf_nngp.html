@@ -96,10 +96,14 @@ match (the lowest covariate balance) for the provided set of hyperparameters.</p
 
 
 <dt>GPS_m</dt>
-<dd><p>A data.frame of GPS vectors.</p><ul><li><p>Column 1: GPS</p></li>
-<li><p>Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).</p></li>
-<li><p>Column 3: Standard deviation of  e_gps (e_gps_std)</p></li>
-</ul></dd>
+<dd><p>An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE</p></dd>
 
 
 <dt>params</dt>
@@ -109,8 +113,6 @@ These parameters include:</p><ul><li><p>alpha: A scaling factor for the GPS valu
 <li><p>g_sigma: A scaling factor for kernel function (gamma/sigma).</p></li>
 <li><p>tune_app: A tuning approach. Available approaches:</p><ul><li><p>all: try all combinations of hyperparameters.</p></li>
 </ul></li>
-<li><p>expand: Scaling factor to determine the total number of nearest neighbors.
-The total is <code>2 * expand * n_neighbour</code>.</p></li>
 <li><p>n_neighbor: Number of nearest neighbors on one side.</p></li>
 <li><p>block_size: Number of samples included in a computation block. Mainly
 used to balance the speed and memory requirement. Larger <code>block_size</code>
@@ -162,7 +164,6 @@ used by internal packages.</p></dd>
 <span class="r-in"><span>                                                  g_sigma <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                                  tune_app <span class="op">=</span> <span class="st">"all"</span>,</span></span>
 <span class="r-in"><span>                                                  n_neighbor <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>                                                  expand <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                                  block_size <span class="op">=</span> <span class="fl">1e4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                    formula <span class="op">=</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">Y</span> <span class="op">-</span> <span class="va">treat</span>,</span></span>
 <span class="r-in"><span>                                    nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>

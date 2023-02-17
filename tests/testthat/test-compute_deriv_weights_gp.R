@@ -14,5 +14,5 @@ test_that("compute_deriv_weights_gp works as expected!", {
                                       hyperparam = c(1, 1, 2))
 
   expect_equal(length(weights), nrow(data))
-  expect_equal(weights[37], 0.000708717, tolerance = 0.00001)
+  expect_equal(weights[37], 3.307249e-05, tolerance = 0.00001)
 })

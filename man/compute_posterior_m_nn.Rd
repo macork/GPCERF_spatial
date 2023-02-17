@@ -12,7 +12,6 @@ compute_posterior_m_nn(
   y_obs_ord,
   kernel_fn = function(x) exp(-x^2),
   n_neighbor = 10,
-  expand = 5,
   block_size = 10000
 )
 }
@@ -34,17 +33,14 @@ as \code{obs_ord}.}
 
 \item{kernel_fn}{The covariance function of the GP.}
 
-\item{n_neighbor}{The number of nearest neighbors on one side
-(see also \code{expand}).}
-
-\item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2 * expand * n_neighbor}.}
+\item{n_neighbor}{The number of nearest neighbors on one side.}
 
 \item{block_size}{Number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement.
 Larger \code{block_size} is faster, but requires more memory.}
 }
 \value{
+TODO: The first column is the selected index and the second column is weight.
 A two-column matrix. The first column is the weights assigned to each
 nearest neighbor. The second column is the corresponding observed outcome
 value. The weight in the last row of this matrix is NA and the observed

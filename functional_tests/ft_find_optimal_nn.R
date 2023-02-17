@@ -12,7 +12,6 @@ GPS_m <- train_gps(cov_mt = as.matrix(data[,-(1:2)]),
 # Hyperparameter
 hyperparam <- c(0.1, 0.2, 1)
 n_neighbor <- 10
-expand <- 1
 block_size <- 10000
 
 # compute posterior mean and standard deviation for vector of w.
@@ -31,7 +30,6 @@ optimal_cb <- GPCERF:::find_optimal_nn(w_obs = data$treat,
                                        design_mt = design_mt,
                                        hyperparams = hyperparam_grid,
                                        n_neighbor = 50,
-                                       expand = 2,
                                        block_size = 2e3,
                                        nthread = 1)
 t_2 <- proc.time()

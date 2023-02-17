@@ -16,7 +16,7 @@ test_that("compute_sd_gp works as expected.", {
                       sl_lib = c("SL.xgboost"),
                       dnorm_log = FALSE)
 
-   GPS <- GPS_m$GPS
+   GPS <- GPS_m$gps$GPS
 
    # set hyperparameters
    hyperparam <- c(0.1, 0.4, 1)
@@ -25,7 +25,7 @@ test_that("compute_sd_gp works as expected.", {
    g_sigma <- hyperparam[[3]]
 
    # Compute scaled observation data and inverse of covariate matrix.
-   scaled_obs <- cbind(obs_exposure * sqrt(1 / alpha), GPS * sqrt(1 / beta))
+   scaled_obs <- cbind(obs_exposure * sqrt(1 / beta), GPS * sqrt(1 / alpha))
 
    tentative_sigma <- 0.1
 

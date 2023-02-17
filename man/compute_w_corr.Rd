@@ -2,31 +2,42 @@
 % Please edit documentation in R/compute_w_corr.R
 \name{compute_w_corr}
 \alias{compute_w_corr}
-\title{Compute weighted correlation}
+\title{Compute  weighted covariate balance}
 \usage{
-compute_w_corr(w, confounders, weights)
+compute_w_corr(w, covariate, weight)
 }
 \arguments{
-\item{w}{A vector of exposure values for the observed data.}
+\item{w}{A vector of observed continuous exposure variable.}
 
-\item{confounders}{A data.frame of observational confounders.}
+\item{covariate}{A data frame of observed covariates variable.}
 
-\item{weights}{A vector of weights for each observation data.}
+\item{weight}{A vector of weights.}
 }
 \value{
-A vector of covariate balance.
+The function returns a list saved the measure related to covariate balance
+\code{absolute_corr}: the absolute correlations for each pre-exposure
+covairates;
+\code{mean_absolute_corr}: the average absolute correlations for all
+pre-exposure covairates.
 }
 \description{
-Computes weighted correlation of the observational data based on weights
-achieved by Gaussian Process.
+Computes weighted covariate balance for given data sets.
 }
 \examples{
+set.seed(639)
+n <- 100
+mydata <- generate_synthetic_data(sample_size=100)
+year <- sample(x=c("2001","2002","2003","2004","2005"),size = n,
+ replace = TRUE)
+region <- sample(x=c("North", "South", "East", "West"),size = n,
+ replace = TRUE)
+mydata$year <- as.factor(year)
+mydata$region <- as.factor(region)
+mydata$cf5 <- as.factor(mydata$cf5)
+cor_val <- compute_w_corr(mydata[,2],
+                          mydata[, 3:length(mydata)],
+                          runif(n))
 
-set.seed(124)
-mydata <- generate_synthetic_data(sample_size = 200)
-weights <- runif(nrow(mydata))
-compute_w_corr(mydata$treat,
-               mydata[, 3:ncol(mydata)],
-               weights)
+print(cor_val$mean_absolute_corr)
 
 }

@@ -7,15 +7,17 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m A data.frame of GPS vectors. Including:
-#'   - Column 1: GPS values.
-#'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std).
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param y_obs A vector of observed outcome values.
 #' @param hyperparam A vector of hyper-parameters in the GP model.
-#' @param n_neighbor The number of nearest neighbors on one side (see also \code{expand}).
-#' @param expand Scaling factor to determine the total number of nearest
-#' neighbors. The total is \code{2 * expand * n_neighbor}.
+#' @param n_neighbor The number of nearest neighbors on one side.
 #' @param block_size The number of samples included in a computation block. Mainly used to
 #' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
 #' @param kernel_fn The covariance function. The input is the square of Euclidean distance.
@@ -32,7 +34,6 @@ compute_deriv_nn <- function(w,
                              y_obs,
                              hyperparam,
                              n_neighbor,
-                             expand,
                              block_size,
                              kernel_fn = function(x) exp(-x),
                              kernel_deriv_fn = function(x) -exp(-x)){
@@ -45,12 +46,12 @@ compute_deriv_nn <- function(w,
 
 
   # Get gps and helper functions
-  GPS <- GPS_m$GPS
-  e_gps_pred <- GPS_m$e_gps_pred
-  e_gps_std <- GPS_m$e_gps_std
+  GPS <- GPS_m$gps$GPS
+  e_gps_pred <- GPS_m$gps$e_gps_pred
+  e_gps_std <- GPS_m$gps$e_gps_std
+  dnorm_log <- GPS_m$used_params$dnorm_log
 
-
-  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
+  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
 
   n <- length(GPS_w)
   n_block <- ceiling(n/block_size)
@@ -60,32 +61,34 @@ compute_deriv_nn <- function(w,
 
 
   if(w >= obs_ord[nrow(obs_ord),1]){
-    idx_all <- seq( nrow(obs_ord) - expand*n_neighbor + 1, nrow(obs_ord), 1)
+    idx_all <- seq( nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
   }else{
     idx_anchor <- which.max(obs_ord[,1]>=w)
-    idx_start <- max(1, idx_anchor - n_neighbor*expand)
-    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor*expand)
+    idx_start <- max(1, idx_anchor - n_neighbor)
+    idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor)
     if(idx_end == nrow(obs_ord)){
-      idx_all <- seq(idx_end - n_neighbor*2*expand + 1, idx_end, 1)
+      idx_all <- seq(idx_end - n_neighbor*2 + 1, idx_end, 1)
     }else{
-      idx_all <- seq(idx_start, idx_start+n_neighbor*2*expand-1, 1)
+      idx_all <- seq(idx_start, idx_start+n_neighbor*2-1, 1)
     }
   }
 
-  obs_use <- t(t(obs_ord[idx_all,])*(1/sqrt(c(alpha, beta))))
+  obs_use <- t(t(obs_ord[idx_all,])*(1/sqrt(c(beta, alpha))))
   y_use <- y_obs_ord[idx_all]
 
-  obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(alpha, beta))))
+  obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(beta, alpha))))
   id_all <- split(1:n, ceiling(seq_along(1:n)/n_block))
   Sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(obs_use))^2) + diag(nrow(obs_use))
   Sigma_obs_inv <- chol2inv(chol(Sigma_obs))
 
   all_weights <- sapply(id_all, function(id.ind){
 
+    # TODO: change index to column name.
     cross_dist <- spatstat.geom::crossdist(obs_new[id.ind,1], obs_new[id.ind,2],
                                           obs_use[,1], obs_use[,2])
 
-    Sigma_cross <- g_sigma*(1/alpha)*(2*outer(rep(w,length(id.ind))*(1/alpha),
+
+    Sigma_cross <- g_sigma*(1/beta)*(2*outer(rep(w,length(id.ind))*(1/beta),
                                               obs_use[,1], "-"))*
                                               kernel_deriv_fn(cross_dist^2)
     #mean

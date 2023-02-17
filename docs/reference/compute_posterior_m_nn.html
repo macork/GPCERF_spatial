@@ -76,7 +76,6 @@ calculating the posterior mean.</p>
 <span>  <span class="va">y_obs_ord</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  n_neighbor <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  expand <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  block_size <span class="op">=</span> <span class="fl">10000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -113,13 +112,7 @@ as <code>obs_ord</code>.</p></dd>
 
 
 <dt>n_neighbor</dt>
-<dd><p>The number of nearest neighbors on one side
-(see also <code>expand</code>).</p></dd>
-
-
-<dt>expand</dt>
-<dd><p>Scaling factor to determine the total number of nearest
-neighbors. The total is <code>2 * expand * n_neighbor</code>.</p></dd>
+<dd><p>The number of nearest neighbors on one side.</p></dd>
 
 
 <dt>block_size</dt>
@@ -132,7 +125,8 @@ Larger <code>block_size</code> is faster, but requires more memory.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A two-column matrix. The first column is the weights assigned to each
+<p>TODO: The first column is the selected index and the second column is weight.
+A two-column matrix. The first column is the weights assigned to each
 nearest neighbor. The second column is the corresponding observed outcome
 value. The weight in the last row of this matrix is NA and the observed
 outcome value is the estimated posterior mean of the CERF at point <code>w</code>,

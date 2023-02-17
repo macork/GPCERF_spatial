@@ -13,10 +13,14 @@
 #'   - Column 3~m: Confounders (C)
 #'
 #' @param w A vector of exposure level to compute CERF.
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-#'   - Column 3: Standard deviation of  e_gps (e_gps_std)
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param params A list of parameters that is required to run the process.
 #' These parameters include:
 #'   - alpha: A scaling factor for the GPS value.
@@ -24,8 +28,6 @@
 #'   - g_sigma: A scaling factor for kernel function (gamma/sigma).
 #'   - tune_app: A tuning approach. Available approaches:
 #'     - all: try all combinations of hyperparameters.
-#'   - expand: Scaling factor to determine the total number of nearest neighbors.
-#'   The total is \code{2 * expand * n_neighbour}.
 #'   - n_neighbor: Number of nearest neighbors on one side.
 #'   - block_size: Number of samples included in a computation block. Mainly
 #'   used to balance the speed and memory requirement. Larger \code{block_size}
@@ -64,7 +66,6 @@
 #'                                                   g_sigma = 1,
 #'                                                   tune_app = "all",
 #'                                                   n_neighbor = 20,
-#'                                                   expand = 1,
 #'                                                   block_size = 1e4),
 #'                                     formula = ~ . - 1 - Y - treat,
 #'                                     nthread = 1)
@@ -84,6 +85,10 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   logger::log_info("Working on estimating cerf using nngp approach ...")
 
   # Double-check input parameters ----------------------------------------------
+  if (any(is.na(data))){
+    stop("At this time, data with missing values is not supported.")
+  }
+
   check_params <- function(my_param, params) {
     for (item in my_param) {
       if (!is.element(c(item), names(params))) {
@@ -95,15 +100,38 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   }
 
   check_params(c("alpha", "beta", "g_sigma",
-                 "tune_app", "n_neighbor",
-                 "expand", "block_size"), params)
+                 "tune_app", "n_neighbor", "block_size"), params)
+
+  if (!inherits(GPS_m, "gps")) {
+    stop(paste0("The GPS_m should be a gps class. ",
+                "Current format: ", class(GPS_m)[1]))
+  }
+
+  if (nrow(data)!=length(GPS_m$gps$w)){
+    stop(paste0("Provided Data and GPS object should have the same size.",
+                "Current sizes: ", nrow(data), " vs ", length(GPS_m$gps$w)))
+  }
+
 
   # TODO: Check values of parameters, too.
+
+  # Order data based on w ------------------------------------------------------
+  data <- data[order(data[, c(2)]), ]
+  GPS_m$gps <- GPS_m$gps[order(GPS_m$gps$w), ]
+
+  if (!all.equal(data[, c(2)], GPS_m$gps$w, tolerance = 0.00001)){
+    stop(paste0("Provided GPS object and data object have different",
+                " exposure values."))
+  }
 
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------
   tune_params <-  expand.grid(getElement(params, "alpha"),
                               getElement(params, "beta"),
                               getElement(params, "g_sigma"))
+
+  # Note: In the package, alpha is used to scale w and beta is used to scale
+  # GPS following the same convention in the method paper.
+
 
   if (nrow(tune_params) == 0) {
     stop(paste("Something went wrong with tuning parameters. ",
@@ -124,7 +152,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
 
   # Get other parameters -------------------------------------------------------
   n_neighbor <- getElement(params, "n_neighbor")
-  expand <- getElement(params, "expand")
   block_size <- getElement(params, "block_size")
 
   # Search for the best set of parameters --------------------------------------
@@ -137,7 +164,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                                     hyperparams = tune_params_subset,
                                     n_neighbor = n_neighbor,
                                     kernel_fn = kernel_fn,
-                                    expand = expand,
                                     block_size = block_size,
                                     nthread = nthread)
 
@@ -151,10 +177,10 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   # Estimate noise -------------------------------------------------------------
   noise_nn <- estimate_noise_nn(hyperparam = nn_opt_param,
                                 w_obs = data[, c(2)],
-                                GPS_obs = GPS_m$GPS,
+                                GPS_obs = GPS_m$gps$GPS,
                                 y_obs = data[, c(1)],
                                 kernel_fn = kernel_fn,
-                                n_neighbor = n_neighbor * expand,
+                                n_neighbor = n_neighbor,
                                 nthread = nthread)
 
   # Compute posterior mean and standard deviation ------------------------------
@@ -166,7 +192,6 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                                         GPS_m = GPS_m,
                                         kernel_fn = kernel_fn,
                                         n_neighbor = n_neighbor,
-                                        expand = expand,
                                         block_size = block_size,
                                         nthread = nthread)
 

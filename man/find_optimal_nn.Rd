@@ -13,7 +13,6 @@ find_optimal_nn(
   hyperparams = expand.grid(seq(0.5, 4.5, 1), seq(0.5, 4.5, 1), seq(0.5, 4.5, 1)),
   kernel_fn = function(x) exp(-x^2),
   n_neighbor = 50,
-  expand = 2,
   block_size = 2000,
   nthread = 1
 )
@@ -25,13 +24,14 @@ find_optimal_nn(
 
 \item{y_obs}{A vector of observed outcomes}
 
-\item{GPS_m}{A data.frame of GPS vectors.
-\itemize{
-\item Column 1: GPS
-\item Column 2: Prediction of exposure for covariate of each data sample
+\item{GPS_m}{An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
 (e_gps_pred).
-\item Column 3: Standard deviation of  e_gps (e_gps_std)
-}}
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE}
 
 \item{design_mt}{The covariate matrix of all samples (intercept excluded).}
 
@@ -40,11 +40,7 @@ each row contains a set of values of all hyper-parameters.}
 
 \item{kernel_fn}{The covariance function of the GP.}
 
-\item{n_neighbor}{The number of nearest neighbors on one side
-(see also \code{expand}).}
-
-\item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2 * expand * n_neighbor}.}
+\item{n_neighbor}{The number of nearest neighbors on one side.}
 
 \item{block_size}{The number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement. Larger

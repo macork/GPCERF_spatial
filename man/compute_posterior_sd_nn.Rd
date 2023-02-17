@@ -12,7 +12,6 @@ compute_posterior_sd_nn(
   sigma2,
   kernel_fn = function(x) exp(-x^2),
   n_neighbor = 10,
-  expand = 1,
   block_size = 10000
 )
 }
@@ -32,11 +31,7 @@ exposure levels. The rows are in ascending order for the first column.}
 
 \item{kernel_fn}{The covariance function of the GP.}
 
-\item{n_neighbor}{Number of nearest neighbors on one side
-(see also \code{expand}).}
-
-\item{expand}{A scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n_neighbor}.}
+\item{n_neighbor}{Number of nearest neighbors on one side.}
 
 \item{block_size}{Number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement.

@@ -114,7 +114,6 @@ Input parameters:
   - g_sigma: A scaling factor for kernel function (gamma/sigma).   
   - tune_app: A tuning approach. Available approaches:   
     - all: try all combinations of hyperparameters.   
-  - expand: Scaling factor to determine the total number of nearest neighbors.   
   - n_neighbors: Number of nearest neighbors on one side.    
   - block_size: Number of samples included in a computation block. Mainly used to balance speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.    
 
@@ -142,7 +141,6 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
                                                   g_sigma = 1,
                                                   tune_app = "all",
                                                   n_neighbor = 20,
-                                                  expand = 1,
                                                   block_size = 1e4),
                                     formula = ~ . - 1 - Y - treat,
                                     nthread = 1)

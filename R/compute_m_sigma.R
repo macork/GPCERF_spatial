@@ -16,13 +16,14 @@
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure levels at which the CERF is estimated.
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: A vector of estimated GPS evaluated at the observed exposure
-#'   levels.
-#'   - Column 2: Estimated conditional means of the exposure given covariates
-#'               for all samples (e_gps_pred).
-#'   - Column 3: Estimated conditional standard deviation of the exposure given
-#'               covariates for all samples (e_gps_std).
+#' @param GPS_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param tuning The function is used for parameter tuning (default = TRUE)
 #' or estimation (FALSE)
 #' @param kernel_fn The covariance function of GP.
@@ -41,9 +42,9 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
 
   param <- unlist(hyperparam)
 
-  GPS <- GPS_m$GPS
-  e_gps_pred <- GPS_m$e_gps_pred
-  e_gps_std <- GPS_m$e_gps_std
+  GPS <- GPS_m$gps$GPS
+  #e_gps_pred <- GPS_m$e_gps_pred
+  #e_gps_std <- GPS_m$e_gps_std
 
   # mi(w)
   # param 1: alpha
@@ -54,19 +55,41 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   beta  <- param[2]
   g_sigma <- param[3]
 
+  logger::log_trace("Should go through tuning? {tuning}")
+  logger::log_trace("Running for tune parameters: ",
+                    "alpha: {alpha}, beta: {beta}, g_sigma: {g_sigma} ...")
+
   w_obs <- data[[2]]
 
-  scaled_obs <- cbind(w_obs * sqrt(1 / alpha), GPS * sqrt(1 / beta))
+  #TODO: Following the paper and alpha beta convention, first column should be
+  # GPS scaled with alpha, and second column should be w scaled with beta.
+
+  scaled_obs <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
+  colnames(scaled_obs) <- c('w_sc_obs','gps_sc_obs')
+
+
+  t_sigma_obs_1 <- proc.time()
   sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(scaled_obs))) +
                diag(nrow(scaled_obs))
+  t_sigma_obs_2 <- proc.time()
+
+  logger::log_trace("Wall clock time to generate covariance matrix ",
+                    "({nrow(sigma_obs)},{ncol(sigma_obs)}): ",
+                    "{t_sigma_obs_2[[3]] - t_sigma_obs_1[[3]]} s.")
+
 
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
   # Estimate noise
   if(!tuning) {
     noise_est <- estimate_noise_gp(data = data,
-                                   sigma_obs, inv_sigma_obs)
+                                   sigma_obs = sigma_obs,
+                                   inv_sigma_obs = inv_sigma_obs)
+    logger::log_debug("Estimated noise: {noise_est} ")
   }
+
+  logger::log_info("Computing weight and covariate balance for each requested ",
+                   "exposure value ... ")
 
   col_all_list <- lapply(w,
                          function(w_instance) {
@@ -93,24 +116,45 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
     if(!tuning) {
       est <- data$Y %*% weights_final
       pst_sd <- noise_est * sqrt(weights_res$sd_scaled ^ 2 + 1)
-    }
-    else{
+      logger::log_trace("Posterior for w = {w_instance} ==> ",
+                        "mu: {est}, var:{pst_sd}")
+    } else {
       est <- NA
       pst_sd <- NA
     }
-    covariate_balance <- compute_w_corr(w = data[[2]],
-                                        confounders = data[, 3:ncol(data)],
-                                        weights_final)
+    cov_balance_obj <- compute_w_corr(w = data[[2]],
+                                      covariate = data[, 3:ncol(data)],
+                                      weight = weights_final)
+    covariate_balance <- as.vector(cov_balance_obj$absolute_corr)
     c(covariate_balance, est, pst_sd)
+    list(covariate_balance = cov_balance_obj,
+         est = est,
+         pst_sd = pst_sd)
   })
 
-  col_all <- do.call(cbind, col_all_list)
+  logger::log_info("Done with computing weight and covariate balance for ",
+                   "each requested exposure value. ")
 
-  n_confounders <- nrow(col_all) - 2 # est, pst_sd
-  est_index <- nrow(col_all) -1
-  pst_index <- nrow(col_all)
+  col_all <- sapply(col_all_list, function(x) {x$covariate_balance$absolute_corr})
+  est <- sapply(col_all_list, function(x) {x$est})
+  pst_sd <- sapply(col_all_list, function(x) {x$pst_sd})
 
-  list(cb = rowMeans(col_all[1:n_confounders, ], na.rm = T),
-       est = col_all[est_index, ],
-       pst = col_all[pst_index, ])
+  # compute original covariate balance of data
+  if (!tuning){
+    cov_balance_obj_org <- compute_w_corr(w = data[[2]],
+                                          covariate = data[, 3:ncol(data)],
+                                          weight = rep(1, nrow(data)))
+    cb_org <- cov_balance_obj_org$absolute_corr
+  } else {
+    cb_org <- NA
+  }
+
+
+  col_all_w_average <- rowMeans(col_all, na.rm = TRUE)
+
+
+  list(cb = col_all_w_average,
+       cb_org = cb_org,
+       est = est,
+       pst = pst_sd)
 }
