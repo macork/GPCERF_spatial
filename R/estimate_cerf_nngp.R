@@ -34,7 +34,6 @@
 #'   is faster, but requires more memory.
 #' alpha, beta, and g_sigma can be a vector of parameters.
 #' @param kernel_fn A kernel function. A default value is a Gaussian Kernel.
-#' @param formula A formula to indicate the design matrix of the model for GPS.
 #' @param nthread An integer value that represents the number of threads to be
 #' used by internal packages.
 #'
@@ -67,11 +66,10 @@
 #'                                                   tune_app = "all",
 #'                                                   n_neighbor = 20,
 #'                                                   block_size = 1e4),
-#'                                     formula = ~ . - 1 - Y - treat,
 #'                                     nthread = 1)
 #'}
 #'
-estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
+estimate_cerf_nngp <- function(data, w, GPS_m, params,
                                kernel_fn = function(x) exp(-x ^ 2),
                                nthread = 1) {
 
@@ -155,18 +153,16 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   block_size <- getElement(params, "block_size")
 
   # Search for the best set of parameters --------------------------------------
-  design_mt <- as.data.frame(model.matrix(formula, data = data))
   optimal_cb_res <- find_optimal_nn(w_obs = data[, c(2)],
                                     w = w,
                                     y_obs = data[, c(1)],
                                     GPS_m = GPS_m,
-                                    design_mt = design_mt,
+                                    design_mt = data[, 3:ncol(data)],
                                     hyperparams = tune_params_subset,
                                     n_neighbor = n_neighbor,
                                     kernel_fn = kernel_fn,
                                     block_size = block_size,
                                     nthread = nthread)
-
 
   # Extract the optimum hyperparameters
   all_cb_res <- sapply(optimal_cb_res, '[[', 'cb')
@@ -201,17 +197,40 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
   logger::log_info("Done with estimating cerf using nngp approach ",
                    "Wall clock time: {t_nngp_2[[3]] - t_nngp_1[[3]]} s.")
 
+  # Compute covariate balance for original data --------------------------------
+  cov_balance_obj_org <- compute_w_corr(w = data[[2]],
+                                        covariate = data[, 3:ncol(data)],
+                                        weight = rep(1, nrow(data)))
+  cb_org <- cov_balance_obj_org$absolute_corr
 
-  # Build nngp_cerf S3 object
+
+  # Build nngp_cerf S3 object --------------------------------------------------
   result <- list()
   class(result) <- "cerf_nngp"
 
-  result$w <- w
+  # Hyper parameterss -------------------------
+  optimal_params <- nn_opt_param
+  names(optimal_params) <- c('alpha', 'beta', 'g_sigma')
+  result$optimal_params <- optimal_params
+  result$num_of_trial <- nrow(tune_params_subset)
+
+  # Data --------------------------------------
+  posterior <- list()
+  posterior$mean <- posterior_mean
+  posterior$sd <- posterior_sd
+  posterior$w <- w
+  result$posterior <- posterior
+
+  # Covariate balance -------------------------
   result$cb <- optimal_cb_res[[opt_idx_nn]]$cb
-  result$pst_mean <- posterior_mean
-  result$pst_sd <- posterior_sd
+  result$cb_org <- cb_org
+
+  # Function call -----------------------------
   result$fcall <- fcall
-  result$params <- nn_opt_param
+
+  t_nngp_2 <- proc.time()
+  logger::log_debug("Wall clock time to run estimate_cerf_nngp:",
+                    " {(t_nngp_2 -   t_nngp_1)[[3]]} seconds.")
 
   invisible(result)
 }

@@ -48,6 +48,28 @@ tru_R <- function(w, sim_data) {
   }))
 }
 
+plot_fun <- function(object, ...){
+    # extract data
+  tmp_data <- data.frame(w_vals = object$posterior$w,
+                         mean_vals = object$posterior$mean,
+                         sd_vals = object$posterior$sd)
+
+  g1 <- ggplot2::ggplot(tmp_data) +
+       ggplot2::geom_ribbon(ggplot2::aes(.data$w_vals,
+                                y = .data$mean_vals,
+                                ymin = .data$mean_vals - 1.96 * .data$sd_vals,
+                                ymax = .data$mean_vals + 1.96 * .data$sd_vals),
+                                fill = "blue", alpha = 0.25) +
+        ggplot2::geom_line(ggplot2::aes(.data$w_vals, .data$mean_vals),
+                           color = "blue", size = 1) +
+        ggplot2::theme_bw() +
+        ggplot2::ggtitle("Estimated CERF (gp) with credible band (1.96sd)") +
+        ggplot2::xlab("Exposure level") +
+        ggplot2::ylab("Population average counterfactual outcome")
+  
+  return(g1)
+}
+
 erf_tru_normal <- sapply(seq(0, 20, 0.1), function(w) tru_R(w, data_sim_normal))
 erf_tru_t <- sapply(seq(0, 20, 0.1), function(w) tru_R(w, data_sim_t))
 ```
@@ -85,7 +107,7 @@ gp_res_normal <- estimate_cerf_gp(data_sim_normal,
                                                 g_sigma = 1,
                                                 tune_app = "all"),
                                   nthread = 1)
-plot(gp_res_normal) + 
+plot_fun(gp_res_normal) + 
   geom_line(data = data.frame(w = w_all, y = erf_tru_normal), 
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```
@@ -103,7 +125,7 @@ gp_res_t <- estimate_cerf_gp(data_sim_t,
                                            g_sigma = 1,
                                            tune_app = "all"),
                              nthread = 1)
-plot(gp_res_t) + 
+plot_fun(gp_res_t) + 
   geom_line(data = data.frame(w = w_all, y = erf_tru_t), 
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```

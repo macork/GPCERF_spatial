@@ -142,7 +142,6 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
                                                   tune_app = "all",
                                                   n_neighbor = 20,
                                                   block_size = 1e4),
-                                    formula = ~ . - 1 - Y - treat,
                                     nthread = 1)
 
 plot(cerf_nngp_obj)
