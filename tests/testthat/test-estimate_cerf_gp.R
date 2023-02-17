@@ -24,8 +24,33 @@ test_that("estimate_cerf_gp works as expected!", {
 
   expect_s3_class(cerf_gp_obj, "cerf_gp")
 
-  expect_equal(length(cerf_gp_obj$pst_mean), 201L)
-  expect_equal(length(cerf_gp_obj$w), 201L)
+  expect_equal(length(cerf_gp_obj$posterior$mean), 201L)
+  expect_equal(length(cerf_gp_obj$posterior$w), 201L)
+
+  # Check non-consistent data and GPS object. ----------------------------------
+  # Different size
+  set.seed(659)
+  data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
+  w_all <- seq(0, 20, 0.1)
+  # Estimate GPS function
+  GPS_m <- train_gps(cov_mt = data[,-(1:2)],
+                     w_all = data$treat,
+                     sl_lib = c("SL.xgboost"),
+                     dnorm_log = FALSE)
+
+  GPS_mm <- GPS_m
+  GPS_mm$gps <- GPS_mm$gps[1:99, ]
+
+  # exposure values
+    expect_error(cerf_gp_obj <- estimate_cerf_gp(
+                                  data = data,
+                                  w = w_all,
+                                  GPS_m = GPS_mm,
+                                  params = list(alpha = c(0.1, 0.2, 0.4),
+                                                beta = 0.2,
+                                                g_sigma = 1,
+                                                tune_app = "all"),
+                                  nthread = 1))
 
   # Check input parameters -----------------------------------------------------
   set.seed(129)
@@ -142,6 +167,6 @@ test_that("estimate_cerf_gp works as expected!", {
 
   expect_s3_class(cerf_gp_obj_2, "cerf_gp")
 
-  expect_equal(length(cerf_gp_obj_2$pst_mean), 301L)
-  expect_equal(length(cerf_gp_obj_2$w), 301L)
+  expect_equal(length(cerf_gp_obj_2$posterior$mean), 301L)
+  expect_equal(length(cerf_gp_obj_2$posterior$w), 301L)
 })

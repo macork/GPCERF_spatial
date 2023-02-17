@@ -23,6 +23,7 @@ A data.frame that includes:
 \item a vector of estimated conditional means of exposure levels when the covariates are fixed
 at the observed values;
 \item estimated standard deviation of exposure levels
+\item a vector of observed exposure levels.
 }
 }
 \description{

@@ -2,7 +2,9 @@
 rm(list = ls())
 t_1 <- proc.time()
 set.seed(129)
-data <- generate_synthetic_data(sample_size = 500, gps_spec = 1)
+data <- generate_synthetic_data(sample_size = 2000, gps_spec = 1)
+
+data$cf5 <- as.factor(data$cf5)
 
 m_xgboost <- function(nthread = 12, ...) {
   SuperLearner::SL.xgboost(nthread = nthread, ...)
@@ -27,7 +29,7 @@ cerf_gp_obj <- estimate_cerf_gp(data,
                                               beta = c(0.2, 0.4, 0.6),
                                               g_sigma = c(0.5, 0.8),
                                               tune_app = "all"),
-                                nthread = 4)
+                                nthread = 12)
 
 t_2 <- proc.time()
 print(paste("Wall clock time: ", t_2[[3]] - t_1[[3]], "s."))

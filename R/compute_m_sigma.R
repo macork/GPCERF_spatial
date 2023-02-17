@@ -127,26 +127,34 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
                                       weight = weights_final)
     covariate_balance <- as.vector(cov_balance_obj$absolute_corr)
     c(covariate_balance, est, pst_sd)
+    list(covariate_balance = cov_balance_obj,
+         est = est,
+         pst_sd = pst_sd)
   })
 
   logger::log_info("Done with computing weight and covariate balance for ",
                    "each requested exposure value. ")
 
-  col_all <- do.call(cbind, col_all_list)
+  col_all <- sapply(col_all_list, function(x) {x$covariate_balance$absolute_corr})
+  est <- sapply(col_all_list, function(x) {x$est})
+  pst_sd <- sapply(col_all_list, function(x) {x$pst_sd})
 
-  n_confounders <- nrow(col_all) - 2 # est, pst_sd
-  est_index <- nrow(col_all) -1
-  pst_index <- nrow(col_all)
+  # compute original covariate balance of data
+  if (!tuning){
+    cov_balance_obj_org <- compute_w_corr(w = data[[2]],
+                                          covariate = data[, 3:ncol(data)],
+                                          weight = rep(1, nrow(data)))
+    cb_org <- cov_balance_obj_org$absolute_corr
+  } else {
+    cb_org <- NA
+  }
 
-  logger::log_trace("Matrix ({nrow(col_all)}, {ncol(col_all)}) of ",
-                    "cov. b. for each requested w was generated. ",
-                    "Last two rows are posterior place holders.")
 
-  # compute one covariate balance per hyper parameters. This is done by taking
-  # average over all requested w values.
-  col_all_w_average <- rowMeans(col_all[1:n_confounders, ], na.rm = TRUE)
+  col_all_w_average <- rowMeans(col_all, na.rm = TRUE)
+
 
   list(cb = col_all_w_average,
-       est = col_all[est_index, ],
-       pst = col_all[pst_index, ])
+       cb_org = cb_org,
+       est = est,
+       pst = pst_sd)
 }

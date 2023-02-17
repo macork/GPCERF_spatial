@@ -17,6 +17,7 @@
 #'   - a vector of estimated conditional means of exposure levels when the covariates are fixed
 #' at the observed values;
 #'   - estimated standard deviation of exposure levels
+#'   - a vector of observed exposure levels.
 #' @export
 #'
 #' @examples
@@ -42,8 +43,8 @@ train_gps <- function(cov_mt, w_all, sl_lib, dnorm_log) {
                                   sd = GPS_SL_sd,
                                   log = dnorm_log),
                       e_gps_pred = GPS_SL$SL.predict,
-                      e_gps_std = GPS_SL_sd)
-
+                      e_gps_std = GPS_SL_sd,
+                      w = w_all)
 
   t_2 <- proc.time()
   logger::log_debug("Wall clock time to estimate GPS values:  ",

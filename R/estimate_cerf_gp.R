@@ -92,6 +92,11 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                 "Current format: ", class(GPS_m)[1]))
   }
 
+  if (nrow(data)!=length(GPS_m$gps$w)){
+    stop(paste0("Provided Data and GPS object should have the same size. ",
+                "Current sizes: ", nrow(data), " vs ", length(GPS_m$gps$w)))
+  }
+
   check_params <- function(my_param, params) {
     for (item in my_param) {
       if (!is.element(c(item), names(params))) {
@@ -206,21 +211,28 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                                    kernel_fn = kernel_fn)
 
 
-  # Build gp_cerf S3 object
+  # Build gp_cerf S3 object ----------------------------------------------------
   result <- list()
   class(result) <- "cerf_gp"
 
-  result$pst_mean <- gp_cerf_final$est
-  result$pst_sd <- gp_cerf_final$pst
-  result$w <- w
+  # Hyper parameters ------------------------
+  optimal_params <- opt_param
+  names(optimal_params) <- c('alpha', 'beta', 'g_sigma')
+  result$optimal_params <- optimal_params
+
+  # Data ------------------------------------
+  posterior <- list()
+  posterior$mean <- gp_cerf_final$est
+  posterior$sd <- gp_cerf_final$pst
+  posterior$w <- w
+  result$posterior <- posterior
+
+  # Covariate balance -----------------------
   result$cb <- gp_cerf_final$cb
-  result$params <- opt_param
+  result$cb_org <- gp_cerf_final$cb_org
+
+  # Function call ---------------------------
   result$fcall <- fcall
-
-  # Add best match to the gp_cerf object
-
-  # Add other useful info form the processing to the gp_cerf object
-
 
   et_time_gp <- proc.time()
   logger::log_debug("Wall clock time to run estimate_cerf_gp:",

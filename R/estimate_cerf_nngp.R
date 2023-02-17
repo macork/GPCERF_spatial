@@ -107,10 +107,22 @@ estimate_cerf_nngp <- function(data, w, GPS_m, params, formula,
                 "Current format: ", class(GPS_m)[1]))
   }
 
+  if (nrow(data)!=length(GPS_m$gps$w)){
+    stop(paste0("Provided Data and GPS object should have the same size.",
+                "Current sizes: ", nrow(data), " vs ", length(GPS_m$gps$w)))
+  }
+
+
   # TODO: Check values of parameters, too.
 
-  # Order data based on w
+  # Order data based on w ------------------------------------------------------
   data <- data[order(data[, c(2)]), ]
+  GPS_m$gps <- GPS_m$gps[order(GPS_m$gps$w), ]
+
+  if (!all.equal(data[, c(2)], GPS_m$gps$w, tolerance = 0.00001)){
+    stop(paste0("Provided GPS object and data object have different",
+                " exposure values."))
+  }
 
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------
   tune_params <-  expand.grid(getElement(params, "alpha"),
