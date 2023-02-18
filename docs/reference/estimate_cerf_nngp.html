@@ -76,7 +76,6 @@ match (the lowest covariate balance) for the provided set of hyperparameters.</p
 <span>  <span class="va">w</span>,</span>
 <span>  <span class="va">GPS_m</span>,</span>
 <span>  <span class="va">params</span>,</span>
-<span>  <span class="va">formula</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  nthread <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -121,10 +120,6 @@ alpha, beta, and g_sigma can be a vector of parameters.</p></li>
 </ul></dd>
 
 
-<dt>formula</dt>
-<dd><p>A formula to indicate the design matrix of the model for GPS.</p></dd>
-
-
 <dt>kernel_fn</dt>
 <dd><p>A kernel function. A default value is a Gaussian Kernel.</p></dd>
 
@@ -150,10 +145,10 @@ used by internal packages.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">19</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span>sample_size <span class="op">=</span> <span class="fl">120</span>, gps_spec <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Estimate GPS function</span></span></span>
-<span class="r-in"><span><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_gps.html">train_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>                   w_all <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>,</span></span>
-<span class="r-in"><span>                   sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                      w_all <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>,</span></span>
+<span class="r-in"><span>                      sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># exposure values</span></span></span>
 <span class="r-in"><span><span class="va">w.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span>,<span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cerf_nngp_obj</span> <span class="op">&lt;-</span> <span class="fu">estimate_cerf_nngp</span><span class="op">(</span><span class="va">data</span>,</span></span>
@@ -165,7 +160,6 @@ used by internal packages.</p></dd>
 <span class="r-in"><span>                                                  tune_app <span class="op">=</span> <span class="st">"all"</span>,</span></span>
 <span class="r-in"><span>                                                  n_neighbor <span class="op">=</span> <span class="fl">20</span>,</span></span>
 <span class="r-in"><span>                                                  block_size <span class="op">=</span> <span class="fl">1e4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                    formula <span class="op">=</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">Y</span> <span class="op">-</span> <span class="va">treat</span>,</span></span>
 <span class="r-in"><span>                                    nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
