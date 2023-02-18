@@ -36,7 +36,7 @@ GPS_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
                       dnorm_log = TRUE)
 
 # exposure values
-w_all <- seq(0,20,0.1)
+w_all <- seq(min(sim_data$treat)+1, max(sim_data$treat)-1, 1)
 
 cerf_gp_obj <- estimate_cerf_gp(sim_data,
                                 w_all,
