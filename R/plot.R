@@ -67,8 +67,8 @@ autoplot.cerf_gp <- function(object, ...) {
   m_balance$covariates <- rep(seq(1, n_cov, 1), 2)
   colnames(m_balance)[colnames(m_balance) == "time"] <- "Data"
 
-  default_gg_title <- "Covariate Balance"
-  default_gg_labs <- list(x = "Absolute Weighted Correlation", y= "Covariates")
+  default_gg_title <- "Covariate balance"
+  default_gg_labs <- list(x = "Absolute weighted correlation", y= "Covariates")
 
   color_var <- c("#1E88E5", "#FFC107")
 
@@ -183,8 +183,8 @@ autoplot.cerf_nngp <- function(object, ...) {
   m_balance$covariates <- rep(seq(1, n_cov, 1), 2)
   colnames(m_balance)[colnames(m_balance) == "time"] <- "Data"
 
-  default_gg_title <- "Covariate Balance"
-  default_gg_labs <- list(x = "Absolute Weighted Correlation", y= "Covariates")
+  default_gg_title <- "Covariate balance"
+  default_gg_labs <- list(x = "Absolute weighted correlation", y= "Covariates")
 
   color_var <- c("#1E88E5", "#FFC107")
 
