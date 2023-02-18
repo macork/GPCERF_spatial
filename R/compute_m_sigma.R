@@ -88,7 +88,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
     logger::log_debug("Estimated noise: {noise_est} ")
   }
 
-  logger::log_info("Computing weight and covariate balance for each requested ",
+  logger::log_debug("Computing weight and covariate balance for each requested ",
                    "exposure value ... ")
 
   col_all_list <- lapply(w,
@@ -132,7 +132,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
          pst_sd = pst_sd)
   })
 
-  logger::log_info("Done with computing weight and covariate balance for ",
+  logger::log_debug("Done with computing weight and covariate balance for ",
                    "each requested exposure value. ")
 
   col_all <- sapply(col_all_list, function(x) {x$covariate_balance$absolute_corr})

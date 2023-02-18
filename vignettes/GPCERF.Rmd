@@ -42,7 +42,6 @@ GPS_m <- estimate_gps(cov_mt = mydata[,c("cf1", "cf2", "cf3", "cf4",
                   w_all = mydata$treat,
                   sl_lib = c("SL.xgboost"),
                   dnorm_log = FALSE)
-head(GPS_m)
 ```
 
 ### Estimating exposure response using Gaussian Processes
