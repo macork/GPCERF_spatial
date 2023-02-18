@@ -41,7 +41,8 @@ autoplot.cerf_gp <- function(object, ...) {
         ggplot2::geom_line(ggplot2::aes(.data$w_vals, .data$mean_vals),
                            color = "blue", size = 1) +
         ggplot2::theme_bw() +
-        ggplot2::ggtitle("Estimated CERF (gp) with credible band (1.96sd)") +
+        ggplot2::ggtitle("Estimated CERF (gp)") +
+        ggplot2::labs(subtitle = "+ credible band (1.96sd)") +
         ggplot2::xlab("Exposure level") +
         ggplot2::ylab("Population average counterfactual outcome")
 
@@ -158,7 +159,8 @@ autoplot.cerf_nngp <- function(object, ...) {
                            color="#FC4E07",
                            size = 1) +
         ggplot2::theme_bw() +
-        ggplot2::ggtitle("Estimated CERF (nngp) with credible band (1.96sd)") +
+        ggplot2::ggtitle("Estimated CERF (nngp)") +
+        ggplot2::labs(subtitle = "+ credible band (1.96sd)") +
         ggplot2::xlab("Exposure level") +
         ggplot2::ylab("Population average counterfactual outcome")
 

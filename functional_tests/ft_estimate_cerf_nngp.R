@@ -1,5 +1,3 @@
-
-
 set.seed(967)
 sim_data <- generate_synthetic_data(sample_size = 10000, gps_spec = 1)
 sim_data$cf5 <- as.factor(sim_data$cf5)
@@ -36,7 +34,7 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
 summary(cerf_nngp_obj)
 plot(cerf_nngp_obj)
 
-png("readme_nngp.png", width = 8, height = 4, units = "in", res = 300)
+png("readme_nngp.png", width = 12, height = 4, units = "in", res = 300)
 plot(cerf_nngp_obj)
 dev.off()
 

@@ -28,7 +28,7 @@ cerf_gp_obj <- estimate_cerf_gp(sim_data,
 summary(cerf_gp_obj)
 plot(cerf_gp_obj)
 
-png("readme_gp.png", width = 8, height = 4, units = "in", res = 300)
+png("readme_gp.png", width = 12, height = 4, units = "in", res = 300)
 plot(cerf_gp_obj)
 dev.off()
 
