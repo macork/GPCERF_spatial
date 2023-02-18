@@ -50,7 +50,7 @@ cerf_gp_obj <- estimate_cerf_gp(sim_data,
 summary(cerf_gp_obj)
 plot(cerf_gp_obj)
 ```
-```sh
+```
 GPCERF Full Gaussian Process exposure rate function object
 
 Optimal hyper parameters(#trial: 60): 
@@ -119,7 +119,7 @@ summary(cerf_nngp_obj)
 plot(cerf_nngp_obj)
 ```
 
-```sh
+```
 GPCERF Nearest Neighbore Gaussian Process exposure rate function object summary
 
 Optimal hyper parameters(#trial: 96): 
