@@ -22,31 +22,42 @@ library("GPCERF")
 ### GP
 
 ```r
+library(GPCERF)
 set.seed(781)
 sim_data <- generate_synthetic_data(sample_size = 500, gps_spec = 1)
 
-m_xgboost <- function(nthread = 12, ...) {
+n_core <- 1
+
+m_xgboost <- function(nthread = n_core, ...) {
   SuperLearner::SL.xgboost(nthread = nthread, ...)
+}
+
+m_ranger <- function(num.threads = n_core, ...){
+  SuperLearner::SL.ranger(num.threads = num.threads, ...)
 }
 
 # Estimate GPS function
 GPS_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
                       w_all = sim_data$treat,
-                      sl_lib = c("m_xgboost"),
+                      sl_lib = c("m_xgboost", "m_ranger"),
                       dnorm_log = TRUE)
 
 # exposure values
-w_all <- seq(min(sim_data$treat)+1, max(sim_data$treat)-1, 1)
+q1 <- stats::quantile(sim_data$treat, 0.05)
+q2 <- stats::quantile(sim_data$treat, 0.95)
+
+w_all <- seq(q1, q2, 1)
+
+params_lst <- list(alpha = 10 ^ seq(-2, 2, length.out = 10),
+                   beta = 10 ^ seq(-2, 2, length.out = 10),
+                   g_sigma = c(0.1, 1, 10),
+                   tune_app = "all")
 
 cerf_gp_obj <- estimate_cerf_gp(sim_data,
                                 w_all,
                                 GPS_m,
-                                params = list(alpha = c(0.01, 0.1, 1, 2, 3, 4),
-                                              beta = c(0.01, 0.1, 1, 10, 100),
-                                              g_sigma = c(0.001, 0.01, 0.1, 1),
-                                              tune_app = "all"),
-                                nthread = 12)
-
+                                params = params_lst,
+                                nthread = n_core)
 summary(cerf_gp_obj)
 plot(cerf_gp_obj)
 ```

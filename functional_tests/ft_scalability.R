@@ -1,5 +1,8 @@
+library(GPCERF)
+library(ggplot2)
+
 set.seed(781)
-sim_data <- generate_synthetic_data(sample_size = 5000, gps_spec = 1)
+sim_data <- generate_synthetic_data(sample_size = 500, gps_spec = 1)
 
 m_xgboost <- function(nthread = 12, ...) {
   SuperLearner::SL.xgboost(nthread = nthread, ...)
@@ -21,28 +24,28 @@ q2 <- stats::quantile(sim_data$treat, 0.95)
 
 w_all <- seq(q1, q2, 1)
 
-
 params_lst <- list(alpha = 10 ^ seq(-2, 2, length.out = 10),
                    beta = 10 ^ seq(-2, 2, length.out = 10),
                    g_sigma = c(0.1, 1, 10),
-                   tune_app = "all",
-                   n_neighbor = 50,
-                   block_size = 1e3)
+                   tune_app = "all")
 
+
+time_df <- data.frame(core = numeric(0), wc = numeric(0))
+
+for (i in c(1, 2, 4, 8)){
 t1 <- proc.time()
-cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
-                                    w_all,
-                                    GPS_m,
-                                    params = params_lst,
-                                    nthread = 12)
+cerf_gp_obj <- estimate_cerf_gp(sim_data,
+                                w_all,
+                                GPS_m,
+                                params = params_lst,
+                                nthread = i)
 t2 <- proc.time()
+time_df <- rbind(time_df, data.frame(core = i, wc = (t2 - t1)[[3]]))
 print(paste("Wall clock time: ", (t2 - t1)[[3]],
             " seconds."))
+}
 
-summary(cerf_nngp_obj)
-plot(cerf_nngp_obj)
+# summary(cerf_gp_obj)
+# plot(cerf_gp_obj)
 
-# png("readme_nngp.png", width = 12, height = 4, units = "in", res = 300)
-# plot(cerf_nngp_obj)
-# dev.off()
-
+ggplot(time_df) + geom_line(aes(log2(core), log2(wc))) + geom_point(aes(log2(core), log2(wc)))
