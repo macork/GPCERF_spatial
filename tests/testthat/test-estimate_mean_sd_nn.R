@@ -34,5 +34,5 @@ test_that("estimate_mean_sd_nn works as expected!", {
                              block_size = block_size)
 
   expect_equal(length(val), 21)
-  expect_equal(val[10], 5.068975, tolerance = 0.0001)
+  expect_equal(val[10], 5.031225, tolerance = 0.0001)
 })

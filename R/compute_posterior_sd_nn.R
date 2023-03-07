@@ -61,12 +61,16 @@ compute_posterior_sd_nn <-  function(hyperparam,
                               diag(nrow(obs_use))))
   obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(beta, alpha))))
 
+  id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
   #within variance
-  sigma_sq1 <- (1 + g_sigma) * sigma2 / n
+  sigma_sq1 <- (sum(sapply(id_all, function(id_ind){
+    dist_block <- abs(Rfast::Outer(obs_new[id_ind,2], obs_new[,2], "-"))
+    Sigma_block <- sigma2*g_sigma*kernel_fn(dist_block)
+    sum(Sigma_block)
+  })) + sigma2*n)/n^2
 
   #cross variance
   #also use block to free up memories
-  id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
   cross_cov_colS <- Rfast::rowsums(sapply(id_all, function(id_ind){
     cross_cov <- sigma2 * g_sigma *
                   kernel_fn(spatstat.geom::crossdist(obs_new[id_ind, 1],
@@ -79,7 +83,7 @@ compute_posterior_sd_nn <-  function(hyperparam,
   cross_cov_mult <- c(arma_mm(cov_use_inv, cross_cov_colS))
 
   sigma_sq2 <- c(cross_cov_colS %*% cross_cov_mult) / n ^ 2
-  posterior_sd <- sqrt(sigma_sq1 - sigma_sq2 + sigma2)
+  posterior_sd <- sqrt(sigma_sq1 - sigma_sq2)
 
   logger::log_debug("w: {w}, sigma_sq1: {sigma_sq1}, sigma_sq2: {sigma_sq2},",
                     "sigma2: {sigma2}")

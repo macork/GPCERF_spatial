@@ -115,7 +115,7 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
 
     if(!tuning) {
       est <- data$Y %*% weights_final
-      pst_sd <- noise_est * sqrt(weights_res$sd_scaled ^ 2 + 1)
+      pst_sd <- noise_est*weights_res$sd_scaled#noise_est * sqrt(weights_res$sd_scaled ^ 2 + 1)
       logger::log_trace("Posterior for w = {w_instance} ==> ",
                         "mu: {est}, var:{pst_sd}")
     } else {
