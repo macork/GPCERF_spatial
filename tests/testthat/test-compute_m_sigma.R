@@ -6,7 +6,7 @@ test_that("compute_m_sigma works as expected!", {
    w_all <- seq(0, 20, 0.1)
 
    #Estimate GPS function
-   GPS_m <- estimate_gps(cov_mt = data[, -(1:2)],
+   gps_m <- estimate_gps(cov_mt = data[, -(1:2)],
                          w_all = data$treat,
                          sl_lib = c("SL.xgboost"),
                          dnorm_log = FALSE)
@@ -14,7 +14,7 @@ test_that("compute_m_sigma works as expected!", {
    tune_res <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                                data = data,
                                w = w_all,
-                               GPS_m = GPS_m,
+                               gps_m = gps_m,
                                tuning = FALSE)
 
    gp_cerf <- tune_res$est
@@ -27,7 +27,7 @@ test_that("compute_m_sigma works as expected!", {
    tune_res_t <- compute_m_sigma(hyperparam = c(0.09, 0.09, 10),
                                  data = data,
                                  w = w_all,
-                                 GPS_m = GPS_m,
+                                 gps_m = gps_m,
                                  tuning = TRUE)
 
    expect_equal(length(tune_res_t$cb), 6L)

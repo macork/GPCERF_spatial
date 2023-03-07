@@ -7,7 +7,7 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -18,10 +18,13 @@
 #' @param y_obs A vector of observed outcome values.
 #' @param hyperparam A vector of hyper-parameters in the GP model.
 #' @param n_neighbor The number of nearest neighbors on one side.
-#' @param block_size The number of samples included in a computation block. Mainly used to
-#' balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.
-#' @param kernel_fn The covariance function. The input is the square of Euclidean distance.
-#' @param kernel_deriv_fn The partial derivative of the covariance function. The input is the square of Euclidean distance.
+#' @param block_size The number of samples included in a computation block.
+#' Mainly used to balance the speed and memory requirement. Larger
+#' \code{block_size} is faster, but requires more memory.
+#' @param kernel_fn The covariance function. The input is the square of
+#' Euclidean distance.
+#' @param kernel_deriv_fn The partial derivative of the covariance function.
+#' The input is the square of Euclidean distance.
 #'
 #' @return
 #' A scalar of estimated derivative of CERF at \code{w} in nnGP.
@@ -30,7 +33,7 @@
 #'
 compute_deriv_nn <- function(w,
                              w_obs,
-                             GPS_m,
+                             gps_m,
                              y_obs,
                              hyperparam,
                              n_neighbor,
@@ -46,10 +49,10 @@ compute_deriv_nn <- function(w,
 
 
   # Get gps and helper functions
-  GPS <- GPS_m$gps$GPS
-  e_gps_pred <- GPS_m$gps$e_gps_pred
-  e_gps_std <- GPS_m$gps$e_gps_std
-  dnorm_log <- GPS_m$used_params$dnorm_log
+  GPS <- gps_m$gps$GPS
+  e_gps_pred <- gps_m$gps$e_gps_pred
+  e_gps_std <- gps_m$gps$e_gps_std
+  dnorm_log <- gps_m$used_params$dnorm_log
 
   GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
 

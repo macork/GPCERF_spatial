@@ -37,7 +37,7 @@ sample, and each column is a covariate.
 
 ```{r}
 mydata <- generate_synthetic_data()
-GPS_m <- estimate_gps(cov_mt = mydata[,c("cf1", "cf2", "cf3", "cf4",
+gps_m <- estimate_gps(cov_mt = mydata[,c("cf1", "cf2", "cf3", "cf4",
                                          "cf5", "cf6")],
                   w_all = mydata$treat,
                   sl_lib = c("SL.xgboost"),
@@ -53,7 +53,7 @@ Input parameters:
   - Column 2: Exposure or treatment (w)   
   - Column 3~m: Confounders (C)   
 **`w`** A vector of exposure level to compute CERF.   
-**`GPS_m`** A data.frame of GPS vectors.   
+**`gps_m`** A data.frame of GPS vectors.   
   - Column 1: GPS   
   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred)   
   - Column 3: Standard deviation of e_gps (e_gps_std)   
@@ -74,7 +74,7 @@ set.seed(129)
 sim_data <- generate_synthetic_data(sample_size = 400, gps_spec = 3)
 
 # Estimate GPS function
-GPS_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
+gps_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
                       w_all = sim_data$treat,
                       sl_lib = c("SL.xgboost"),
                       dnorm_log = TRUE)
@@ -91,7 +91,7 @@ params_lst <- list(alpha = c(0.05),
                    tune_app = "all")
 cerf_gp_obj <- estimate_cerf_gp(sim_data,
                                w_all,
-                               GPS_m,
+                               gps_m,
                                params = params_lst,
                                nthread = 1)
 summary(cerf_gp_obj)
@@ -107,7 +107,7 @@ Input parameters:
   - Column 2: Exposure or treatment (w)   
   - Column 3~m: Confounders (C)   
 **`w`** A vector of exposure level to compute CERF.   
-**`GPS_m`** A data.frame of GPS vectors.   
+**`gps_m`** A data.frame of GPS vectors.   
   - Column 1: GPS   
   - Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred)   
   - Column 3: Standard deviation of e_gps (e_gps_std)   
@@ -130,7 +130,7 @@ set.seed(19)
 sim_data <- generate_synthetic_data(sample_size = 1000, gps_spec = 3)
 
 # Estimate GPS function
-GPS_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
+gps_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
                       w_all = sim_data$treat,
                       sl_lib = c("SL.xgboost"),
                       dnorm_log = TRUE)
@@ -148,7 +148,7 @@ params_lst <- list(alpha = c(0.05),
                    block_size = 1e4)
 cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
                                     w_all,
-                                    GPS_m,
+                                    gps_m,
                                     params = params_lst,
                                     nthread = 1)
 

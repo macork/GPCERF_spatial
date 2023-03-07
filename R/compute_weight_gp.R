@@ -18,7 +18,7 @@
 #'   - Third element: gamma/sigma
 #' @param inv_sigma_obs Inverse of the covariance matrix between observed
 #' samples.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -35,7 +35,7 @@
 #' @keywords internal
 #'
 compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
-                              inv_sigma_obs, GPS_m, est_sd = FALSE,
+                              inv_sigma_obs, gps_m, est_sd = FALSE,
                               kernel_fn = function(x) exp(-x ^ 2)){
 
   logger::log_trace("Computing weights for w = {w} ...")
@@ -45,9 +45,9 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   g_sigma <- hyperparam[[3]]
 
   # Compute GPS for requested w
-  e_gps_pred <- GPS_m$gps$e_gps_pred
-  e_gps_std <- GPS_m$gps$e_gps_std
-  dnorm_log <- GPS_m$used_params$dnorm_log
+  e_gps_pred <- gps_m$gps$e_gps_pred
+  e_gps_std <- gps_m$gps$e_gps_std
+  dnorm_log <- gps_m$used_params$dnorm_log
 
   # TODO: The following section is repeated between this function
   # and compute_sd_gp function.

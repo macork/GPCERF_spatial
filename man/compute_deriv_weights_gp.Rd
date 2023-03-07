@@ -7,7 +7,7 @@
 compute_deriv_weights_gp(
   w,
   w_obs,
-  GPS_m,
+  gps_m,
   hyperparam,
   kernel_fn = function(x) exp(-x),
   kernel_deriv_fn = function(x) -exp(-x)
@@ -18,7 +18,7 @@ compute_deriv_weights_gp(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{An S3 gps object including:
+\item{gps_m}{An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS
 - Column 2: Prediction of exposure for covariate of each data sample

@@ -11,7 +11,7 @@
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure level to compute CERF.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -46,7 +46,7 @@
 #'
 #'
 #' # Estimate GPS function
-#' GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+#' gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
 #'                       w_all = data$treat,
 #'                       sl_lib = c("SL.xgboost"),
 #'                       dnorm_log = FALSE)
@@ -57,7 +57,7 @@
 #'
 #' cerf_gp_obj <- estimate_cerf_gp(data,
 #'                                 w_all,
-#'                                 GPS_m,
+#'                                 gps_m,
 #'                                 params = list(alpha = c(0.1),
 #'                                               beta=0.2,
 #'                                               g_sigma = 1,
@@ -65,7 +65,7 @@
 #'                                 nthread = 1)
 #' }
 #'
-estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
+estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
                              kernel_fn = function(x) exp(-x ^ 2)){
 
   # Log system info
@@ -87,14 +87,14 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                 "Current format: ", class(data)[1]))
   }
 
-  if (!inherits(GPS_m, "gps")) {
-    stop(paste0("The GPS_m should be a gps class. ",
-                "Current format: ", class(GPS_m)[1]))
+  if (!inherits(gps_m, "gps")) {
+    stop(paste0("The gps_m should be a gps class. ",
+                "Current format: ", class(gps_m)[1]))
   }
 
-  if (nrow(data)!=length(GPS_m$gps$w)){
+  if (nrow(data)!=length(gps_m$gps$w)){
     stop(paste0("Provided Data and GPS object should have the same size. ",
-                "Current sizes: ", nrow(data), " vs ", length(GPS_m$gps$w)))
+                "Current sizes: ", nrow(data), " vs ", length(gps_m$gps$w)))
   }
 
   check_params <- function(my_param, params) {
@@ -155,7 +155,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
     # export variables and functions to cluster cores
     parallel::clusterExport(cl = cl,
-                            varlist = c("w", "data", "GPS_m",
+                            varlist = c("w", "data", "gps_m",
                                         "tune_params_subset",
                                         "kernel_fn",
                                         "compute_m_sigma"),
@@ -166,7 +166,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                                      compute_m_sigma(hyperparam = x,
                                                      data = data,
                                                      w = w,
-                                                     GPS_m = GPS_m,
+                                                     gps_m = gps_m,
                                                      tuning = TRUE,
                                                      kernel_fn = kernel_fn)
                                    })
@@ -178,7 +178,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
       compute_m_sigma(hyperparam = x,
                       data = data,
                       w = w,
-                      GPS_m = GPS_m,
+                      gps_m = gps_m,
                       tuning = TRUE,
                       kernel_fn = kernel_fn)
       })
@@ -206,7 +206,7 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   gp_cerf_final <- compute_m_sigma(hyperparam = opt_param,
                                    data = data,
                                    w = w,
-                                   GPS_m = GPS_m,
+                                   gps_m = gps_m,
                                    tuning = FALSE,
                                    kernel_fn = kernel_fn)
 

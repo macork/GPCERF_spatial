@@ -8,7 +8,7 @@
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
 #' @param y_obs A vector of observed outcome values of all samples.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -29,7 +29,7 @@
 #' \donttest{
 #' set.seed(847)
 #' data <- generate_synthetic_data(sample_size = 100)
-#' GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+#' gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
 #'                       w_all = data$treat,
 #'                       sl_lib = c("SL.xgboost"),
 #'                       dnorm_log = FALSE)
@@ -39,13 +39,13 @@
 #' val <- compute_rl_deriv_gp(w = wi,
 #'                            w_obs = data$treat,
 #'                            y_obs = data$Y,
-#'                            GPS_m = GPS_m,
+#'                            gps_m = gps_m,
 #'                            hyperparam = c(1,1,2))
 #' }
 compute_rl_deriv_gp <- function(w,
                                 w_obs,
                                 y_obs,
-                                GPS_m,
+                                gps_m,
                                 hyperparam,
                                 kernel_fn = function(x) exp(-x),
                                 kernel_deriv_fn = function(x) -exp(-x)){
@@ -53,21 +53,21 @@ compute_rl_deriv_gp <- function(w,
 
 
   # left side weights
-  GPS_m_left <- GPS_m
-  GPS_m_left$gps <- GPS_m_left$gps[w_obs < w,]
+  gps_m_left <- gps_m
+  gps_m_left$gps <- gps_m_left$gps[w_obs < w,]
   left_weights <-  compute_deriv_weights_gp(w = w,
                                             w_obs = w_obs[w_obs < w],
-                                            GPS_m = GPS_m_left,
+                                            gps_m = gps_m_left,
                                             hyperparam = hyperparam,
                                             kernel_fn = kernel_fn,
                                             kernel_deriv_fn = kernel_deriv_fn)
 
   # right side weights
-  GPS_m_right <- GPS_m
-  GPS_m_right$gps <- GPS_m_right$gps[w_obs >= w,]
+  gps_m_right <- gps_m
+  gps_m_right$gps <- gps_m_right$gps[w_obs >= w,]
   right_weights <-  compute_deriv_weights_gp(w = w,
                                              w_obs = w_obs[w_obs >= w],
-                                             GPS_m = GPS_m_right,
+                                             gps_m = gps_m_right,
                                              hyperparam = hyperparam,
                                              kernel_fn = kernel_fn,
                                              kernel_deriv_fn = kernel_deriv_fn)

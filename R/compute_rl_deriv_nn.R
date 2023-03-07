@@ -8,7 +8,7 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -37,7 +37,7 @@
 #' \donttest{
 #' set.seed(325)
 #' data <- generate_synthetic_data(sample_size = 200)
-#' GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+#' gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
 #'                       w_all = data$treat,
 #'                       sl_lib = c("SL.xgboost"),
 #'                       dnorm_log = FALSE)
@@ -46,7 +46,7 @@
 #'
 #' deriv_val <- compute_rl_deriv_nn(w = wi,
 #'                                  w_obs = data$treat,
-#'                                  GPS_m = GPS_m,
+#'                                  gps_m = gps_m,
 #'                                  y_obs = data$Y,
 #'                                  hyperparam = c(0.2,0.4,1.2),
 #'                                  n_neighbor = 20,
@@ -54,7 +54,7 @@
 #'}
 compute_rl_deriv_nn <-  function(w,
                                  w_obs,
-                                 GPS_m,
+                                 gps_m,
                                  y_obs,
                                  hyperparam,
                                  n_neighbor,
@@ -63,11 +63,11 @@ compute_rl_deriv_nn <-  function(w,
                                  kernel_deriv_fn = function(x) -exp(-x)
                                  ) {
 
-  GPS_m_left <- GPS_m
-  GPS_m_left$gps <- GPS_m_left$gps[w_obs < w,]
+  gps_m_left <- gps_m
+  gps_m_left$gps <- gps_m_left$gps[w_obs < w,]
   left_deriv <- compute_deriv_nn(w,
                                  w_obs[w_obs < w],
-                                 GPS_m_left,
+                                 gps_m_left,
                                  y_obs[w_obs < w],
                                  hyperparam,
                                  n_neighbor = n_neighbor,
@@ -76,11 +76,11 @@ compute_rl_deriv_nn <-  function(w,
                                  kernel_deriv_fn = kernel_deriv_fn)
 
 
-  GPS_m_right <- GPS_m
-  GPS_m_right$gps <- GPS_m_right$gps[w_obs >= w,]
+  gps_m_right <- gps_m
+  gps_m_right$gps <- gps_m_right$gps[w_obs >= w,]
   right_deriv <- compute_deriv_nn(w,
                                   w_obs[w_obs >= w],
-                                  GPS_m_right,
+                                  gps_m_right,
                                   y_obs[w_obs >= w],
                                   hyperparam,
                                   n_neighbor = n_neighbor,

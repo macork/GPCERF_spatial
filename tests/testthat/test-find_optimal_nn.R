@@ -3,7 +3,7 @@ test_that("find_optimal_nn works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+  gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                         w_all = data$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
@@ -25,7 +25,7 @@ test_that("find_optimal_nn works as expected!", {
   optimal_cb <- find_optimal_nn(w_obs = data$treat,
                                 w = w,
                                 y_obs = data$Y,
-                                GPS_m = GPS_m,
+                                gps_m = gps_m,
                                 design_mt = design_mt,
                                 hyperparams = hyperparam_grid,
                                 n_neighbor = 100,

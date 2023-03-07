@@ -11,12 +11,12 @@ test_that("compute_sd_gp works as expected.", {
    kernel_fn <- function(x) exp(-x^2)
 
    # Estimate GPS function
-   GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+   gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                          w_all = data$treat,
                          sl_lib = c("SL.xgboost"),
                          dnorm_log = FALSE)
 
-   GPS <- GPS_m$gps$GPS
+   GPS <- gps_m$gps$GPS
 
    # set hyperparameters
    hyperparam <- c(0.1, 0.4, 1)
@@ -33,7 +33,7 @@ test_that("compute_sd_gp works as expected.", {
                                     scaled_obs = scaled_obs,
                                     hyperparam = hyperparam,
                                     sigma = tentative_sigma,
-                                    GPS_m = GPS_m,
+                                    gps_m = gps_m,
                                     kernel_fn = kernel_fn)
 
    expect_equal(length(post_sd), 1L)

@@ -19,9 +19,9 @@ test_that("multiplication works", {
   e_gps_std <- sd(data$treat - e_gps_pred)
   GPS <- dnorm(data$treat, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
 
-  GPS_m <- list()
-  GPS_m$gps <- data.frame(GPS, e_gps_pred, e_gps_std)
-  GPS_m$used_params$dnorm_log <- TRUE
+  gps_m <- list()
+  gps_m$gps <- data.frame(GPS, e_gps_pred, e_gps_std)
+  gps_m$used_params$dnorm_log <- TRUE
 
   # set hyperparameters
   hyperparam <- c(0.1, 0.4, 1)
@@ -42,7 +42,7 @@ test_that("multiplication works", {
                               scaled_obs = scaled_obs,
                               hyperparam = hyperparam,
                               inv_sigma_obs = inv_sigma_obs,
-                              GPS_m = GPS_m,
+                              gps_m = gps_m,
                               kernel_fn = kernel_fn)
 
   expect_equal(length(weight$weight), 200L)

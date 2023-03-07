@@ -7,7 +7,7 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -27,7 +27,7 @@
 #'
 compute_deriv_weights_gp <- function(w,
                                      w_obs,
-                                     GPS_m,
+                                     gps_m,
                                      hyperparam,
                                      kernel_fn = function(x) exp(-x),
                                      kernel_deriv_fn = function(x) -exp(-x)){
@@ -38,10 +38,10 @@ compute_deriv_weights_gp <- function(w,
   g_sigma <- hyperparam[[3]]
 
 
-  GPS <- GPS_m$gps$GPS
-  e_gps_pred <- GPS_m$gps$e_gps_pred
-  e_gps_std <- GPS_m$gps$e_gps_std
-  dnorm_log <- GPS_m$used_params$dnorm_log
+  GPS <- gps_m$gps$GPS
+  e_gps_pred <- gps_m$gps$e_gps_pred
+  e_gps_std <- gps_m$gps$e_gps_std
+  dnorm_log <- gps_m$used_params$dnorm_log
 
   GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
   n <- length(GPS_w)

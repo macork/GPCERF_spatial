@@ -23,7 +23,7 @@
 #' @examples
 #' \donttest{
 #' data <- generate_synthetic_data(sample_size = 200)
-#' GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+#' gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
 #'                       w_all = data$treat,
 #'                       sl_lib = c("SL.xgboost"),
 #'                       dnorm_log = FALSE)
@@ -38,7 +38,7 @@ estimate_gps <- function(cov_mt, w_all, sl_lib, dnorm_log) {
                                        SL.library = sl_lib)
 
   GPS_SL_sd <- sd(w_all - GPS_SL$SL.predict)
-  GPS_m <- data.frame(GPS = dnorm(w_all,
+  gps_m <- data.frame(GPS = dnorm(w_all,
                                   mean = GPS_SL$SL.predict,
                                   sd = GPS_SL_sd,
                                   log = dnorm_log),
@@ -52,7 +52,7 @@ estimate_gps <- function(cov_mt, w_all, sl_lib, dnorm_log) {
 
   result <- list()
   class(result) <- "gps"
-  result$gps <- GPS_m
+  result$gps <- gps_m
   result$used_params <- list(dnorm_log = dnorm_log)
 
  return(result)

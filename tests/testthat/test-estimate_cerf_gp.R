@@ -4,7 +4,7 @@ test_that("estimate_cerf_gp works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+  gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                         w_all = data$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
@@ -14,7 +14,7 @@ test_that("estimate_cerf_gp works as expected!", {
 
   cerf_gp_obj <- estimate_cerf_gp(data = data,
                                   w = w_all,
-                                  GPS_m = GPS_m,
+                                  gps_m = gps_m,
                                   params = list(alpha = c(0.1, 0.2, 0.4),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -33,19 +33,19 @@ test_that("estimate_cerf_gp works as expected!", {
   data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
   w_all <- seq(0, 20, 0.1)
   # Estimate GPS function
-  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+  gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                         w_all = data$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
 
-  GPS_mm <- GPS_m
-  GPS_mm$gps <- GPS_mm$gps[1:99, ]
+  gps_mm <- gps_m
+  gps_mm$gps <- gps_mm$gps[1:99, ]
 
   # exposure values
     expect_error(cerf_gp_obj <- estimate_cerf_gp(
                                   data = data,
                                   w = w_all,
-                                  GPS_m = GPS_mm,
+                                  gps_m = gps_mm,
                                   params = list(alpha = c(0.1, 0.2, 0.4),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -57,7 +57,7 @@ test_that("estimate_cerf_gp works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+  gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                         w_all = data$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
@@ -68,7 +68,7 @@ test_that("estimate_cerf_gp works as expected!", {
   expect_error(cerf_gp_obj <- estimate_cerf_gp(
                                   data = as.matrix(data),
                                   w = w_all,
-                                  GPS_m = GPS_m,
+                                  gps_m = gps_m,
                                   params = list(alpha = c(0.1, 0.2, 0.4),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -78,7 +78,7 @@ test_that("estimate_cerf_gp works as expected!", {
   expect_error(cerf_gp_obj <- estimate_cerf_gp(
                                   data = data,
                                   w = w_all,
-                                  GPS_m = as.matrix(GPS_m),
+                                  gps_m = as.matrix(gps_m),
                                   params = list(alpha = c(0.1, 0.2, 0.4),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -89,7 +89,7 @@ test_that("estimate_cerf_gp works as expected!", {
   expect_error(cerf_gp_obj <- estimate_cerf_gp(
                                   data = data,
                                   w = w_all,
-                                  GPS_m = GPS_m,
+                                  gps_m = gps_m,
                                   params = list(alpha = c(0.1, 0.2, 0.4),
                                                 beta = 0.2,
                                                 ggggg_sigma = 1,
@@ -99,7 +99,7 @@ test_that("estimate_cerf_gp works as expected!", {
   expect_error(cerf_gp_obj <- estimate_cerf_gp(
                                   data = data,
                                   w = w_all,
-                                  GPS_m = GPS_m,
+                                  gps_m = gps_m,
                                   params = list(alpha = c(),
                                                 beta = c(),
                                                 g_sigma = ,
@@ -110,7 +110,7 @@ test_that("estimate_cerf_gp works as expected!", {
   expect_error(cerf_gp_obj <- estimate_cerf_gp(
                                   data = data,
                                   w = w_all,
-                                  GPS_m = GPS_m,
+                                  gps_m = gps_m,
                                   params = list(alpha = c(0.1, 0.2, 0.4),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -120,7 +120,7 @@ test_that("estimate_cerf_gp works as expected!", {
   expect_error(cerf_gp_obj <- estimate_cerf_gp(
                                   data = data,
                                   w = w_all,
-                                  GPS_m = GPS_m,
+                                  gps_m = gps_m,
                                   params = list(alpha = c(0.1, 0.2, 0.4),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -134,7 +134,7 @@ test_that("estimate_cerf_gp works as expected!", {
   expect_error(cerf_gp_obj <- estimate_cerf_gp(
                                   data = data_na,
                                   w = w_all,
-                                  GPS_m = GPS_m,
+                                  gps_m = gps_m,
                                   params = list(alpha = c(0.1, 0.2, 0.4),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -147,7 +147,7 @@ test_that("estimate_cerf_gp works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+  gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                         w_all = data$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
@@ -158,7 +158,7 @@ test_that("estimate_cerf_gp works as expected!", {
   cerf_gp_obj_2 <- estimate_cerf_gp(
                                    data = data,
                                    w = w_all,
-                                   GPS_m = GPS_m,
+                                   gps_m = gps_m,
                                    params = list(alpha = c(0.1, 0.2, 0.4),
                                                  beta = 0.2,
                                                  g_sigma = 1,

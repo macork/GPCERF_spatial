@@ -13,7 +13,7 @@
 #'   - Second element: beta
 #'   - Third element: gamma/sigma
 #' @param sigma  A scaler that represents noise.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -32,7 +32,7 @@ compute_sd_gp <- function(w,
                           scaled_obs,
                           hyperparam,
                           sigma,
-                          GPS_m,
+                          gps_m,
                           kernel_fn = function(x) exp(-x ^ 2)) {
 
 
@@ -43,9 +43,9 @@ compute_sd_gp <- function(w,
   n <- nrow(scaled_obs)
 
   # Compute GPS for requested w
-  e_gps_pred <- GPS_m$gps$e_gps_pred
-  e_gps_std <- GPS_m$gps$e_gps_std
-  dnorm_log <- GPS_m$used_params$dnorm_log
+  e_gps_pred <- gps_m$gps$e_gps_pred
+  e_gps_std <- gps_m$gps$e_gps_std
+  dnorm_log <- gps_m$used_params$dnorm_log
   GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
 
   # Compute helper matrix for the new w and corresponding GPS.
