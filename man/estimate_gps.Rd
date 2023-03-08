@@ -20,7 +20,8 @@ data sample and each column is a covariate.}
 A data.frame that includes:
 \itemize{
 \item a vector of estimated GPS at the observed exposure levels;
-\item a vector of estimated conditional means of exposure levels when the covariates are fixed
+\item a vector of estimated conditional means of exposure levels when the
+covariates are fixed
 at the observed values;
 \item estimated standard deviation of exposure levels
 \item a vector of observed exposure levels.

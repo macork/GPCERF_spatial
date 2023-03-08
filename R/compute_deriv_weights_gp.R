@@ -52,16 +52,16 @@ compute_deriv_weights_gp <- function(w,
   obs_new <- cbind(w * sqrt(1 / beta), gps_w * sqrt(1 / alpha))
   colnames(obs_new) <- c("w_sc_for_w", "gps_sc_for_w")
 
-  Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
+  sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
                diag(nrow(obs_use))
   cross_dist <- spatstat.geom::crossdist(obs_new[, "w_sc_for_w"],
                                          obs_new[, "gps_sc_for_w"],
                                          obs_use[, "w_sc_obs"],
                                          obs_use[, "gps_sc_obs"])
 
-  Sigma_cross <- g_sigma * sqrt(1 / beta) * kernel_deriv_fn(cross_dist ^ 2) *
+  sigma_cross <- g_sigma * sqrt(1 / beta) * kernel_deriv_fn(cross_dist ^ 2) *
                          (2 * outer(rep(w, n), w_obs, "-"))
-  weights_all <- Sigma_cross %*% chol2inv(chol(Sigma_obs))
+  weights_all <- sigma_cross %*% chol2inv(chol(sigma_obs))
 
   return(colMeans(weights_all))
 }

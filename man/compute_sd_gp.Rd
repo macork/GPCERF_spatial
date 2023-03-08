@@ -19,7 +19,8 @@ compute_sd_gp(
 \item{scaled_obs}{A matrix of two columns.
 \itemize{
 \item First column is the scaled GPS value of all samples (GPS * 1/sqrt(alpha))
-\item Second column is the scaled exposure value of all samples (w * 1/sqrt(beta))
+\item Second column is the scaled exposure value of all samples
+(w * 1/sqrt(beta))
 }}
 
 \item{hyperparam}{A vector of hyper-parameters for the GP.
