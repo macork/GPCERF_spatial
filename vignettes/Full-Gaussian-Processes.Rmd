@@ -29,13 +29,13 @@ We first generate a synthetic dataset with six covariates, one continuous exposu
 ```{r}
 set.seed(134)
 # Generate dataset with a normally distributed exposure given covariates
-data_sim_normal <- generate_synthetic_data(sample_size = 400, 
-                                           outcome_sd = 10, 
+data_sim_normal <- generate_synthetic_data(sample_size = 400,
+                                           outcome_sd = 10,
                                            gps_spec = 1)
 
 # Generate dataset with a t-distributed with 2df exposure given covariates
-data_sim_t <- generate_synthetic_data(sample_size = 400, 
-                                      outcome_sd = 10, 
+data_sim_t <- generate_synthetic_data(sample_size = 400,
+                                      outcome_sd = 10,
                                       gps_spec = 2)
 
 tru_R <- function(w, sim_data) {
@@ -66,7 +66,7 @@ plot_fun <- function(object, ...) {
         ggplot2::ggtitle("Estimated CERF (gp) with credible band (1.96sd)") +
         ggplot2::xlab("Exposure level") +
         ggplot2::ylab("Population average counterfactual outcome")
-  
+
   return(g1)
 }
 
@@ -107,8 +107,8 @@ gp_res_normal <- estimate_cerf_gp(data_sim_normal,
                                                 g_sigma = 1,
                                                 tune_app = "all"),
                                   nthread = 1)
-plot_fun(gp_res_normal) + 
-  geom_line(data = data.frame(w = w_all, y = erf_tru_normal), 
+plot_fun(gp_res_normal) +
+  geom_line(data = data.frame(w = w_all, y = erf_tru_normal),
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```
 
@@ -125,8 +125,8 @@ gp_res_t <- estimate_cerf_gp(data_sim_t,
                                            g_sigma = 1,
                                            tune_app = "all"),
                              nthread = 1)
-plot_fun(gp_res_t) + 
-  geom_line(data = data.frame(w = w_all, y = erf_tru_t), 
+plot_fun(gp_res_t) +
+  geom_line(data = data.frame(w = w_all, y = erf_tru_t),
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```
 

@@ -30,19 +30,19 @@ We first generate a synthetic dataset with six covariates, one continuous exposu
 ```{r}
 set.seed(1)
 # Generate dataset with a normally distributed exposure given covariates
-data_sim_normal <- generate_synthetic_data(sample_size = 500, 
-                                           outcome_sd = 10, 
+data_sim_normal <- generate_synthetic_data(sample_size = 500,
+                                           outcome_sd = 10,
                                            gps_spec = 1)
 # Generate dataset with a t-distributed with 2df exposure given covariates
 data_sim_t <- generate_synthetic_data(sample_size = 500,
                                       outcome_sd = 10,
                                       gps_spec = 2)
 tru_R <- function(w, sim_data) {
-  design_mt <- model.matrix(~cf1 + cf2 + cf3 + cf4 + cf5 + cf6 - 1, 
+  design_mt <- model.matrix(~cf1 + cf2 + cf3 + cf4 + cf5 + cf6 - 1,
                             data = sim_data)
   mean(apply(design_mt, 1, function(x) {
     -10 - sum(c(2, 2, 3, -1, 2, 2) * x) -
-     w * (0.1 - 0.1 * x[1] + 0.1 * x[4] + 0.1 * x[5] + 0.1 * x[3] ^ 2) + 
+     w * (0.1 - 0.1 * x[1] + 0.1 * x[4] + 0.1 * x[5] + 0.1 * x[3] ^ 2) +
      0.13 ^ 2 * w ^ 3
   }))
 }
@@ -65,7 +65,7 @@ plot_fun <- function(object, ...) {
         ggplot2::ggtitle("Estimated CERF (nngp) with credible band (1.96sd)") +
         ggplot2::xlab("Exposure level") +
         ggplot2::ylab("Population average counterfactual outcome")
-  
+
   return(g1)
 }
 
@@ -107,8 +107,8 @@ nngp_res_normal <- estimate_cerf_nngp(data_sim_normal,
                                                     block_size = 50,
                                                     tune_app = "all"),
                                       nthread = 1)
-plot_fun(nngp_res_normal) + 
-  geom_line(data = data.frame(w = w_all, y = erf_tru_normal), 
+plot_fun(nngp_res_normal) +
+  geom_line(data = data.frame(w = w_all, y = erf_tru_normal),
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```
 
@@ -127,8 +127,8 @@ nngp_res_t <- estimate_cerf_nngp(data_sim_t,
                                                block_size = 50,
                                                tune_app = "all"),
                                 nthread = 1)
-plot_fun(nngp_res_t) + 
-  geom_line(data = data.frame(w = w_all, y = erf_tru_t), 
+plot_fun(nngp_res_t) +
+  geom_line(data = data.frame(w = w_all, y = erf_tru_t),
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```
 
