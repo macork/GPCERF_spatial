@@ -90,7 +90,7 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://devtools.r-lib.org/" class="external-link">"devtools"</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"NSAPH-Software/GPCERF"</span>, ref<span class="op">=</span><span class="st">"main"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"NSAPH-Software/GPCERF"</span>, ref <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/NSAPH-Software/GPCERF" class="external-link">"GPCERF"</a></span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -107,7 +107,7 @@ covariate.<br><strong><code>w_all</code></strong> A vector of observed exposure
 level.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">mydata</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cf1"</span>, <span class="st">"cf2"</span>, <span class="st">"cf3"</span>, <span class="st">"cf4"</span>,</span>
+<span><span class="va">gps_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">mydata</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cf1"</span>, <span class="st">"cf2"</span>, <span class="st">"cf3"</span>, <span class="st">"cf4"</span>,</span>
 <span>                                         <span class="st">"cf5"</span>, <span class="st">"cf6"</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>                  w_all <span class="op">=</span> <span class="va">mydata</span><span class="op">$</span><span class="va">treat</span>,</span>
 <span>                  sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span>
@@ -123,7 +123,7 @@ data.<br>
 - Column 1: Outcome (Y)<br>
 - Column 2: Exposure or treatment (w)<br>
 - Column 3~m: Confounders (C)<br><strong><code>w</code></strong> A vector of exposure level to compute
-CERF.<br><strong><code>GPS_m</code></strong> A data.frame of GPS vectors.<br>
+CERF.<br><strong><code>gps_m</code></strong> A data.frame of GPS vectors.<br>
 - Column 1: GPS<br>
 - Column 2: Prediction of exposure for covariate of each data sample
 (e_gps_pred)<br>
@@ -144,7 +144,7 @@ value is a Gaussian kernel.</p>
 <span><span class="va">sim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span>sample_size <span class="op">=</span> <span class="fl">400</span>, gps_spec <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Estimate GPS function</span></span>
-<span><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">sim_data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span>
+<span><span class="va">gps_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">sim_data</span><span class="op">[</span>, <span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>                      w_all <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">treat</span>,</span>
 <span>                      sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span>
 <span>                      dnorm_log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -161,7 +161,7 @@ value is a Gaussian kernel.</p>
 <span>                   tune_app <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="va">cerf_gp_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_cerf_gp.html">estimate_cerf_gp</a></span><span class="op">(</span><span class="va">sim_data</span>,</span>
 <span>                               <span class="va">w_all</span>,</span>
-<span>                               <span class="va">GPS_m</span>,</span>
+<span>                               <span class="va">gps_m</span>,</span>
 <span>                               params <span class="op">=</span> <span class="va">params_lst</span>,</span>
 <span>                               nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cerf_gp_obj</span><span class="op">)</span></span>
@@ -199,7 +199,7 @@ data.<br>
 - Column 1: Outcome (Y)<br>
 - Column 2: Exposure or treatment (w)<br>
 - Column 3~m: Confounders (C)<br><strong><code>w</code></strong> A vector of exposure level to compute
-CERF.<br><strong><code>GPS_m</code></strong> A data.frame of GPS vectors.<br>
+CERF.<br><strong><code>gps_m</code></strong> A data.frame of GPS vectors.<br>
 - Column 1: GPS<br>
 - Column 2: Prediction of exposure for covariate of each data sample
 (e_gps_pred)<br>
@@ -224,7 +224,7 @@ value is a Gaussian kernel.</p>
 <span><span class="va">sim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span>sample_size <span class="op">=</span> <span class="fl">1000</span>, gps_spec <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Estimate GPS function</span></span>
-<span><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">sim_data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span>
+<span><span class="va">gps_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">sim_data</span><span class="op">[</span>, <span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>                      w_all <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">treat</span>,</span>
 <span>                      sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span>
 <span>                      dnorm_log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -242,7 +242,7 @@ value is a Gaussian kernel.</p>
 <span>                   block_size <span class="op">=</span> <span class="fl">1e4</span><span class="op">)</span></span>
 <span><span class="va">cerf_nngp_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_cerf_nngp.html">estimate_cerf_nngp</a></span><span class="op">(</span><span class="va">sim_data</span>,</span>
 <span>                                    <span class="va">w_all</span>,</span>
-<span>                                    <span class="va">GPS_m</span>,</span>
+<span>                                    <span class="va">gps_m</span>,</span>
 <span>                                    params <span class="op">=</span> <span class="va">params_lst</span>,</span>
 <span>                                    nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>

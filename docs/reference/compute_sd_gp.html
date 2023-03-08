@@ -67,7 +67,7 @@
 <span>  <span class="va">scaled_obs</span>,</span>
 <span>  <span class="va">hyperparam</span>,</span>
 <span>  <span class="va">sigma</span>,</span>
-<span>  <span class="va">GPS_m</span>,</span>
+<span>  <span class="va">gps_m</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -80,7 +80,8 @@
 
 <dt>scaled_obs</dt>
 <dd><p>A matrix of two columns.</p><ul><li><p>First column is the scaled GPS value of all samples (GPS * 1/sqrt(alpha))</p></li>
-<li><p>Second column is the scaled exposure value of all samples (w * 1/sqrt(beta))</p></li>
+<li><p>Second column is the scaled exposure value of all samples
+(w * 1/sqrt(beta))</p></li>
 </ul></dd>
 
 
@@ -95,7 +96,7 @@
 <dd><p>A scaler that represents noise.</p></dd>
 
 
-<dt>GPS_m</dt>
+<dt>gps_m</dt>
 <dd><p>An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS
