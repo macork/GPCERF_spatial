@@ -11,7 +11,7 @@ test_that("Weighted correlation works as expected.", {
   expect_equal(length(val1), 4L)
   expect_equal(length(val1$absolute_corr), 6L)
   expect_equal(val1$absolute_corr[["cf1"]], 0.177344, tolerance = 0.00001)
-  expect_equal(val1$absolute_corr[["cf2"]], 0.3641282 , tolerance = 0.00001)
+  expect_equal(val1$absolute_corr[["cf2"]], 0.3641282, tolerance = 0.00001)
 
   expect_error(compute_w_corr(w = data1$treat,
                               covariate = as.matrix(data1[, 3:ncol(data1)]),

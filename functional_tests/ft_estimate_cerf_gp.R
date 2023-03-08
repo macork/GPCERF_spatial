@@ -11,7 +11,7 @@ m_ranger <- function(num.threads = 12, ...){
 }
 
 # Estimate GPS function
-GPS_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
+gps_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
                       w_all = sim_data$treat,
                       sl_lib = c("m_xgboost", "m_ranger"),
                       dnorm_log = TRUE)
@@ -31,7 +31,7 @@ params_lst <- list(alpha = 10 ^ seq(-2, 2, length.out = 10),
 t1 <- proc.time()
 cerf_gp_obj <- estimate_cerf_gp(sim_data,
                                 w_all,
-                                GPS_m,
+                                gps_m,
                                 params = params_lst,
                                 nthread = 12)
 t2 <- proc.time()

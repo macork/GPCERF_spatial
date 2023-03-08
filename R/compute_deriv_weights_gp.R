@@ -7,7 +7,7 @@
 #'
 #' @param w A scalar of exposure level of interest.
 #' @param w_obs A vector of observed exposure levels of all samples.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -27,10 +27,10 @@
 #'
 compute_deriv_weights_gp <- function(w,
                                      w_obs,
-                                     GPS_m,
+                                     gps_m,
                                      hyperparam,
                                      kernel_fn = function(x) exp(-x),
-                                     kernel_deriv_fn = function(x) -exp(-x)){
+                                     kernel_deriv_fn = function(x) -exp(-x)) {
 
 
   alpha <- hyperparam[[1]]
@@ -38,30 +38,30 @@ compute_deriv_weights_gp <- function(w,
   g_sigma <- hyperparam[[3]]
 
 
-  GPS <- GPS_m$gps$GPS
-  e_gps_pred <- GPS_m$gps$e_gps_pred
-  e_gps_std <- GPS_m$gps$e_gps_std
-  dnorm_log <- GPS_m$used_params$dnorm_log
+  gps <- gps_m$gps$gps
+  e_gps_pred <- gps_m$gps$e_gps_pred
+  e_gps_std <- gps_m$gps$e_gps_std
+  dnorm_log <- gps_m$used_params$dnorm_log
 
-  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
-  n <- length(GPS_w)
+  gps_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
+  n <- length(gps_w)
 
-  obs_use <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
-  colnames(obs_use) <- c('w_sc_obs','gps_sc_obs')
+  obs_use <- cbind(w_obs * sqrt(1 / beta), gps * sqrt(1 / alpha))
+  colnames(obs_use) <- c("w_sc_obs", "gps_sc_obs")
 
-  obs_new <- cbind(w * sqrt(1 / beta), GPS_w * sqrt(1 / alpha))
-  colnames(obs_new) <- c('w_sc_for_w','gps_sc_for_w')
+  obs_new <- cbind(w * sqrt(1 / beta), gps_w * sqrt(1 / alpha))
+  colnames(obs_new) <- c("w_sc_for_w", "gps_sc_for_w")
 
-  Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
+  sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
                diag(nrow(obs_use))
   cross_dist <- spatstat.geom::crossdist(obs_new[, "w_sc_for_w"],
                                          obs_new[, "gps_sc_for_w"],
                                          obs_use[, "w_sc_obs"],
                                          obs_use[, "gps_sc_obs"])
 
-  Sigma_cross <- g_sigma * sqrt(1 / beta) * kernel_deriv_fn(cross_dist ^ 2) *
+  sigma_cross <- g_sigma * sqrt(1 / beta) * kernel_deriv_fn(cross_dist ^ 2) *
                          (2 * outer(rep(w, n), w_obs, "-"))
-  weights_all <- Sigma_cross %*% chol2inv(chol(Sigma_obs))
+  weights_all <- sigma_cross %*% chol2inv(chol(sigma_obs))
 
   return(colMeans(weights_all))
 }

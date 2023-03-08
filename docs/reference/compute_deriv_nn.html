@@ -68,7 +68,7 @@ exposure level with nnGP.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compute_deriv_nn</span><span class="op">(</span></span>
 <span>  <span class="va">w</span>,</span>
 <span>  <span class="va">w_obs</span>,</span>
-<span>  <span class="va">GPS_m</span>,</span>
+<span>  <span class="va">gps_m</span>,</span>
 <span>  <span class="va">y_obs</span>,</span>
 <span>  <span class="va">hyperparam</span>,</span>
 <span>  <span class="va">n_neighbor</span>,</span>
@@ -88,7 +88,7 @@ exposure level with nnGP.</p>
 <dd><p>A vector of observed exposure levels of all samples.</p></dd>
 
 
-<dt>GPS_m</dt>
+<dt>gps_m</dt>
 <dd><p>An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS
@@ -112,16 +112,19 @@ used_params:
 
 
 <dt>block_size</dt>
-<dd><p>The number of samples included in a computation block. Mainly used to
-balance the speed and memory requirement. Larger <code>block_size</code> is faster, but requires more memory.</p></dd>
+<dd><p>The number of samples included in a computation block.
+Mainly used to balance the speed and memory requirement. Larger
+<code>block_size</code> is faster, but requires more memory.</p></dd>
 
 
 <dt>kernel_fn</dt>
-<dd><p>The covariance function. The input is the square of Euclidean distance.</p></dd>
+<dd><p>The covariance function. The input is the square of
+Euclidean distance.</p></dd>
 
 
 <dt>kernel_deriv_fn</dt>
-<dd><p>The partial derivative of the covariance function. The input is the square of Euclidean distance.</p></dd>
+<dd><p>The partial derivative of the covariance function.
+The input is the square of Euclidean distance.</p></dd>
 
 </dl></div>
     <div class="section level2">

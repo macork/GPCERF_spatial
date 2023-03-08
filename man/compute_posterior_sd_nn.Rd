@@ -7,7 +7,7 @@
 compute_posterior_sd_nn(
   hyperparam,
   w,
-  GPS_w,
+  gps_w,
   obs_ord,
   sigma2,
   kernel_fn = function(x) exp(-x^2),
@@ -20,7 +20,7 @@ compute_posterior_sd_nn(
 
 \item{w}{The exposure level for the point of interest on the CERF.}
 
-\item{GPS_w}{The GPS for all samples when their exposure levels are set
+\item{gps_w}{The GPS for all samples when their exposure levels are set
 at \code{w}.}
 
 \item{obs_ord}{A matrix of two columns. The first column is the observed

@@ -29,13 +29,13 @@ We first generate a synthetic dataset with six covariates, one continuous exposu
 ```{r}
 set.seed(134)
 # Generate dataset with a normally distributed exposure given covariates
-data_sim_normal <- generate_synthetic_data(sample_size = 400, 
-                                           outcome_sd = 10, 
+data_sim_normal <- generate_synthetic_data(sample_size = 400,
+                                           outcome_sd = 10,
                                            gps_spec = 1)
 
 # Generate dataset with a t-distributed with 2df exposure given covariates
-data_sim_t <- generate_synthetic_data(sample_size = 400, 
-                                      outcome_sd = 10, 
+data_sim_t <- generate_synthetic_data(sample_size = 400,
+                                      outcome_sd = 10,
                                       gps_spec = 2)
 
 tru_R <- function(w, sim_data) {
@@ -48,7 +48,7 @@ tru_R <- function(w, sim_data) {
   }))
 }
 
-plot_fun <- function(object, ...){
+plot_fun <- function(object, ...) {
     # extract data
   tmp_data <- data.frame(w_vals = object$posterior$w,
                          mean_vals = object$posterior$mean,
@@ -66,7 +66,7 @@ plot_fun <- function(object, ...){
         ggplot2::ggtitle("Estimated CERF (gp) with credible band (1.96sd)") +
         ggplot2::xlab("Exposure level") +
         ggplot2::ylab("Population average counterfactual outcome")
-  
+
   return(g1)
 }
 
@@ -81,12 +81,12 @@ erf_tru_t <- sapply(seq(0, 20, 0.1), function(w) tru_R(w, data_sim_t))
 GPCERF will first convert the covariate values into a single composite score (GPS) and then use it to fit the Gaussian processes. We use the GPS estimation function in CasaulGPS (see [here](https://nsaph-software.github.io/CausalGPS/articles/Estimating-GPS.html)) to get the GPS model that maps covariates into GPS.
 
 ```{r}
-GPS_m_normal <- estimate_gps(cov_mt = data_sim_normal[,-(1:2)],
+gps_m_normal <- estimate_gps(cov_mt = data_sim_normal[, -(1:2)],
                              w_all = data_sim_normal$treat,
                              sl_lib = c("SL.xgboost"),
                              dnorm_log = FALSE)
 
-GPS_m_t <- estimate_gps(cov_mt = data_sim_t[, -(1:2)],
+gps_m_t <- estimate_gps(cov_mt = data_sim_t[, -(1:2)],
                         w_all = data_sim_t$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
@@ -101,14 +101,14 @@ w_all <- seq(0, 20, 0.1)
 
 gp_res_normal <- estimate_cerf_gp(data_sim_normal,
                                   w_all,
-                                  GPS_m_normal,
+                                  gps_m_normal,
                                   params = list(alpha = c(0.1),
-                                                beta=0.2,
+                                                beta = 0.2,
                                                 g_sigma = 1,
                                                 tune_app = "all"),
                                   nthread = 1)
-plot_fun(gp_res_normal) + 
-  geom_line(data = data.frame(w = w_all, y = erf_tru_normal), 
+plot_fun(gp_res_normal) +
+  geom_line(data = data.frame(w = w_all, y = erf_tru_normal),
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```
 
@@ -119,14 +119,14 @@ We can see that the estimated curve follows the true ERF closely and the 95\% cr
 ```{r}
 gp_res_t <- estimate_cerf_gp(data_sim_t,
                              w_all,
-                             GPS_m_t,
+                             gps_m_t,
                              params = list(alpha = c(0.1),
-                                           beta=0.2,
+                                           beta = 0.2,
                                            g_sigma = 1,
                                            tune_app = "all"),
                              nthread = 1)
-plot_fun(gp_res_t) + 
-  geom_line(data = data.frame(w = w_all, y = erf_tru_t), 
+plot_fun(gp_res_t) +
+  geom_line(data = data.frame(w = w_all, y = erf_tru_t),
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```
 

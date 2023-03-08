@@ -8,7 +8,7 @@ compute_rl_deriv_gp(
   w,
   w_obs,
   y_obs,
-  GPS_m,
+  gps_m,
   hyperparam,
   kernel_fn = function(x) exp(-x),
   kernel_deriv_fn = function(x) -exp(-x)
@@ -21,7 +21,7 @@ compute_rl_deriv_gp(
 
 \item{y_obs}{A vector of observed outcome values of all samples.}
 
-\item{GPS_m}{An S3 gps object including:
+\item{gps_m}{An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS
 - Column 2: Prediction of exposure for covariate of each data sample
@@ -48,7 +48,7 @@ right-derivatives at an exposure level for the detection of change points.
 \donttest{
 set.seed(847)
 data <- generate_synthetic_data(sample_size = 100)
-GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                       w_all = data$treat,
                       sl_lib = c("SL.xgboost"),
                       dnorm_log = FALSE)
@@ -58,7 +58,7 @@ wi <- 8.6
 val <- compute_rl_deriv_gp(w = wi,
                            w_obs = data$treat,
                            y_obs = data$Y,
-                           GPS_m = GPS_m,
+                           gps_m = gps_m,
                            hyperparam = c(1,1,2))
 }
 }

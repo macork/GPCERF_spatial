@@ -9,7 +9,7 @@ compute_m_sigma(
   hyperparam,
   data,
   w,
-  GPS_m,
+  gps_m,
   tuning,
   kernel_fn = function(x) exp(-x^2)
 )
@@ -32,7 +32,7 @@ and covariates. In the following order:
 
 \item{w}{A vector of exposure levels at which the CERF is estimated.}
 
-\item{GPS_m}{An S3 gps object including:
+\item{gps_m}{An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS
 - Column 2: Prediction of exposure for covariate of each data sample

@@ -7,7 +7,7 @@
 compute_posterior_m_nn(
   hyperparam,
   w,
-  GPS_w,
+  gps_w,
   obs_ord,
   y_obs_ord,
   kernel_fn = function(x) exp(-x^2),
@@ -21,7 +21,7 @@ compute_posterior_m_nn(
 \item{w}{A scaler representing the exposure level for the point of interest
 on the CERF.}
 
-\item{GPS_w}{The GPS for all samples when their exposure levels are set
+\item{gps_w}{The GPS for all samples when their exposure levels are set
 at \code{w}.}
 
 \item{obs_ord}{A matrix of two columns. First column is the observed

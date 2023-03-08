@@ -7,13 +7,14 @@
 #' @param w A scalar of exposure level of interest.
 #' @param scaled_obs A matrix of two columns.
 #'   - First column is the scaled GPS value of all samples (GPS * 1/sqrt(alpha))
-#'   - Second column is the scaled exposure value of all samples (w * 1/sqrt(beta))
+#'   - Second column is the scaled exposure value of all samples
+#'   (w * 1/sqrt(beta))
 #' @param hyperparam A vector of hyper-parameters for the GP.
 #'   - First element: alpha
 #'   - Second element: beta
 #'   - Third element: gamma/sigma
 #' @param sigma  A scaler that represents noise.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -32,7 +33,7 @@ compute_sd_gp <- function(w,
                           scaled_obs,
                           hyperparam,
                           sigma,
-                          GPS_m,
+                          gps_m,
                           kernel_fn = function(x) exp(-x ^ 2)) {
 
 
@@ -43,16 +44,16 @@ compute_sd_gp <- function(w,
   n <- nrow(scaled_obs)
 
   # Compute GPS for requested w
-  e_gps_pred <- GPS_m$gps$e_gps_pred
-  e_gps_std <- GPS_m$gps$e_gps_std
-  dnorm_log <- GPS_m$used_params$dnorm_log
-  GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
+  e_gps_pred <- gps_m$gps$e_gps_pred
+  e_gps_std <- gps_m$gps$e_gps_std
+  dnorm_log <- gps_m$used_params$dnorm_log
+  gps_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
 
   # Compute helper matrix for the new w and corresponding GPS.
-  scaled_w <- cbind(w / sqrt(1 / beta), GPS_w / sqrt(1 / alpha))
+  scaled_w <- cbind(w / sqrt(1 / beta), gps_w / sqrt(1 / alpha))
 
   scaled_combined <- rbind(scaled_w, scaled_obs)
-  Sigma_all <- (g_sigma*kernel_fn(as.matrix(stats::dist(scaled_combined))) +
+  Sigma_all <- (g_sigma * kernel_fn(as.matrix(stats::dist(scaled_combined))) +
                 diag(n * 2)) * sigma ^ 2
   Sigma_within_w <- Sigma_all[1:n, 1:n]
   Sigma_cross <- Sigma_all[1:n, -(1:n)]

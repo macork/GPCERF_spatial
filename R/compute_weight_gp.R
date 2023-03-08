@@ -18,7 +18,7 @@
 #'   - Third element: gamma/sigma
 #' @param inv_sigma_obs Inverse of the covariance matrix between observed
 #' samples.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -35,8 +35,8 @@
 #' @keywords internal
 #'
 compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
-                              inv_sigma_obs, GPS_m, est_sd = FALSE,
-                              kernel_fn = function(x) exp(-x ^ 2)){
+                              inv_sigma_obs, gps_m, est_sd = FALSE,
+                              kernel_fn = function(x) exp(-x ^ 2)) {
 
   logger::log_trace("Computing weights for w = {w} ...")
 
@@ -45,15 +45,13 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   g_sigma <- hyperparam[[3]]
 
   # Compute GPS for requested w
-  e_gps_pred <- GPS_m$gps$e_gps_pred
-  e_gps_std <- GPS_m$gps$e_gps_std
-  dnorm_log <- GPS_m$used_params$dnorm_log
+  e_gps_pred <- gps_m$gps$e_gps_pred
+  e_gps_std <- gps_m$gps$e_gps_std
+  dnorm_log <- gps_m$used_params$dnorm_log
 
-  # TODO: The following section is repeated between this function
-  # and compute_sd_gp function.
-  GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
-  scaled_w <- cbind(w * sqrt(1 / beta), GPS_w * sqrt(1 / alpha))
-  colnames(scaled_w) <- c('w_sc_for_w','gps_sc_for_w')
+  gps_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
+  scaled_w <- cbind(w * sqrt(1 / beta), gps_w * sqrt(1 / alpha))
+  colnames(scaled_w) <- c("w_sc_for_w", "gps_sc_for_w")
 
   # kappa
   # sigma_cross = kappa/sigma^2 : Is always n*n matrix.
@@ -81,10 +79,11 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   if (est_sd) {
     # TODO: It seems we are computing noise based on GPS value. Is that correct?
     # It is GPS.
-    sigma_w <- g_sigma*kernel_fn(outer(scaled_w[,2], scaled_w[,2], "-")^2) +
-      diag(nrow(scaled_w))
-    sd_scaled = sqrt(sum(sigma_w)/nrow(scaled_w)^2 -
-                     sum(weight*normalized_sigma_cross))
+    sigma_w <- g_sigma * kernel_fn(outer(scaled_w[, 2],
+                                         scaled_w[, 2], "-") ^ 2) +
+                                           diag(nrow(scaled_w))
+    sd_scaled <- sqrt(sum(sigma_w) / nrow(scaled_w) ^ 2 -
+                      sum(weight * normalized_sigma_cross))
     logger::log_trace("Computed scaled standard deviation: {sd_scaled}")
   } else {
     sd_scaled <- NA

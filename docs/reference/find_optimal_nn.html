@@ -69,7 +69,7 @@ and selects the hyper-parameter values that minimizes the covariate balance.</p>
 <span>  <span class="va">w_obs</span>,</span>
 <span>  <span class="va">w</span>,</span>
 <span>  <span class="va">y_obs</span>,</span>
-<span>  <span class="va">GPS_m</span>,</span>
+<span>  <span class="va">gps_m</span>,</span>
 <span>  <span class="va">design_mt</span>,</span>
 <span>  hyperparams <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
@@ -93,7 +93,7 @@ and selects the hyper-parameter values that minimizes the covariate balance.</p>
 <dd><p>A vector of observed outcomes</p></dd>
 
 
-<dt>GPS_m</dt>
+<dt>gps_m</dt>
 <dd><p>An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS

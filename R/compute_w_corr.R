@@ -35,10 +35,10 @@
 #'
 compute_w_corr <- function(w,
                            covariate,
-                           weight){
+                           weight) {
 
 
-  if (!is.data.frame(covariate)){
+  if (!is.data.frame(covariate)) {
     stop(paste("covariate should be a data.frame, the provided one is: ",
                class(covariate)))
   }
@@ -53,7 +53,7 @@ compute_w_corr <- function(w,
   absolute_corr_n <- absolute_corr_f <- NULL
 
   if (length(col_n) > 0) {
-    absolute_corr_n <- sapply(col_n,function(i){
+    absolute_corr_n <- sapply(col_n, function(i) {
       abs(wCorr::weightedCorr(x = w,
                               y = covariate[, i],
                               weights = weight,
@@ -63,7 +63,7 @@ compute_w_corr <- function(w,
   }
 
   if (length(col_f) > 0) {
-    internal_fun<- function(i){
+    internal_fun <- function(i) {
       abs(wCorr::weightedCorr(x = w,
                               y = covariate[, i],
                               weights = weight,
@@ -71,7 +71,7 @@ compute_w_corr <- function(w,
 
     absolute_corr_f <- c()
     for (item in col_f){
-      if (length(unique(covariate[,item])) == 1 ){
+      if (length(unique(covariate[, item])) == 1) {
         absolute_corr_f <- c(absolute_corr_f, NA)
       } else {
         absolute_corr_f <- c(absolute_corr_f, internal_fun(item))

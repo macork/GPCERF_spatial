@@ -10,7 +10,7 @@
 #' @param w_obs A vector of observed exposure levels.
 #' @param w A vector of exposure levels at which the CERF is estimated.
 #' @param y_obs A vector of observed outcome values.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -36,55 +36,55 @@ estimate_mean_sd_nn <- function(hyperparam,
                                 w_obs,
                                 w,
                                 y_obs,
-                                GPS_m,
+                                gps_m,
                                 kernel_fn = function(x) exp(-x ^ 2),
                                 n_neighbor = 50,
                                 block_size = 2e3,
-                                nthread = 1){
+                                nthread = 1) {
 
 
   t_est_m_sd_1 <- proc.time()
   logger::log_info("Working on estimating mean and sd using nngp approach ...")
 
 
-  coord_obs <- cbind(w_obs, GPS_m$gps$GPS)
+  coord_obs <- cbind(w_obs, gps_m$gps$gps)
 
-  if (any(is.na(y_obs))){
+  if (any(is.na(y_obs))) {
     stop("y_obs has missing value(s).")
   }
 
   lfp <- get_options("logger_file_path")
 
   # make a cluster
-  cl <- parallel::makeCluster(nthread, type="PSOCK",
-                              outfile= lfp)
+  cl <- parallel::makeCluster(nthread, type = "PSOCK",
+                              outfile = lfp)
 
   # install the package on all nodes.
   parallel::clusterEvalQ(cl, {library("GPCERF")})
 
   # export variables and functions to cluster cores
-  parallel::clusterExport(cl=cl,
-                          varlist = c("w", "GPS_m", "hyperparam",
+  parallel::clusterExport(cl = cl,
+                          varlist = c("w", "gps_m", "hyperparam",
                                       "coord_obs", "y_obs",
                                       "sigma2", "kernel_fn",
                                       "n_neighbor", "block_size",
                                       "compute_posterior_m_nn",
                                       "compute_posterior_sd_nn",
                                       "compute_inverse", "calc_cross"),
-                          envir=environment())
+                          envir = environment())
 
 
   all_res <- parallel::parSapply(cl,
                                  w,
-                                 function(wi){
-    GPS_w <- dnorm(wi,
-                  mean = GPS_m$gps$e_gps_pred,
-                  sd = GPS_m$gps$e_gps_std,
-                  log = GPS_m$used_params$dnorm_log)
+                                 function(wi) {
+    gps_w <- dnorm(wi,
+                   mean = gps_m$gps$e_gps_pred,
+                   sd = gps_m$gps$e_gps_std,
+                   log = gps_m$used_params$dnorm_log)
 
     val <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                    w = wi,
-                                   GPS_w = GPS_w,
+                                   gps_w = gps_w,
                                    obs_ord = coord_obs,
                                    sigma2 = sigma2,
                                    kernel_fn = kernel_fn,

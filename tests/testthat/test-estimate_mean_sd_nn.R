@@ -4,7 +4,7 @@ test_that("estimate_mean_sd_nn works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- estimate_gps(cov_mt = data[, -(1:2)],
+  gps_m <- estimate_gps(cov_mt = data[, -(1:2)],
                         w_all = data$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
@@ -17,7 +17,7 @@ test_that("estimate_mean_sd_nn works as expected!", {
   # compute noise
   noise <- estimate_noise_nn(hyperparam = hyperparam,
                              w_obs = data$treat,
-                             GPS_obs = GPS_m$gps$GPS,
+                             GPS_obs = gps_m$gps$gps,
                              y_obs = data$Y,
                              n_neighbor = n_neighbor,
                              nthread = 1)
@@ -29,7 +29,7 @@ test_that("estimate_mean_sd_nn works as expected!", {
                              w_obs = data$treat,
                              w = w,
                              y_obs = data$Y,
-                             GPS_m = GPS_m,
+                             gps_m = gps_m,
                              n_neighbor = n_neighbor,
                              block_size = block_size)
 

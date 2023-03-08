@@ -9,7 +9,7 @@ compute_sd_gp(
   scaled_obs,
   hyperparam,
   sigma,
-  GPS_m,
+  gps_m,
   kernel_fn = function(x) exp(-x^2)
 )
 }
@@ -19,7 +19,8 @@ compute_sd_gp(
 \item{scaled_obs}{A matrix of two columns.
 \itemize{
 \item First column is the scaled GPS value of all samples (GPS * 1/sqrt(alpha))
-\item Second column is the scaled exposure value of all samples (w * 1/sqrt(beta))
+\item Second column is the scaled exposure value of all samples
+(w * 1/sqrt(beta))
 }}
 
 \item{hyperparam}{A vector of hyper-parameters for the GP.
@@ -31,7 +32,7 @@ compute_sd_gp(
 
 \item{sigma}{A scaler that represents noise.}
 
-\item{GPS_m}{An S3 gps object including:
+\item{gps_m}{An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS
 - Column 2: Prediction of exposure for covariate of each data sample

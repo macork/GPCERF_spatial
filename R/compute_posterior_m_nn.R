@@ -9,7 +9,7 @@
 #' @param hyperparam A set of hyperparameters in the GP model.
 #' @param w  A scaler representing the exposure level for the point of interest
 #'  on the CERF.
-#' @param GPS_w The GPS for all samples when their exposure levels are set
+#' @param gps_w The GPS for all samples when their exposure levels are set
 #'  at \code{w}.
 #' @param obs_ord A matrix of two columns. First column is the observed
 #' exposure levels of all samples; second is the GPS at the observed exposure
@@ -34,7 +34,7 @@
 #'
 compute_posterior_m_nn <- function(hyperparam,
                                    w,
-                                   GPS_w,
+                                   gps_w,
                                    obs_ord,
                                    y_obs_ord,
                                    kernel_fn = function(x) exp(-x ^ 2),
@@ -47,22 +47,18 @@ compute_posterior_m_nn <- function(hyperparam,
   g_sigma <- hyperparam[[3]]
 
 
-  n <- base::length(GPS_w)
+  n <- base::length(gps_w)
 
-  # Compute number of blocks
-  # n_block <- base::ceiling(n / block_size)
-
-
-  if(w >= obs_ord[nrow(obs_ord),1]){
+  if (w >= obs_ord[nrow(obs_ord), 1]) {
     idx_select <- seq(nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
-  }else{
+  } else {
     # which.max returns the index of first TRUE value.
-    idx_anchor <- which.max(obs_ord[,1] >= w)
+    idx_anchor <- which.max(obs_ord[, 1] >= w)
     idx_start <- max(1, idx_anchor - n_neighbor)
     idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor)
-    if(idx_end == nrow(obs_ord)){
+    if (idx_end == nrow(obs_ord)) {
       idx_select <- seq(idx_end - n_neighbor * 2 + 1, idx_end, 1)
-    }else{
+    } else {
       idx_select <- seq(idx_start, idx_start + n_neighbor * 2 - 1, 1)
     }
   }
@@ -72,24 +68,24 @@ compute_posterior_m_nn <- function(hyperparam,
                                   + diag(nrow(used_obs)))
   used_y <- y_obs_ord[idx_select]
 
-  w_obs <- t(t(cbind(w, GPS_w)) * (1/sqrt(c(beta, alpha))))
+  w_obs <- t(t(cbind(w, gps_w)) * (1 / sqrt(c(beta, alpha))))
   id_all <- split(1:n, ceiling(seq_along(1:n) / block_size))
 
-  all_weights <- sapply(id_all, function(id_ind){
-    cov_cross <- g_sigma * kernel_fn(spatstat.geom::crossdist(w_obs[id_ind,1],
-                                                              w_obs[id_ind,2],
-                                                              used_obs[,1],
-                                                              used_obs[,2]))
+  all_weights <- sapply(id_all, function(id_ind) {
+    cov_cross <- g_sigma * kernel_fn(spatstat.geom::crossdist(w_obs[id_ind, 1],
+                                                              w_obs[id_ind, 2],
+                                                              used_obs[, 1],
+                                                              used_obs[, 2]))
     #weight
     c(arma_mm(cov_used_inv, Rfast::colsums(cov_cross)))
   })
   weights <- Rfast::rowsums(all_weights) / n
   weights[weights < 0] <- 0
-  if(sum(weights) > 0) {
+  if (sum(weights) > 0) {
     weights <- weights / sum(weights)
   }
 
   est <- c(used_y %*% weights)
 
-  return(cbind(c(idx_select,NA), c(weights, est)))
+  return(cbind(c(idx_select, NA), c(weights, est)))
 }

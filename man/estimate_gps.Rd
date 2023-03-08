@@ -20,7 +20,8 @@ data sample and each column is a covariate.}
 A data.frame that includes:
 \itemize{
 \item a vector of estimated GPS at the observed exposure levels;
-\item a vector of estimated conditional means of exposure levels when the covariates are fixed
+\item a vector of estimated conditional means of exposure levels when the
+covariates are fixed
 at the observed values;
 \item estimated standard deviation of exposure levels
 \item a vector of observed exposure levels.
@@ -33,7 +34,7 @@ approach.
 \examples{
 \donttest{
 data <- generate_synthetic_data(sample_size = 200)
-GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                       w_all = data$treat,
                       sl_lib = c("SL.xgboost"),
                       dnorm_log = FALSE)

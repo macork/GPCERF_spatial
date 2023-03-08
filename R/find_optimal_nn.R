@@ -8,7 +8,7 @@
 #' @param w_obs A vector of the observed exposure levels.
 #' @param w A vector of exposure levels at which CERF will be estimated.
 #' @param y_obs A vector of observed outcomes
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -33,10 +33,10 @@
 #'
 #' @keywords internal
 #'
-find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
-                            hyperparams = expand.grid(seq(0.5,4.5,1),
-                                                      seq(0.5,4.5,1),
-                                                      seq(0.5,4.5,1)),
+find_optimal_nn <- function(w_obs, w, y_obs, gps_m, design_mt,
+                            hyperparams = expand.grid(seq(0.5, 4.5, 1),
+                                                      seq(0.5, 4.5, 1),
+                                                      seq(0.5, 4.5, 1)),
                             kernel_fn = function(x) exp(-x^2),
                             n_neighbor = 50, block_size = 2e3,
                             nthread = 1) {
@@ -44,7 +44,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
   logger::log_info("Started finding optimal values ... ")
   t_opt_1 <- proc.time()
 
-  coord_obs <- cbind(w_obs, GPS_m$gps$GPS)
+  coord_obs <- cbind(w_obs, gps_m$gps$gps)
 
   lfp <- get_options("logger_file_path")
 
@@ -55,7 +55,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
 
   # export variables and functions to cluster cores
   parallel::clusterExport(cl = cl,
-                          varlist = c("w", "GPS_m",
+                          varlist = c("w", "gps_m",
                                       "coord_obs", "y_obs", "kernel_fn",
                                       "n_neighbor", "block_size",
                                       "compute_posterior_m_nn",
@@ -75,17 +75,17 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
 
     all_res_list <- parallel::parLapply(cl,
                                         w,
-                                        function(wi){
+                                        function(wi) {
       # Estimate GPS for requested w.
-      GPS_w <- dnorm(wi,
-                     mean = GPS_m$gps$e_gps_pred,
-                     sd = GPS_m$gps$e_gps_std,
-                     log = GPS_m$used_params$dnorm_log)
+      gps_w <- dnorm(wi,
+                     mean = gps_m$gps$e_gps_pred,
+                     sd = gps_m$gps$e_gps_std,
+                     log = gps_m$used_params$dnorm_log)
 
       # Compute posterior mean
       res <- compute_posterior_m_nn(hyperparam = hyperparam,
                                     w = wi,
-                                    GPS_w = GPS_w,
+                                    gps_w = gps_w,
                                     obs_ord = coord_obs,
                                     y_obs_ord = y_obs,
                                     n_neighbor = n_neighbor,
@@ -96,17 +96,16 @@ find_optimal_nn <- function(w_obs, w, y_obs, GPS_m, design_mt,
       cb_obj <- compute_w_corr(w = coord_obs[idx, 1],
                                covariate = design_mt[idx, ],
                                weight = weights)
-      #cb = as.vector(cb_obj$absolute_corr)
-      cb = cb_obj$absolute_corr
+      cb <- cb_obj$absolute_corr
       list(cb = cb, est = res[nrow(res), 2])
     })
 
-    all_cb_tmp <- do.call(cbind, lapply(all_res_list, '[[', 'cb'))
-    all_est_tmp <- sapply(all_res_list, '[[', 'est')
+    all_cb_tmp <- do.call(cbind, lapply(all_res_list, "[[", "cb"))
+    all_est_tmp <- sapply(all_res_list, "[[", "est")
 
     #covariate specific balance, averaged over w
     list(cb = rowMeans(all_cb_tmp, na.rm = TRUE),
-         est = all_est_tmp )
+         est = all_est_tmp)
   })
 
   parallel::stopCluster(cl)

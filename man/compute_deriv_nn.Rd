@@ -7,7 +7,7 @@
 compute_deriv_nn(
   w,
   w_obs,
-  GPS_m,
+  gps_m,
   y_obs,
   hyperparam,
   n_neighbor,
@@ -21,7 +21,7 @@ compute_deriv_nn(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{An S3 gps object including:
+\item{gps_m}{An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS
 - Column 2: Prediction of exposure for covariate of each data sample
@@ -36,12 +36,15 @@ used_params:
 
 \item{n_neighbor}{The number of nearest neighbors on one side.}
 
-\item{block_size}{The number of samples included in a computation block. Mainly used to
-balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}
+\item{block_size}{The number of samples included in a computation block.
+Mainly used to balance the speed and memory requirement. Larger
+\code{block_size} is faster, but requires more memory.}
 
-\item{kernel_fn}{The covariance function. The input is the square of Euclidean distance.}
+\item{kernel_fn}{The covariance function. The input is the square of
+Euclidean distance.}
 
-\item{kernel_deriv_fn}{The partial derivative of the covariance function. The input is the square of Euclidean distance.}
+\item{kernel_deriv_fn}{The partial derivative of the covariance function.
+The input is the square of Euclidean distance.}
 }
 \value{
 A scalar of estimated derivative of CERF at \code{w} in nnGP.

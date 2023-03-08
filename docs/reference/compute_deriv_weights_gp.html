@@ -68,7 +68,7 @@ posterior mean of the first derivative of CERF at a given exposure level.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compute_deriv_weights_gp</span><span class="op">(</span></span>
 <span>  <span class="va">w</span>,</span>
 <span>  <span class="va">w_obs</span>,</span>
-<span>  <span class="va">GPS_m</span>,</span>
+<span>  <span class="va">gps_m</span>,</span>
 <span>  <span class="va">hyperparam</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  kernel_deriv_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">)</span></span>
@@ -85,7 +85,7 @@ posterior mean of the first derivative of CERF at a given exposure level.</p>
 <dd><p>A vector of observed exposure levels of all samples.</p></dd>
 
 
-<dt>GPS_m</dt>
+<dt>gps_m</dt>
 <dd><p>An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS

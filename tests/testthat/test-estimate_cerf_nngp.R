@@ -4,7 +4,7 @@ test_that("estimate_cerf_nngp works as expected!", {
   data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
   # Estimate GPS function
-  GPS_m <- estimate_gps(cov_mt = data[, -(1:2)],
+  gps_m <- estimate_gps(cov_mt = data[, -(1:2)],
                         w_all = data$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
@@ -13,7 +13,7 @@ test_that("estimate_cerf_nngp works as expected!", {
   w_all <- seq(0, 20, 0.5)
   cerf_nngp_obj <- estimate_cerf_nngp(data,
                                       w_all,
-                                      GPS_m,
+                                      gps_m,
                                       params = list(alpha = c(0.1, 0.2),
                                                     beta = 0.2,
                                                     g_sigma = 1,
@@ -23,7 +23,7 @@ test_that("estimate_cerf_nngp works as expected!", {
 
   expect_error(estimate_cerf_nngp(data,
                                   w_all,
-                                  GPS_m,
+                                  gps_m,
                                   params = list(alpha = c(0.1, 0.2),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -33,7 +33,7 @@ test_that("estimate_cerf_nngp works as expected!", {
 
   expect_error(estimate_cerf_nngp(data,
                                   w_all,
-                                  GPS_m,
+                                  gps_m,
                                   params = list(alpha = c(0.1, 0.2),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -52,7 +52,7 @@ test_that("estimate_cerf_nngp works as expected!", {
   data_na$cf2[3] <- NA
   expect_error(estimate_cerf_nngp(data_na,
                                   w_all,
-                                  GPS_m,
+                                  gps_m,
                                   params = list(alpha = c(0.1, 0.2),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -66,17 +66,17 @@ test_that("estimate_cerf_nngp works as expected!", {
   data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
   w_all <- seq(0, 20, 0.1)
   # Estimate GPS function
-  GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+  gps_m <- estimate_gps(cov_mt = data[, -(1:2)],
                         w_all = data$treat,
                         sl_lib = c("SL.xgboost"),
                         dnorm_log = FALSE)
 
-  GPS_mm <- GPS_m
-  GPS_mm$gps <- GPS_mm$gps[1:99, ]
+  gps_mm <- gps_m
+  gps_mm$gps <- gps_mm$gps[1:99, ]
 
   expect_error(estimate_cerf_nngp(data,
                                   w_all,
-                                  GPS_mm,
+                                  gps_mm,
                                   params = list(alpha = c(0.1, 0.2),
                                                 beta = 0.2,
                                                 g_sigma = 1,
@@ -85,12 +85,12 @@ test_that("estimate_cerf_nngp works as expected!", {
                                                 block_size = 1e4)))
 
   # Same size but different exposure values
-  GPS_mx <- GPS_m
-  GPS_mx$gps$w[4] <- GPS_mm$gps$w[4] + 2.5
+  gps_mx <- gps_m
+  gps_mx$gps$w[4] <- gps_mm$gps$w[4] + 2.5
 
   expect_error(estimate_cerf_nngp(data,
                                   w_all,
-                                  GPS_mx,
+                                  gps_mx,
                                   params = list(alpha = c(0.1, 0.2),
                                                 beta = 0.2,
                                                 g_sigma = 1,

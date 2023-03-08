@@ -69,17 +69,17 @@ autoplot.cerf_gp <- function(object, ...) {
   colnames(m_balance)[colnames(m_balance) == "time"] <- "Data"
 
   default_gg_title <- "Covariate balance"
-  default_gg_labs <- list(x = "Absolute weighted correlation", y= "Covariates")
+  default_gg_labs <- list(x = "Absolute weighted correlation", y = "Covariates")
 
   color_var <- c("#1E88E5", "#FFC107")
 
   g2 <- ggplot2::ggplot(data = m_balance,
-                       ggplot2::aes(x=.data$value,
-                                    y=.data$covariates,
-                                    color=.data$Data)) +
+                       ggplot2::aes(x = .data$value,
+                                    y = .data$covariates,
+                                    color = .data$Data)) +
     ggplot2::geom_point() +
     ggplot2::geom_path() +
-    ggplot2::scale_y_discrete(limit = factor(1:n_cov),labels = covar_label) +
+    ggplot2::scale_y_discrete(limit = factor(1:n_cov), labels = covar_label) +
     ggplot2::theme_bw() +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
     ggplot2::labs(x = default_gg_labs$x,
@@ -103,7 +103,8 @@ autoplot.cerf_gp <- function(object, ...) {
 #' @param ... Additional arguments passed to customize the plot.
 #'
 #' @return
-#' Returns a ggplot2 object, invisibly. This function is called for side effects.
+#' Returns a ggplot2 object, invisibly. This function is called for side
+#' effects.
 #'
 #' @export
 #'
@@ -152,11 +153,11 @@ autoplot.cerf_nngp <- function(object, ...) {
   g1 <- ggplot2::ggplot(tmp_data) +
         ggplot2::geom_ribbon(ggplot2::aes(.data$w_vals,
                                 y = .data$mean_vals,
-                                ymin = .data$mean_vals - 1.96*.data$sd_vals,
-                                ymax = .data$mean_vals + 1.96*.data$sd_vals),
+                                ymin = .data$mean_vals - 1.96 * .data$sd_vals,
+                                ymax = .data$mean_vals + 1.96 * .data$sd_vals),
                                 fill = "#FC4E07", alpha = 0.25) +
-        ggplot2::geom_line(ggplot2::aes(.data$w_vals,.data$mean_vals),
-                           color="#FC4E07",
+        ggplot2::geom_line(ggplot2::aes(.data$w_vals, .data$mean_vals),
+                           color = "#FC4E07",
                            size = 1) +
         ggplot2::theme_bw() +
         ggplot2::ggtitle("Estimated CERF (nngp)") +
@@ -186,17 +187,17 @@ autoplot.cerf_nngp <- function(object, ...) {
   colnames(m_balance)[colnames(m_balance) == "time"] <- "Data"
 
   default_gg_title <- "Covariate balance"
-  default_gg_labs <- list(x = "Absolute weighted correlation", y= "Covariates")
+  default_gg_labs <- list(x = "Absolute weighted correlation", y = "Covariates")
 
   color_var <- c("#1E88E5", "#FFC107")
 
   g2 <- ggplot2::ggplot(data = m_balance,
-                        ggplot2::aes(x=.data$value,
-                                     y=.data$covariates,
-                                     color=.data$Data)) +
+                        ggplot2::aes(x = .data$value,
+                                     y = .data$covariates,
+                                     color = .data$Data)) +
     ggplot2::geom_point() +
     ggplot2::geom_path() +
-    ggplot2::scale_y_discrete(limit = factor(1:n_cov),labels = covar_label) +
+    ggplot2::scale_y_discrete(limit = factor(1:n_cov), labels = covar_label) +
     ggplot2::theme_bw() +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
     ggplot2::labs(x = default_gg_labs$x,
@@ -220,7 +221,8 @@ autoplot.cerf_nngp <- function(object, ...) {
 #' @param ... Additional arguments passed to customize the plot.
 #'
 #' @return
-#' Returns a ggplot2 object, invisibly. This function is called for side effects.
+#' Returns a ggplot2 object, invisibly. This function is called for side
+#' effects.
 #'
 #' @export
 #'

@@ -16,7 +16,7 @@
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure levels at which the CERF is estimated.
-#' @param GPS_m An S3 gps object including:
+#' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
 #'     - Column 1: GPS
 #'     - Column 2: Prediction of exposure for covariate of each data sample
@@ -37,14 +37,12 @@
 #'
 #' @keywords internal
 #'
-compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
-                            kernel_fn = function(x) exp(-x ^ 2)){
+compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
+                            kernel_fn = function(x) exp(-x ^ 2)) {
 
   param <- unlist(hyperparam)
 
-  GPS <- GPS_m$gps$GPS
-  #e_gps_pred <- GPS_m$e_gps_pred
-  #e_gps_std <- GPS_m$e_gps_std
+  gps <- gps_m$gps$gps
 
   # mi(w)
   # param 1: alpha
@@ -64,8 +62,8 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   #TODO: Following the paper and alpha beta convention, first column should be
   # GPS scaled with alpha, and second column should be w scaled with beta.
 
-  scaled_obs <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
-  colnames(scaled_obs) <- c('w_sc_obs','gps_sc_obs')
+  scaled_obs <- cbind(w_obs * sqrt(1 / beta), gps * sqrt(1 / alpha))
+  colnames(scaled_obs) <- c("w_sc_obs", "gps_sc_obs")
 
 
   t_sigma_obs_1 <- proc.time()
@@ -81,15 +79,15 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
   # Estimate noise
-  if(!tuning) {
+  if (!tuning) {
     noise_est <- estimate_noise_gp(data = data,
                                    sigma_obs = sigma_obs,
                                    inv_sigma_obs = inv_sigma_obs)
     logger::log_debug("Estimated noise: {noise_est} ")
   }
 
-  logger::log_debug("Computing weight and covariate balance for each requested ",
-                   "exposure value ... ")
+  logger::log_debug("Computing weight and covariate balance for each ",
+                   "requested exposure value ... ")
 
   col_all_list <- lapply(w,
                          function(w_instance) {
@@ -100,22 +98,22 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
                                      scaled_obs = scaled_obs,
                                      hyperparam = hyperparam,
                                      inv_sigma_obs = inv_sigma_obs,
-                                     GPS_m = GPS_m,
+                                     gps_m = gps_m,
                                      est_sd = !tuning,
                                      kernel_fn = kernel_fn)
 
     weights_final <- weights_res$weight
     weights_final[weights_final < 0] <- 0
-    if(sum(weights_final) > 0) {
+    if (sum(weights_final) > 0) {
       weights_final <- weights_final / sum(weights_final)
     }
 
     # weigts.final = invers of paranthesis * kappa
     # est is the same as m in the paper.
 
-    if(!tuning) {
+    if (!tuning) {
       est <- data$Y %*% weights_final
-      pst_sd <- noise_est*weights_res$sd_scaled#noise_est * sqrt(weights_res$sd_scaled ^ 2 + 1)
+      pst_sd <- noise_est * weights_res$sd_scaled
       logger::log_trace("Posterior for w = {w_instance} ==> ",
                         "mu: {est}, var:{pst_sd}")
     } else {
@@ -135,12 +133,14 @@ compute_m_sigma <- function(hyperparam, data, w, GPS_m, tuning,
   logger::log_debug("Done with computing weight and covariate balance for ",
                    "each requested exposure value. ")
 
-  col_all <- sapply(col_all_list, function(x) {x$covariate_balance$absolute_corr})
-  est <- sapply(col_all_list, function(x) {x$est})
-  pst_sd <- sapply(col_all_list, function(x) {x$pst_sd})
+  col_all <- sapply(col_all_list, function(x) {
+    x$covariate_balance$absolute_corr
+    })
+  est <- sapply(col_all_list, function(x) x$est)
+  pst_sd <- sapply(col_all_list, function(x) x$pst_sd)
 
   # compute original covariate balance of data
-  if (!tuning){
+  if (!tuning) {
     cov_balance_obj_org <- compute_w_corr(w = data[[2]],
                                           covariate = data[, 3:ncol(data)],
                                           weight = rep(1, nrow(data)))

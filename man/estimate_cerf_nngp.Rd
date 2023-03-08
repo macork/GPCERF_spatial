@@ -8,7 +8,7 @@ Gaussian process}
 estimate_cerf_nngp(
   data,
   w,
-  GPS_m,
+  gps_m,
   params,
   kernel_fn = function(x) exp(-x^2),
   nthread = 1
@@ -24,7 +24,7 @@ estimate_cerf_nngp(
 
 \item{w}{A vector of exposure level to compute CERF.}
 
-\item{GPS_m}{An S3 gps object including:
+\item{gps_m}{An S3 gps object including:
 gps: A data.frame of GPS vectors.
 - Column 1: GPS
 - Column 2: Prediction of exposure for covariate of each data sample
@@ -74,7 +74,7 @@ match (the lowest covariate balance) for the provided set of hyperparameters.
 set.seed(19)
 data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 # Estimate GPS function
-GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
+gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
                       w_all = data$treat,
                       sl_lib = c("SL.xgboost"),
                       dnorm_log = FALSE)
@@ -82,7 +82,7 @@ GPS_m <- estimate_gps(cov_mt = data[,-(1:2)],
 w.all <- seq(0,20,2)
 cerf_nngp_obj <- estimate_cerf_nngp(data,
                                     w.all,
-                                    GPS_m,
+                                    gps_m,
                                     params = list(alpha = c(0.1),
                                                   beta = 0.2,
                                                   g_sigma = 1,
