@@ -18,7 +18,7 @@ test_that("compute_posterior_sd_nn works as expected.", {
   wi <- 0.4
 
   # Estimate GPS for the exposure level
-  GPS_w <- dnorm(wi,
+  gps_w <- dnorm(wi,
                  mean = gps_m$gps$e_gps_pred,
                  sd = gps_m$gps$e_gps_std,
                  log = gps_m$used_params$dnorm_log)
@@ -41,7 +41,7 @@ test_that("compute_posterior_sd_nn works as expected.", {
   # compute posterior standard deviation
   pst_sd <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                     w = wi,
-                                    GPS_w = GPS_w,
+                                    gps_w = gps_w,
                                     obs_ord = obs_ord,
                                     sigma2 = noise,
                                     n_neighbor = 20)

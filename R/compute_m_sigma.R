@@ -136,8 +136,8 @@ compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
   col_all <- sapply(col_all_list, function(x) {
     x$covariate_balance$absolute_corr
     })
-  est <- sapply(col_all_list, function(x) {x$est})
-  pst_sd <- sapply(col_all_list, function(x) {x$pst_sd})
+  est <- sapply(col_all_list, function(x) x$est)
+  pst_sd <- sapply(col_all_list, function(x) x$pst_sd)
 
   # compute original covariate balance of data
   if (!tuning) {

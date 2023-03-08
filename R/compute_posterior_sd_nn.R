@@ -7,7 +7,7 @@
 #'
 #' @param hyperparam The values of hyperparameters in the GP model.
 #' @param w  The exposure level for the point of interest on the CERF.
-#' @param GPS_w The GPS for all samples when their exposure levels are set
+#' @param gps_w The GPS for all samples when their exposure levels are set
 #' at \code{w}.
 #' @param obs_ord A matrix of two columns. The first column is the observed
 #' exposure levels of all samples; the second is the GPS at the observed
@@ -26,7 +26,7 @@
 #'
 compute_posterior_sd_nn <-  function(hyperparam,
                                      w,
-                                     GPS_w,
+                                     gps_w,
                                      obs_ord,
                                      sigma2,
                                      kernel_fn = function(x) exp(-x ^ 2),
@@ -38,7 +38,7 @@ compute_posterior_sd_nn <-  function(hyperparam,
   g_sigma <- hyperparam[[3]]
 
 
-  n <- length(GPS_w)
+  n <- length(gps_w)
   # Compute number of blocks
   n_block <- base::ceiling(n / block_size)
 
@@ -59,7 +59,7 @@ compute_posterior_sd_nn <-  function(hyperparam,
   cov_use_inv <- compute_inverse(sigma2 *
                    (g_sigma * kernel_fn(as.matrix(dist(obs_use))) +
                               diag(nrow(obs_use))))
-  obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(beta, alpha))))
+  obs_new <- t(t(cbind(w, gps_w)) * (1 / sqrt(c(beta, alpha))))
 
   id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
   #within variance

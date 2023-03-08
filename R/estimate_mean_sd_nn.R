@@ -77,14 +77,14 @@ estimate_mean_sd_nn <- function(hyperparam,
   all_res <- parallel::parSapply(cl,
                                  w,
                                  function(wi) {
-    GPS_w <- dnorm(wi,
-                  mean = gps_m$gps$e_gps_pred,
-                  sd = gps_m$gps$e_gps_std,
-                  log = gps_m$used_params$dnorm_log)
+    gps_w <- dnorm(wi,
+                   mean = gps_m$gps$e_gps_pred,
+                   sd = gps_m$gps$e_gps_std,
+                   log = gps_m$used_params$dnorm_log)
 
     val <- compute_posterior_sd_nn(hyperparam = hyperparam,
                                    w = wi,
-                                   GPS_w = GPS_w,
+                                   gps_w = gps_w,
                                    obs_ord = coord_obs,
                                    sigma2 = sigma2,
                                    kernel_fn = kernel_fn,

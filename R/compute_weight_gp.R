@@ -49,10 +49,8 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
   e_gps_std <- gps_m$gps$e_gps_std
   dnorm_log <- gps_m$used_params$dnorm_log
 
-  # TODO: The following section is repeated between this function
-  # and compute_sd_gp function.
-  GPS_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
-  scaled_w <- cbind(w * sqrt(1 / beta), GPS_w * sqrt(1 / alpha))
+  gps_w <- stats::dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
+  scaled_w <- cbind(w * sqrt(1 / beta), gps_w * sqrt(1 / alpha))
   colnames(scaled_w) <- c("w_sc_for_w", "gps_sc_for_w")
 
   # kappa

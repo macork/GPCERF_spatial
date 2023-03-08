@@ -9,7 +9,7 @@
 #' @param hyperparam A set of hyperparameters in the GP model.
 #' @param w  A scaler representing the exposure level for the point of interest
 #'  on the CERF.
-#' @param GPS_w The GPS for all samples when their exposure levels are set
+#' @param gps_w The GPS for all samples when their exposure levels are set
 #'  at \code{w}.
 #' @param obs_ord A matrix of two columns. First column is the observed
 #' exposure levels of all samples; second is the GPS at the observed exposure
@@ -34,7 +34,7 @@
 #'
 compute_posterior_m_nn <- function(hyperparam,
                                    w,
-                                   GPS_w,
+                                   gps_w,
                                    obs_ord,
                                    y_obs_ord,
                                    kernel_fn = function(x) exp(-x ^ 2),
@@ -47,7 +47,7 @@ compute_posterior_m_nn <- function(hyperparam,
   g_sigma <- hyperparam[[3]]
 
 
-  n <- base::length(GPS_w)
+  n <- base::length(gps_w)
 
   if (w >= obs_ord[nrow(obs_ord), 1]) {
     idx_select <- seq(nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
@@ -68,7 +68,7 @@ compute_posterior_m_nn <- function(hyperparam,
                                   + diag(nrow(used_obs)))
   used_y <- y_obs_ord[idx_select]
 
-  w_obs <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(beta, alpha))))
+  w_obs <- t(t(cbind(w, gps_w)) * (1 / sqrt(c(beta, alpha))))
   id_all <- split(1:n, ceiling(seq_along(1:n) / block_size))
 
   all_weights <- sapply(id_all, function(id_ind) {
