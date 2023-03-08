@@ -11,7 +11,7 @@ test_that("generate_synthetic_data works as expected!", {
 
   set.seed(256)
   mydata <- generate_synthetic_data(sample_size = 300, outcome_sd = 10,
-                                    gps_spec= 2, cova_spec=2)
+                                    gps_spec = 2, cova_spec = 2)
 
   expect_equal(class(mydata), "data.frame")
   expect_equal(nrow(mydata), 300L)
@@ -20,7 +20,7 @@ test_that("generate_synthetic_data works as expected!", {
 
   set.seed(811)
   mydata <- generate_synthetic_data(sample_size = 300, outcome_sd = 10,
-                                    gps_spec= 3, cova_spec=2)
+                                    gps_spec = 3, cova_spec = 2)
 
   expect_equal(class(mydata), "data.frame")
   expect_equal(nrow(mydata), 300L)
@@ -30,7 +30,7 @@ test_that("generate_synthetic_data works as expected!", {
 
   set.seed(769)
   mydata <- generate_synthetic_data(sample_size = 400, outcome_sd = 10,
-                                    gps_spec= 4, cova_spec=2)
+                                    gps_spec = 4, cova_spec = 2)
 
   expect_equal(class(mydata), "data.frame")
   expect_equal(nrow(mydata), 400L)
@@ -39,7 +39,7 @@ test_that("generate_synthetic_data works as expected!", {
 
   set.seed(769)
   mydata <- generate_synthetic_data(sample_size = 200, outcome_sd = 10,
-                                    gps_spec= 5, cova_spec=2)
+                                    gps_spec = 5, cova_spec = 2)
 
   expect_equal(class(mydata), "data.frame")
   expect_equal(nrow(mydata), 200L)
@@ -48,7 +48,7 @@ test_that("generate_synthetic_data works as expected!", {
 
   set.seed(987)
   mydata <- generate_synthetic_data(sample_size = 200, outcome_sd = 10,
-                                    gps_spec= 6, cova_spec=2)
+                                    gps_spec = 6, cova_spec = 2)
 
   expect_equal(class(mydata), "data.frame")
   expect_equal(nrow(mydata), 200L)

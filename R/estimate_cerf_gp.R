@@ -66,7 +66,7 @@
 #' }
 #'
 estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
-                             kernel_fn = function(x) exp(-x ^ 2)){
+                             kernel_fn = function(x) exp(-x ^ 2)) {
 
   # Log system info
   log_system_info()
@@ -78,7 +78,7 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
   fcall <- match.call()
 
   # Double-check input parameters ----------------------------------------------
-  if (any(is.na(data))){
+  if (any(is.na(data))) {
     stop("At this time, data with missing values is not supported.")
   }
 
@@ -92,7 +92,7 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
                 "Current format: ", class(gps_m)[1]))
   }
 
-  if (nrow(data)!=length(gps_m$gps$w)){
+  if (nrow(data) != length(gps_m$gps$w)) {
     stop(paste0("Provided Data and GPS object should have the same size. ",
                 "Current sizes: ", nrow(data), " vs ", length(gps_m$gps$w)))
   }
@@ -143,14 +143,14 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
 
   # Compute m, "confidence interval", and covariate balance for provided
   # hyperparameters. -----------------------------------------------------------
-  if(nthread > 1 && nrow(tune_params_subset) > 1) {
+  if (nthread > 1 && nrow(tune_params_subset) > 1) {
 
     logger::log_trace("Starting a cluster with {nthread} threads ...")
 
     lfp <- get_options("logger_file_path")
 
     # make a cluster
-    cl <- parallel::makeCluster(nthread, type="PSOCK",
+    cl <- parallel::makeCluster(nthread, type = "PSOCK",
                                 outfile = lfp)
 
     # export variables and functions to cluster cores
@@ -159,7 +159,7 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
                                         "tune_params_subset",
                                         "kernel_fn",
                                         "compute_m_sigma"),
-                            envir=environment())
+                            envir = environment())
 
     tune_res <- parallel::parApply(cl, tune_params_subset, 1,
                                    function(x) {

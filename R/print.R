@@ -58,7 +58,7 @@ summary.cerf_gp <- function(object, ...) {
 #'
 #' @export
 #'
-print.cerf_nngp <- function(x, ...){
+print.cerf_nngp <- function(x, ...) {
   x <- unclass(x)
 
   cat(" GPCERF Nearest Neighbor Gaussian Process exposure rate function object\n")

@@ -63,15 +63,15 @@ compute_deriv_nn <- function(w,
   y_obs_ord <- y_obs[order(obs_raw[, 1])]
 
 
-  if(w >= obs_ord[nrow(obs_ord), 1]){
-    idx_all <- seq( nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
-  }else{
+  if (w >= obs_ord[nrow(obs_ord), 1]) {
+    idx_all <- seq(nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
+  } else {
     idx_anchor <- which.max(obs_ord[, 1] >= w)
     idx_start <- max(1, idx_anchor - n_neighbor)
     idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor)
-    if(idx_end == nrow(obs_ord)){
+    if (idx_end == nrow(obs_ord)) {
       idx_all <- seq(idx_end - n_neighbor * 2 + 1, idx_end, 1)
-    }else{
+    } else {
       idx_all <- seq(idx_start, idx_start + n_neighbor * 2 - 1, 1)
     }
   }
@@ -79,12 +79,12 @@ compute_deriv_nn <- function(w,
   obs_use <- t(t(obs_ord[idx_all, ]) * (1 / sqrt(c(beta, alpha))))
   y_use <- y_obs_ord[idx_all]
 
-  obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(beta, alpha))))
-  id_all <- split(1:n, ceiling(seq_along(1:n)/n_block))
-  Sigma_obs <- g_sigma*kernel_fn(as.matrix(dist(obs_use))^2) + diag(nrow(obs_use))
+  obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(beta, alpha))))
+  id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
+  Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) + diag(nrow(obs_use))
   Sigma_obs_inv <- chol2inv(chol(Sigma_obs))
 
-  all_weights <- sapply(id_all, function(id_ind){
+  all_weights <- sapply(id_all, function(id_ind) {
 
     # TODO: change index to column name.
     cross_dist <- spatstat.geom::crossdist(obs_new[id_ind, 1],
@@ -92,14 +92,14 @@ compute_deriv_nn <- function(w,
                                            obs_use[, 1], obs_use[, 2])
 
 
-    Sigma_cross <- g_sigma*(1/beta)*(2*outer(rep(w, length(id_ind))*(1/beta),
-                                              obs_use[, 1], "-"))*
-                                              kernel_deriv_fn(cross_dist^2)
+    Sigma_cross <- g_sigma * (1 / beta) * (2 * outer(rep(w, length(id_ind)) * (1 / beta),
+                                               obs_use[, 1], "-")) *
+                                               kernel_deriv_fn(cross_dist ^ 2)
     #mean
-    wght <- Sigma_cross%*%Sigma_obs_inv
+    wght <- Sigma_cross %*% Sigma_obs_inv
     colSums(wght)
   })
-  weights <- rowSums(all_weights)/n
+  weights <- rowSums(all_weights) / n
 
-  return(weights%*%y_use)
+  return(weights %*% y_use)
 }

@@ -75,7 +75,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, gps_m, design_mt,
 
     all_res_list <- parallel::parLapply(cl,
                                         w,
-                                        function(wi){
+                                        function(wi) {
       # Estimate GPS for requested w.
       GPS_w <- dnorm(wi,
                      mean = gps_m$gps$e_gps_pred,
@@ -106,7 +106,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, gps_m, design_mt,
 
     #covariate specific balance, averaged over w
     list(cb = rowMeans(all_cb_tmp, na.rm = TRUE),
-         est = all_est_tmp )
+         est = all_est_tmp)
   })
 
   parallel::stopCluster(cl)

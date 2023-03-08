@@ -38,7 +38,7 @@
 #' @keywords internal
 #'
 compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
-                            kernel_fn = function(x) exp(-x ^ 2)){
+                            kernel_fn = function(x) exp(-x ^ 2)) {
 
   param <- unlist(hyperparam)
 
@@ -81,7 +81,7 @@ compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
   # Estimate noise
-  if(!tuning) {
+  if (!tuning) {
     noise_est <- estimate_noise_gp(data = data,
                                    sigma_obs = sigma_obs,
                                    inv_sigma_obs = inv_sigma_obs)
@@ -106,16 +106,16 @@ compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
 
     weights_final <- weights_res$weight
     weights_final[weights_final < 0] <- 0
-    if(sum(weights_final) > 0) {
+    if (sum(weights_final) > 0) {
       weights_final <- weights_final / sum(weights_final)
     }
 
     # weigts.final = invers of paranthesis * kappa
     # est is the same as m in the paper.
 
-    if(!tuning) {
+    if (!tuning) {
       est <- data$Y %*% weights_final
-      pst_sd <- noise_est*weights_res$sd_scaled#noise_est * sqrt(weights_res$sd_scaled ^ 2 + 1)
+      pst_sd <- noise_est * weights_res$sd_scaled#noise_est * sqrt(weights_res$sd_scaled ^ 2 + 1)
       logger::log_trace("Posterior for w = {w_instance} ==> ",
                         "mu: {est}, var:{pst_sd}")
     } else {
@@ -140,7 +140,7 @@ compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
   pst_sd <- sapply(col_all_list, function(x) {x$pst_sd})
 
   # compute original covariate balance of data
-  if (!tuning){
+  if (!tuning) {
     cov_balance_obj_org <- compute_w_corr(w = data[[2]],
                                           covariate = data[, 3:ncol(data)],
                                           weight = rep(1, nrow(data)))

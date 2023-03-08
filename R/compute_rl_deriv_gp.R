@@ -48,7 +48,7 @@ compute_rl_deriv_gp <- function(w,
                                 gps_m,
                                 hyperparam,
                                 kernel_fn = function(x) exp(-x),
-                                kernel_deriv_fn = function(x) -exp(-x)){
+                                kernel_deriv_fn = function(x) -exp(-x)) {
 
 
 

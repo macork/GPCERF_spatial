@@ -52,7 +52,7 @@ compute_sd_gp <- function(w,
   scaled_w <- cbind(w / sqrt(1 / beta), GPS_w / sqrt(1 / alpha))
 
   scaled_combined <- rbind(scaled_w, scaled_obs)
-  Sigma_all <- (g_sigma*kernel_fn(as.matrix(stats::dist(scaled_combined))) +
+  Sigma_all <- (g_sigma * kernel_fn(as.matrix(stats::dist(scaled_combined))) +
                 diag(n * 2)) * sigma ^ 2
   Sigma_within_w <- Sigma_all[1:n, 1:n]
   Sigma_cross <- Sigma_all[1:n, -(1:n)]

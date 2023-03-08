@@ -83,7 +83,7 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
   logger::log_info("Working on estimating cerf using nngp approach ...")
 
   # Double-check input parameters ----------------------------------------------
-  if (any(is.na(data))){
+  if (any(is.na(data))) {
     stop("At this time, data with missing values is not supported.")
   }
 
@@ -105,7 +105,7 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
                 "Current format: ", class(gps_m)[1]))
   }
 
-  if (nrow(data)!=length(gps_m$gps$w)){
+  if (nrow(data) != length(gps_m$gps$w)) {
     stop(paste0("Provided Data and GPS object should have the same size.",
                 "Current sizes: ", nrow(data), " vs ", length(gps_m$gps$w)))
   }
@@ -117,7 +117,7 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
   data <- data[order(data[, c(2)]), ]
   gps_m$gps <- gps_m$gps[order(gps_m$gps$w), ]
 
-  if (!all.equal(data[, c(2)], gps_m$gps$w, tolerance = 0.00001)){
+  if (!all.equal(data[, c(2)], gps_m$gps$w, tolerance = 0.00001)) {
     stop(paste0("Provided GPS object and data object have different",
                 " exposure values."))
   }
@@ -138,9 +138,9 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
 
   # Choose subset of tuning parameters based on tuning approach ----------------
 
-  if (getElement(params, "tune_app") == "all"){
+  if (getElement(params, "tune_app") == "all") {
     tune_params_subset <- tune_params
-  } else if (getElement(params, "tune_app") == "at_random"){
+  } else if (getElement(params, "tune_app") == "at_random") {
     stop("This approach is not implemented.")
   } else {
     stop(paste("The provided tune_app approach, ",

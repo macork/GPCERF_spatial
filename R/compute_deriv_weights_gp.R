@@ -30,7 +30,7 @@ compute_deriv_weights_gp <- function(w,
                                      gps_m,
                                      hyperparam,
                                      kernel_fn = function(x) exp(-x),
-                                     kernel_deriv_fn = function(x) -exp(-x)){
+                                     kernel_deriv_fn = function(x) -exp(-x)) {
 
 
   alpha <- hyperparam[[1]]

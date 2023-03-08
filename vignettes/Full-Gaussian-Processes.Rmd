@@ -48,7 +48,7 @@ tru_R <- function(w, sim_data) {
   }))
 }
 
-plot_fun <- function(object, ...){
+plot_fun <- function(object, ...) {
     # extract data
   tmp_data <- data.frame(w_vals = object$posterior$w,
                          mean_vals = object$posterior$mean,
@@ -103,7 +103,7 @@ gp_res_normal <- estimate_cerf_gp(data_sim_normal,
                                   w_all,
                                   gps_m_normal,
                                   params = list(alpha = c(0.1),
-                                                beta=0.2,
+                                                beta = 0.2,
                                                 g_sigma = 1,
                                                 tune_app = "all"),
                                   nthread = 1)
@@ -121,7 +121,7 @@ gp_res_t <- estimate_cerf_gp(data_sim_t,
                              w_all,
                              gps_m_t,
                              params = list(alpha = c(0.1),
-                                           beta=0.2,
+                                           beta = 0.2,
                                            g_sigma = 1,
                                            tune_app = "all"),
                              nthread = 1)

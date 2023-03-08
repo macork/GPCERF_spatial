@@ -40,7 +40,7 @@ estimate_mean_sd_nn <- function(hyperparam,
                                 kernel_fn = function(x) exp(-x ^ 2),
                                 n_neighbor = 50,
                                 block_size = 2e3,
-                                nthread = 1){
+                                nthread = 1) {
 
 
   t_est_m_sd_1 <- proc.time()
@@ -49,21 +49,21 @@ estimate_mean_sd_nn <- function(hyperparam,
 
   coord_obs <- cbind(w_obs, gps_m$gps$GPS)
 
-  if (any(is.na(y_obs))){
+  if (any(is.na(y_obs))) {
     stop("y_obs has missing value(s).")
   }
 
   lfp <- get_options("logger_file_path")
 
   # make a cluster
-  cl <- parallel::makeCluster(nthread, type="PSOCK",
-                              outfile= lfp)
+  cl <- parallel::makeCluster(nthread, type = "PSOCK",
+                              outfile = lfp)
 
   # install the package on all nodes.
   parallel::clusterEvalQ(cl, {library("GPCERF")})
 
   # export variables and functions to cluster cores
-  parallel::clusterExport(cl=cl,
+  parallel::clusterExport(cl = cl,
                           varlist = c("w", "gps_m", "hyperparam",
                                       "coord_obs", "y_obs",
                                       "sigma2", "kernel_fn",
@@ -71,12 +71,12 @@ estimate_mean_sd_nn <- function(hyperparam,
                                       "compute_posterior_m_nn",
                                       "compute_posterior_sd_nn",
                                       "compute_inverse", "calc_cross"),
-                          envir=environment())
+                          envir = environment())
 
 
   all_res <- parallel::parSapply(cl,
                                  w,
-                                 function(wi){
+                                 function(wi) {
     GPS_w <- dnorm(wi,
                   mean = gps_m$gps$e_gps_pred,
                   sd = gps_m$gps$e_gps_std,

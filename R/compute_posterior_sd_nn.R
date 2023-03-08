@@ -43,7 +43,7 @@ compute_posterior_sd_nn <-  function(hyperparam,
   n_block <- base::ceiling(n / block_size)
 
   if (w >= obs_ord[nrow(obs_ord), 1]) {
-    idx_all <- seq( nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
+    idx_all <- seq(nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
   } else {
     idx_anchor <- which.max(obs_ord[, 1] >= w)
     idx_start <- max(1, idx_anchor - n_neighbor)
@@ -63,15 +63,15 @@ compute_posterior_sd_nn <-  function(hyperparam,
 
   id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
   #within variance
-  sigma_sq1 <- (sum(sapply(id_all, function(id_ind){
+  sigma_sq1 <- (sum(sapply(id_all, function(id_ind) {
     dist_block <- abs(Rfast::Outer(obs_new[id_ind, 2], obs_new[, 2], "-"))
-    Sigma_block <- sigma2*g_sigma*kernel_fn(dist_block)
+    Sigma_block <- sigma2 * g_sigma * kernel_fn(dist_block)
     sum(Sigma_block)
-  })) + sigma2*n)/n^2
+  })) + sigma2 * n) / n ^ 2
 
   #cross variance
   #also use block to free up memories
-  cross_cov_colS <- Rfast::rowsums(sapply(id_all, function(id_ind){
+  cross_cov_colS <- Rfast::rowsums(sapply(id_all, function(id_ind) {
     cross_cov <- sigma2 * g_sigma *
                   kernel_fn(spatstat.geom::crossdist(obs_new[id_ind, 1],
                                                      obs_new[id_ind, 2],

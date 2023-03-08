@@ -18,7 +18,7 @@ compute_inverse <- function(mtrx) {
                 "Current format: ", class(mtrx)[1]))
   }
 
-  if (nrow(mtrx) != ncol(mtrx)){
+  if (nrow(mtrx) != ncol(mtrx)) {
     stop(paste0("The input mtrx should be a square matrix. ",
                 "Current dimension: nrow: ",
                 nrow(mtrx), ", ncol: ", ncol(mtrx)))

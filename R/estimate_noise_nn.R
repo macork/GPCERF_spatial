@@ -39,13 +39,13 @@ estimate_noise_nn <- function(hyperparam,
   y_ord <- y_obs[order(w_obs)]
 
   lfp <- get_options("logger_file_path")
-  cl <- parallel::makeCluster(nthread, type="PSOCK",
-                              outfile= lfp)
-  parallel::clusterExport(cl=cl,
+  cl <- parallel::makeCluster(nthread, type = "PSOCK",
+                              outfile = lfp)
+  parallel::clusterExport(cl = cl,
                           varlist = c("w_obs", "obs_ord", "y_ord",
                                       "n_neighbor", "kernel_fn", "g_sigma",
                                       "arma_mm"),
-                          envir=environment())
+                          envir = environment())
 
   all_residuals <- parallel::parSapply(cl,
                                        1:length(w_obs),

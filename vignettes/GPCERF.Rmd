@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r, eval=FALSE}
 library("devtools")
-install_github("NSAPH-Software/GPCERF", ref="main")
+install_github("NSAPH-Software/GPCERF", ref = "main")
 ```
 ```{r}
 library("GPCERF")
