@@ -217,7 +217,7 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
 
   # Hyper parameters ------------------------
   optimal_params <- opt_param
-  names(optimal_params) <- c('alpha', 'beta', 'g_sigma')
+  names(optimal_params) <- c("alpha", "beta", "g_sigma")
   result$optimal_params <- optimal_params
   result$num_of_trial <- nrow(tune_params_subset)
 

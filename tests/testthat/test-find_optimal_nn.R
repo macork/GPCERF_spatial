@@ -15,7 +15,7 @@ test_that("find_optimal_nn works as expected!", {
 
   # compute posterior mean and standard deviation for vector of w.
   w <- seq(0, 20, 2)
-  design_mt <- model.matrix(~ . -1, data = data[, 3:ncol(data)])
+  design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
   design_mt <- as.data.frame(design_mt)
 
   hyperparam_grid <- expand.grid(seq(0.5, 2.5, 1),
@@ -31,7 +31,7 @@ test_that("find_optimal_nn works as expected!", {
                                 n_neighbor = 100,
                                 block_size = 2e3)
 
-  all_cb_res <- sapply(optimal_cb, '[[', 'cb')
+  all_cb_res <- sapply(optimal_cb, "[[", "cb")
   opt_idx_nn <- order(colMeans(abs(all_cb_res)))[1]
   nn_opt_param <- unlist(hyperparam_grid[opt_idx_nn, ])
 

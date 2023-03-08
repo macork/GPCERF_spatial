@@ -101,8 +101,8 @@ find_optimal_nn <- function(w_obs, w, y_obs, gps_m, design_mt,
       list(cb = cb, est = res[nrow(res), 2])
     })
 
-    all_cb_tmp <- do.call(cbind, lapply(all_res_list, '[[', 'cb'))
-    all_est_tmp <- sapply(all_res_list, '[[', 'est')
+    all_cb_tmp <- do.call(cbind, lapply(all_res_list, "[[", "cb"))
+    all_est_tmp <- sapply(all_res_list, "[[", "est")
 
     #covariate specific balance, averaged over w
     list(cb = rowMeans(all_cb_tmp, na.rm = TRUE),

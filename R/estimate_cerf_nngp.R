@@ -165,7 +165,7 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
                                     nthread = nthread)
 
   # Extract the optimum hyperparameters
-  all_cb_res <- sapply(optimal_cb_res, '[[', 'cb')
+  all_cb_res <- sapply(optimal_cb_res, "[[", "cb")
   opt_idx_nn <- order(colMeans(abs(all_cb_res)))[1]
   posterior_mean <- optimal_cb_res[[opt_idx_nn]]$est
   nn_opt_param <- unlist(tune_params_subset[opt_idx_nn, ])
@@ -210,7 +210,7 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
 
   # Hyper parameterss -------------------------
   optimal_params <- nn_opt_param
-  names(optimal_params) <- c('alpha', 'beta', 'g_sigma')
+  names(optimal_params) <- c("alpha", "beta", "g_sigma")
   result$optimal_params <- optimal_params
   result$num_of_trial <- nrow(tune_params_subset)
 
