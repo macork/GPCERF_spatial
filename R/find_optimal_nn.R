@@ -34,9 +34,9 @@
 #' @keywords internal
 #'
 find_optimal_nn <- function(w_obs, w, y_obs, gps_m, design_mt,
-                            hyperparams = expand.grid(seq(0.5,4.5,1),
-                                                      seq(0.5,4.5,1),
-                                                      seq(0.5,4.5,1)),
+                            hyperparams = expand.grid(seq(0.5, 4.5, 1),
+                                                      seq(0.5, 4.5, 1),
+                                                      seq(0.5, 4.5, 1)),
                             kernel_fn = function(x) exp(-x^2),
                             n_neighbor = 50, block_size = 2e3,
                             nthread = 1) {

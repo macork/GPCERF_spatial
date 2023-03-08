@@ -47,10 +47,10 @@ compute_deriv_weights_gp <- function(w,
   n <- length(GPS_w)
 
   obs_use <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
-  colnames(obs_use) <- c('w_sc_obs','gps_sc_obs')
+  colnames(obs_use) <- c('w_sc_obs', 'gps_sc_obs')
 
   obs_new <- cbind(w * sqrt(1 / beta), GPS_w * sqrt(1 / alpha))
-  colnames(obs_new) <- c('w_sc_for_w','gps_sc_for_w')
+  colnames(obs_new) <- c('w_sc_for_w', 'gps_sc_for_w')
 
   Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
                diag(nrow(obs_use))

@@ -53,7 +53,7 @@ compute_w_corr <- function(w,
   absolute_corr_n <- absolute_corr_f <- NULL
 
   if (length(col_n) > 0) {
-    absolute_corr_n <- sapply(col_n,function(i){
+    absolute_corr_n <- sapply(col_n, function(i){
       abs(wCorr::weightedCorr(x = w,
                               y = covariate[, i],
                               weights = weight,
@@ -71,7 +71,7 @@ compute_w_corr <- function(w,
 
     absolute_corr_f <- c()
     for (item in col_f){
-      if (length(unique(covariate[,item])) == 1 ){
+      if (length(unique(covariate[, item])) == 1 ){
         absolute_corr_f <- c(absolute_corr_f, NA)
       } else {
         absolute_corr_f <- c(absolute_corr_f, internal_fun(item))

@@ -26,7 +26,7 @@ generate_synthetic_data <- function(sample_size = 1000, outcome_sd = 10,
                                    gps_spec = 1, cova_spec = 1) {
 
   # pre-treatment variables (confounders)
-  cf <- MASS::mvrnorm(n = sample_size, mu = rep(0,4), Sigma = diag(4))
+  cf <- MASS::mvrnorm(n = sample_size, mu = rep(0, 4), Sigma = diag(4))
   cf5 <- sample(c((-2):2), sample_size, replace = TRUE)
   cf6 <- stats::runif(sample_size, min=-3, max=3)
 
@@ -43,7 +43,7 @@ generate_synthetic_data <- function(sample_size = 1000, outcome_sd = 10,
                      0.1 * cf[, 3] +
                      0.2 * cf[, 4] +
                      0.1 * cf5 + 0.1 * cf6) * 15 + 22 +
-                     stats::rt(sample_size,2)
+                     stats::rt(sample_size, 2)
     treat[which(treat < (-5))] <- (-5)
     treat[which(treat > (25))] <- (25)
   }else if (gps_spec == 3) {
@@ -87,7 +87,7 @@ generate_synthetic_data <- function(sample_size = 1000, outcome_sd = 10,
 
   #produce outcome Y
   Y = sapply(1:sample_size, function(i) {
-    -10 - 5 * sum(c(2, 2, 3, -1) * cf[i,]) - 5 * 2 * cf5[i] - 5 * 2 * cf6[i] -
+    -10 - 5 * sum(c(2, 2, 3, -1) * cf[i, ]) - 5 * 2 * cf5[i] - 5 * 2 * cf6[i] -
       treat[i] * (0.1 - 0.1 * cf[i, 1] + 0.1 * cf[i, 4] + 0.1 * cf5[i] +
                   0.1 * cf[i, 3] ^ 2) * 5 + 0.13 ^ 2 * treat[i] ^ 3 +
                   stats::rnorm(1, mean=0, sd=outcome_sd)

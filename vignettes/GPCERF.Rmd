@@ -37,7 +37,7 @@ sample, and each column is a covariate.
 
 ```{r}
 mydata <- generate_synthetic_data()
-gps_m <- estimate_gps(cov_mt = mydata[,c("cf1", "cf2", "cf3", "cf4",
+gps_m <- estimate_gps(cov_mt = mydata[, c("cf1", "cf2", "cf3", "cf4",
                                          "cf5", "cf6")],
                   w_all = mydata$treat,
                   sl_lib = c("SL.xgboost"),
@@ -74,7 +74,7 @@ set.seed(129)
 sim_data <- generate_synthetic_data(sample_size = 400, gps_spec = 3)
 
 # Estimate GPS function
-gps_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
+gps_m <- estimate_gps(cov_mt = sim_data[, -(1:2)],
                       w_all = sim_data$treat,
                       sl_lib = c("SL.xgboost"),
                       dnorm_log = TRUE)
@@ -130,7 +130,7 @@ set.seed(19)
 sim_data <- generate_synthetic_data(sample_size = 1000, gps_spec = 3)
 
 # Estimate GPS function
-gps_m <- estimate_gps(cov_mt = sim_data[,-(1:2)],
+gps_m <- estimate_gps(cov_mt = sim_data[, -(1:2)],
                       w_all = sim_data$treat,
                       sl_lib = c("SL.xgboost"),
                       dnorm_log = TRUE)

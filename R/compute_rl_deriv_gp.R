@@ -54,7 +54,7 @@ compute_rl_deriv_gp <- function(w,
 
   # left side weights
   gps_m_left <- gps_m
-  gps_m_left$gps <- gps_m_left$gps[w_obs < w,]
+  gps_m_left$gps <- gps_m_left$gps[w_obs < w, ]
   left_weights <-  compute_deriv_weights_gp(w = w,
                                             w_obs = w_obs[w_obs < w],
                                             gps_m = gps_m_left,
@@ -64,7 +64,7 @@ compute_rl_deriv_gp <- function(w,
 
   # right side weights
   gps_m_right <- gps_m
-  gps_m_right$gps <- gps_m_right$gps[w_obs >= w,]
+  gps_m_right$gps <- gps_m_right$gps[w_obs >= w, ]
   right_weights <-  compute_deriv_weights_gp(w = w,
                                              w_obs = w_obs[w_obs >= w],
                                              gps_m = gps_m_right,

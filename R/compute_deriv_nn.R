@@ -59,14 +59,14 @@ compute_deriv_nn <- function(w,
   n <- length(GPS_w)
   n_block <- ceiling(n / block_size)
   obs_raw <- cbind(w_obs, GPS)
-  obs_ord <- obs_raw[order(obs_raw[,1]),]
-  y_obs_ord <- y_obs[order(obs_raw[,1])]
+  obs_ord <- obs_raw[order(obs_raw[, 1]), ]
+  y_obs_ord <- y_obs[order(obs_raw[, 1])]
 
 
-  if(w >= obs_ord[nrow(obs_ord),1]){
+  if(w >= obs_ord[nrow(obs_ord), 1]){
     idx_all <- seq( nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
   }else{
-    idx_anchor <- which.max(obs_ord[,1] >= w)
+    idx_anchor <- which.max(obs_ord[, 1] >= w)
     idx_start <- max(1, idx_anchor - n_neighbor)
     idx_end <- min(nrow(obs_ord), idx_anchor + n_neighbor)
     if(idx_end == nrow(obs_ord)){
@@ -76,7 +76,7 @@ compute_deriv_nn <- function(w,
     }
   }
 
-  obs_use <- t(t(obs_ord[idx_all,]) * (1 / sqrt(c(beta, alpha))))
+  obs_use <- t(t(obs_ord[idx_all, ]) * (1 / sqrt(c(beta, alpha))))
   y_use <- y_obs_ord[idx_all]
 
   obs_new <- t(t(cbind(w, GPS_w))*(1/sqrt(c(beta, alpha))))
@@ -87,12 +87,13 @@ compute_deriv_nn <- function(w,
   all_weights <- sapply(id_all, function(id_ind){
 
     # TODO: change index to column name.
-    cross_dist <- spatstat.geom::crossdist(obs_new[id_ind,1], obs_new[id_ind,2],
-                                          obs_use[,1], obs_use[,2])
+    cross_dist <- spatstat.geom::crossdist(obs_new[id_ind, 1],
+                                           obs_new[id_ind, 2],
+                                           obs_use[, 1], obs_use[, 2])
 
 
-    Sigma_cross <- g_sigma*(1/beta)*(2*outer(rep(w,length(id_ind))*(1/beta),
-                                              obs_use[,1], "-"))*
+    Sigma_cross <- g_sigma*(1/beta)*(2*outer(rep(w, length(id_ind))*(1/beta),
+                                              obs_use[, 1], "-"))*
                                               kernel_deriv_fn(cross_dist^2)
     #mean
     wght <- Sigma_cross%*%Sigma_obs_inv

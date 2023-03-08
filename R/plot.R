@@ -79,7 +79,7 @@ autoplot.cerf_gp <- function(object, ...) {
                                     color=.data$Data)) +
     ggplot2::geom_point() +
     ggplot2::geom_path() +
-    ggplot2::scale_y_discrete(limit = factor(1:n_cov),labels = covar_label) +
+    ggplot2::scale_y_discrete(limit = factor(1:n_cov), labels = covar_label) +
     ggplot2::theme_bw() +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
     ggplot2::labs(x = default_gg_labs$x,
@@ -155,7 +155,7 @@ autoplot.cerf_nngp <- function(object, ...) {
                                 ymin = .data$mean_vals - 1.96*.data$sd_vals,
                                 ymax = .data$mean_vals + 1.96*.data$sd_vals),
                                 fill = "#FC4E07", alpha = 0.25) +
-        ggplot2::geom_line(ggplot2::aes(.data$w_vals,.data$mean_vals),
+        ggplot2::geom_line(ggplot2::aes(.data$w_vals, .data$mean_vals),
                            color="#FC4E07",
                            size = 1) +
         ggplot2::theme_bw() +
@@ -196,7 +196,7 @@ autoplot.cerf_nngp <- function(object, ...) {
                                      color=.data$Data)) +
     ggplot2::geom_point() +
     ggplot2::geom_path() +
-    ggplot2::scale_y_discrete(limit = factor(1:n_cov),labels = covar_label) +
+    ggplot2::scale_y_discrete(limit = factor(1:n_cov), labels = covar_label) +
     ggplot2::theme_bw() +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
     ggplot2::labs(x = default_gg_labs$x,

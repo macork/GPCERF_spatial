@@ -90,7 +90,7 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
   check_params <- function(my_param, params) {
     for (item in my_param) {
       if (!is.element(c(item), names(params))) {
-        stop(paste0("The required parameter, ", item,", is not provided. ",
+        stop(paste0("The required parameter, ", item, ", is not provided. ",
                     "Current parameters: ", paste(unlist(names(params)),
                                                   collapse = ", ")))
       }

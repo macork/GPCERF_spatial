@@ -9,7 +9,7 @@ test_that("compute_inverse works as expected.", {
   inv_sigma_obs <- compute_inverse(D)
 
   expect_true(is.matrix(inv_sigma_obs))
-  expect_equal(inv_sigma_obs[1,1], 1589.723863, tolerance = 0.00001)
+  expect_equal(inv_sigma_obs[1, 1], 1589.723863, tolerance = 0.00001)
   expect_equal(nrow(inv_sigma_obs), 10L)
   expect_equal(ncol(inv_sigma_obs), 10L)
 

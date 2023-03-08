@@ -64,7 +64,7 @@ compute_rl_deriv_nn <-  function(w,
                                  ) {
 
   gps_m_left <- gps_m
-  gps_m_left$gps <- gps_m_left$gps[w_obs < w,]
+  gps_m_left$gps <- gps_m_left$gps[w_obs < w, ]
   left_deriv <- compute_deriv_nn(w,
                                  w_obs[w_obs < w],
                                  gps_m_left,
@@ -77,7 +77,7 @@ compute_rl_deriv_nn <-  function(w,
 
 
   gps_m_right <- gps_m
-  gps_m_right$gps <- gps_m_right$gps[w_obs >= w,]
+  gps_m_right$gps <- gps_m_right$gps[w_obs >= w, ]
   right_deriv <- compute_deriv_nn(w,
                                   w_obs[w_obs >= w],
                                   gps_m_right,

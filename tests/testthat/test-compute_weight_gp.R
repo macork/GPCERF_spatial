@@ -31,7 +31,7 @@ test_that("multiplication works", {
 
   # Compute scaled observation data and inverse of covariate matrix.
   scaled_obs = cbind(obs_exposure * sqrt(1 / beta), GPS * sqrt(1 / alpha))
-  colnames(scaled_obs) <- c('w_sc_obs','gps_sc_obs')
+  colnames(scaled_obs) <- c('w_sc_obs', 'gps_sc_obs')
 
   sigma_obs = g_sigma * kernel_fn(as.matrix(dist(scaled_obs))) +
                         diag(nrow(scaled_obs))
