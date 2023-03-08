@@ -44,7 +44,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, gps_m, design_mt,
   logger::log_info("Started finding optimal values ... ")
   t_opt_1 <- proc.time()
 
-  coord_obs <- cbind(w_obs, gps_m$gps$GPS)
+  coord_obs <- cbind(w_obs, gps_m$gps$gps)
 
   lfp <- get_options("logger_file_path")
 

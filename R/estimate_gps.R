@@ -34,17 +34,17 @@ estimate_gps <- function(cov_mt, w_all, sl_lib, dnorm_log) {
 
   logger::log_info("Started estimating GPS values ... ")
   t_1 <- proc.time()
-  GPS_SL <- SuperLearner::SuperLearner(Y = w_all,
+  gps_sl <- SuperLearner::SuperLearner(Y = w_all,
                                        X = as.data.frame(cov_mt),
                                        SL.library = sl_lib)
 
-  GPS_SL_sd <- sd(w_all - GPS_SL$SL.predict)
-  gps_m <- data.frame(GPS = dnorm(w_all,
-                                  mean = GPS_SL$SL.predict,
-                                  sd = GPS_SL_sd,
+  gps_sl_sd <- sd(w_all - gps_sl$SL.predict)
+  gps_m <- data.frame(gps = dnorm(w_all,
+                                  mean = gps_sl$SL.predict,
+                                  sd = gps_sl_sd,
                                   log = dnorm_log),
-                      e_gps_pred = GPS_SL$SL.predict,
-                      e_gps_std = GPS_SL_sd,
+                      e_gps_pred = gps_sl$SL.predict,
+                      e_gps_std = gps_sl_sd,
                       w = w_all)
 
   t_2 <- proc.time()

@@ -173,7 +173,7 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
   # Estimate noise -------------------------------------------------------------
   noise_nn <- estimate_noise_nn(hyperparam = nn_opt_param,
                                 w_obs = data[, c(2)],
-                                GPS_obs = gps_m$gps$GPS,
+                                GPS_obs = gps_m$gps$gps,
                                 y_obs = data[, c(1)],
                                 kernel_fn = kernel_fn,
                                 n_neighbor = n_neighbor,

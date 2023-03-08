@@ -49,16 +49,16 @@ compute_deriv_nn <- function(w,
 
 
   # Get gps and helper functions
-  GPS <- gps_m$gps$GPS
+  gps <- gps_m$gps$gps
   e_gps_pred <- gps_m$gps$e_gps_pred
   e_gps_std <- gps_m$gps$e_gps_std
   dnorm_log <- gps_m$used_params$dnorm_log
 
-  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
+  gps_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
 
-  n <- length(GPS_w)
+  n <- length(gps_w)
   n_block <- ceiling(n / block_size)
-  obs_raw <- cbind(w_obs, GPS)
+  obs_raw <- cbind(w_obs, gps)
   obs_ord <- obs_raw[order(obs_raw[, 1]), ]
   y_obs_ord <- y_obs[order(obs_raw[, 1])]
 
@@ -79,7 +79,7 @@ compute_deriv_nn <- function(w,
   obs_use <- t(t(obs_ord[idx_all, ]) * (1 / sqrt(c(beta, alpha))))
   y_use <- y_obs_ord[idx_all]
 
-  obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(beta, alpha))))
+  obs_new <- t(t(cbind(w, gps_w)) * (1 / sqrt(c(beta, alpha))))
   id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
   Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
                diag(nrow(obs_use))

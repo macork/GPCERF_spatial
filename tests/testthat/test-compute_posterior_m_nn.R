@@ -20,10 +20,11 @@ test_that("compute_posterior_m_nn works as expected.", {
   # Estimate GPS for the exposure level
   GPS_w <- dnorm(wi,
                  mean = gps_m$gps$e_gps_pred,
-                 sd = gps_m$gps$e_gps_std, log = gps_m$used_params$dnorm_log)
+                 sd = gps_m$gps$e_gps_std,
+                 log = gps_m$used_params$dnorm_log)
 
   # Order data for easy selection
-  coord_obs <- cbind(data$treat, gps_m$gps$GPS)
+  coord_obs <- cbind(data$treat, gps_m$gps$gps)
   y_use <- data$Y
 
   obs_ord <- coord_obs[order(coord_obs[, 1]), ]

@@ -38,18 +38,18 @@ compute_deriv_weights_gp <- function(w,
   g_sigma <- hyperparam[[3]]
 
 
-  GPS <- gps_m$gps$GPS
+  gps <- gps_m$gps$gps
   e_gps_pred <- gps_m$gps$e_gps_pred
   e_gps_std <- gps_m$gps$e_gps_std
   dnorm_log <- gps_m$used_params$dnorm_log
 
-  GPS_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
-  n <- length(GPS_w)
+  gps_w <- dnorm(w, mean = e_gps_pred, sd = e_gps_std, log = dnorm_log)
+  n <- length(gps_w)
 
-  obs_use <- cbind(w_obs * sqrt(1 / beta), GPS * sqrt(1 / alpha))
+  obs_use <- cbind(w_obs * sqrt(1 / beta), gps * sqrt(1 / alpha))
   colnames(obs_use) <- c("w_sc_obs", "gps_sc_obs")
 
-  obs_new <- cbind(w * sqrt(1 / beta), GPS_w * sqrt(1 / alpha))
+  obs_new <- cbind(w * sqrt(1 / beta), gps_w * sqrt(1 / alpha))
   colnames(obs_new) <- c("w_sc_for_w", "gps_sc_for_w")
 
   Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +

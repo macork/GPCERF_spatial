@@ -24,7 +24,7 @@ test_that("estimate_noise_nn works as expected!", {
                  log = gps_m$used_params$dnorm_log)
 
   # Order data for easy selection
-  coord_obs <- cbind(data$treat, gps_m$gps$GPS)
+  coord_obs <- cbind(data$treat, gps_m$gps$gps)
   y_use <- data$Y
 
   obs_ord <- coord_obs[order(coord_obs[, 1]), ]
@@ -32,7 +32,7 @@ test_that("estimate_noise_nn works as expected!", {
 
   noise <- estimate_noise_nn(hyperparam = hyperparam,
                              w_obs = data$treat,
-                             GPS_obs = gps_m$gps$GPS,
+                             GPS_obs = gps_m$gps$gps,
                              y_obs = y_use_ord,
                              n_neighbor = n_neighbor,
                              nthread = 1)

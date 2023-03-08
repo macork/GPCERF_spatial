@@ -47,7 +47,7 @@ estimate_mean_sd_nn <- function(hyperparam,
   logger::log_info("Working on estimating mean and sd using nngp approach ...")
 
 
-  coord_obs <- cbind(w_obs, gps_m$gps$GPS)
+  coord_obs <- cbind(w_obs, gps_m$gps$gps)
 
   if (any(is.na(y_obs))) {
     stop("y_obs has missing value(s).")

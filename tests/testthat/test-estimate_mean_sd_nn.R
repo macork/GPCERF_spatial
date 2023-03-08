@@ -17,7 +17,7 @@ test_that("estimate_mean_sd_nn works as expected!", {
   # compute noise
   noise <- estimate_noise_nn(hyperparam = hyperparam,
                              w_obs = data$treat,
-                             GPS_obs = gps_m$gps$GPS,
+                             GPS_obs = gps_m$gps$gps,
                              y_obs = data$Y,
                              n_neighbor = n_neighbor,
                              nthread = 1)
