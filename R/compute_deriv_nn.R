@@ -81,7 +81,8 @@ compute_deriv_nn <- function(w,
 
   obs_new <- t(t(cbind(w, GPS_w)) * (1 / sqrt(c(beta, alpha))))
   id_all <- split(1:n, ceiling(seq_along(1:n) / n_block))
-  Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) + diag(nrow(obs_use))
+  Sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(obs_use)) ^ 2) +
+               diag(nrow(obs_use))
   Sigma_obs_inv <- chol2inv(chol(Sigma_obs))
 
   all_weights <- sapply(id_all, function(id_ind) {
@@ -92,9 +93,10 @@ compute_deriv_nn <- function(w,
                                            obs_use[, 1], obs_use[, 2])
 
 
-    Sigma_cross <- g_sigma * (1 / beta) * (2 * outer(rep(w, length(id_ind)) * (1 / beta),
-                                               obs_use[, 1], "-")) *
-                                               kernel_deriv_fn(cross_dist ^ 2)
+    Sigma_cross <- g_sigma * (1 / beta) *
+                               (2 * outer(rep(w, length(id_ind)) * (1 / beta),
+                                              obs_use[, 1], "-")) *
+                                              kernel_deriv_fn(cross_dist ^ 2)
     #mean
     wght <- Sigma_cross %*% Sigma_obs_inv
     colSums(wght)

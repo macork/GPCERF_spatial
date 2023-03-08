@@ -88,8 +88,8 @@ compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
     logger::log_debug("Estimated noise: {noise_est} ")
   }
 
-  logger::log_debug("Computing weight and covariate balance for each requested ",
-                   "exposure value ... ")
+  logger::log_debug("Computing weight and covariate balance for each ",
+                   "requested exposure value ... ")
 
   col_all_list <- lapply(w,
                          function(w_instance) {
@@ -115,7 +115,7 @@ compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
 
     if (!tuning) {
       est <- data$Y %*% weights_final
-      pst_sd <- noise_est * weights_res$sd_scaled#noise_est * sqrt(weights_res$sd_scaled ^ 2 + 1)
+      pst_sd <- noise_est * weights_res$sd_scaled
       logger::log_trace("Posterior for w = {w_instance} ==> ",
                         "mu: {est}, var:{pst_sd}")
     } else {
@@ -135,7 +135,9 @@ compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
   logger::log_debug("Done with computing weight and covariate balance for ",
                    "each requested exposure value. ")
 
-  col_all <- sapply(col_all_list, function(x) {x$covariate_balance$absolute_corr})
+  col_all <- sapply(col_all_list, function(x) {
+    x$covariate_balance$absolute_corr
+    })
   est <- sapply(col_all_list, function(x) {x$est})
   pst_sd <- sapply(col_all_list, function(x) {x$pst_sd})
 

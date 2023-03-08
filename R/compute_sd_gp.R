@@ -7,7 +7,8 @@
 #' @param w A scalar of exposure level of interest.
 #' @param scaled_obs A matrix of two columns.
 #'   - First column is the scaled GPS value of all samples (GPS * 1/sqrt(alpha))
-#'   - Second column is the scaled exposure value of all samples (w * 1/sqrt(beta))
+#'   - Second column is the scaled exposure value of all samples
+#'   (w * 1/sqrt(beta))
 #' @param hyperparam A vector of hyper-parameters for the GP.
 #'   - First element: alpha
 #'   - Second element: beta

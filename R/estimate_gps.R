@@ -14,7 +14,8 @@
 #' @return
 #' A data.frame that includes:
 #'   - a vector of estimated GPS at the observed exposure levels;
-#'   - a vector of estimated conditional means of exposure levels when the covariates are fixed
+#'   - a vector of estimated conditional means of exposure levels when the
+#'   covariates are fixed
 #' at the observed values;
 #'   - estimated standard deviation of exposure levels
 #'   - a vector of observed exposure levels.

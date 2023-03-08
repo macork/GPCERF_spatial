@@ -32,7 +32,8 @@ print.cerf_gp <- function(x, ...) {
 summary.cerf_gp <- function(object, ...) {
 
   cat("GPCERF full Gaussian grocess exposure response function object\n")
-  cat(paste0("\nOptimal hyper parameters(#trial: ", object$num_of_trial, "): \n"))
+  cat(paste0("\nOptimal hyper parameters(#trial: ",
+             object$num_of_trial, "): \n"))
   cat(paste(" ", names(object$optimal_params), "=",
             object$optimal_params))
   cat("\n\nOptimal covariate balance: ")
@@ -61,7 +62,8 @@ summary.cerf_gp <- function(object, ...) {
 print.cerf_nngp <- function(x, ...) {
   x <- unclass(x)
 
-  cat(" GPCERF Nearest Neighbor Gaussian Process exposure rate function object\n")
+  cat(paste(" GPCERF Nearest Neighbor Gaussian Process exposure ",
+            "response function object\n"))
   cat(" function call: \n")
   cat("      ***       \n")
   print(x$fcall, ...)
@@ -86,7 +88,8 @@ summary.cerf_nngp <- function(object, ...) {
   cat(paste0("GPCERF nearest neighbore Gaussian process exposure response",
              " function object summary\n"))
 
-  cat(paste0("\nOptimal hyper parameters(#trial: ", object$num_of_trial, "): \n"))
+  cat(paste0("\nOptimal hyper parameters(#trial: ",
+             object$num_of_trial, "): \n"))
   cat(paste(" ", names(object$optimal_params), "=",
             object$optimal_params))
   cat("\n\nOptimal covariate balance: ")

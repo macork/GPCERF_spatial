@@ -103,7 +103,8 @@ autoplot.cerf_gp <- function(object, ...) {
 #' @param ... Additional arguments passed to customize the plot.
 #'
 #' @return
-#' Returns a ggplot2 object, invisibly. This function is called for side effects.
+#' Returns a ggplot2 object, invisibly. This function is called for side
+#' effects.
 #'
 #' @export
 #'
@@ -220,7 +221,8 @@ autoplot.cerf_nngp <- function(object, ...) {
 #' @param ... Additional arguments passed to customize the plot.
 #'
 #' @return
-#' Returns a ggplot2 object, invisibly. This function is called for side effects.
+#' Returns a ggplot2 object, invisibly. This function is called for side
+#' effects.
 #'
 #' @export
 #'
