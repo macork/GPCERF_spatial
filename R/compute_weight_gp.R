@@ -84,8 +84,8 @@ compute_weight_gp <- function(w, w_obs, scaled_obs, hyperparam,
     sigma_w <- g_sigma * kernel_fn(outer(scaled_w[, 2],
                                          scaled_w[, 2], "-") ^ 2) +
                                            diag(nrow(scaled_w))
-    sd_scaled = sqrt(sum(sigma_w) / nrow(scaled_w) ^ 2 -
-                     sum(weight * normalized_sigma_cross))
+    sd_scaled <- sqrt(sum(sigma_w) / nrow(scaled_w) ^ 2 -
+                      sum(weight * normalized_sigma_cross))
     logger::log_trace("Computed scaled standard deviation: {sd_scaled}")
   } else {
     sd_scaled <- NA

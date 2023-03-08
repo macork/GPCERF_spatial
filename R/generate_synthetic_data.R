@@ -86,14 +86,14 @@ generate_synthetic_data <- function(sample_size = 1000, outcome_sd = 10,
   }
 
   #produce outcome Y
-  Y = sapply(1:sample_size, function(i) {
-    -10 - 5 * sum(c(2, 2, 3, -1) * cf[i, ]) - 5 * 2 * cf5[i] - 5 * 2 * cf6[i] -
+  Y <- sapply(1:sample_size, function(i) {
+      -10 - 5 * sum(c(2, 2, 3, -1) * cf[i, ]) - 5 * 2 * cf5[i] - 5 * 2 * cf6[i] -
       treat[i] * (0.1 - 0.1 * cf[i, 1] + 0.1 * cf[i, 4] + 0.1 * cf5[i] +
                   0.1 * cf[i, 3] ^ 2) * 5 + 0.13 ^ 2 * treat[i] ^ 3 +
                   stats::rnorm(1, mean = 0, sd = outcome_sd)
   })
   if (cova_spec == 1) {
-    cf = cf
+    cf <- cf
     #Kang 2007
   } else if (cova_spec == 2) {
     cf[, 1] <- exp(cf[, 1] / 2)

@@ -3,9 +3,9 @@ test_that("compute_inverse works as expected.", {
   set.seed(1934)
   A <- runif(10)
   B <- runif(10)
-  C = cbind(A, B)
-  kernel_fn = function(x) exp(-x ^ 2)
-  D = kernel_fn(as.matrix(dist(C)))
+  C <- cbind(A, B)
+  kernel_fn <- function(x) exp(-x ^ 2)
+  D <- kernel_fn(as.matrix(dist(C)))
   inv_sigma_obs <- compute_inverse(D)
 
   expect_true(is.matrix(inv_sigma_obs))

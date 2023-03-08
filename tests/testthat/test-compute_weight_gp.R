@@ -6,10 +6,10 @@ test_that("multiplication works", {
   w_obs <- obs_exposure <- data$treat
 
   # Choose an exposure level to compute CERF
-  w = 1.8
+  w <- 1.8
 
   # Define kernel function
-  kernel_fn = function(x) exp(-x ^ 2)
+  kernel_fn <- function(x) exp(-x ^ 2)
 
   # compute GPS, e_gps_pred, and e_gps_std
   e_gps <- xgboost(label = data$treat,
@@ -30,10 +30,10 @@ test_that("multiplication works", {
   g_sigma <- hyperparam[3]
 
   # Compute scaled observation data and inverse of covariate matrix.
-  scaled_obs = cbind(obs_exposure * sqrt(1 / beta), GPS * sqrt(1 / alpha))
+  scaled_obs <- cbind(obs_exposure * sqrt(1 / beta), GPS * sqrt(1 / alpha))
   colnames(scaled_obs) <- c("w_sc_obs", "gps_sc_obs")
 
-  sigma_obs = g_sigma * kernel_fn(as.matrix(dist(scaled_obs))) +
+  sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(scaled_obs))) +
                         diag(nrow(scaled_obs))
   inv_sigma_obs <- compute_inverse(sigma_obs)
 

@@ -96,8 +96,7 @@ find_optimal_nn <- function(w_obs, w, y_obs, gps_m, design_mt,
       cb_obj <- compute_w_corr(w = coord_obs[idx, 1],
                                covariate = design_mt[idx, ],
                                weight = weights)
-      #cb = as.vector(cb_obj$absolute_corr)
-      cb = cb_obj$absolute_corr
+      cb <- cb_obj$absolute_corr
       list(cb = cb, est = res[nrow(res), 2])
     })
 
