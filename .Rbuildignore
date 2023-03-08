@@ -20,4 +20,3 @@ index.md
 ^CRAN-RELEASE$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
-^_binder/*$
