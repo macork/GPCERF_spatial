@@ -17,10 +17,10 @@ test_that("multiplication works", {
                    nrounds = 50)
   e_gps_pred <- predict(e_gps, as.matrix(data[, -(1:2)]))
   e_gps_std <- sd(data$treat - e_gps_pred)
-  GPS <- dnorm(data$treat, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
+  gps <- dnorm(data$treat, mean = e_gps_pred, sd = e_gps_std, log = TRUE)
 
   gps_m <- list()
-  gps_m$gps <- data.frame(GPS, e_gps_pred, e_gps_std)
+  gps_m$gps <- data.frame(gps, e_gps_pred, e_gps_std)
   gps_m$used_params$dnorm_log <- TRUE
 
   # set hyperparameters
@@ -30,7 +30,7 @@ test_that("multiplication works", {
   g_sigma <- hyperparam[3]
 
   # Compute scaled observation data and inverse of covariate matrix.
-  scaled_obs <- cbind(obs_exposure * sqrt(1 / beta), GPS * sqrt(1 / alpha))
+  scaled_obs <- cbind(obs_exposure * sqrt(1 / beta), gps * sqrt(1 / alpha))
   colnames(scaled_obs) <- c("w_sc_obs", "gps_sc_obs")
 
   sigma_obs <- g_sigma * kernel_fn(as.matrix(dist(scaled_obs))) +

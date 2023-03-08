@@ -49,10 +49,6 @@ compute_posterior_m_nn <- function(hyperparam,
 
   n <- base::length(GPS_w)
 
-  # Compute number of blocks
-  # n_block <- base::ceiling(n / block_size)
-
-
   if (w >= obs_ord[nrow(obs_ord), 1]) {
     idx_select <- seq(nrow(obs_ord) - n_neighbor + 1, nrow(obs_ord), 1)
   } else {

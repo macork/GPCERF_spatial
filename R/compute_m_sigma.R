@@ -43,8 +43,6 @@ compute_m_sigma <- function(hyperparam, data, w, gps_m, tuning,
   param <- unlist(hyperparam)
 
   gps <- gps_m$gps$gps
-  #e_gps_pred <- gps_m$e_gps_pred
-  #e_gps_std <- gps_m$e_gps_std
 
   # mi(w)
   # param 1: alpha

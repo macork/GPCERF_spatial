@@ -15,7 +15,7 @@ test_that("find_optimal_nn works as expected!", {
 
   # compute posterior mean and standard deviation for vector of w.
   w <- seq(0, 20, 2)
-  design_mt <- model.matrix(~.-1, data = data[, 3:ncol(data)])
+  design_mt <- model.matrix(~. - 1, data = data[, 3:ncol(data)])
   design_mt <- as.data.frame(design_mt)
 
   hyperparam_grid <- expand.grid(seq(0.5, 2.5, 1),
