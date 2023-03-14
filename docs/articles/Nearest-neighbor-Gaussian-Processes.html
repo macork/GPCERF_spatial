@@ -45,7 +45,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Standard Gaussian Processes</a>
     <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
@@ -151,7 +151,7 @@ this population at <code>w=seq(0,20,0.1)</code>.</p>
 <span><span class="va">erf_tru_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span>, <span class="fl">0.1</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">w</span><span class="op">)</span> <span class="fu">tru_R</span><span class="op">(</span><span class="va">w</span>, <span class="va">data_sim_t</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="estimate-erf-with-full-gaussian-processes">Estimate ERF with full Gaussian Processes<a class="anchor" aria-label="anchor" href="#estimate-erf-with-full-gaussian-processes"></a>
+<h2 id="estimate-erf-with-standard-gaussian-processes">Estimate ERF with standard Gaussian Processes<a class="anchor" aria-label="anchor" href="#estimate-erf-with-standard-gaussian-processes"></a>
 </h2>
 <div class="section level3">
 <h3 id="train-gps-model">Train GPS Model<a class="anchor" aria-label="anchor" href="#train-gps-model"></a>
@@ -196,11 +196,14 @@ ERF.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>w <span class="op">=</span> <span class="va">w_all</span>, y <span class="op">=</span> <span class="va">erf_tru_normal</span><span class="op">)</span>,</span>
 <span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">w</span>, y <span class="op">=</span> <span class="va">y</span>, color <span class="op">=</span> <span class="st">"True"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
 <p><img src="Nearest-neighbor-Gaussian-Processes_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>We can see that the estimated curve follows the true ERF closely and
 the 95% credible band completely covers the true ERF. But the running
-time is much smaller than the full GP approach.</p>
+time is much smaller than the standard GP approach.</p>
 </div>
 <div class="section level3">
 <h3 id="t-distributed-exposure">T-distributed Exposure<a class="anchor" aria-label="anchor" href="#t-distributed-exposure"></a>
