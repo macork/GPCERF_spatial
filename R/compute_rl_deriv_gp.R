@@ -1,5 +1,5 @@
 #' @title
-#' Detect change-point in full GP
+#' Detect change-point in standard GP
 #'
 #' @description
 #' Calculates the posterior mean of the difference between left- and

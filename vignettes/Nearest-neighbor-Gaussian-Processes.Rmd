@@ -74,7 +74,7 @@ erf_tru_normal <- sapply(seq(0, 20, 0.1), function(w) tru_R(w, data_sim_normal))
 erf_tru_t <- sapply(seq(0, 20, 0.1), function(w) tru_R(w, data_sim_t))
 ```
 
-## Estimate ERF with full Gaussian Processes
+## Estimate ERF with standard Gaussian Processes
 
 ### Train GPS Model
 
@@ -112,7 +112,7 @@ plot_fun(nngp_res_normal) +
             aes(x = w, y = y, color = "True"), size = 1.5)
 ```
 
-We can see that the estimated curve follows the true ERF closely and the 95\% credible band completely covers the true ERF. But the running time is much smaller than the full GP approach.
+We can see that the estimated curve follows the true ERF closely and the 95\% credible band completely covers the true ERF. But the running time is much smaller than the standard GP approach.
 
 ### T-distributed Exposure
 
