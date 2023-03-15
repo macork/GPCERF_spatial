@@ -11,7 +11,9 @@
 #'
 log_system_info <- function() {
 
+  # Gather system information
   sys_info <- Sys.info()
+
   logger::log_info("System name: {sys_info[1]}, ",
                    "OS type: {.Platform$OS.type}, ",
                    "machine architecture: {sys_info[5]}, ",

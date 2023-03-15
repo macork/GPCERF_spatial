@@ -1,10 +1,10 @@
 #' @title
-#' Compute mean, credible interval, and covariate balance in full Gaussian
+#' Compute mean, credible interval, and covariate balance in standard Gaussian
 #'  process (GP)
 #'
 #' @description
 #' Calculates the induced covariate balance associated with one hyper-parameter
-#' configuration in full GP.
+#' configuration in standard GP.
 #'
 #' @param hyperparam A vector of values of hyper-parameters.
 #'   - First element: alpha

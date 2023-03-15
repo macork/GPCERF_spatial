@@ -1,8 +1,8 @@
 ---
-title: "Full Gaussian Processes"
+title: "Standard Gaussian Processes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Full Gaussian Processes}
+  %\VignetteIndexEntry{Standard Gaussian Processes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,7 +20,7 @@ library(GPCERF)
 library(ggplot2)
 ```
 
-In this vignette, we present an example of using full Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://cran.r-project.org/package=CausalGPS).
+In this vignette, we present an example of using standard Gaussian processes approach in GPCERF to estimate the exposure response function (ERF) of a continuous exposure based on simulated data. We use a synthetic data generation function from the R package [CausalGPS](https://cran.r-project.org/package=CausalGPS).
 
 ## Generate Synthetic Data
 
@@ -74,7 +74,7 @@ erf_tru_normal <- sapply(seq(0, 20, 0.1), function(w) tru_R(w, data_sim_normal))
 erf_tru_t <- sapply(seq(0, 20, 0.1), function(w) tru_R(w, data_sim_t))
 ```
 
-## Estimate ERF with full Gaussian Processes
+## Estimate ERF with standard Gaussian Processes
 
 ### Train GPS Model
 

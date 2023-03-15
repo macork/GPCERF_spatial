@@ -2,7 +2,8 @@
 % Please edit documentation in R/estimate_noise_gp.R
 \name{estimate_noise_gp}
 \alias{estimate_noise_gp}
-\title{Estimate the standard deviation of the nugget term in full Gaussian process}
+\title{Estimate the standard deviation of the nugget term in standard Gaussian
+process}
 \usage{
 estimate_noise_gp(data, sigma_obs, inv_sigma_obs)
 }
@@ -20,10 +21,10 @@ estimate_noise_gp(data, sigma_obs, inv_sigma_obs)
 covariates.}
 }
 \value{
-A scalar of estimated standard deviation of the nugget term in full GP.
+A scalar of estimated standard deviation of the nugget term in standard GP.
 }
 \description{
-Estimates the standard deviations of the nugget term in full GP by
+Estimates the standard deviations of the nugget term in standard GP by
 calculating the standard deviations of the residuals.
 }
 \keyword{internal}

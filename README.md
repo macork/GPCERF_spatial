@@ -62,7 +62,7 @@ summary(cerf_gp_obj)
 plot(cerf_gp_obj)
 ```
 ```
-GPCERF full Gaussian grocess exposure response function object
+GPCERF standard Gaussian grocess exposure response function object
 
 Optimal hyper parameters(#trial: 300): 
   alpha = 12.9154966501488   beta = 12.9154966501488   g_sigma = 0.1

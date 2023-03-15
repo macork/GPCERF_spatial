@@ -12,7 +12,7 @@
 print.cerf_gp <- function(x, ...) {
   x <- unclass(x)
 
-  cat(" GPCERF Full Gaussian Process exposure rate function object\n")
+  cat(" GPCERF Standard Gaussian Process exposure rate function object\n")
   cat(" function call: \n")
   cat("      ***       \n")
   print(x$fcall, ...)
@@ -31,7 +31,7 @@ print.cerf_gp <- function(x, ...) {
 #' @export
 summary.cerf_gp <- function(object, ...) {
 
-  cat("GPCERF full Gaussian grocess exposure response function object\n")
+  cat("GPCERF standard Gaussian grocess exposure response function object\n")
   cat(paste0("\nOptimal hyper parameters(#trial: ",
              object$num_of_trial, "): \n"))
   cat(paste(" ", names(object$optimal_params), "=",
