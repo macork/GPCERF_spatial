@@ -1,6 +1,7 @@
 # GPCERF (developing)
 
 ## Changed
+- `full GP` --> `standard GP`
 - `plot`s of exposure response function objects include covariate balance.
 - `formula` is no longer need in nn functions.
 - `estimate_gps` now returns the used exposure level, too. 
