@@ -1,5 +1,5 @@
 #' @title
-#' Generate synthetic data for GPCERF package
+#' Generate synthetic data for the GPCERF package
 #'
 #' @description
 #' Generates synthetic data set based on different GPS models and covariates.

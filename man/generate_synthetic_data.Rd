@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_synthetic_data.R
 \name{generate_synthetic_data}
 \alias{generate_synthetic_data}
-\title{Generate synthetic data for GPCERF package}
+\title{Generate synthetic data for the GPCERF package}
 \usage{
 generate_synthetic_data(
   sample_size = 1000,

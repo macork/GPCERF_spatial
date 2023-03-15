@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_m_sigma.R
 \name{compute_m_sigma}
 \alias{compute_m_sigma}
-\title{Compute mean, credible interval, and covariate balance in full Gaussian
+\title{Compute mean, credible interval, and covariate balance in standard Gaussian
 process (GP)}
 \usage{
 compute_m_sigma(
@@ -57,6 +57,6 @@ exposure, which is the metric for covariate balance
 }
 \description{
 Calculates the induced covariate balance associated with one hyper-parameter
-configuration in full GP.
+configuration in standard GP.
 }
 \keyword{internal}
