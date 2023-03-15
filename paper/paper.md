@@ -96,8 +96,6 @@ cerf_gp_obj <- estimate_cerf_gp(sim_data,
                                 params = params_lst,
                                 nthread = 12)
 
-summary(cerf_gp_obj)
-plot(cerf_gp_obj)
 ```
 In this example, we generated a synthetic dataset of 500 observations and six covariates. We then developed a wrapper function to modify the number of threads in the SuperLearner package @SuperLearner_R. We estimated the GPS values using these wrapper functions. One can read more details by running `?GPCERF::estimate_gps` in R. To compute the posterior mean and standard deviation of $R(w)$, we need to provide the range of exposure values of interest and a range of hyperparameters that will be examined as additional input and parameters. Further details can be found in `?GPCERF::estimate_cerf_gp`. The function outputs an `S3` object, which can be further investigated using generic functions, as shown below.
 
@@ -105,7 +103,7 @@ In this example, we generated a synthetic dataset of 500 observations and six co
 summary(cerf_gp_obj)  
 ```
 
-```s
+```
 GPCERF standard Gaussian grocess exposure response function object
 
 Optimal hyper parameters(#trial: 300): 
@@ -128,5 +126,11 @@ Original covariate balance:
   cf6 = 0.257
             ----***----     
 ```
+As one can see, as part of the grid search, 300 different combination of hyper parameters have been tried. \autoref{fig:gp} shows the causal exposure response function and achieved covariate balance in this simulated example.
+
+
+![Plot of GP models S3 object. Left: Estimated CERF with credible band. Right: Covariate balance of confounders before and after weighting with GP approach.\label{fig:example}](figures/readme_gp.png){ width=80% }
+
+
 
 # References
