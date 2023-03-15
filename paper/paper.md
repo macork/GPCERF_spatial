@@ -129,7 +129,7 @@ Original covariate balance:
 As one can see, as part of the grid search, 300 different combination of hyper parameters have been tried. \autoref{fig:gp} shows the causal exposure response function and achieved covariate balance in this simulated example.
 
 
-![Plot of GP models S3 object. Left: Estimated CERF with credible band. Right: Covariate balance of confounders before and after weighting with GP approach.\label{fig:gp}](figures/readme_gp.png){ width=110% }
+![Plot of GP models S3 object. Left: Estimated CERF with credible band. Right: Covariate balance of confounders before and after weighting with GP approach.\label{fig:gp}](figures/readme_gp.png){ width=100% }
 
 The discussion on acceptable covariate balance for causal inference analyses is not within the scope of this paper. However, in the literature, a maximal covariate balance upper limit of 0.1 is generally considered acceptable @wu_2020. It is possible to expand the hyperparameters' search domain to achieve a lower covariate balance.
 
@@ -212,14 +212,14 @@ Original covariate balance:
             ----***----    
 ```
 
-Figure \autoref{fig:nngp} shows the result of `plot(cerf_nngp_obj)` function.
+\autoref{fig:nngp} shows the result of `plot(cerf_nngp_obj)` function.
 
-![Plot of nnGP models S3 object. Left: Estimated CERF with credible band. Right: Covariate balance of confounders before and after weighting with nnGP approach.\label{fig:nngp}](figures/readme_nngp.png){ width=110% }
+![Plot of nnGP models S3 object. Left: Estimated CERF with credible band. Right: Covariate balance of confounders before and after weighting with nnGP approach.\label{fig:nngp}](figures/readme_nngp.png){ width=100% }
 
 # Software related features
 
-We have implemented several features to enhance its performance and usability. By utilizing an internal `parallel` package, the software is capable of scaling up in a shared memory system. Additionally, we have implemented a logging infrastructure that tracks the software's internal progress and provides users and developers with detailed information on processed runs @logger. We have also activated continuous integration (CI) through GitHub actions, which runs unit tests and checks the code quality for any submitted pull request. The majority of the codebase is tested at least once. To ensure efficient development, we follow a successful git branching model @driessen_2010 and use the tidyverse styling guide.
-The software is available on CRAN [@gpcerf_cran] and is primarily written in R. However, some of the core computations are written in C++ [@rcpp_1; @rcpp_2; @rcpp_3].
+We have implemented several features to enhance the package performance and usability. By utilizing an internal `parallel` package, the software is capable of scaling up in a shared memory system. Additionally, we have implemented a logging infrastructure that tracks the software's internal progress and provides users and developers with detailed information on processed runs [@logger]. We have also activated continuous integration (CI) through GitHub actions, which runs unit tests and checks the code quality for any submitted pull request. The majority of the codebase is tested at least once. To ensure efficient development, we follow a successful git branching model [@driessen_2010] and use the tidyverse styling guide.
+The software is available on CRAN [@gpcerf_cran] and is primarily written in R. However, some of the core computations are written in C++ using the `Rcpp` package [@rcpp_1; @rcpp_2; @rcpp_3].
 
 # Acknowledgement
 
