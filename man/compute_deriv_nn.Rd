@@ -7,11 +7,10 @@
 compute_deriv_nn(
   w,
   w_obs,
-  GPS_m,
+  gps_m,
   y_obs,
   hyperparam,
   n_neighbor,
-  expand,
   block_size,
   kernel_fn = function(x) exp(-x),
   kernel_deriv_fn = function(x) -exp(-x)
@@ -22,28 +21,30 @@ compute_deriv_nn(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{A data.frame of GPS vectors. Including:
-\itemize{
-\item Column 1: GPS values.
-\item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-\item Column 3: Standard deviation of  e_gps (e_gps_std).
-}}
+\item{gps_m}{An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FALSE}
 
 \item{y_obs}{A vector of observed outcome values.}
 
 \item{hyperparam}{A vector of hyper-parameters in the GP model.}
 
-\item{n_neighbor}{The number of nearest neighbors on one side (see also \code{expand}).}
+\item{n_neighbor}{The number of nearest neighbors on one side.}
 
-\item{expand}{Scaling factor to determine the total number of nearest
-neighbors. The total is \code{2 * expand * n_neighbor}.}
+\item{block_size}{The number of samples included in a computation block.
+Mainly used to balance the speed and memory requirement. Larger
+\code{block_size} is faster, but requires more memory.}
 
-\item{block_size}{The number of samples included in a computation block. Mainly used to
-balance the speed and memory requirement. Larger \code{block_size} is faster, but requires more memory.}
+\item{kernel_fn}{The covariance function. The input is the square of
+Euclidean distance.}
 
-\item{kernel_fn}{The covariance function. The input is the square of Euclidean distance.}
-
-\item{kernel_deriv_fn}{The partial derivative of the covariance function. The input is the square of Euclidean distance.}
+\item{kernel_deriv_fn}{The partial derivative of the covariance function.
+The input is the square of Euclidean distance.}
 }
 \value{
 A scalar of estimated derivative of CERF at \code{w} in nnGP.

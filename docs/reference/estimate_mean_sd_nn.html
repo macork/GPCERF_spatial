@@ -12,7 +12,7 @@ at specified exposure levels with nnGP."><!-- mathjax --><script src="https://cd
     
     <a class="navbar-brand me-2" href="../index.html">GPCERF</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@ at specified exposure levels with nnGP."><!-- mathjax --><script src="https://cd
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Standard-Gaussian-Processes.html">Standard Gaussian Processes</a>
     <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
@@ -71,10 +71,9 @@ at specified exposure levels with nnGP.</p>
 <span>  <span class="va">w_obs</span>,</span>
 <span>  <span class="va">w</span>,</span>
 <span>  <span class="va">y_obs</span>,</span>
-<span>  <span class="va">GPS_m</span>,</span>
+<span>  <span class="va">gps_m</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  n_neighbor <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  expand <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  block_size <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>  nthread <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -102,12 +101,15 @@ at specified exposure levels with nnGP.</p>
 <dd><p>A vector of observed outcome values.</p></dd>
 
 
-<dt>GPS_m</dt>
-<dd><p>A data.frame of GPS vectors.</p><ul><li><p>Column 1: GPS</p></li>
-<li><p>Column 2: Prediction of exposure for covariate of each data sample
-(e_gps_pred).</p></li>
-<li><p>Column 3: Standard deviation of  e_gps (e_gps_std)</p></li>
-</ul></dd>
+<dt>gps_m</dt>
+<dd><p>An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE</p></dd>
 
 
 <dt>kernel_fn</dt>
@@ -115,13 +117,7 @@ at specified exposure levels with nnGP.</p>
 
 
 <dt>n_neighbor</dt>
-<dd><p>The number of nearest neighbors on one side
-(see also <code>expand</code>).</p></dd>
-
-
-<dt>expand</dt>
-<dd><p>Scaling factor to determine the total number of nearest
-neighbors. The total is <code>2 * expand * n_neighbour</code>.</p></dd>
+<dd><p>The number of nearest neighbors on one side.</p></dd>
 
 
 <dt>block_size</dt>

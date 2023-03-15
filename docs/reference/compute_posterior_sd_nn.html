@@ -12,7 +12,7 @@ the nnGP model."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
     
     <a class="navbar-brand me-2" href="../index.html">GPCERF</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@ the nnGP model."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Standard-Gaussian-Processes.html">Standard Gaussian Processes</a>
     <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
@@ -68,12 +68,11 @@ the nnGP model.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compute_posterior_sd_nn</span><span class="op">(</span></span>
 <span>  <span class="va">hyperparam</span>,</span>
 <span>  <span class="va">w</span>,</span>
-<span>  <span class="va">GPS_w</span>,</span>
+<span>  <span class="va">gps_w</span>,</span>
 <span>  <span class="va">obs_ord</span>,</span>
 <span>  <span class="va">sigma2</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  n_neighbor <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  expand <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  block_size <span class="op">=</span> <span class="fl">10000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -88,7 +87,7 @@ the nnGP model.</p>
 <dd><p>The exposure level for the point of interest on the CERF.</p></dd>
 
 
-<dt>GPS_w</dt>
+<dt>gps_w</dt>
 <dd><p>The GPS for all samples when their exposure levels are set
 at <code>w</code>.</p></dd>
 
@@ -108,13 +107,7 @@ exposure levels. The rows are in ascending order for the first column.</p></dd>
 
 
 <dt>n_neighbor</dt>
-<dd><p>Number of nearest neighbors on one side
-(see also <code>expand</code>).</p></dd>
-
-
-<dt>expand</dt>
-<dd><p>A scaling factor to determine the total number of nearest
-neighbors. The total is <code>2*expand*n_neighbor</code>.</p></dd>
+<dd><p>Number of nearest neighbors on one side.</p></dd>
 
 
 <dt>block_size</dt>

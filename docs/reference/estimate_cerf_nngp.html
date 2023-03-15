@@ -16,7 +16,7 @@ match (the lowest covariate balance) for the provided set of hyperparameters."><
     
     <a class="navbar-brand me-2" href="../index.html">GPCERF</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@ match (the lowest covariate balance) for the provided set of hyperparameters."><
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Standard-Gaussian-Processes.html">Standard Gaussian Processes</a>
     <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
@@ -74,9 +74,8 @@ match (the lowest covariate balance) for the provided set of hyperparameters.</p
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_cerf_nngp</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">w</span>,</span>
-<span>  <span class="va">GPS_m</span>,</span>
+<span>  <span class="va">gps_m</span>,</span>
 <span>  <span class="va">params</span>,</span>
-<span>  <span class="va">formula</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  nthread <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -95,11 +94,15 @@ match (the lowest covariate balance) for the provided set of hyperparameters.</p
 <dd><p>A vector of exposure level to compute CERF.</p></dd>
 
 
-<dt>GPS_m</dt>
-<dd><p>A data.frame of GPS vectors.</p><ul><li><p>Column 1: GPS</p></li>
-<li><p>Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).</p></li>
-<li><p>Column 3: Standard deviation of  e_gps (e_gps_std)</p></li>
-</ul></dd>
+<dt>gps_m</dt>
+<dd><p>An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE</p></dd>
 
 
 <dt>params</dt>
@@ -109,18 +112,12 @@ These parameters include:</p><ul><li><p>alpha: A scaling factor for the GPS valu
 <li><p>g_sigma: A scaling factor for kernel function (gamma/sigma).</p></li>
 <li><p>tune_app: A tuning approach. Available approaches:</p><ul><li><p>all: try all combinations of hyperparameters.</p></li>
 </ul></li>
-<li><p>expand: Scaling factor to determine the total number of nearest neighbors.
-The total is <code>2 * expand * n_neighbour</code>.</p></li>
 <li><p>n_neighbor: Number of nearest neighbors on one side.</p></li>
 <li><p>block_size: Number of samples included in a computation block. Mainly
 used to balance the speed and memory requirement. Larger <code>block_size</code>
 is faster, but requires more memory.
 alpha, beta, and g_sigma can be a vector of parameters.</p></li>
 </ul></dd>
-
-
-<dt>formula</dt>
-<dd><p>A formula to indicate the design matrix of the model for GPS.</p></dd>
 
 
 <dt>kernel_fn</dt>
@@ -148,23 +145,21 @@ used by internal packages.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">19</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span>sample_size <span class="op">=</span> <span class="fl">120</span>, gps_spec <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Estimate GPS function</span></span></span>
-<span class="r-in"><span><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_gps.html">train_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>                   w_all <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>,</span></span>
-<span class="r-in"><span>                   sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gps_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                      w_all <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>,</span></span>
+<span class="r-in"><span>                      sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># exposure values</span></span></span>
 <span class="r-in"><span><span class="va">w.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span>,<span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cerf_nngp_obj</span> <span class="op">&lt;-</span> <span class="fu">estimate_cerf_nngp</span><span class="op">(</span><span class="va">data</span>,</span></span>
 <span class="r-in"><span>                                    <span class="va">w.all</span>,</span></span>
-<span class="r-in"><span>                                    <span class="va">GPS_m</span>,</span></span>
+<span class="r-in"><span>                                    <span class="va">gps_m</span>,</span></span>
 <span class="r-in"><span>                                    params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                                  beta <span class="op">=</span> <span class="fl">0.2</span>,</span></span>
 <span class="r-in"><span>                                                  g_sigma <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                                  tune_app <span class="op">=</span> <span class="st">"all"</span>,</span></span>
 <span class="r-in"><span>                                                  n_neighbor <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>                                                  expand <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                                  block_size <span class="op">=</span> <span class="fl">1e4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                    formula <span class="op">=</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">Y</span> <span class="op">-</span> <span class="va">treat</span>,</span></span>
 <span class="r-in"><span>                                    nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

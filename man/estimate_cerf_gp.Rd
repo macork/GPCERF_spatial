@@ -7,7 +7,7 @@
 estimate_cerf_gp(
   data,
   w,
-  GPS_m,
+  gps_m,
   params,
   nthread = 1,
   kernel_fn = function(x) exp(-x^2)
@@ -23,14 +23,14 @@ estimate_cerf_gp(
 
 \item{w}{A vector of exposure level to compute CERF.}
 
-\item{GPS_m}{A data.frame of GPS vectors.
-\itemize{
-\item Column 1: GPS
-\item Column 2: Prediction of exposure for covariate of each data
-sample (e_gps_pred).
-\item Column 3: Standard deviation of
-e_gps (e_gps_std)
-}}
+\item{gps_m}{An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE}
 
 \item{params}{A list of parameters that is required to run the process.
 These parameters include:
@@ -70,10 +70,10 @@ data <- generate_synthetic_data(sample_size = 100, gps_spec = 3)
 
 
 # Estimate GPS function
-GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                   w_all = data$treat,
-                   sl_lib = c("SL.xgboost"),
-                   dnorm_log = FALSE)
+gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
+                      w_all = data$treat,
+                      sl_lib = c("SL.xgboost"),
+                      dnorm_log = FALSE)
 
 # exposure values
 w_all <- seq(0,10,1)
@@ -81,7 +81,7 @@ w_all <- seq(0,10,1)
 
 cerf_gp_obj <- estimate_cerf_gp(data,
                                 w_all,
-                                GPS_m,
+                                gps_m,
                                 params = list(alpha = c(0.1),
                                               beta=0.2,
                                               g_sigma = 1,

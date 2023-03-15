@@ -1,3 +1,15 @@
+# GPCERF 0.2.1 (2023-01-15)
+
+## Changed
+- `full GP` --> `standard GP`
+- `plot`s of exposure response function objects include covariate balance.
+- `formula` is no longer need in nn functions.
+- `estimate_gps` now returns the used exposure level, too. 
+- `train_gps` --> `estimate_gps` 
+- The nearest neighbor approach does not get `expand` as an input parameter (`n_neighbor` * `expand` --> `n_neighbor`).
+- The weighted covariate balance now is computed using the wCorr package.
+
+
 # GPCERF 0.2.0 (2023-01-22)
 
 ## Changed

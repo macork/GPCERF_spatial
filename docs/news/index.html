@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">GPCERF</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Standard-Gaussian-Processes.html">Standard Gaussian Processes</a>
     <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
@@ -55,6 +55,26 @@
       <small>Source: <a href="https://github.com/NSAPH-Software/GPCERF/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.1" id="gpcerf-021-2023-01-15">GPCERF 0.2.1 (2023-01-15)<a class="anchor" aria-label="anchor" href="#gpcerf-021-2023-01-15"></a></h2>
+<div class="section level3">
+<h3 id="changed-0-2-1">Changed<a class="anchor" aria-label="anchor" href="#changed-0-2-1"></a></h3>
+<ul><li>
+<code>full GP</code> –&gt; <code>standard GP</code>
+</li>
+<li>
+<code>plot</code>s of exposure response function objects include covariate balance.</li>
+<li>
+<code>formula</code> is no longer need in nn functions.</li>
+<li>
+<code>estimate_gps</code> now returns the used exposure level, too.</li>
+<li>
+<code>train_gps</code> –&gt; <code>estimate_gps</code>
+</li>
+<li>The nearest neighbor approach does not get <code>expand</code> as an input parameter (<code>n_neighbor</code> * <code>expand</code> –&gt; <code>n_neighbor</code>).</li>
+<li>The weighted covariate balance now is computed using the wCorr package.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="gpcerf-020-2023-01-22">GPCERF 0.2.0 (2023-01-22)<a class="anchor" aria-label="anchor" href="#gpcerf-020-2023-01-22"></a></h2><p class="text-muted">CRAN release: 2023-01-22</p>
 <div class="section level3">

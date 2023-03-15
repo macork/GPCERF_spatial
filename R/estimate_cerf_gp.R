@@ -11,12 +11,14 @@
 #'   - Column 2: Exposure or treatment (w)
 #'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure level to compute CERF.
-#' @param GPS_m A data.frame of GPS vectors.
-#'   - Column 1: GPS
-#'   - Column 2: Prediction of exposure for covariate of each data
-#'   sample (e_gps_pred).
-#'   - Column 3: Standard deviation of
-#'   e_gps (e_gps_std)
+#' @param gps_m An S3 gps object including:
+#'   gps: A data.frame of GPS vectors.
+#'     - Column 1: GPS
+#'     - Column 2: Prediction of exposure for covariate of each data sample
+#'     (e_gps_pred).
+#'     - Column 3: Standard deviation of  e_gps (e_gps_std)
+#'   used_params:
+#'     - dnorm_log: TRUE or FLASE
 #' @param params A list of parameters that is required to run the process.
 #' These parameters include:
 #'   - alpha: A scaling factor for the GPS value.
@@ -44,10 +46,10 @@
 #'
 #'
 #' # Estimate GPS function
-#' GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-#'                    w_all = data$treat,
-#'                    sl_lib = c("SL.xgboost"),
-#'                    dnorm_log = FALSE)
+#' gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
+#'                       w_all = data$treat,
+#'                       sl_lib = c("SL.xgboost"),
+#'                       dnorm_log = FALSE)
 #'
 #' # exposure values
 #' w_all <- seq(0,10,1)
@@ -55,7 +57,7 @@
 #'
 #' cerf_gp_obj <- estimate_cerf_gp(data,
 #'                                 w_all,
-#'                                 GPS_m,
+#'                                 gps_m,
 #'                                 params = list(alpha = c(0.1),
 #'                                               beta=0.2,
 #'                                               g_sigma = 1,
@@ -63,31 +65,42 @@
 #'                                 nthread = 1)
 #' }
 #'
-estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
-                             kernel_fn = function(x) exp(-x ^ 2)){
-
+estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
+                             kernel_fn = function(x) exp(-x ^ 2)) {
 
   # Log system info
   log_system_info()
+
+  # timing the function
+  st_time_gp <- proc.time()
 
   # function call
   fcall <- match.call()
 
   # Double-check input parameters ----------------------------------------------
+  if (any(is.na(data))) {
+    stop("At this time, data with missing values is not supported.")
+  }
+
   if (!is.data.frame(data)) {
     stop(paste0("Data should be a data.frame. ",
                 "Current format: ", class(data)[1]))
   }
 
-  if (!is.data.frame(GPS_m)) {
-    stop(paste0("The GPS_m should be a data.frame. ",
-                "Current format: ", class(GPS_m)[1]))
+  if (!inherits(gps_m, "gps")) {
+    stop(paste0("The gps_m should be a gps class. ",
+                "Current format: ", class(gps_m)[1]))
+  }
+
+  if (nrow(data) != length(gps_m$gps$w)) {
+    stop(paste0("Provided Data and GPS object should have the same size. ",
+                "Current sizes: ", nrow(data), " vs ", length(gps_m$gps$w)))
   }
 
   check_params <- function(my_param, params) {
     for (item in my_param) {
       if (!is.element(c(item), names(params))) {
-        stop(paste0("The required parameter, ", item,", is not provided. ",
+        stop(paste0("The required parameter, ", item, ", is not provided. ",
                     "Current parameters: ", paste(unlist(names(params)),
                                                   collapse = ", ")))
       }
@@ -96,12 +109,18 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
 
   check_params(c("alpha", "beta", "g_sigma", "tune_app"), params)
 
+  # Note: In the package, alpha is used to scale w and beta is used to scale
+  # GPS following the same convention in the method paper.
+
   # TODO: Check values of parameters, too.
 
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------
   tune_params <-  expand.grid(getElement(params, "alpha"),
                               getElement(params, "beta"),
                               getElement(params, "g_sigma"))
+
+  logger::log_trace("Number of provided combination of tune parameters: ",
+                    "{nrow(tune_params)}")
 
   if (nrow(tune_params) == 0) {
     stop(paste("Something went wrong with tuning parameters. ",
@@ -119,44 +138,62 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
                " is not supported."))
   }
 
+  logger::log_trace("Number of selected combination of tune parameters: ",
+                    "{nrow(tune_params_subset)}")
+
   # Compute m, "confidence interval", and covariate balance for provided
   # hyperparameters. -----------------------------------------------------------
-  if(nthread > 1 && nrow(tune_params_subset) > 1) {
+  if (nthread > 1 && nrow(tune_params_subset) > 1) {
+
+    logger::log_trace("Starting a cluster with {nthread} threads ...")
+
     lfp <- get_options("logger_file_path")
 
     # make a cluster
-    cl <- parallel::makeCluster(nthread, type="PSOCK",
+    cl <- parallel::makeCluster(nthread, type = "PSOCK",
                                 outfile = lfp)
 
     # export variables and functions to cluster cores
     parallel::clusterExport(cl = cl,
-                            varlist = c("w", "data", "GPS_m",
+                            varlist = c("w", "data", "gps_m",
                                         "tune_params_subset",
                                         "kernel_fn",
                                         "compute_m_sigma"),
-                            envir=environment())
+                            envir = environment())
 
     tune_res <- parallel::parApply(cl, tune_params_subset, 1,
                                    function(x) {
                                      compute_m_sigma(hyperparam = x,
                                                      data = data,
                                                      w = w,
-                                                     GPS_m = GPS_m,
+                                                     gps_m = gps_m,
                                                      tuning = TRUE,
                                                      kernel_fn = kernel_fn)
                                    })
 
     parallel::stopCluster(cl)
+    logger::log_trace("Cluster with {nthread} threads was terminated.")
   } else if (nrow(tune_params_subset) > 1) {
     tune_res <- apply(tune_params_subset, 1, function(x) {
       compute_m_sigma(hyperparam = x,
                       data = data,
                       w = w,
-                      GPS_m = GPS_m,
+                      gps_m = gps_m,
                       tuning = TRUE,
                       kernel_fn = kernel_fn)
       })
   }
+
+  logger::log_debug("Number of generated tuning results: {length(tune_res)}")
+
+  # Tuning results include:
+  # cb: covariate balance for each confounder. This is the average of all
+  #     all covariate balance for each requested exposure values.
+  # est: Posterior mean for all requested exposure values (vector of
+  #      NA if tuning).
+  # pst: Posterior standard deviation for all requested exposure values (vector
+  #.     of NA if tuning.)
+
 
   # Select the combination of hyperparameters that provides the lowest
   # covariate balance ----------------------------------------------------------
@@ -165,28 +202,42 @@ estimate_cerf_gp <- function(data, w, GPS_m, params, nthread = 1,
   } else {
     opt_idx <- 1
   }
-  opt_param <- tune_params_subset[opt_idx,]
+  opt_param <- tune_params_subset[opt_idx, ]
   gp_cerf_final <- compute_m_sigma(hyperparam = opt_param,
                                    data = data,
                                    w = w,
-                                   GPS_m = GPS_m,
+                                   gps_m = gps_m,
                                    tuning = FALSE,
                                    kernel_fn = kernel_fn)
 
-  # Build gp_cerf S3 object
+
+  # Build gp_cerf S3 object ----------------------------------------------------
   result <- list()
   class(result) <- "cerf_gp"
 
-  result$pst_mean <- gp_cerf_final$est
-  result$pst_sd <- gp_cerf_final$pst
-  result$w <- w
+  # Hyper parameters ------------------------
+  optimal_params <- opt_param
+  names(optimal_params) <- c("alpha", "beta", "g_sigma")
+  result$optimal_params <- optimal_params
+  result$num_of_trial <- nrow(tune_params_subset)
+
+  # Data ------------------------------------
+  posterior <- list()
+  posterior$mean <- gp_cerf_final$est
+  posterior$sd <- gp_cerf_final$pst
+  posterior$w <- w
+  result$posterior <- posterior
+
+  # Covariate balance -----------------------
   result$cb <- gp_cerf_final$cb
-  result$params <- opt_param
+  result$cb_org <- gp_cerf_final$cb_org
+
+  # Function call ---------------------------
   result$fcall <- fcall
 
-  # Add best match to the gp_cerf object
-
-  # Add other useful info form the processing to the gp_cerf object
+  et_time_gp <- proc.time()
+  logger::log_debug("Wall clock time to run estimate_cerf_gp:",
+                    " {(et_time_gp -   st_time_gp)[[3]]} seconds.")
 
   # return gp_cerf S3 object
   invisible(result)

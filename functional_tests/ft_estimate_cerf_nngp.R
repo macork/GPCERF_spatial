@@ -1,45 +1,50 @@
-set_logger(logger_file_path = "functional_tests/GPCERF.log", logger_level = "DEBUG")
+set.seed(781)
+# Generate synthetic data with 500 data samples.
+sim_data <- generate_synthetic_data(sample_size = 5000, gps_spec = 1)
 
-t_1 <- proc.time()
-set.seed(19)
-sim_data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
+# SuperLearner internal libraries' wrapper.
+m_xgboost <- function(nthread = 12, ...) {
+  SuperLearner::SL.xgboost(nthread = nthread, ...)
+}
+
+m_ranger <- function(num.threads = 12, ...){
+  SuperLearner::SL.ranger(num.threads = num.threads, ...)
+}
+
 # Estimate GPS function
-GPS_m <- train_GPS(cov_mt = as.matrix(sim_data[,-(1:2)]),
-                  w_all = as.matrix(sim_data$treat))
-# exposure values
-w_all <- seq(0,20,2)
-data.table::setDT(sim_data)
+gps_m <- estimate_gps(cov_mt = paste0("cf", seq(1,6))],
+                      w_all = sim_data$treat,
+                      sl_lib = c("m_xgboost", "m_ranger"),
+                      dnorm_log = TRUE)
+
+# exposure values of interest
+# We trim the exposure level to satisfy positivity assumption to avoid including
+# extreme exposure values.
+q1 <- stats::quantile(sim_data$treat, 0.05)
+q2 <- stats::quantile(sim_data$treat, 0.95)
+
+w_all <- seq(q1, q2, 1)
+
+# Hyperparameters' range for grid search to find optimal hyperparameters
+params_lst <- list(alpha = 10 ^ seq(-2, 2, length.out = 10),
+                   beta = 10 ^ seq(-2, 2, length.out = 10),
+                   g_sigma = c(0.1, 1, 10),
+                   tune_app = "all",
+                   n_neighbor = 50,
+                   block_size = 1e3)
+
+# Estimate exposure response function
 cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
                                     w_all,
-                                    GPS_m,
-                                    params = list(alpha = c(0.1),
-                                                  beta = 0.2,
-                                                  g_sigma = 1,
-                                                  tune_app = "all",
-                                                  n_neighbor = 20,
-                                                  expand = 1,
-                                                  block_size = 1e4),
-                                    formula = ~ . - 1 - Y - treat,
+                                    gps_m,
+                                    params = params_lst,
                                     nthread = 12)
 
-t_2 <- proc.time()
-print(paste("Wall clock time: ", t_2[[3]] - t_1[[3]], " s."))
 
-print(cerf_nngp_obj)
 summary(cerf_nngp_obj)
+plot(cerf_nngp_obj)
 
-# profiling
-profvis::profvis({
-  cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
-                                      w_all,
-                                      GPS_m,
-                                      params = list(alpha = c(0.1),
-                                                    beta = 0.2,
-                                                    g_sigma = 1,
-                                                    tune_app = "all",
-                                                    n_neighbor = 20,
-                                                    expand = 1,
-                                                    block_size = 1e4),
-                                      formula = ~ . - 1 - Y - treat,
-                                      nthread = 1)
-})
+# png("readme_nngp.png", width = 12, height = 4, units = "in", res = 300)
+# plot(cerf_nngp_obj)
+# dev.off()
+

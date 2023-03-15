@@ -8,9 +8,8 @@ Gaussian process}
 estimate_cerf_nngp(
   data,
   w,
-  GPS_m,
+  gps_m,
   params,
-  formula,
   kernel_fn = function(x) exp(-x^2),
   nthread = 1
 )
@@ -25,12 +24,14 @@ estimate_cerf_nngp(
 
 \item{w}{A vector of exposure level to compute CERF.}
 
-\item{GPS_m}{A data.frame of GPS vectors.
-\itemize{
-\item Column 1: GPS
-\item Column 2: Prediction of exposure for covariate of each data sample (e_gps_pred).
-\item Column 3: Standard deviation of  e_gps (e_gps_std)
-}}
+\item{gps_m}{An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE}
 
 \item{params}{A list of parameters that is required to run the process.
 These parameters include:
@@ -42,16 +43,12 @@ These parameters include:
 \itemize{
 \item all: try all combinations of hyperparameters.
 }
-\item expand: Scaling factor to determine the total number of nearest neighbors.
-The total is \code{2 * expand * n_neighbour}.
 \item n_neighbor: Number of nearest neighbors on one side.
 \item block_size: Number of samples included in a computation block. Mainly
 used to balance the speed and memory requirement. Larger \code{block_size}
 is faster, but requires more memory.
 alpha, beta, and g_sigma can be a vector of parameters.
 }}
-
-\item{formula}{A formula to indicate the design matrix of the model for GPS.}
 
 \item{kernel_fn}{A kernel function. A default value is a Gaussian Kernel.}
 
@@ -77,23 +74,21 @@ match (the lowest covariate balance) for the provided set of hyperparameters.
 set.seed(19)
 data <- generate_synthetic_data(sample_size = 120, gps_spec = 3)
 # Estimate GPS function
-GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                   w_all = data$treat,
-                   sl_lib = c("SL.xgboost"),
-                   dnorm_log = FALSE)
+gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
+                      w_all = data$treat,
+                      sl_lib = c("SL.xgboost"),
+                      dnorm_log = FALSE)
 # exposure values
 w.all <- seq(0,20,2)
 cerf_nngp_obj <- estimate_cerf_nngp(data,
                                     w.all,
-                                    GPS_m,
+                                    gps_m,
                                     params = list(alpha = c(0.1),
                                                   beta = 0.2,
                                                   g_sigma = 1,
                                                   tune_app = "all",
                                                   n_neighbor = 20,
-                                                  expand = 1,
                                                   block_size = 1e4),
-                                    formula = ~ . - 1 - Y - treat,
                                     nthread = 1)
 }
 

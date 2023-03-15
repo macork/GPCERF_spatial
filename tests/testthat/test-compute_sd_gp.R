@@ -11,12 +11,12 @@ test_that("compute_sd_gp works as expected.", {
    kernel_fn <- function(x) exp(-x^2)
 
    # Estimate GPS function
-   GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                      w_all = data$treat,
-                      sl_lib = c("SL.xgboost"),
-                      dnorm_log = FALSE)
+   gps_m <- estimate_gps(cov_mt = data[, -(1:2)],
+                         w_all = data$treat,
+                         sl_lib = c("SL.xgboost"),
+                         dnorm_log = FALSE)
 
-   GPS <- GPS_m$GPS
+   gps <- gps_m$gps$gps
 
    # set hyperparameters
    hyperparam <- c(0.1, 0.4, 1)
@@ -25,7 +25,7 @@ test_that("compute_sd_gp works as expected.", {
    g_sigma <- hyperparam[[3]]
 
    # Compute scaled observation data and inverse of covariate matrix.
-   scaled_obs <- cbind(obs_exposure * sqrt(1 / alpha), GPS * sqrt(1 / beta))
+   scaled_obs <- cbind(obs_exposure * sqrt(1 / beta), gps * sqrt(1 / alpha))
 
    tentative_sigma <- 0.1
 
@@ -33,7 +33,7 @@ test_that("compute_sd_gp works as expected.", {
                                     scaled_obs = scaled_obs,
                                     hyperparam = hyperparam,
                                     sigma = tentative_sigma,
-                                    GPS_m = GPS_m,
+                                    gps_m = gps_m,
                                     kernel_fn = kernel_fn)
 
    expect_equal(length(post_sd), 1L)

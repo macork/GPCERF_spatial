@@ -18,13 +18,17 @@ compute_inverse <- function(mtrx) {
                 "Current format: ", class(mtrx)[1]))
   }
 
-  if (nrow(mtrx) != ncol(mtrx)){
+  if (nrow(mtrx) != ncol(mtrx)) {
     stop(paste0("The input mtrx should be a square matrix. ",
                 "Current dimension: nrow: ",
                 nrow(mtrx), ", ncol: ", ncol(mtrx)))
   }
 
+  t_1 <- proc.time()
   inv_mtrx <- chol2inv(chol(mtrx))
-
+  t_2 <- proc.time()
+  logger::log_debug("Wall clock time to compute inverse matrix ",
+                    "({nrow(mtrx)}, {ncol(mtrx)}): ",
+                    " {t_2[[3]] - t_1[[3]]} s.")
   return(inv_mtrx)
 }

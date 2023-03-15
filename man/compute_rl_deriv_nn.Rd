@@ -7,11 +7,10 @@
 compute_rl_deriv_nn(
   w,
   w_obs,
-  GPS_m,
+  gps_m,
   y_obs,
   hyperparam,
   n_neighbor,
-  expand,
   block_size,
   kernel_fn = function(x) exp(-x),
   kernel_deriv_fn = function(x) -exp(-x)
@@ -22,23 +21,20 @@ compute_rl_deriv_nn(
 
 \item{w_obs}{A vector of observed exposure levels of all samples.}
 
-\item{GPS_m}{A data.frame of GPS vectors.
-\itemize{
-\item Column 1: GPS values.
-\item Column 2: Prediction of exposure for covariate of each data
-sample (e_gps_pred).
-\item Column 3: Standard deviation of  e_gps (e_gps_std).
-}}
+\item{gps_m}{An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE}
 
 \item{y_obs}{A vector of observed outcome values.}
 
 \item{hyperparam}{A vector of hyper-parameters in the GP model.}
 
-\item{n_neighbor}{The number of nearest neighbors on one side
-(see also \code{expand}).}
-
-\item{expand}{A scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n_neighbor}.}
+\item{n_neighbor}{The number of nearest neighbors on one side.}
 
 \item{block_size}{The number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement. Larger
@@ -63,20 +59,19 @@ nnGP approximation is used.
 \donttest{
 set.seed(325)
 data <- generate_synthetic_data(sample_size = 200)
-GPS_m <- train_gps(cov_mt = data[,-(1:2)],
-                   w_all = data$treat,
-                   sl_lib = c("SL.xgboost"),
-                   dnorm_log = FALSE)
+gps_m <- estimate_gps(cov_mt = data[,-(1:2)],
+                      w_all = data$treat,
+                      sl_lib = c("SL.xgboost"),
+                      dnorm_log = FALSE)
 
 wi <- 12.2
 
 deriv_val <- compute_rl_deriv_nn(w = wi,
                                  w_obs = data$treat,
-                                 GPS_m = GPS_m,
+                                 gps_m = gps_m,
                                  y_obs = data$Y,
                                  hyperparam = c(0.2,0.4,1.2),
                                  n_neighbor = 20,
-                                 expand = 1,
                                  block_size = 10)
 }
 }

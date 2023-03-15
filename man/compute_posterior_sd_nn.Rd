@@ -7,12 +7,11 @@
 compute_posterior_sd_nn(
   hyperparam,
   w,
-  GPS_w,
+  gps_w,
   obs_ord,
   sigma2,
   kernel_fn = function(x) exp(-x^2),
   n_neighbor = 10,
-  expand = 1,
   block_size = 10000
 )
 }
@@ -21,7 +20,7 @@ compute_posterior_sd_nn(
 
 \item{w}{The exposure level for the point of interest on the CERF.}
 
-\item{GPS_w}{The GPS for all samples when their exposure levels are set
+\item{gps_w}{The GPS for all samples when their exposure levels are set
 at \code{w}.}
 
 \item{obs_ord}{A matrix of two columns. The first column is the observed
@@ -32,11 +31,7 @@ exposure levels. The rows are in ascending order for the first column.}
 
 \item{kernel_fn}{The covariance function of the GP.}
 
-\item{n_neighbor}{Number of nearest neighbors on one side
-(see also \code{expand}).}
-
-\item{expand}{A scaling factor to determine the total number of nearest
-neighbors. The total is \code{2*expand*n_neighbor}.}
+\item{n_neighbor}{Number of nearest neighbors on one side.}
 
 \item{block_size}{Number of samples included in a computation block.
 Mainly used to balance the speed and memory requirement.

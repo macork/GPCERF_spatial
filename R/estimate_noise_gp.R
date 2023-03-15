@@ -1,8 +1,9 @@
 #' @title
-#' Estimate the standard deviation of the nugget term in full Gaussian process
+#' Estimate the standard deviation of the nugget term in standard Gaussian
+#' process
 #'
 #' @description
-#' Estimates the standard deviations of the nugget term in full GP by
+#' Estimates the standard deviations of the nugget term in standard GP by
 #' calculating the standard deviations of the residuals.
 #'
 #' @param data A data.frame of observation data.
@@ -14,7 +15,7 @@
 #' covariates.
 #'
 #' @return
-#' A scalar of estimated standard deviation of the nugget term in full GP.
+#' A scalar of estimated standard deviation of the nugget term in standard GP.
 #'
 #' @keywords internal
 #'

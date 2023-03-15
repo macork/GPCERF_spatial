@@ -1,79 +1,110 @@
 #' @title
-#' Compute weighted correlation
+#' Compute  weighted covariate balance
 #'
 #' @description
-#' Computes weighted correlation of the observational data based on weights
-#' achieved by Gaussian Process.
+#' Computes weighted covariate balance for given data sets.
 #'
-#' @param w A vector of exposure values for the observed data.
-#' @param confounders A data.frame of observational confounders.
-#' @param weights A vector of weights for each observation data.
-#'
+#' @param w A vector of observed continuous exposure variable.
+#' @param weight A vector of weights.
+#' @param covariate A data frame of observed covariates variable.
 #' @return
-#' A vector of covariate balance.
+#' The function returns a list saved the measure related to covariate balance
+#' \code{absolute_corr}: the absolute correlations for each pre-exposure
+#'  covairates;
+#' \code{mean_absolute_corr}: the average absolute correlations for all
+#'  pre-exposure covairates.
 #'
 #' @export
 #'
 #' @examples
+#' set.seed(639)
+#' n <- 100
+#' mydata <- generate_synthetic_data(sample_size=100)
+#' year <- sample(x=c("2001","2002","2003","2004","2005"),size = n,
+#'  replace = TRUE)
+#' region <- sample(x=c("North", "South", "East", "West"),size = n,
+#'  replace = TRUE)
+#' mydata$year <- as.factor(year)
+#' mydata$region <- as.factor(region)
+#' mydata$cf5 <- as.factor(mydata$cf5)
+#' cor_val <- compute_w_corr(mydata[,2],
+#'                           mydata[, 3:length(mydata)],
+#'                           runif(n))
 #'
-#' set.seed(124)
-#' mydata <- generate_synthetic_data(sample_size = 200)
-#' weights <- runif(nrow(mydata))
-#' compute_w_corr(mydata$treat,
-#'                mydata[, 3:ncol(mydata)],
-#'                weights)
+#' print(cor_val$mean_absolute_corr)
 #'
-compute_w_corr <- function(w, confounders, weights) {
+compute_w_corr <- function(w,
+                           covariate,
+                           weight) {
 
 
-  if (!is.data.frame(confounders)) {
-    stop(paste0("The confounders should be a data.frame. ",
-                "Current format: ", class(confounders)[1]))
+  if (!is.data.frame(covariate)) {
+    stop(paste("covariate should be a data.frame, the provided one is: ",
+               class(covariate)))
   }
 
-  if (!is.vector(w)) {
-    stop(paste0("The w param should be a vector. ",
-                "Current format: ", class(w)[1]))
+
+  # detect numeric columns
+  col_n <- colnames(covariate)[unlist(lapply(covariate, is.numeric))]
+
+  # detect factorial columns
+  col_f <- colnames(covariate)[unlist(lapply(covariate, is.factor))]
+
+  absolute_corr_n <- absolute_corr_f <- NULL
+
+  if (length(col_n) > 0) {
+    absolute_corr_n <- sapply(col_n, function(i) {
+      abs(wCorr::weightedCorr(x = w,
+                              y = covariate[, i],
+                              weights = weight,
+                              method = c("spearman")))})
+    absolute_corr_n <- unlist(absolute_corr_n)
+    names(absolute_corr_n) <- col_n
   }
 
-  if (nrow(confounders) != length(weights)){
-    stop(paste0("Number of data samples in confounder (", nrow(confounders),
-                ") and length of ", "weights (", length(weights),
-                ") should be equal."))
+  if (length(col_f) > 0) {
+    internal_fun <- function(i) {
+      abs(wCorr::weightedCorr(x = w,
+                              y = covariate[, i],
+                              weights = weight,
+                              method = c("Polyserial")))}
+
+    absolute_corr_f <- c()
+    for (item in col_f){
+      if (length(unique(covariate[, item])) == 1) {
+        absolute_corr_f <- c(absolute_corr_f, NA)
+      } else {
+        absolute_corr_f <- c(absolute_corr_f, internal_fun(item))
+      }
+    }
+    names(absolute_corr_f) <- col_f
   }
 
-  if (length(w) != length(weights)){
-    stop(paste0("Number of data samples in w (", length(w),
-                ") and length of ", "weights (", length(weights),
-                ") should be equal."))
+  absolute_corr <- c(absolute_corr_n, absolute_corr_f)
+
+  logger::log_trace(paste0("absolute_corr value: {paste(names(absolute_corr), ",
+                           "absolute_corr, collapse = ', ', sep = ' : ')}"))
+
+  if (sum(is.na(absolute_corr)) > 0) {
+    warning(paste(
+      "The following features generated missing values: ",
+      names(absolute_corr)[is.na(absolute_corr)],
+      "\nIn computing mean covariate balance, they will be ignored."))
   }
 
-  # TODO: model.matrix will create dummy variables for factors.
-  # Double-check.
-  conf_names <- colnames(confounders)
-  frml <- paste("~", paste(conf_names, collapse = "+"), "-1", sep = "")
 
-  # normalize weights here
-  weights[weights < 0] <- 0
-  if (sum(weights) > 0) {
-    weights <- weights / sum(weights)
-  }
+  # compute mean value
+  mean_val <- mean(absolute_corr, na.rm = TRUE)
 
-  x_design <- model.matrix(as.formula(frml), data = confounders)
-  w_mean <- sum(w * weights)
-  w_sd <- sqrt(sum((w - w_mean) ^ 2 * weights))
-  w_stan <- (w - w_mean) / w_sd
+  # compute median value
+  median_val <- median(absolute_corr, na.rm = TRUE)
 
-  x_mean <- colSums(x_design * weights)
-  x_cov <- (t(x_design) - x_mean) %*% diag(weights) %*% t(t(x_design) - x_mean)
+  # Maximal value
+  max_val <- max(absolute_corr, na.rm = TRUE)
 
-  # when x_cov is rank deficient, return NA for all covariate balance
-  x_stan <- tryCatch(t(t(solve(chol(x_cov))) %*% (t(x_design) - x_mean)),
-                     error = function(e) NA)
-  if (!is.na(x_stan[1])) {
-    covariate_balance <- abs(c(t(x_stan) %*% diag(weights) %*% w_stan))
-  } else {
-    covariate_balance = rep(NA, nrow(x_cov))
-  }
-  return(covariate_balance)
+  return(list(absolute_corr = absolute_corr,
+              mean_absolute_corr = mean_val,
+              median_absolute_corr = median_val,
+              maximal_absolute_corr = max_val))
+
 }

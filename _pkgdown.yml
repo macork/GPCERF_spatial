@@ -1,4 +1,4 @@
-url: https://fasrc.github.io/GPCERF/
+url: https://NSAPH-Software.github.io/GPCERF/
 
 home:
   title: Gaussian Process (GP) approach for nonparametric modeling.
@@ -17,7 +17,7 @@ reference:
   - title: Utilities
     contents:
     - generate_synthetic_data
-    - train_gps
+    - estimate_gps
     - compute_w_corr
     - set_logger
     - get_logger
@@ -31,4 +31,4 @@ reference:
 articles:
   - title: Introduction
     navbar: Introduction
-    contents: [Full-Gaussian-Processes, Nearest-neighbor-Gaussian-Processes]
+    contents: [Standard-Gaussian-Processes, Nearest-neighbor-Gaussian-Processes]

@@ -1,7 +1,7 @@
 
 t_1 <- proc.time()
 set.seed(912)
-data <- generate_synthetic_data(sample_size = 2000, gps_spec = 3)
+data <- generate_synthetic_data(sample_size = 200, gps_spec = 3)
 
 w_all = seq(0,20,1)
 

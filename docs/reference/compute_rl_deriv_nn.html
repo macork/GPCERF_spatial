@@ -14,7 +14,7 @@ nnGP approximation is used."><!-- mathjax --><script src="https://cdnjs.cloudfla
     
     <a class="navbar-brand me-2" href="../index.html">GPCERF</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +32,7 @@ nnGP approximation is used."><!-- mathjax --><script src="https://cdnjs.cloudfla
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Introduction</h6>
-    <a class="dropdown-item" href="../articles/Full-Gaussian-Processes.html">Full Gaussian Processes</a>
+    <a class="dropdown-item" href="../articles/Standard-Gaussian-Processes.html">Standard Gaussian Processes</a>
     <a class="dropdown-item" href="../articles/Nearest-neighbor-Gaussian-Processes.html">Nearest-neighbor Gaussian Processes</a>
   </div>
 </li>
@@ -71,11 +71,10 @@ nnGP approximation is used.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compute_rl_deriv_nn</span><span class="op">(</span></span>
 <span>  <span class="va">w</span>,</span>
 <span>  <span class="va">w_obs</span>,</span>
-<span>  <span class="va">GPS_m</span>,</span>
+<span>  <span class="va">gps_m</span>,</span>
 <span>  <span class="va">y_obs</span>,</span>
 <span>  <span class="va">hyperparam</span>,</span>
 <span>  <span class="va">n_neighbor</span>,</span>
-<span>  <span class="va">expand</span>,</span>
 <span>  <span class="va">block_size</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  kernel_deriv_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">)</span></span>
@@ -92,12 +91,15 @@ nnGP approximation is used.</p>
 <dd><p>A vector of observed exposure levels of all samples.</p></dd>
 
 
-<dt>GPS_m</dt>
-<dd><p>A data.frame of GPS vectors.</p><ul><li><p>Column 1: GPS values.</p></li>
-<li><p>Column 2: Prediction of exposure for covariate of each data
-sample (e_gps_pred).</p></li>
-<li><p>Column 3: Standard deviation of  e_gps (e_gps_std).</p></li>
-</ul></dd>
+<dt>gps_m</dt>
+<dd><p>An S3 gps object including:
+gps: A data.frame of GPS vectors.
+- Column 1: GPS
+- Column 2: Prediction of exposure for covariate of each data sample
+(e_gps_pred).
+- Column 3: Standard deviation of  e_gps (e_gps_std)
+used_params:
+- dnorm_log: TRUE or FLASE</p></dd>
 
 
 <dt>y_obs</dt>
@@ -109,13 +111,7 @@ sample (e_gps_pred).</p></li>
 
 
 <dt>n_neighbor</dt>
-<dd><p>The number of nearest neighbors on one side
-(see also <code>expand</code>).</p></dd>
-
-
-<dt>expand</dt>
-<dd><p>A scaling factor to determine the total number of nearest
-neighbors. The total is <code>2*expand*n_neighbor</code>.</p></dd>
+<dd><p>The number of nearest neighbors on one side.</p></dd>
 
 
 <dt>block_size</dt>
@@ -147,20 +143,19 @@ derivatives.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">325</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_synthetic_data.html">generate_synthetic_data</a></span><span class="op">(</span>sample_size <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">GPS_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="train_gps.html">train_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>                   w_all <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>,</span></span>
-<span class="r-in"><span>                   sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gps_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_gps.html">estimate_gps</a></span><span class="op">(</span>cov_mt <span class="op">=</span> <span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                      w_all <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>,</span></span>
+<span class="r-in"><span>                      sl_lib <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      dnorm_log <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">wi</span> <span class="op">&lt;-</span> <span class="fl">12.2</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">deriv_val</span> <span class="op">&lt;-</span> <span class="fu">compute_rl_deriv_nn</span><span class="op">(</span>w <span class="op">=</span> <span class="va">wi</span>,</span></span>
 <span class="r-in"><span>                                 w_obs <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">treat</span>,</span></span>
-<span class="r-in"><span>                                 GPS_m <span class="op">=</span> <span class="va">GPS_m</span>,</span></span>
+<span class="r-in"><span>                                 gps_m <span class="op">=</span> <span class="va">gps_m</span>,</span></span>
 <span class="r-in"><span>                                 y_obs <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Y</span>,</span></span>
 <span class="r-in"><span>                                 hyperparam <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">1.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                 n_neighbor <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>                                 expand <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                 block_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
