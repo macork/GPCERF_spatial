@@ -1,4 +1,4 @@
-# GPCERF (developing)
+# GPCERF 0.2.1 (2023-01-15)
 
 ## Changed
 - `full GP` --> `standard GP`
