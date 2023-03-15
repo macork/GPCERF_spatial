@@ -161,6 +161,12 @@ Original covariate balance:
 <img src="man/figures/png/readme_nngp.png" width="900">
 </p>
 
+## Code of Conduct
+
+Please note that the GPCERF project is released with a [Contributor Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct). By contributing to this project, you agree to abide by its terms.
+
+
+
 ## References
 
 Ren, B., Wu, X., Braun, D., Pillai, N. and Dominici, F., 2021. Bayesian modeling for exposure response curve via gaussian processes: Causal effects of exposure to air pollution on health outcomes. arXiv preprint arXiv:2105.03454.

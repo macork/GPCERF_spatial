@@ -32,3 +32,7 @@ articles:
   - title: Introduction
     navbar: Introduction
     contents: [Standard-Gaussian-Processes, Nearest-neighbor-Gaussian-Processes]
+
+  - title: Collabration
+    navbar: Collabration
+    contents: [Developers-Guide]
