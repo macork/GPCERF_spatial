@@ -12,7 +12,7 @@ m_ranger <- function(num.threads = 12, ...){
 }
 
 # Estimate GPS function
-gps_m <- estimate_gps(cov_mt = paste0("cf", seq(1,6))],
+gps_m <- estimate_gps(cov_mt = sim_data[, paste0("cf", seq(1,6))],
                       w_all = sim_data$treat,
                       sl_lib = c("m_xgboost", "m_ranger"),
                       dnorm_log = TRUE)
