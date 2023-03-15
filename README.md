@@ -7,7 +7,7 @@
 # Gaussian processes for the estimation of causal exposure-response curves (GP-CERF)
 
 ## Summary
-Gaussian Process (GP) and nearest neighbor Gaussian Process (nnGP) approachs for nonparametric modeling. 
+Gaussian Process (GP) and nearest neighbor Gaussian Process (nnGP) approaches for nonparametric modeling. 
 
 ## Installation
 
