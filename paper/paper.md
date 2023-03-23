@@ -29,7 +29,7 @@ bibliography: paper.bib
 
 # Summary
 
-We present the GPCERF R [@R_2022] package, which employs a novel Bayesian approach based on Gaussian Process (GP) to estimate the causal exposure-response function (CERF) for continuous exposures, along with associated uncertainties. R packages that target causal effects under a binary exposure setting exist [e.g., @MatchIt_R], as well as in the continuous exposure setting [@CausalGPS_R]. However, they often rely on a separate resampling stage to quantify uncertainty of the estimates, which can be computationally demanding. GPCERF provides a two-step end-to-end solution for causal inference with continuous exposures that is equipped with automatic and efficient uncertainty quantification. During the first step (the design phase), the algorithm searches for optimal hyperparameters (using the exposures and covariates) that achieve optimal covariate balance in the induced pseudo-population, i.e., that the correlation between the exposure and each covariate is close to zero. The selected hyperparameters are then used in the second step (the analysis phase) to estimate the CERF on the balanced data set and its associated uncertainty using two different types of GPs: a standard GP and a nearest-neighbor GP (nnGP). The standard GP offers high accuracy in estimating CERF but is also computationally intensive. The nnGP is a computationally efficient approximation of the standard GP and is well-suited for the analysis of large-scale datasets. 
+We present the GPCERF R package, which employs a novel Bayesian approach based on Gaussian Process (GP) to estimate the causal exposure-response function (CERF) for continuous exposures, along with associated uncertainties. R packages that target causal effects under a binary exposure setting exist [e.g., @MatchIt_R], as well as in the continuous exposure setting [e.g., @CausalGPS_R]. However, they often rely on a separate resampling stage to quantify uncertainty of the estimates, which can be computationally demanding. GPCERF provides a two-step end-to-end solution for causal inference with continuous exposures that is equipped with automatic and efficient uncertainty quantification. During the first step (the design phase), the algorithm searches for optimal hyperparameters (using the exposures and covariates) that achieve optimal covariate balance in the induced pseudo-population, i.e., that the correlation between the exposure and each covariate is close to zero. The selected hyperparameters are then used in the second step (the analysis phase) to estimate the CERF on the balanced data set and its associated uncertainty using two different types of GPs: a standard GP and a nearest-neighbor GP (nnGP). The standard GP offers high accuracy in estimating CERF but is also computationally intensive. The nnGP is a computationally efficient approximation of the standard GP and is well-suited for the analysis of large-scale datasets. 
 
 # Statement of need
 
@@ -54,7 +54,7 @@ Both GP and nnGP approaches involve two primary steps - tuning and estimation. G
 ## Example 1: Standard GP models
 
 To compute the causal exposure response function, one can use the \verb|etimate_cerf_gp()| function. 
-In this example, we generated a synthetic dataset of 500 observations and six covariates. We considered the estimation of $R(w)$ for $w$ that are between 5- and 95-percentiles of the observed exposure levels. We imposed this restriction to make sure that the positivity assumption, which is required for the identifiability of $R(w)$ from the observed data, is not likely to be violated [@Ren_2021_bayesian]. In other words, by confining the exposure level of interest to the aforementioned interval, the probability of being exposed to any of the exposure level should be strictly positive given any arbitrary values of the covariates. We then developed a wrapper function to modify the number of threads in the SuperLearner package [@SuperLearner_R]. We estimated the GPS values using these wrapper functions. One can read more details by running \verb|?GPCERF::estimate_gps| in R. To compute the posterior mean and standard deviation of $R(w)$, we need to provide the range of exposure values of interest and a range of hyperparameters that will be examined as additional input and parameters. Further details can be found in \verb|?GPCERF::estimate_cerf_gp|. The function outputs an \verb|S3| object, which can be further investigated using generic functions, as shown below.
+In this example, we generated a synthetic dataset of 500 observations and six covariates. We considered the estimation of $R(w)$ for $w$ that are between 5- and 95-percentiles of the observed exposure levels. We imposed this restriction to make sure that the positivity assumption, which is required for the identifiability of $R(w)$ from the observed data, is not likely to be violated [@Ren_2021_bayesian]. In other words, by confining the exposure level of interest to the aforementioned interval, the probability of being exposed to any of the exposure level should be strictly positive given any arbitrary values of the covariates. We then developed a wrapper function to modify the number of threads in the SuperLearner package [@SuperLearner_R]. We estimated the GPS values using these wrapper functions. One can read more details by running \verb|?GPCERF::estimate_gps| in R. To compute the posterior mean and standard deviation of $R(w)$, we need to provide the range of exposure values of interest and a range of hyperparameters that will be examined as additional input and parameters. The function outputs an \verb|S3| object, which can be further investigated using generic functions, as shown below.
 
 ```r
 library(GPCERF)
@@ -64,11 +64,11 @@ set.seed(781)
 sim_data <- generate_synthetic_data(sample_size = 500, 
                                     gps_spec = 1)
 
-# SuperLearner internal libraries' wrapper.
+# SuperLearner internal libraries' wrapper. (Optional)
+
 m_xgboost <- function(nthread = 12, ...) {
   SuperLearner::SL.xgboost(nthread = nthread, ...)
 }
-
 m_ranger <- function(num.threads = 12, ...){
   SuperLearner::SL.ranger(num.threads = num.threads, ...)
 }
@@ -137,7 +137,7 @@ plot(cerf_gp_obj)
 
 ![Plot of GP models S3 object. Left: Estimated CERF with credible band. Right: Covariate balance of confounders before and after weighting with GP approach.\label{fig:gp}](figures/readme_gp.png){ width=100% }
 
-The discussion on acceptable covariate balance for causal inference analyses is not within the scope of this paper. However, in the literature, a mean covariate balance upper limit of 0.1 is generally considered acceptable @wu_2020. It is possible to expand the hyperparameters' search domain to achieve a lower covariate balance.
+The discussion on acceptable covariate balance for causal inference analyses is not within the scope of this paper. However, in the literature, a mean covariate balance upper limit of 0.1 is generally considered acceptable [@wu_2020]. It is possible to expand the hyperparameters' search domain to achieve a lower covariate balance.
 
 ## Example 2: Nearest neighbor GP models
 
@@ -226,7 +226,7 @@ Original covariate balance:
 # Software related features
 
 We have implemented several features to enhance the package performance and usability. By utilizing an internal `parallel` package, the software is capable of scaling up in a shared memory system. Additionally, we have implemented a logging infrastructure that tracks the software's internal progress and provides users and developers with detailed information on processed runs [@logger]. We have also activated continuous integration (CI) through GitHub actions, which runs unit tests and checks the code quality for any submitted pull request. The majority of the codebase is tested at least once. To ensure efficient development, we follow a successful git branching model [@driessen_2010] and use the tidyverse styling guide.
-The software is available on CRAN [@gpcerf_cran] and is primarily written in R. However, some of the core computations are written in C++ using the `Rcpp` package [@rcpp_1; @rcpp_2; @rcpp_3].
+The software is available on CRAN [@gpcerf_cran] and is primarily written in R [@R_2022]. However, some of the core computations are written in C++ using the `Rcpp` package [@rcpp_1; @rcpp_2; @rcpp_3].
 
 # Acknowledgement
 
