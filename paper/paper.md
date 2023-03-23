@@ -230,6 +230,6 @@ The software is available on CRAN [@gpcerf_cran] and is primarily written in R. 
 
 # Acknowledgement
 
-This work was partially funded by the following grants: NIH: R01s R01ES028033, R01ES030616, R01AG066793, R01ES029950, RF1AG071024, RF1AG074372, R01MD016054, R01ES034373 and Sloan foundation.
+This work was partially funded by the following grants: NIH: R01s R01ES028033, R01ES030616, R01AG066793, R01ES029950, RF1AG071024, RF1AG074372, R01MD016054, R01ES034373, R01ES028033-03S1, R01AG066793-02S1, and Sloan Foundation: G-2020-13946.
 
 # References
