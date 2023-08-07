@@ -19,6 +19,8 @@ library("GPCERF")
 
 ## Usage
 
+_Note:_ The following examples will also need installing `ranger` R package. 
+
 ### GP
 
 ```r
