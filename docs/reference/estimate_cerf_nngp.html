@@ -79,6 +79,9 @@ match (the lowest covariate balance) for the provided set of hyperparameters.</p
 <span>  <span class="va">w</span>,</span>
 <span>  <span class="va">gps_m</span>,</span>
 <span>  <span class="va">params</span>,</span>
+<span>  <span class="va">outcome_col</span>,</span>
+<span>  <span class="va">treatment_col</span>,</span>
+<span>  <span class="va">covariates_col</span>,</span>
 <span>  kernel_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  nthread <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -87,10 +90,7 @@ match (the lowest covariate balance) for the provided set of hyperparameters.</p
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>A data.frame of observation data.</p><ul><li><p>Column 1: Outcome (Y)</p></li>
-<li><p>Column 2: Exposure or treatment (w)</p></li>
-<li><p>Column 3~m: Confounders (C)</p></li>
-</ul></dd>
+<dd><p>A data.frame of observation data.</p></dd>
 
 
 <dt>w</dt>
@@ -121,6 +121,18 @@ used to balance the speed and memory requirement. Larger <code>block_size</code>
 is faster, but requires more memory.
 alpha, beta, and g_sigma can be a vector of parameters.</p></li>
 </ul></dd>
+
+
+<dt>outcome_col</dt>
+<dd><p>An outcome column name in <code>data</code>.</p></dd>
+
+
+<dt>treatment_col</dt>
+<dd><p>A treatment column name in <code>data</code>.</p></dd>
+
+
+<dt>covariates_col</dt>
+<dd><p>Covariates columns name in <code>data</code>.</p></dd>
 
 
 <dt>kernel_fn</dt>
@@ -163,6 +175,9 @@ used by internal packages.</p></dd>
 <span class="r-in"><span>                                                  tune_app <span class="op">=</span> <span class="st">"all"</span>,</span></span>
 <span class="r-in"><span>                                                  n_neighbor <span class="op">=</span> <span class="fl">20</span>,</span></span>
 <span class="r-in"><span>                                                  block_size <span class="op">=</span> <span class="fl">1e4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                    outcome_col <span class="op">=</span> <span class="st">"Y"</span>,</span></span>
+<span class="r-in"><span>                                    treatment_col <span class="op">=</span> <span class="st">"treat"</span>,</span></span>
+<span class="r-in"><span>                                    covariates_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"cf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                    nthread <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
