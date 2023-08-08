@@ -2,7 +2,8 @@
 
 ## Changed
 
-- `estimate_cerf_gp` takes `outcome_col`, `treatment_col`, and `covariates_col` names.
+- `estimate_cerf_nngp` takes `outcome_col`, `treatment_col`, and `covariates_col` names as inputs.
+- `estimate_cerf_gp` takes `outcome_col`, `treatment_col`, and `covariates_col` names as inputs.
 
 # GPCERF 0.2.1 (2023-01-15)
 
