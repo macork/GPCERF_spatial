@@ -7,9 +7,6 @@
 #' for the provided set of hyperparameters.
 #'
 #' @param data A data.frame of observation data.
-#'   - Column 1: Outcome (Y)
-#'   - Column 2: Exposure or treatment (w)
-#'   - Column 3~m: Confounders (C)
 #' @param w A vector of exposure level to compute CERF.
 #' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.
@@ -27,6 +24,9 @@
 #'   - tune_app: A tuning approach. Available approaches:
 #'     - all: try all combinations of hyperparameters.
 #' alpha, beta, and g_sigma can be a vector of parameters.
+#' @param outcome_col An outcome column name in `data`.
+#' @param treatment_col A treatment column name in `data`.
+#' @param covariates_col Covariates columns name in `data`.
 #' @param nthread An integer value that represents the number of threads to be
 #' used by internal packages.
 #' @param kernel_fn A kernel function. A default value is a Gaussian Kernel.
@@ -62,6 +62,9 @@
 #'                                               beta=0.2,
 #'                                               g_sigma = 1,
 #'                                               tune_app = "all"),
+#'                                 outcome_col = "Y",
+#'                                 treatment_col = "treat",
+#'                                 covariates_col = paste0("cf", seq(1,6)),
 #'                                 nthread = 1)
 #' }
 #'

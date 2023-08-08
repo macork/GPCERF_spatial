@@ -10,11 +10,9 @@
 #'   - First element: alpha
 #'   - Second element: beta
 #'   - Third element: g_sigma (gamma / sigma)
-#' @param data A  data.frame containing all data including outcome, exposure
-#' and covariates. In the following order:
-#'   - Column 1: Outcome (Y)
-#'   - Column 2: Exposure or treatment (w)
-#'   - Column 3~m: Confounders (C)
+#' @param outcome_data A  vector of outcome data.
+#' @param treatment_data A vector of treatment data.
+#' @param covariates_data A data frame of covariates data.
 #' @param w A vector of exposure levels at which the CERF is estimated.
 #' @param gps_m An S3 gps object including:
 #'   gps: A data.frame of GPS vectors.

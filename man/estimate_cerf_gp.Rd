@@ -17,12 +17,7 @@ estimate_cerf_gp(
 )
 }
 \arguments{
-\item{data}{A data.frame of observation data.
-\itemize{
-\item Column 1: Outcome (Y)
-\item Column 2: Exposure or treatment (w)
-\item Column 3~m: Confounders (C)
-}}
+\item{data}{A data.frame of observation data.}
 
 \item{w}{A vector of exposure level to compute CERF.}
 
@@ -47,6 +42,12 @@ These parameters include:
 alpha, beta, and g_sigma can be a vector of parameters.
 }
 }}
+
+\item{outcome_col}{An outcome column name in \code{data}.}
+
+\item{treatment_col}{A treatment column name in \code{data}.}
+
+\item{covariates_col}{Covariates columns name in \code{data}.}
 
 \item{nthread}{An integer value that represents the number of threads to be
 used by internal packages.}
@@ -89,6 +90,9 @@ cerf_gp_obj <- estimate_cerf_gp(data,
                                               beta=0.2,
                                               g_sigma = 1,
                                               tune_app = "all"),
+                                outcome_col = "Y",
+                                treatment_col = "treat",
+                                covariates_col = paste0("cf", seq(1,6)),
                                 nthread = 1)
 }
 

@@ -1,3 +1,9 @@
+# GPCERF (developing)
+
+## Changed
+
+- `estimate_cerf_gp` takes `outcome_col`, `treatment_col`, and `covariates_col` names.
+
 # GPCERF 0.2.1 (2023-01-15)
 
 ## Changed
