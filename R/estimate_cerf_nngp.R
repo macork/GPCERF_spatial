@@ -129,6 +129,24 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
   treatment_data <- data[[treatment_col]]
   covariates_data <- data[, covariates_col, drop=FALSE]
 
+  # Check if outcome_data and treatment_data are vectors
+  is_outcome_vector <- is.vector(outcome_data) &&
+                       !is.data.frame(outcome_data)
+
+  is_treatment_vector <- is.vector(treatment_data) &&
+                       !is.data.frame(treatment_data)
+  # Check if covariates_data is a data.frame
+  is_covariates_dataframe <- is.data.frame(covariates_data)
+
+  if (!is_outcome_vector) {
+    stop("outcome_data is not a vector.")
+  }
+  if (!is_treatment_vector) {
+    stop("treatment_data is not a vector.")
+  }
+  if (!is_covariates_dataframe) {
+    stop("covariates_data is not a data.frame.")
+  }
 
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------
   tune_params <-  expand.grid(getElement(params, "alpha"),
@@ -174,7 +192,20 @@ estimate_cerf_nngp <- function(data, w, gps_m, params,
 
   # Extract the optimum hyperparameters
   all_cb_res <- sapply(optimal_cb_res, "[[", "cb")
-  opt_idx_nn <- order(colMeans(abs(all_cb_res)))[1]
+
+  if (!is.matrix(all_cb_res)){
+    # in case of one covariate col_all returns vector instead of matrix
+    row_name <- names(all_cb_res)[1]
+    all_cb_res <- matrix(all_cb_res, nrow = 1)
+    rownames(all_cb_res) <- row_name
+  }
+
+  if (nrow(all_cb_res) == 1){
+    opt_idx_nn <- order(abs(all_cb_res))[1]
+  } else {
+    opt_idx_nn <- order(colMeans(abs(all_cb_res)))[1]
+  }
+
   posterior_mean <- optimal_cb_res[[opt_idx_nn]]$est
   nn_opt_param <- unlist(tune_params_subset[opt_idx_nn, ])
 

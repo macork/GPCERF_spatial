@@ -148,9 +148,20 @@ compute_m_sigma <- function(hyperparam, outcome_data, treatment_data,
     cb_org <- NA
   }
 
+  if (!is.matrix(col_all)){
+    # in case of one covariate col_all returns vector instead of matrix
+    row_name <- names(col_all)[1]
+    col_all <- matrix(col_all, nrow = 1)
+    rownames(col_all) <- row_name
+  }
 
-  col_all_w_average <- rowMeans(col_all, na.rm = TRUE)
 
+  if (nrow(col_all) == 1){
+    col_all_w_average <- mean(col_all, na.rm = TRUE)
+    names(col_all_w_average) <- rownames(col_all)
+  } else {
+    col_all_w_average <- rowMeans(col_all, na.rm = TRUE)
+  }
 
   list(cb = col_all_w_average,
        cb_org = cb_org,

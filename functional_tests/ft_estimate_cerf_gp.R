@@ -39,7 +39,7 @@ cerf_gp_obj <- estimate_cerf_gp(sim_data,
                                 params = params_lst,
                                 outcome_col = "Y",
                                 treatment_col = "treat",
-                                covariates_col = paste0("cf", seq(1,6)),
+                                covariates_col = c("cf1"), # paste0("cf", seq(1,6)),
                                 nthread = 12)
 
 summary(cerf_gp_obj)

@@ -124,6 +124,25 @@ estimate_cerf_gp <- function(data, w, gps_m, params,
   treatment_data <- data[[treatment_col]]
   covariates_data <- data[, covariates_col, drop=FALSE]
 
+  # Check if outcome_data and treatment_data are vectors
+  is_outcome_vector <- is.vector(outcome_data) &&
+    !is.data.frame(outcome_data)
+
+  is_treatment_vector <- is.vector(treatment_data) &&
+    !is.data.frame(treatment_data)
+  # Check if covariates_data is a data.frame
+  is_covariates_dataframe <- is.data.frame(covariates_data)
+
+  if (!is_outcome_vector) {
+    stop("outcome_data is not a vector.")
+  }
+  if (!is_treatment_vector) {
+    stop("treatment_data is not a vector.")
+  }
+  if (!is_covariates_dataframe) {
+    stop("covariates_data is not a data.frame.")
+  }
+
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------
   tune_params <-  expand.grid(getElement(params, "alpha"),
                               getElement(params, "beta"),
