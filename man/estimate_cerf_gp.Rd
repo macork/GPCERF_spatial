@@ -9,6 +9,9 @@ estimate_cerf_gp(
   w,
   gps_m,
   params,
+  outcome_col,
+  treatment_col,
+  covariates_col,
   nthread = 1,
   kernel_fn = function(x) exp(-x^2)
 )

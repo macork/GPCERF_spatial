@@ -65,8 +65,9 @@
 #'                                 nthread = 1)
 #' }
 #'
-estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
-                             kernel_fn = function(x) exp(-x ^ 2)) {
+estimate_cerf_gp <- function(data, w, gps_m, params,
+                             outcome_col, treatment_col, covariates_col,
+                             nthread = 1, kernel_fn = function(x) exp(-x ^ 2)) {
 
   # Log system info
   log_system_info()
@@ -114,6 +115,12 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
 
   # TODO: Check values of parameters, too.
 
+  # Collect data ---------------------------------------------------------------
+
+  outcome_data <- data[[outcome_col]]
+  treatment_data <- data[[treatment_col]]
+  covariates_data <- data[, covariates_col, drop=FALSE]
+
   # Expand the grid of parameters (alpha, beta, g_sigma) -----------------------
   tune_params <-  expand.grid(getElement(params, "alpha"),
                               getElement(params, "beta"),
@@ -155,7 +162,10 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
 
     # export variables and functions to cluster cores
     parallel::clusterExport(cl = cl,
-                            varlist = c("w", "data", "gps_m",
+                            varlist = c("w", "outcome_data",
+                                        "treatment_data",
+                                        "covariates_data",
+                                        "gps_m",
                                         "tune_params_subset",
                                         "kernel_fn",
                                         "compute_m_sigma"),
@@ -163,12 +173,15 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
 
     tune_res <- parallel::parApply(cl, tune_params_subset, 1,
                                    function(x) {
-                                     compute_m_sigma(hyperparam = x,
-                                                     data = data,
-                                                     w = w,
-                                                     gps_m = gps_m,
-                                                     tuning = TRUE,
-                                                     kernel_fn = kernel_fn)
+                                     compute_m_sigma(
+                                       hyperparam = x,
+                                       outcome_data =  outcome_data,
+                                       treatment_data = treatment_data,
+                                       covariates_data = covariates_data,
+                                       w = w,
+                                       gps_m = gps_m,
+                                       tuning = TRUE,
+                                       kernel_fn = kernel_fn)
                                    })
 
     parallel::stopCluster(cl)
@@ -176,7 +189,9 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
   } else if (nrow(tune_params_subset) > 1) {
     tune_res <- apply(tune_params_subset, 1, function(x) {
       compute_m_sigma(hyperparam = x,
-                      data = data,
+                      outcome_data =  outcome_data,
+                      treatment_data = treatment_data,
+                      covariates_data = covariates_data,
                       w = w,
                       gps_m = gps_m,
                       tuning = TRUE,
@@ -204,7 +219,9 @@ estimate_cerf_gp <- function(data, w, gps_m, params, nthread = 1,
   }
   opt_param <- tune_params_subset[opt_idx, ]
   gp_cerf_final <- compute_m_sigma(hyperparam = opt_param,
-                                   data = data,
+                                   outcome_data =  outcome_data,
+                                   treatment_data = treatment_data,
+                                   covariates_data = covariates_data,
                                    w = w,
                                    gps_m = gps_m,
                                    tuning = FALSE,
