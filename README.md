@@ -19,6 +19,8 @@ library("GPCERF")
 
 ## Usage
 
+_Note:_ The following examples will also need installing `ranger` R package. 
+
 ### GP
 
 ```r
@@ -57,6 +59,9 @@ cerf_gp_obj <- estimate_cerf_gp(sim_data,
                                 w_all,
                                 gps_m,
                                 params = params_lst,
+                                outcome_col = "Y",
+                                treatment_col = "treat",
+                                covariates_col = paste0("cf", seq(1,6)),
                                 nthread = n_core)
 summary(cerf_gp_obj)
 plot(cerf_gp_obj)
@@ -128,6 +133,9 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
                                     w_all,
                                     gps_m,
                                     params = params_lst,
+                                    outcome_col = "Y",
+                                    treatment_col = "treat",
+                                    covariates_col = paste0("cf", seq(1,6)),
                                     nthread = 12)
 summary(cerf_nngp_obj)
 plot(cerf_nngp_obj)
@@ -166,6 +174,9 @@ Original covariate balance:
 Please note that the GPCERF project is released with a [Contributor Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct). By contributing to this project, you agree to abide by its terms.
 
 
+## Reporting Issues & Seeking Support
+
+If you encounter any issues with GPCERF, we kindly ask you to report them on our GitHub by opening a new issue. To expedite resolution, including a reproducible example is highly appreciated. For those seeking assistance or further details about a particular topic, feel free to initiate a Discussion on GitHub or open an issue. Additionally, for more direct inquiries, the package maintainer can be reached via the email address provided in the DESCRIPTION file.
 
 ## References
 

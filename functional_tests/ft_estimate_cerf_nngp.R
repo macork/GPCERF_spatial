@@ -12,7 +12,7 @@ m_ranger <- function(num.threads = 12, ...){
 }
 
 # Estimate GPS function
-gps_m <- estimate_gps(cov_mt = paste0("cf", seq(1,6))],
+gps_m <- estimate_gps(cov_mt = sim_data[, paste0("cf", seq(1,6))],
                       w_all = sim_data$treat,
                       sl_lib = c("m_xgboost", "m_ranger"),
                       dnorm_log = TRUE)
@@ -38,6 +38,9 @@ cerf_nngp_obj <- estimate_cerf_nngp(sim_data,
                                     w_all,
                                     gps_m,
                                     params = params_lst,
+                                    outcome_col = "Y",
+                                    treatment_col = "treat",
+                                    covariates_col = "cf1", #paste0("cf", seq(1,6)),
                                     nthread = 12)
 
 
