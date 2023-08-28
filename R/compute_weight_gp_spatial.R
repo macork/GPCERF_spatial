@@ -57,7 +57,7 @@ compute_weight_gp_spatial <- function(w, w_obs, scaled_obs, spatial_coords, min_
   gps_max <- min_max_table$max[min_max_table$var == "gps"]
 
   # Filtering observed data based on the exposure constraint
-  # Current constraint is to be within 3 of actual observed
+  # Current constraint is to be within 4 of actual observed exposure
   valid_obs_indices <- which(abs(w_obs - w) <= 4)
   filtered_scaled_obs <- scaled_obs[valid_obs_indices, ]
   filtered_spatial_coords <- spatial_coords[valid_obs_indices, ]
@@ -69,6 +69,7 @@ compute_weight_gp_spatial <- function(w, w_obs, scaled_obs, spatial_coords, min_
 
   # Create gps and scaled loc matrix excluding those farther than 4 away.
   # Replace this with more efficient process eventually
+  # I think I dont need the infinity part, could replace with 0 and should work fine
   for(i in 1:n) {
     for(j in 1:n) {
       # For GPS
