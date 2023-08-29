@@ -68,7 +68,7 @@ compute_m_sigma_spatial <- function(hyperparam, outcome_data, treatment_data,
   }
 
   # Now create distance matrix from spatial coordinates, scaled by beta
-  loc_matrix <- as.matrix(dist(spatial_coords))
+  loc_matrix <- as.matrix(stats::dist(spatial_coords))
   norm_loc_matrix <- normalize_min_max(loc_matrix)
   scaled_loc_matrix <- norm_loc_matrix * sqrt(1 / beta)
 
@@ -77,7 +77,7 @@ compute_m_sigma_spatial <- function(hyperparam, outcome_data, treatment_data,
   loc_max <- max(loc_matrix)
 
   # Similarly for gps_matrix
-  gps_matrix <- as.matrix(dist(gps))
+  gps_matrix <- as.matrix(stats::dist(gps))
   norm_gps_matrix <- normalize_min_max(gps_matrix)
   scaled_gps_matrix <- norm_gps_matrix * sqrt(1 / alpha)
 
@@ -98,6 +98,7 @@ compute_m_sigma_spatial <- function(hyperparam, outcome_data, treatment_data,
   # between spatial location and gps
   combined_dist_matrix <- sqrt(scaled_loc_matrix^2 + scaled_gps_matrix^2)
 
+  # Why is the "nugget" term set to be 1 here? Should it be smaller, or should this be tuned?
   t_sigma_obs_1 <- proc.time()
   sigma_obs <- g_sigma * kernel_fn(combined_dist_matrix) +
     diag(nrow(combined_dist_matrix))
@@ -110,6 +111,7 @@ compute_m_sigma_spatial <- function(hyperparam, outcome_data, treatment_data,
   inv_sigma_obs <- compute_inverse(sigma_obs)
 
   # Estimate noise
+  # Curious how this is used in the GP framework
   if (!tuning) {
     noise_est <- estimate_noise_gp(data = outcome_data,
                                    sigma_obs = sigma_obs,

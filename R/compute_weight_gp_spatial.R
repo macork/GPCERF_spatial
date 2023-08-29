@@ -57,8 +57,9 @@ compute_weight_gp_spatial <- function(w, w_obs, scaled_obs, spatial_coords, min_
   gps_max <- min_max_table$max[min_max_table$var == "gps"]
 
   # Filtering observed data based on the exposure constraint
-  # Current constraint is to be within 4 of actual observed exposure
-  valid_obs_indices <- which(abs(w_obs - w) <= 4)
+  # Current constraint is to be within x of actual observed exposure
+  # Set to 25 for now just to be able to do this correctly without impossing this constraint
+  valid_obs_indices <- which(abs(w_obs - w) <= 25)
   filtered_scaled_obs <- scaled_obs[valid_obs_indices, ]
   filtered_spatial_coords <- spatial_coords[valid_obs_indices, ]
 
@@ -88,19 +89,15 @@ compute_weight_gp_spatial <- function(w, w_obs, scaled_obs, spatial_coords, min_
     }
   }
 
-  # Normalize using computed min/max
+  # Normalize using computed min/max, then scale
   norm_gps_matrix <- normalize_min_max(gps_matrix, gps_min, gps_max)
-
-  # Scale by appropriate ammount
   scaled_gps_matrix <- norm_gps_matrix * sqrt(1 / alpha)
 
-  # Normalize using computed min/max
+  # Normalize using computed min/max then scale
   norm_loc_matrix <- normalize_min_max(loc_matrix, loc_min, loc_max)
-
-  # Scale by appropriate amount
   scaled_loc_matrix <- norm_loc_matrix * sqrt(1 / beta)
 
-  # Now combine
+  # Now combine into one matrix
   combined_dist_matrix <- sqrt(scaled_loc_matrix^2 + scaled_gps_matrix^2)
 
   # kappa
@@ -131,26 +128,33 @@ compute_weight_gp_spatial <- function(w, w_obs, scaled_obs, spatial_coords, min_
   if (est_sd) {
 
     # Create GPS diff with itself
+    # Confused by how I am supposed to find the estimated standard deviation of the average
+    # here, and how the impact of weights that are 0 for some locations might impact this
+
     gps_diff <- outer(gps_w, gps_w, "-")
-    # Replace with Inf for invalid indices
-    gps_diff[, -valid_obs_indices] <- Inf
     gps_self_matrix <- abs(gps_diff)
 
     # Normalize using computed min/max
     norm_gps_self_matrix <- normalize_min_max(gps_self_matrix, gps_min, gps_max)
 
     # Scale by appropriate ammount
-    scaled_gps_self_matrix <- norm_gps_matrix * sqrt(1 / alpha)
+    scaled_gps_self_matrix <- norm_gps_self_matrix * sqrt(1 / alpha)
 
-    # Now combine
-    combined_dist_matrix <- sqrt(scaled_loc_matrix^2 + scaled_gps_self_matrix^2)
+    # Create distance matrix
+    loc_self_matrix <- as.matrix(stats::dist(spatial_coords))
+    norm_loc_self_matrix <- normalize_min_max(loc_self_matrix, loc_min, loc_max)
+    scaled_loc_self_matrix <- loc_self_matrix * sqrt(1 / beta)
 
-    # This not correct, but using for now
-    sigma_w <- g_sigma * kernel_fn(combined_dist_matrix) +
-      diag(n)
+    # Now combine to find self dist matrix
+    self_dist_matrix <- sqrt(scaled_loc_self_matrix^2 + scaled_gps_self_matrix^2)
+
+    # Create sigma with itself in observed dataset
+    sigma_w <- g_sigma * kernel_fn(self_dist_matrix) + diag(n)
+
+    # Is this missing a n^2 in the orignal compute weights GP
     sd_scaled <- sqrt(sum(sigma_w) / n ^ 2 -
-                        sum(weight * normalized_sigma_cross))
-    sd_scaled = 1
+                        sum(weight * normalized_sigma_cross) / n ^ 2)
+
     logger::log_trace("Computed scaled standard deviation: {sd_scaled}")
   } else {
     sd_scaled <- NA
